@@ -31,9 +31,7 @@
 
         /* Sidebar */
         .sidebar { width: 220px; min-width: 220px; height: 100vh; position: fixed; top: 0; left: 0; background: #fff; border-right: 1px solid #e9edf5; display: flex; flex-direction: column; z-index: 40; overflow-y: auto; }
-        .sidebar-logo { padding: 1.25rem 1.5rem 1rem; border-bottom: 1px solid #f1f5f9; }
-        .sidebar-logo-name { font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-        .sidebar-logo-sub  { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #e03057; }
+        .sidebar-logo { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; }
         .nav-group-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; padding: 1.1rem 1.25rem 0.35rem; }
         .nav-item { display: flex; align-items: center; gap: 0.65rem; padding: 0.52rem 1.25rem; font-size: 0.84rem; font-weight: 500; color: #475569; border-radius: 10px; margin: 0 0.5rem; cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; }
         .nav-item:hover { background: #f8fafc; color: #0f172a; }
@@ -63,6 +61,16 @@
 
         /* Content */
         .dash-content { padding: 1.75rem 2rem; flex: 1; }
+
+        /* Collapsible Sections */
+        .dash-section { background: #fff; border-radius: 14px; border: 1px solid #e9edf5; margin-bottom: 1.25rem; overflow: hidden; }
+        .dash-section-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; cursor: pointer; background: #fafbff; border-bottom: 1px solid #f1f5f9; transition: background 0.2s; }
+        .dash-section-header:hover { background: #f8fafc; }
+        .dash-section-title { font-size: 0.92rem; font-weight: 700; color: #0f172a; }
+        .dash-section-icon { width: 20px; height: 20px; color: #94a3b8; transition: transform 0.3s; }
+        .dash-section.collapsed .dash-section-icon { transform: rotate(-90deg); }
+        .dash-section-content { padding: 1.25rem; transition: all 0.3s ease; }
+        .dash-section.collapsed .dash-section-content { display: none; }
 
         /* KPI Cards */
         .kpi-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 1rem; margin-bottom: 1rem; }
@@ -243,8 +251,14 @@
     {{-- Dashboard Content --}}
     <div class="dash-content">
 
-        {{-- ── KPI Row 1 (6 cards) ─────────────────────── --}}
-        <div class="kpi-grid">
+        {{-- ── KPI Section ─────────────────────────────── --}}
+        <div class="dash-section" id="kpi-section">
+            <div class="dash-section-header" onclick="toggleSection('kpi-section')">
+                <div class="dash-section-title">Key Performance Indicators</div>
+                <svg class="dash-section-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="dash-section-content">
+                <div class="kpi-grid">
 
             <div class="kpi-card">
                 <div class="kpi-icon" style="background:#eff6ff;">
@@ -308,7 +322,6 @@
 
         </div>
 
-        {{-- ── KPI Row 2 (4 cards) ─────────────────────── --}}
         <div class="kpi-grid-2">
 
             <div class="kpi-card">
