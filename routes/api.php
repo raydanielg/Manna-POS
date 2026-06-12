@@ -56,4 +56,11 @@ Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
     Route::get('suppliers',            fn() => response()->json(Supplier::select('id','name','company')->orderBy('name')->get()))->name('suppliers');
     Route::get('expense-categories',   fn() => response()->json(ExpenseCategory::select('id','name')->orderBy('name')->get()))->name('expense-categories');
     Route::get('users',                fn() => response()->json(\App\Models\User::select('id','name','email','role','business_name','business_city','business_country','currency','created_at')->orderBy('name')->get()))->name('users');
+
+    // Staff management
+    Route::get('staff',           [App\Http\Controllers\Api\StaffApiController::class, 'index']);
+    Route::post('staff',          [App\Http\Controllers\Api\StaffApiController::class, 'store']);
+    Route::get('staff/{id}',      [App\Http\Controllers\Api\StaffApiController::class, 'show']);
+    Route::put('staff/{id}',      [App\Http\Controllers\Api\StaffApiController::class, 'update']);
+    Route::delete('staff/{id}',   [App\Http\Controllers\Api\StaffApiController::class, 'destroy']);
 });

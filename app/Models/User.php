@@ -12,7 +12,7 @@ class User extends Authenticatable {
     protected $fillable = [
         'name','email','password','role','phone',
         'business_name','business_type','business_address','business_city','business_country',
-        'currency','tax_percentage','fiscal_year_start',
+        'currency','tax_percentage','fiscal_year_start','owner_id',
     ];
 
     protected $hidden = ['password','remember_token'];
@@ -21,4 +21,12 @@ class User extends Authenticatable {
         'email_verified_at' => 'datetime',
         'tax_percentage'    => 'decimal:2',
     ];
+
+    public function staff() {
+        return $this->hasMany(User::class, 'owner_id');
+    }
+
+    public function owner() {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 }
