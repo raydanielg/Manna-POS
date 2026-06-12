@@ -1,28 +1,9 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Privacy Policy - {{ config('app.name', 'MannaPOS') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@extends('layouts.page')
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #f5f5f5;
-            color: #1a1a1a;
-            line-height: 1.6;
-            padding: 2rem 0;
-        }
+@section('title', 'Privacy Policy - ' . config('app.name', 'MannaPOS'))
+
+@section('content')
+<div class="pb-16">
 
         .document-container {
             max-width: 210mm;
@@ -246,6 +227,6 @@
         <div class="document-footer">
             <p>© 2024 MannaPOS. All rights reserved. This Privacy Policy is part of our Terms of Service.</p>
         </div>
-    </div>
-</body>
-</html>
+</div>
+</style>
+@endsection
