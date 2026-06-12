@@ -35,11 +35,11 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(String email, String password, {bool remember = false}) async {
     _setLoading(true);
     try {
       final data = await ApiService.post('/auth/login', {'email': email, 'password': password});
-      await _saveAuth(data['token'], data['user']);
+      await _saveAuth(data['token'], data['user'], remember: remember, email: email);
     } finally { _setLoading(false); }
   }
 
@@ -65,21 +65,33 @@ class AuthProvider extends ChangeNotifier {
     return _user!;
   }
 
-  Future<void> _saveAuth(String token, dynamic userData) async {
+  Future<void> _saveAuth(String token, dynamic userData, {bool remember = false, String? email}) async {
     ApiService.setToken(token);
     _user = AppUser.fromJson(userData);
+    _rememberMe = remember;
+    _savedEmail = remember ? email : null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(AppConstants.tokenKey, token);
     await prefs.setString(AppConstants.userKey, jsonEncode(userData));
+    await prefs.setBool('remember_me', remember);
+    if (remember && email != null) {
+      await prefs.setString('remember_email', email);
+    } else {
+      await prefs.remove('remember_email');
+    }
     notifyListeners();
   }
 
   Future<void> _clearAuth() async {
     ApiService.clearToken();
     _user = null;
+    _savedEmail = null;
+    _rememberMe = false;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(AppConstants.tokenKey);
     await prefs.remove(AppConstants.userKey);
+    await prefs.remove('remember_email');
+    await prefs.remove('remember_me');
     notifyListeners();
   }
 
