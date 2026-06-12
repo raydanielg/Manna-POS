@@ -55,4 +55,5 @@ Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
     Route::get('units',                fn() => response()->json(Unit::select('id','name','short_name')->orderBy('name')->get()))->name('units');
     Route::get('suppliers',            fn() => response()->json(Supplier::select('id','name','company')->orderBy('name')->get()))->name('suppliers');
     Route::get('expense-categories',   fn() => response()->json(ExpenseCategory::select('id','name')->orderBy('name')->get()))->name('expense-categories');
+    Route::get('users',                fn() => response()->json(\App\Models\User::select('id','name','email','role','business_name','business_city','business_country','currency','created_at')->orderBy('name')->get()))->name('users');
 });
