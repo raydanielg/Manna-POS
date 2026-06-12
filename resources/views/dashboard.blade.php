@@ -477,8 +477,8 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">List Stock Transfers</a>
-                <a href="#" class="child-item">Add Stock Transfer</a>
+                <a href="{{ route('dashboard.stock-transfer.list-stock-transfer') }}" class="child-item">List Stock Transfers</a>
+                <a href="{{ route('dashboard.stock-transfer.add-stock-transfer') }}" class="child-item">Add Stock Transfer</a>
             </div>
         </div>
 
@@ -490,8 +490,8 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">List Stock Adjustments</a>
-                <a href="#" class="child-item">Add Stock Adjustment</a>
+                <a href="{{ route('dashboard.stock-adjustment.list-stock-adjustment') }}" class="child-item">List Stock Adjustments</a>
+                <a href="{{ route('dashboard.stock-adjustment.add-stock-adjustment') }}" class="child-item">Add Stock Adjustment</a>
             </div>
         </div>
 
