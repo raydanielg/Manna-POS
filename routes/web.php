@@ -144,6 +144,8 @@ Route::get('/dashboard/user-management/roles', function () {
 Route::get('/dashboard/user-management/sales-commission-agents', function () {
     return view('dashboard.user-management.sales-commission-agents');
 })->middleware('auth')->name('dashboard.user-management.sales-commission-agents');
+Route::get('/dashboard/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'profile'])->middleware('auth')->name('dashboard.profile');
+Route::put('/dashboard/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'updateProfile'])->middleware('auth')->name('dashboard.profile.update');
 
 // Contacts Routes
 Route::get('/dashboard/contacts/suppliers', function () {
