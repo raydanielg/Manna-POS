@@ -448,8 +448,30 @@
         }
 
         .form-submit-section .btn {
-            padding: 1rem 2rem;
+            padding: 0.875rem 2rem;
             font-size: 1rem;
+            font-weight: 600;
+            background: #10B981;
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .form-submit-section .btn:hover {
+            background: #059669;
+            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .form-submit-section .btn:active {
+            transform: translateY(0);
+        }
+
+        .form-submit-section .btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         /* Toast Notifications */
