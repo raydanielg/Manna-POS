@@ -126,7 +126,7 @@ class _ExpenseFormState extends State<_ExpenseForm> {
   Future<void> _save() async {
     if (!_form.currentState!.validate()) return;
     setState(() { _saving = true; _err = null; });
-    final body = {'title': _title.text.trim(), 'amount': double.tryParse(_amount.text) ?? 0, 'expense_date': _date.text, if (_catId != null) 'expense_category_id': _catId, if (_notes.text.isNotEmpty) 'notes': _notes.text.trim()};
+    final body = {'reference': _title.text.trim(), 'amount': double.tryParse(_amount.text) ?? 0, 'expense_date': _date.text, if (_catId != null) 'expense_category_id': _catId, if (_notes.text.isNotEmpty) 'notes': _notes.text.trim()};
     try {
       if (widget.expense != null) await ApiService.put('/expenses/${widget.expense!.id}', body);
       else await ApiService.post('/expenses', body);
@@ -146,7 +146,7 @@ class _ExpenseFormState extends State<_ExpenseForm> {
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(widget.expense != null ? 'Edit Expense' : 'Add Expense', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)), IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context))]),
       if (_err != null) ...[const SizedBox(height: 12), Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(10)), child: Text(_err!, style: const TextStyle(color: AppColors.danger)))],
       const SizedBox(height: 16),
-      TextFormField(controller: _title, decoration: const InputDecoration(labelText: 'Title *'), validator: (v) => v!.isNotEmpty ? null : 'Required'),
+      TextFormField(controller: _title, decoration: const InputDecoration(labelText: 'Reference / Title *'), validator: (v) => v!.isNotEmpty ? null : 'Required'),
       const SizedBox(height: 12),
       Row(children: [
         Expanded(child: TextFormField(controller: _amount, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Amount *'), validator: (v) => double.tryParse(v ?? '') != null ? null : 'Enter valid amount')),
