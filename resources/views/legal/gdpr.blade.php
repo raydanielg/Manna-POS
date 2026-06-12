@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="pb-16">
-
+<style>
         .document-container {
             max-width: 210mm;
             margin: 0 auto;
@@ -264,4 +264,5 @@
             <p>© 2024 MannaPOS. All rights reserved. This GDPR Compliance Statement should be read together with our Privacy Policy.</p>
         </div>
 </div>
+</style>
 @endsection

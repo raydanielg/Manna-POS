@@ -220,4 +220,5 @@
             <p>© 2024 MannaPOS. All rights reserved. This Cookie Policy should be read together with our Privacy Policy.</p>
         </div>
 </div>
+</style>
 @endsection

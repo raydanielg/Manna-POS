@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="pb-16">
-<style>
+
         .document-container {
             max-width: 210mm;
             margin: 0 auto;
@@ -253,4 +253,5 @@
             <p>© 2024 MannaPOS. All rights reserved. These Terms of Service constitute a legally binding agreement between you and MannaPOS.</p>
         </div>
 </div>
+</style>
 @endsection
