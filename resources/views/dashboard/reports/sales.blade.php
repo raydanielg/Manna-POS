@@ -49,11 +49,11 @@
             Dashboard
         </a>
         <div class="nav-group-label">Reports</div>
-        <a href="#" class="nav-item active">
+        <a href="{{ route('dashboard.reports.sales') }}" class="nav-item active">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
             Sales Reports
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('dashboard.reports.inventory') }}" class="nav-item">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
             Inventory Reports
         </a>
