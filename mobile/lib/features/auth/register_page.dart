@@ -37,21 +37,21 @@ class _RegisterPageState extends State<RegisterPage> {
   String? _error;
 
   static const _bizTypes = [
-    ('retail',     '🏪', 'Retail'),
-    ('wholesale',  '🏭', 'Wholesale'),
-    ('restaurant', '🍽️', 'Restaurant'),
-    ('service',    '⚙️', 'Service'),
-    ('other',      '📦', 'Other'),
+    ('retail', Icons.store, 'Retail'),
+    ('wholesale', Icons.warehouse, 'Wholesale'),
+    ('restaurant', Icons.restaurant, 'Restaurant'),
+    ('service', Icons.build, 'Service'),
+    ('other', Icons.category, 'Other'),
   ];
 
   static const _currencies = [
-    ('TZS', '🇹🇿', 'Tanzanian Shilling'),
-    ('USD', '🇺🇸', 'US Dollar'),
-    ('EUR', '🇪🇺', 'Euro'),
-    ('KES', '🇰🇪', 'Kenyan Shilling'),
-    ('UGX', '🇺🇬', 'Ugandan Shilling'),
-    ('GBP', '🇬🇧', 'British Pound'),
-    ('ZAR', '🇿🇦', 'South African Rand'),
+    ('TZS', 'Tanzanian Shilling'),
+    ('USD', 'US Dollar'),
+    ('EUR', 'Euro'),
+    ('KES', 'Kenyan Shilling'),
+    ('UGX', 'Ugandan Shilling'),
+    ('GBP', 'British Pound'),
+    ('ZAR', 'South African Rand'),
   ];
 
   static const _months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -91,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _pageCtrl.previousPage(duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
       setState(() { _step--; _error = null; });
     } else {
-      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/login');
     }
   }
 
@@ -146,7 +146,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  // ── Header ─────────────────────────────────────────────────────────────────
   Widget _header() {
     const titles = ['Business Details', 'Business Settings', 'Owner Information'];
     const subs   = ['Basic information about your business', 'Tax and financial settings', 'Your personal details'];
@@ -216,119 +215,91 @@ class _RegisterPageState extends State<RegisterPage> {
     ]);
   }
 
-  // ── Step 1: Business Details ───────────────────────────────────────────────
   Widget _step1() => SingleChildScrollView(
-    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+    padding: const EdgeInsets.all(20),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      _card(children: [
-        _label('Business Name', required: true),
-        TextFormField(
-          controller: _bizName,
-          decoration: const InputDecoration(labelText: 'e.g. Duka la Mama Pita', prefixIcon: Icon(Icons.storefront_outlined, size: 20)),
-          onChanged: (_) => setState(() {}),
-        ),
-        const SizedBox(height: 20),
-        _label('Business Type', required: true),
-        const SizedBox(height: 10),
-        Wrap(spacing: 10, runSpacing: 10, children: _bizTypes.map((t) {
-          final (val, emoji, lab) = t;
-          final sel = _bizType == val;
-          return GestureDetector(
-            onTap: () => setState(() => _bizType = val),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-              decoration: BoxDecoration(
-                color: sel ? AppColors.primaryLt : Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: sel ? AppColors.primary : AppColors.border, width: sel ? 2 : 1),
-                boxShadow: sel ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.15), blurRadius: 8)] : [],
-              ),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                Text(emoji, style: const TextStyle(fontSize: 16)),
-                const SizedBox(width: 8),
-                Text(lab, style: TextStyle(color: sel ? AppColors.primary : AppColors.textPri, fontWeight: sel ? FontWeight.w700 : FontWeight.w500, fontSize: 14)),
-              ]),
+      _label('Business Name', required: true),
+      TextFormField(
+        controller: _bizName,
+        decoration: const InputDecoration(labelText: 'e.g. Duka la Mama Pita', prefixIcon: Icon(Icons.storefront_outlined, size: 20)),
+        onChanged: (_) => setState(() {}),
+      ),
+      const SizedBox(height: 20),
+      _label('Business Type', required: true),
+      const SizedBox(height: 10),
+      Wrap(spacing: 10, runSpacing: 10, children: _bizTypes.map((t) {
+        final (val, icon, lab) = t;
+        final sel = _bizType == val;
+        return GestureDetector(
+          onTap: () => setState(() => _bizType = val),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+            decoration: BoxDecoration(
+              color: sel ? AppColors.primaryLt : Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: sel ? AppColors.primary : AppColors.border, width: sel ? 2 : 1),
+              boxShadow: sel ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.15), blurRadius: 8)] : [],
             ),
-          );
-        }).toList()),
-      ]),
-      const SizedBox(height: 14),
-      _card(children: [
-        Row(children: [
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _label('City', required: true),
-            TextFormField(controller: _bizCity, decoration: const InputDecoration(labelText: 'e.g. Dar es Salaam', prefixIcon: Icon(Icons.location_city_outlined, size: 20)), onChanged: (_) => setState(() {})),
-          ])),
-          const SizedBox(width: 12),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _label('Country'),
-            TextFormField(controller: _bizCountry, decoration: const InputDecoration(prefixText: '🇹🇿  ')),
-          ])),
-        ]),
-        const SizedBox(height: 16),
-        _label('Business Address (optional)'),
-        TextFormField(controller: _bizAddr, decoration: const InputDecoration(labelText: 'Street, building...', prefixIcon: Icon(Icons.place_outlined, size: 20))),
-      ]),
-    ]),
-  );
-
-  // ── Step 2: Business Settings ──────────────────────────────────────────────
-  Widget _step2() => SingleChildScrollView(
-    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      _infoChip('🇹🇿 Tanzania defaults are pre-filled — adjust if needed'),
-      const SizedBox(height: 14),
-      _card(children: [
-        _label('Currency'),
-        DropdownButtonFormField<String>(
-          value: _currency,
-          decoration: const InputDecoration(prefixIcon: Icon(Icons.payments_outlined, size: 20)),
-          isExpanded: true,
-          items: _currencies.map((c) {
-            final (code, flag, name) = c;
-            return DropdownMenuItem(value: code, child: Text('$flag  $code — $name', overflow: TextOverflow.ellipsis));
-          }).toList(),
-          onChanged: (v) => setState(() => _currency = v!),
-        ),
-        const SizedBox(height: 20),
-        _label('VAT / Tax Rate'),
-        TextFormField(
-          controller: _taxPct,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: const InputDecoration(
-            labelText: 'Percentage (%)',
-            hintText: '18',
-            prefixIcon: Icon(Icons.percent_outlined, size: 20),
-            helperText: 'Tanzania standard VAT is 18%',
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(icon, size: 18, color: sel ? AppColors.primary : AppColors.textSec),
+              const SizedBox(width: 8),
+              Text(lab, style: TextStyle(color: sel ? AppColors.primary : AppColors.textPri, fontWeight: sel ? FontWeight.w700 : FontWeight.w500, fontSize: 14)),
+            ]),
           ),
-        ),
-        const SizedBox(height: 20),
-        _label('Fiscal Year Starts'),
-        DropdownButtonFormField<String>(
-          value: _fiscalStart,
-          decoration: const InputDecoration(prefixIcon: Icon(Icons.calendar_month_outlined, size: 20)),
-          items: _months.map((m) => DropdownMenuItem(value: m, child: Text(m))).toList(),
-          onChanged: (v) => setState(() => _fiscalStart = v!),
-        ),
-      ]),
-      const SizedBox(height: 14),
-      _card(children: [
-        Row(children: [
-          Container(width: 40, height: 40, decoration: BoxDecoration(color: AppColors.successLt, borderRadius: BorderRadius.circular(10)), child: const Icon(Icons.lock_outline, color: AppColors.success, size: 20)),
-          const SizedBox(width: 12),
-          const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Secure & Private', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-            Text('Your business data is encrypted and never shared.', style: TextStyle(color: AppColors.textSec, fontSize: 12)),
-          ])),
-        ]),
-      ]),
+        );
+      }).toList()),
+      const SizedBox(height: 20),
+      _label('City', required: true),
+      TextFormField(controller: _bizCity, decoration: const InputDecoration(labelText: 'e.g. Dar es Salaam', prefixIcon: Icon(Icons.location_city_outlined, size: 20)), onChanged: (_) => setState(() {})),
+      const SizedBox(height: 20),
+      _label('Country'),
+      TextFormField(controller: _bizCountry, decoration: const InputDecoration(prefixIcon: Icon(Icons.public, size: 20))),
+      const SizedBox(height: 20),
+      _label('Business Address (optional)'),
+      TextFormField(controller: _bizAddr, decoration: const InputDecoration(labelText: 'Street, building...', prefixIcon: Icon(Icons.place_outlined, size: 20))),
     ]),
   );
 
-  // ── Step 3: Owner Information ──────────────────────────────────────────────
+  Widget _step2() => SingleChildScrollView(
+    padding: const EdgeInsets.all(20),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      _label('Currency'),
+      DropdownButtonFormField<String>(
+        value: _currency,
+        decoration: const InputDecoration(prefixIcon: Icon(Icons.payments_outlined, size: 20)),
+        isExpanded: true,
+        items: _currencies.map((c) {
+          final (code, name) = c;
+          return DropdownMenuItem(value: code, child: Text('$code — $name', overflow: TextOverflow.ellipsis));
+        }).toList(),
+        onChanged: (v) => setState(() => _currency = v!),
+      ),
+      const SizedBox(height: 20),
+      _label('VAT / Tax Rate'),
+      TextFormField(
+        controller: _taxPct,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        decoration: const InputDecoration(
+          labelText: 'Percentage (%)',
+          hintText: '18',
+          prefixIcon: Icon(Icons.percent_outlined, size: 20),
+          helperText: 'Tanzania standard VAT is 18%',
+        ),
+      ),
+      const SizedBox(height: 20),
+      _label('Fiscal Year Starts'),
+      DropdownButtonFormField<String>(
+        value: _fiscalStart,
+        decoration: const InputDecoration(prefixIcon: Icon(Icons.calendar_month_outlined, size: 20)),
+        items: _months.map((m) => DropdownMenuItem(value: m, child: Text(m))).toList(),
+        onChanged: (v) => setState(() => _fiscalStart = v!),
+      ),
+    ]),
+  );
+
   Widget _step3() => SingleChildScrollView(
-    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+    padding: const EdgeInsets.all(20),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       if (_error != null) ...[
         Container(
@@ -342,66 +313,62 @@ class _RegisterPageState extends State<RegisterPage> {
           ]),
         ),
       ],
-      _card(children: [
-        _label('Full Name', required: true),
-        TextFormField(
-          controller: _name,
-          decoration: const InputDecoration(labelText: 'Your full name', prefixIcon: Icon(Icons.person_outline, size: 20)),
-          onChanged: (_) => setState(() {}),
-        ),
-        const SizedBox(height: 16),
-        _label('Phone Number', required: true),
-        _tanzaniaPhone(),
-        const SizedBox(height: 4),
-        const Text('9 digits after +255  •  e.g. 712 345 678', style: TextStyle(color: AppColors.textSec, fontSize: 11)),
-        const SizedBox(height: 16),
-        _label('Email Address', required: true),
-        TextFormField(
-          controller: _email,
-          keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(labelText: 'you@example.com', prefixIcon: Icon(Icons.email_outlined, size: 20)),
-          onChanged: (_) => setState(() {}),
-        ),
-      ]),
-      const SizedBox(height: 14),
-      _card(children: [
-        _label('Password', required: true),
-        TextFormField(
-          controller: _pass,
-          obscureText: !_showPass,
-          decoration: InputDecoration(
-            labelText: 'Min. 8 characters',
-            prefixIcon: const Icon(Icons.lock_outline, size: 20),
-            suffixIcon: IconButton(
-              icon: Icon(_showPass ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec, size: 20),
-              onPressed: () => setState(() => _showPass = !_showPass),
-            ),
+      _label('Full Name', required: true),
+      TextFormField(
+        controller: _name,
+        decoration: const InputDecoration(labelText: 'Your full name', prefixIcon: Icon(Icons.person_outline, size: 20)),
+        onChanged: (_) => setState(() {}),
+      ),
+      const SizedBox(height: 20),
+      _label('Phone Number', required: true),
+      _tanzaniaPhone(),
+      const SizedBox(height: 4),
+      const Text('9 digits after +255  •  e.g. 712 345 678', style: TextStyle(color: AppColors.textSec, fontSize: 11)),
+      const SizedBox(height: 20),
+      _label('Email Address', required: true),
+      TextFormField(
+        controller: _email,
+        keyboardType: TextInputType.emailAddress,
+        decoration: const InputDecoration(labelText: 'you@example.com', prefixIcon: Icon(Icons.email_outlined, size: 20)),
+        onChanged: (_) => setState(() {}),
+      ),
+      const SizedBox(height: 20),
+      _label('Password', required: true),
+      TextFormField(
+        controller: _pass,
+        obscureText: !_showPass,
+        decoration: InputDecoration(
+          labelText: 'Min. 8 characters',
+          prefixIcon: const Icon(Icons.lock_outline, size: 20),
+          suffixIcon: IconButton(
+            icon: Icon(_showPass ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec, size: 20),
+            onPressed: () => setState(() => _showPass = !_showPass),
           ),
-          onChanged: (_) => setState(() {}),
         ),
-        if (_pass.text.isNotEmpty) ...[
-          const SizedBox(height: 8),
-          _strengthBar(_pass.text),
-        ],
-        const SizedBox(height: 16),
-        _label('Confirm Password', required: true),
-        TextFormField(
-          controller: _confirmPass,
-          obscureText: !_showConfirm,
-          decoration: InputDecoration(
-            labelText: 'Re-enter your password',
-            prefixIcon: const Icon(Icons.lock_outline, size: 20),
-            suffixIcon: IconButton(
-              icon: Icon(_showConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec, size: 20),
-              onPressed: () => setState(() => _showConfirm = !_showConfirm),
-            ),
-            errorText: _confirmPass.text.isNotEmpty && _pass.text != _confirmPass.text ? 'Passwords do not match' : null,
-            suffixIconConstraints: const BoxConstraints(minWidth: 48),
+        onChanged: (_) => setState(() {}),
+      ),
+      if (_pass.text.isNotEmpty) ...[
+        const SizedBox(height: 8),
+        _strengthBar(_pass.text),
+      ],
+      const SizedBox(height: 20),
+      _label('Confirm Password', required: true),
+      TextFormField(
+        controller: _confirmPass,
+        obscureText: !_showConfirm,
+        decoration: InputDecoration(
+          labelText: 'Re-enter your password',
+          prefixIcon: const Icon(Icons.lock_outline, size: 20),
+          suffixIcon: IconButton(
+            icon: Icon(_showConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec, size: 20),
+            onPressed: () => setState(() => _showConfirm = !_showConfirm),
           ),
-          onChanged: (_) => setState(() {}),
+          errorText: _confirmPass.text.isNotEmpty && _pass.text != _confirmPass.text ? 'Passwords do not match' : null,
+          suffixIconConstraints: const BoxConstraints(minWidth: 48),
         ),
-      ]),
-      const SizedBox(height: 14),
+        onChanged: (_) => setState(() {}),
+      ),
+      const SizedBox(height: 20),
       Center(child: Wrap(children: [
         const Text('Already have an account? ', style: TextStyle(color: AppColors.textSec, fontSize: 13)),
         GestureDetector(
@@ -412,7 +379,6 @@ class _RegisterPageState extends State<RegisterPage> {
     ]),
   );
 
-  // ── Tanzania phone field ───────────────────────────────────────────────────
   Widget _tanzaniaPhone() => Container(
     decoration: BoxDecoration(
       color: Colors.white,
@@ -427,7 +393,7 @@ class _RegisterPageState extends State<RegisterPage> {
           borderRadius: BorderRadius.only(topLeft: Radius.circular(11), bottomLeft: Radius.circular(11)),
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: const [
-          Text('🇹🇿', style: TextStyle(fontSize: 20)),
+          Icon(Icons.phone_android, size: 20, color: AppColors.primary),
           SizedBox(width: 8),
           Text('+255', style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.primary, fontSize: 15)),
         ]),
@@ -455,7 +421,6 @@ class _RegisterPageState extends State<RegisterPage> {
     ]),
   );
 
-  // ── Password strength bar ──────────────────────────────────────────────────
   Widget _strengthBar(String p) {
     int score = 0;
     if (p.length >= 8) score++;
@@ -477,7 +442,6 @@ class _RegisterPageState extends State<RegisterPage> {
     ]);
   }
 
-  // ── Bottom navigation bar ─────────────────────────────────────────────────
   Widget _bottomNav() {
     final loading = context.watch<AuthProvider>().loading;
     final canProceed = _canNext() && !loading;
@@ -510,25 +474,13 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               child: loading
                 ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))
-                : Text(_step == 2 ? '🎉  Create Account' : 'Continue →', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                : Text(_step == 2 ? 'Create Account' : 'Continue →', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
             ),
           ),
         ),
       ]),
     );
   }
-
-  // ── Helpers ────────────────────────────────────────────────────────────────
-  Widget _card({required List<Widget> children}) => Container(
-    padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: AppColors.border),
-      boxShadow: const [BoxShadow(color: Color(0x06000000), blurRadius: 20, offset: Offset(0, 4))],
-    ),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
-  );
 
   Widget _label(String text, {bool required = false}) => Padding(
     padding: const EdgeInsets.only(bottom: 8),
@@ -537,15 +489,5 @@ class _RegisterPageState extends State<RegisterPage> {
       style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textPri),
       children: required ? const [TextSpan(text: '  *', style: TextStyle(color: AppColors.danger))] : [],
     )),
-  );
-
-  Widget _infoChip(String text) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-    decoration: BoxDecoration(color: AppColors.primaryLt, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.primary.withValues(alpha: 0.3))),
-    child: Row(children: [
-      const Icon(Icons.info_outline, color: AppColors.primary, size: 16),
-      const SizedBox(width: 8),
-      Expanded(child: Text(text, style: const TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w500))),
-    ]),
   );
 }
