@@ -435,9 +435,9 @@
 
         {{-- Products --}}
         <div class="dropdown {{ $isInventory ? 'open' : '' }}" id="dropdown-products">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-products')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-products')" data-tip="Products">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4.5v9l-8 4.5l-8-4.5v-9l8-4.5"/><path d="M12 12l8-4.5"/><path d="M8.2 9.8l7.6-4.6"/><path d="M12 12v9"/><path d="M12 12l-8-4.5"/></svg>
-                Products
+                <span class="nav-label">Products</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
@@ -458,9 +458,9 @@
 
         {{-- Purchases --}}
         <div class="dropdown {{ $isPurchases ? 'open' : '' }}" id="dropdown-purchases">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-purchases')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-purchases')" data-tip="Purchases">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12"/><path d="M16 11l-4 4l-4-4"/><path d="M3 12a9 9 0 0 0 18 0"/></svg>
-                Purchases
+                <span class="nav-label">Purchases</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
@@ -472,9 +472,9 @@
 
         {{-- Sell --}}
         <div class="dropdown {{ $isSell ? 'open' : '' }}" id="dropdown-sell">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-sell')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-sell')" data-tip="Sell">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v-12"/><path d="M16 7l-4-4l-4 4"/><path d="M3 12a9 9 0 0 0 18 0"/></svg>
-                Sell
+                <span class="nav-label">Sell</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
