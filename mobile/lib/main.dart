@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'shared/theme/app_theme.dart';
+import 'shared/constants/app_constants.dart';
+import 'features/auth/login_page.dart';
+import 'features/auth/register_page.dart';
+import 'features/auth/forgot_password_page.dart';
+import 'features/dashboard/dashboard_page.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFF2563EB),
+      statusBarColor: AppTheme.primaryColor,
       statusBarIconBrightness: Brightness.light,
     ),
   );
@@ -17,17 +23,19 @@ class MannaPOSApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MannaPOS',
+      title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF2563EB),
-          brightness: Brightness.light,
-        ),
-        useMaterial3: true,
-        fontFamily: 'Inter',
-      ),
-      home: const SplashScreen(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
+      initialRoute: AppConstants.splashRoute,
+      routes: {
+        AppConstants.splashRoute: (context) => const SplashScreen(),
+        AppConstants.loginRoute: (context) => const LoginPage(),
+        AppConstants.registerRoute: (context) => const RegisterPage(),
+        AppConstants.forgotPasswordRoute: (context) => const ForgotPasswordPage(),
+        AppConstants.dashboardRoute: (context) => const DashboardPage(),
+      },
     );
   }
 }
@@ -55,6 +63,13 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
     _controller.forward();
+    
+    // Navigate to login after splash
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, AppConstants.loginRoute);
+      }
+    });
   }
 
   @override
@@ -68,14 +83,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF2563EB),
-              Color(0xFF7C3AED),
-            ],
-          ),
+          gradient: AppTheme.primaryGradient,
         ),
         child: Center(
           child: FadeTransition(
@@ -100,12 +108,12 @@ class _SplashScreenState extends State<SplashScreen>
                   child: const Icon(
                     Icons.point_of_sale,
                     size: 60,
-                    color: Color(0xFF2563EB),
+                    color: AppTheme.primaryColor,
                   ),
                 ),
                 const SizedBox(height: 32),
                 const Text(
-                  'MannaPOS',
+                  AppConstants.appName,
                   style: TextStyle(
                     fontSize: 42,
                     fontWeight: FontWeight.w800,
@@ -115,7 +123,7 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Point of Sale System',
+                  AppConstants.appDescription,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
