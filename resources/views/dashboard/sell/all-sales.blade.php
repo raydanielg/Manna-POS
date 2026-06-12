@@ -100,8 +100,43 @@
     </div>
   </div>
 </div>
+{{-- Receipt Modal --}}
+<div class="modal-overlay" id="receipt-modal">
+  <div class="modal" style="max-width:460px;padding:0;overflow:hidden;">
+    <div class="modal-header" style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;border:none;">
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <span class="modal-title" style="color:#fff;">Sale Receipt</span>
+      </div>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <button onclick="printReceipt()" style="background:#2563eb;border:none;color:#fff;padding:0.35rem 0.9rem;border-radius:7px;font-size:0.78rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.4rem;">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Print
+        </button>
+        <button class="modal-close" style="color:#94a3b8;" onclick="closeModal('receipt-modal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      </div>
+    </div>
+    <div class="modal-body" style="padding:0;" id="receipt-content">
+      <div style="padding:1.5rem;text-align:center;border-bottom:1px dashed #e2e8f0;">
+        <div style="font-size:1.2rem;font-weight:800;color:#0f172a;">{{ config('app.name','MannaPOS') }}</div>
+        <div style="font-size:0.78rem;color:#64748b;margin-top:2px;">Sales Receipt</div>
+      </div>
+      <div id="receipt-body" style="padding:1.25rem;">
+        <div style="text-align:center;color:#64748b;padding:2rem;">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('scripts')
+<style id="print-styles">
+@media print {
+  body * { visibility: hidden; }
+  #receipt-content, #receipt-content * { visibility: visible; }
+  #receipt-content { position: fixed; top: 0; left: 0; width: 100%; }
+  .modal-header button { display: none !important; }
+}
+</style>
 <script>
 const API='/api/dashboard/sales'; let editId=null; let saleProductList=[];
 const payColors={paid:'badge-success',partial:'badge-warning',unpaid:'badge-danger'};
