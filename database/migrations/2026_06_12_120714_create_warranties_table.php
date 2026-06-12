@@ -15,6 +15,10 @@ class CreateWarrantiesTable extends Migration
     {
         Schema::create('warranties', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->integer('duration');
+            $table->enum('duration_unit', ['days', 'months', 'years'])->default('months');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
