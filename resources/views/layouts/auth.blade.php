@@ -75,17 +75,19 @@
         }
 
         .brand-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #10B981, #059669);
-            border-radius: 8px;
+            width: 64px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
 
-        .brand-icon svg { width: 18px; height: 18px; fill: #fff; }
+        .brand-icon .brand-logo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
         .brand-name {
             font-size: 1.15rem;
@@ -623,11 +625,7 @@
             <div class="auth-brand-inner">
                 <div class="auth-brand-top">
                     <div class="brand-icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
-                            <path d="M2 17L12 22L22 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                            <path d="M2 12L12 17L22 12" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                        </svg>
+                        <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="MannaPOS Logo" class="brand-logo-image">
                     </div>
                     <span class="brand-name">{{ config('app.name', 'MannaPOS') }}</span>
                 </div>
