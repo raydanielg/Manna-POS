@@ -81,7 +81,7 @@ class _HomeTabState extends State<HomeTab> {
       backgroundColor: AppColors.bg,
       body: CustomScrollView(slivers: [
         SliverAppBar(
-          expandedHeight: 160,
+          expandedHeight: 140,
           pinned: true,
           backgroundColor: Colors.white,
           elevation: 0,
@@ -101,10 +101,19 @@ class _HomeTabState extends State<HomeTab> {
               child: SafeArea(child: Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const SizedBox(height: 48),
                 Row(children: [
+                  Container(
+                    width: 50, height: 50,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(colors: [AppColors.primary, AppColors.secondary], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Center(child: Text(user?.initials ?? 'U', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800))),
+                  ),
+                  const SizedBox(width: 14),
                   Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(user?.displayBusiness ?? 'My Business', style: const TextStyle(color: AppColors.textPri, fontSize: 22, fontWeight: FontWeight.w800)),
-                    const SizedBox(height: 4),
-                    Text('Good ${_greeting()}, ${user?.name.split(' ').first ?? ''}!', style: const TextStyle(color: AppColors.textSec, fontSize: 14)),
+                    Text(user?.name ?? 'User', style: const TextStyle(color: AppColors.textPri, fontSize: 18, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 2),
+                    Text(user?.displayBusiness ?? 'My Business', style: const TextStyle(color: AppColors.textSec, fontSize: 13)),
                   ])),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
