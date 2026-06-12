@@ -3,6 +3,7 @@ import '../../shared/theme/app_theme.dart';
 import '../../shared/constants/app_constants.dart';
 import '../pos/pos_page.dart';
 import '../products/products_page.dart';
+import '../sales/sales_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -313,14 +314,7 @@ class ProductsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Products'),
-      ),
-      body: const Center(
-        child: Text('Products Page'),
-      ),
-    );
+    return const ProductsPage();
   }
 }
 
