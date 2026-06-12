@@ -158,20 +158,15 @@
         .auth-form-header .mobile-logo {
             display: none;
             align-items: center;
-            gap: 0.65rem;
+            gap: 0.75rem;
             margin-bottom: 1.5rem;
         }
 
-        .auth-form-header .mobile-logo .logo-icon {
-            width: 30px; height: 30px;
-            background: linear-gradient(135deg, #10B981, #059669);
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .auth-form-header .mobile-logo .logo-image {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
         }
-
-        .auth-form-header .mobile-logo .logo-icon svg { width: 16px; height: 16px; fill: #fff; }
 
         .auth-form-header .mobile-logo span {
             font-size: 1.1rem;
