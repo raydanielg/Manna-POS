@@ -519,6 +519,50 @@
             let currentStep = 1;
             const totalSteps = 3;
 
+            // Load saved form data from localStorage
+            function loadFormData() {
+                const savedData = localStorage.getItem('registerFormData');
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    Object.keys(data).forEach(key => {
+                        const input = registerForm.querySelector(`[name="${key}"]`);
+                        if (input) {
+                            input.value = data[key];
+                        }
+                    });
+                    
+                    // Restore current step
+                    if (data.currentStep) {
+                        currentStep = data.currentStep;
+                        updateStepUI(currentStep);
+                    }
+                }
+            }
+
+            // Save form data to localStorage
+            function saveFormData() {
+                const formData = {};
+                registerForm.querySelectorAll('input, select').forEach(input => {
+                    if (input.name) {
+                        formData[input.name] = input.value;
+                    }
+                });
+                formData.currentStep = currentStep;
+                localStorage.setItem('registerFormData', JSON.stringify(formData));
+            }
+
+            // Clear saved form data
+            function clearFormData() {
+                localStorage.removeItem('registerFormData');
+            }
+
+            // Load saved data on page load
+            loadFormData();
+
+            // Save data on input change
+            registerForm.addEventListener('input', saveFormData);
+            registerForm.addEventListener('change', saveFormData);
+
             function updateStepUI(step) {
                 const currentStepEl = document.querySelector(`.wizard-step[data-step="${currentStep}"]`);
                 const nextStepEl = document.querySelector(`.wizard-step[data-step="${step}"]`);

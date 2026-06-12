@@ -11,79 +11,38 @@
         {{-- Cards grid --}}
         <div class="blog-grid">
 
-            {{-- Card 1 --}}
+            @foreach ($latestBlogs ?? [] as $post)
             <article class="blog-card">
-                <a href="#" class="blog-card-img-wrap">
-                    <img
-                        src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=800&auto=format&fit=crop&q=60"
-                        alt="Smart Inventory Tips"
-                        class="blog-card-img"
-                    >
+                <a href="{{ route('blog.show', $post->slug) }}" class="blog-card-img-wrap">
+                    <img src="{{ $post->cover_image }}" alt="{{ $post->title }}" class="blog-card-img">
                 </a>
                 <div class="blog-card-body">
-                    <span class="blog-badge">Article</span>
-                    <a href="#" class="blog-card-title-link">
-                        <h3 class="blog-card-title">5 Smart Ways to Manage Inventory and Never Run Out of Stock</h3>
+                    <span class="blog-badge">{{ $post->category }}</span>
+                    <a href="{{ route('blog.show', $post->slug) }}" class="blog-card-title-link">
+                        <h3 class="blog-card-title">{{ $post->title }}</h3>
                     </a>
-                    <p class="blog-card-desc">Learn how modern POS systems can automate reordering, track supplier deliveries, and keep your shelves perfectly stocked at all times.</p>
+                    <p class="blog-card-desc">{{ $post->excerpt }}</p>
                     <div class="blog-card-author">
-                        <img
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=60"
-                            alt="Amina Hassan"
-                            class="blog-author-avatar"
-                        >
+                        @if($post->author_avatar)
+                        <img src="{{ $post->author_avatar }}" alt="{{ $post->author_name }}" class="blog-author-avatar">
+                        @endif
                         <div class="blog-author-info">
-                            <span class="blog-author-name">Amina Hassan</span>
-                            <span class="blog-author-meta">Jun 10, 2025 &middot; 8 min read</span>
+                            <span class="blog-author-name">{{ $post->author_name }}</span>
+                            <span class="blog-author-meta">{{ $post->published_at?->format('M j, Y') }} &middot; {{ $post->read_time }} min read</span>
                         </div>
                     </div>
                 </div>
             </article>
+            @endforeach
 
-            {{-- Card 2 --}}
+            {{-- fallback placeholder card (invisible — kept so grid never breaks) --}}
+            @if(($latestBlogs ?? collect())->isEmpty())
             <article class="blog-card">
-                <a href="#" class="blog-card-img-wrap">
-                    <img
-                        src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&auto=format&fit=crop&q=60"
-                        alt="Mobile Payments"
-                        class="blog-card-img"
-                    >
-                </a>
+                <div class="blog-card-img-wrap" style="background:#e2e8f0;"></div>
                 <div class="blog-card-body">
                     <span class="blog-badge">Article</span>
-                    <a href="#" class="blog-card-title-link">
-                        <h3 class="blog-card-title">How Mobile Payments Are Changing the Future of Retail in Africa</h3>
-                    </a>
-                    <p class="blog-card-desc">From M-Pesa to Tigopesa — discover how accepting mobile money can increase your sales and attract more customers to your store.</p>
-                    <div class="blog-card-author">
-                        <img
-                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=60"
-                            alt="David Mwangi"
-                            class="blog-author-avatar"
-                        >
-                        <div class="blog-author-info">
-                            <span class="blog-author-name">David Mwangi</span>
-                            <span class="blog-author-meta">May 28, 2025 &middot; 6 min read</span>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            {{-- Card 3 --}}
-            <article class="blog-card">
-                <a href="#" class="blog-card-img-wrap">
-                    <img
-                        src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=60"
-                        alt="Sales Analytics"
-                        class="blog-card-img"
-                    >
-                </a>
-                <div class="blog-card-body">
-                    <span class="blog-badge">Article</span>
-                    <a href="#" class="blog-card-title-link">
-                        <h3 class="blog-card-title">Using Sales Data to Make Smarter Business Decisions Every Day</h3>
-                    </a>
-                    <p class="blog-card-desc">Your POS holds a goldmine of insights. Here is how to read your reports, spot your best sellers, and grow your profits consistently.</p>
+                    <h3 class="blog-card-title">Coming Soon</h3>
+                    <p class="blog-card-desc">Our first blog posts are on their way. Check back soon!</p>
                     <div class="blog-card-author">
                         <img
                             src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&auto=format&fit=crop&q=60"
