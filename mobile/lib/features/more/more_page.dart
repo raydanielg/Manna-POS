@@ -8,6 +8,7 @@ import '../customers/customers_page.dart';
 import '../expenses/expenses_page.dart';
 import '../reports/reports_page.dart';
 import '../settings/settings_page.dart';
+import 'staff_management_page.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -72,7 +73,7 @@ class MorePage extends StatelessWidget {
         const SizedBox(height: 8),
 
         AppCard(child: Column(children: [
-          _navTile(context, Icons.group_outlined, 'User Management', 'Manage app users', AppColors.primary, AppColors.primaryLt, const _UserManagementPage()),
+          _navTile(context, Icons.group_outlined, 'Staff Management', 'Add & manage your staff', AppColors.primary, AppColors.primaryLt, const StaffManagementPage()),
           const Divider(height: 1),
           _navTile(context, Icons.business_outlined, 'Suppliers', 'Manage suppliers', AppColors.warning, AppColors.warningLt, const _SuppliersPage()),
           const Divider(height: 1),
