@@ -15,6 +15,15 @@ class CreateSaleItemsTable extends Migration
     {
         Schema::create('sale_items', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sale_id');
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->string('product_name');
+            $table->decimal('quantity', 15, 4);
+            $table->decimal('unit_price', 15, 2);
+            $table->decimal('discount', 15, 2)->default(0);
+            $table->decimal('total', 15, 2);
+            $table->foreign('sale_id')->references('id')->on('sales')->cascadeOnDelete();
+            $table->foreign('product_id')->references('id')->on('products')->nullOnDelete();
             $table->timestamps();
         });
     }

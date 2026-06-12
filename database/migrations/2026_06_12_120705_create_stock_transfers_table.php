@@ -15,6 +15,12 @@ class CreateStockTransfersTable extends Migration
     {
         Schema::create('stock_transfers', function (Blueprint $table) {
             $table->id();
+            $table->string('reference')->unique();
+            $table->string('from_location');
+            $table->string('to_location');
+            $table->date('transfer_date');
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
