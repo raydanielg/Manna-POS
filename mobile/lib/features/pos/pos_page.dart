@@ -152,7 +152,9 @@ class _PosPageState extends State<PosPage> with SingleTickerProviderStateMixin {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: const Text('Point of Sale'),
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        title: const Text('Point of Sale', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
         actions: [
           if (_itemCount > 0)
             Padding(padding: const EdgeInsets.only(right: 8),
