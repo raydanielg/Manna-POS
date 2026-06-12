@@ -259,19 +259,21 @@
             @enderror
         </div>
 
-            <div class="wizard-buttons">
-                <button type="button" class="btn btn-secondary prev-btn">
-                    <span class="btn-text">Previous</span>
-                </button>
-                <button type="button" class="btn btn-primary next-btn">
-                    <span class="btn-text">Next</span>
-                </button>
             </div>
         </div>
 
-        <!-- Step 3: Owner Information -->
-        <div class="wizard-step" data-step="3">
-            <h3 class="section-title">Owner Information</h3>
+        <!-- Accordion Section 3: Owner Information -->
+        <div class="accordion-section" data-section="3">
+            <div class="accordion-header" onclick="toggleAccordion(3)">
+                <div class="accordion-header-content">
+                    <h3 class="accordion-title">Owner Information</h3>
+                    <p class="accordion-subtitle">Your personal details</p>
+                </div>
+                <div class="accordion-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+            </div>
+            <div class="accordion-content">
 
         <div class="form-group">
             <label for="first_name" class="form-label">First Name *</label>
