@@ -596,19 +596,75 @@
         <div class="header-right">
             {{-- Date --}}
             <span class="hidden sm:block text-xs text-slate-400 font-medium">{{ now()->format('D, M j Y') }}</span>
-            {{-- Notifications --}}
-            <div class="notif-btn">
-                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                <span class="notif-dot"></span>
-            </div>
-            {{-- User --}}
-            <div class="user-chip">
-                <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
-                <div>
-                    <div class="user-name">{{ Auth::user()->name ?? 'Admin' }}</div>
-                    <div class="user-role">{{ ucfirst(Auth::user()->role ?? 'user') }}</div>
+            
+            {{-- Notifications Dropdown --}}
+            <div class="header-dropdown" id="header-notif-dropdown">
+                <div class="notif-btn" onclick="toggleHeaderDropdown('header-notif-dropdown')">
+                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    <span class="notif-dot"></span>
                 </div>
-                <svg class="w-3.5 h-3.5 text-slate-400 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                <div class="header-dropdown-menu">
+                    <div class="header-dropdown-header">
+                        <div class="header-dropdown-title">Notifications</div>
+                    </div>
+                    <div class="notification-item notification-unread">
+                        <div class="notification-title">New Sale - #INV-001</div>
+                        <div class="notification-desc">Sale of $1,250.00 completed successfully</div>
+                        <div class="notification-time">2 minutes ago</div>
+                    </div>
+                    <div class="notification-item notification-unread">
+                        <div class="notification-title">Low Stock Alert</div>
+                        <div class="notification-desc">Product "Wireless Mouse" is running low (5 units)</div>
+                        <div class="notification-time">15 minutes ago</div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-title">New Customer Registered</div>
+                        <div class="notification-desc">John Doe has registered as a new customer</div>
+                        <div class="notification-time">1 hour ago</div>
+                    </div>
+                    <div class="header-dropdown-footer">
+                        <a href="#" class="header-dropdown-item" style="justify-content: center; padding: 0.5rem;">
+                            View All Notifications
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            {{-- Profile Dropdown --}}
+            <div class="header-dropdown" id="header-profile-dropdown">
+                <div class="user-chip" onclick="toggleHeaderDropdown('header-profile-dropdown')">
+                    <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
+                    <div>
+                        <div class="user-name">{{ Auth::user()->name ?? 'Admin' }}</div>
+                        <div class="user-role">{{ ucfirst(Auth::user()->role ?? 'user') }}</div>
+                    </div>
+                    <svg class="w-3.5 h-3.5 text-slate-400 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="header-dropdown-menu">
+                    <div class="header-dropdown-header">
+                        <div class="header-dropdown-title">My Account</div>
+                    </div>
+                    <a href="#" class="header-dropdown-item">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        My Profile
+                    </a>
+                    <a href="#" class="header-dropdown-item">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></svg>
+                        Settings
+                    </a>
+                    <a href="#" class="header-dropdown-item">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Change Password
+                    </a>
+                    <div class="header-dropdown-divider"></div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="header-dropdown-item" style="width: 100%; border: none; background: none; color: #e03057;">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                            Sign Out
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </header>
@@ -917,6 +973,30 @@ function toggleDropdown(dropdownId) {
     const dropdown = document.getElementById(dropdownId);
     dropdown.classList.toggle('open');
 }
+
+// ── Header Dropdown Toggle ───────────────────────────────
+function toggleHeaderDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.classList.toggle('open');
+    
+    // Close other dropdowns when one is opened
+    const allDropdowns = document.querySelectorAll('.header-dropdown');
+    allDropdowns.forEach(d => {
+        if (d.id !== dropdownId) {
+            d.classList.remove('open');
+        }
+    });
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+    const dropdowns = document.querySelectorAll('.header-dropdown');
+    dropdowns.forEach(dropdown => {
+        if (!dropdown.contains(event.target)) {
+            dropdown.classList.remove('open');
+        }
+    });
+});
 
 // ── Trend Chart ──────────────────────────────────────────
 (function() {
