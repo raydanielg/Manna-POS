@@ -1,135 +1,211 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>List Purchases — {{ config('app.name', 'MannaPOS') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #f1f4fb; }
-        .sidebar { width: 220px; min-width: 220px; height: 100vh; position: fixed; top: 0; left: 0; background: #fff; border-right: 1px solid #e9edf5; display: flex; flex-direction: column; z-index: 40; }
-        .sidebar-logo { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; }
-        .sidebar-content { flex: 1; padding: 0.75rem 0.5rem; overflow-y: auto; }
-        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
-        .nav-item:hover { background: #f8fafc; color: #0f172a; }
-        .nav-item.active { background: #e9edf5; color: #0f172a; font-weight: 600; }
-        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .dropdown { margin-bottom: 0.25rem; }
-        .dropdown-toggle { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .dropdown-toggle:hover { background: #f8fafc; color: #0f172a; }
-        .dropdown-toggle svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .dropdown-toggle .chevron { margin-left: auto; width: 16px; height: 16px; color: #9ca3af; transition: transform 0.3s; }
-        .dropdown.open .dropdown-toggle .chevron { transform: rotate(90deg); }
-        .dropdown-children { display: none; position: relative; margin-top: 0.5rem; margin-bottom: 1rem; padding-left: 2.75rem; }
-        .dropdown.open .dropdown-children { display: block; }
-        .dropdown-children::before { content: ''; position: absolute; left: 1.25rem; top: 0; bottom: 0; width: 1px; background: #e5e7eb; }
-        .dropdown-children .child-item { display: flex; font-size: 0.875rem; font-weight: 500; color: #64748b; padding: 0.35rem 0; transition: color 0.2s; cursor: pointer; text-decoration: none; white-space: nowrap; }
-        .dropdown-children .child-item:hover { color: #0f172a; }
-        .dropdown-children .child-item.active { color: #0f172a; font-weight: 600; }
-        .dropdown-children .child-item + .child-item { margin-top: 0.875rem; }
-        .sidebar-bottom { margin-top: auto; padding: 1rem 0.5rem 1.25rem; border-top: 1px solid #f1f5f9; }
-        .sign-out-btn { display: flex; align-items: center; gap: 0.65rem; padding: 0.52rem 1.25rem; font-size: 0.84rem; font-weight: 600; color: #e03057; width: 100%; border-radius: 10px; background: none; border: none; cursor: pointer; transition: background 0.15s; }
-        .sign-out-btn:hover { background: #fff0f3; }
-        .sign-out-btn svg { width: 16px; height: 16px; }
-        .main-wrap { margin-left: 220px; min-height: 100vh; }
-        .top-header { background: #fff; border-bottom: 1px solid #e9edf5; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
-        .page-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; }
-        .content { padding: 1.75rem 2rem; }
-        .table-card { background: #fff; border-radius: 14px; border: 1px solid #e9edf5; padding: 1.5rem; }
-        .section-title { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem; }
-        .tbl { width: 100%; border-collapse: collapse; }
-        .tbl th { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; padding: 0.6rem 1.25rem; text-align: left; }
-        .tbl td { font-size: 0.8rem; color: #374151; padding: 0.65rem 1.25rem; border-top: 1px solid #f8fafc; }
-        .btn-add { padding: 0.5rem 1rem; background: #10B981; color: white; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-        .btn-add:hover { background: #059669; }
-    </style>
-</head>
-<body class="font-sans antialiased">
-
-<aside class="sidebar">
-    <div class="sidebar-logo">
-        <div class="flex items-center justify-center">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
-                <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-6 h-6 object-contain brightness-0 invert">
-            </div>
-        </div>
+﻿@extends('layouts.dashboard')
+@section('page_title','Purchases')
+@section('content')
+<div class="dash-content">
+<div class="page-card">
+  <div class="card-header">
+    <div class="card-title">Purchase Orders</div>
+    <div class="filters-row">
+      <div class="search-wrap">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Search purchases..." oninput="loadList()">
+      </div>
+      <select id="statusFilter" class="form-control" style="width:140px;" onchange="loadList()">
+        <option value="">All Status</option>
+        <option value="received">Received</option>
+        <option value="pending">Pending</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+      <button class="btn btn-success" onclick="openAddModal()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Add Purchase
+      </button>
     </div>
-    <div class="sidebar-content">
-        <a href="{{ route('dashboard') }}" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M10 12h4v4h-4z"/></svg>
-            Home
-        </a>
-        <div class="dropdown open" id="dropdown-purchases">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-purchases')">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12"/><path d="M16 11l-4 4l-4 -4"/><path d="M3 12a9 9 0 0 0 18 0"/></svg>
-                Purchases
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                <a href="#" class="child-item active">List Purchases</a>
-                <a href="#" class="child-item">Add Purchase</a>
-                <a href="#" class="child-item">List Purchase Return</a>
-            </div>
-        </div>
-    </div>
-    <div class="sidebar-bottom">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="sign-out-btn">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                Sign Out
-            </button>
-        </form>
-    </div>
-</aside>
-
-<div class="main-wrap">
-    <header class="top-header">
-        <h1 class="page-title">List Purchases</h1>
-        <div class="user-chip">
-            <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
-            <div>
-                <div class="user-name">{{ Auth::user()->name ?? 'Admin' }}</div>
-                <div class="user-role">{{ ucfirst(Auth::user()->role ?? 'user') }}</div>
-            </div>
-        </div>
-    </header>
-
-    <div class="content">
-        <div class="table-card">
-            <div class="flex justify-between items-center mb-4">
-                <div class="section-title mb-0">All Purchases</div>
-                <button class="btn-add">+ Add Purchase</button>
-            </div>
-            <table class="tbl">
-                <thead>
-                    <tr>
-                        <th>Purchase ID</th>
-                        <th>Supplier</th>
-                        <th>Date</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td colspan="5" class="text-center text-gray-400 py-8">No purchases yet.</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Reference</th><th>Supplier</th><th>Date</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="tableBody"><tr><td colspan="8" class="tbl-empty">Loading...</td></tr></tbody>
+    </table>
+  </div>
 </div>
-
+</div>
+<div class="modal-overlay" id="modal">
+  <div class="modal modal-lg" style="max-width:860px;">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Add Purchase</div>
+      <button class="modal-close" onclick="closeModal('modal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="itemForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Supplier *</label>
+            <select name="supplier_id" class="form-control" required><option value="">Select supplier...</option></select>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Purchase Date *</label><input name="purchase_date" type="date" class="form-control" required><div class="invalid-feedback"></div></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-control">
+              <option value="received">Received</option>
+              <option value="pending">Pending</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Status</label>
+            <select name="payment_status" class="form-control">
+              <option value="paid">Paid</option>
+              <option value="partial">Partial</option>
+              <option value="unpaid">Unpaid</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:0.75rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+            <label class="form-label" style="margin:0;">Items</label>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="addItemRow()">+ Add Item</button>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+            <table style="width:100%;border-collapse:collapse;">
+              <thead><tr style="background:#f1f5f9;"><th style="padding:0.5rem;font-size:0.72rem;font-weight:600;color:#64748b;text-align:left;">Product</th><th style="padding:0.5rem;font-size:0.72rem;font-weight:600;color:#64748b;text-align:right;">Qty</th><th style="padding:0.5rem;font-size:0.72rem;font-weight:600;color:#64748b;text-align:right;">Unit Cost</th><th style="padding:0.5rem;font-size:0.72rem;font-weight:600;color:#64748b;text-align:right;">Total</th><th style="padding:0.5rem;"></th></tr></thead>
+              <tbody id="itemsBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Discount</label><input name="discount" type="number" min="0" step="0.01" class="form-control" value="0" oninput="calcTotals()"><div class="invalid-feedback"></div></div>
+          <div class="form-group"><label class="form-label">Shipping</label><input name="shipping" type="number" min="0" step="0.01" class="form-control" value="0" oninput="calcTotals()"><div class="invalid-feedback"></div></div>
+        </div>
+        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:0.75rem;display:flex;gap:1.5rem;justify-content:flex-end;">
+          <span style="font-size:0.85rem;color:#64748b;">Subtotal: <strong id="subtotalDisp">0.00</strong></span>
+          <span style="font-size:0.85rem;color:#64748b;">Grand Total: <strong id="totalDisp" style="color:#2563eb;">0.00</strong></span>
+        </div>
+        <input type="hidden" name="subtotal" id="subtotalInput">
+        <input type="hidden" name="tax" value="0">
+        <input type="hidden" name="total" id="totalInput">
+        <div class="form-group" style="margin-top:0.75rem;"><label class="form-label">Notes</label><textarea name="notes" class="form-control" rows="2" placeholder="Notes..."></textarea></div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal')">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="saveItem()">Save Purchase</button>
+    </div>
+  </div>
+</div>
+@endsection
+@section('scripts')
 <script>
-function toggleDropdown(dropdownId) {
-    const dropdown = document.getElementById(dropdownId);
-    dropdown.classList.toggle('open');
+const API='/api/dashboard/purchases'; let editId=null; let productList=[];
+const payColors={paid:'badge-success',partial:'badge-warning',unpaid:'badge-danger'};
+const statusColors={received:'badge-success',pending:'badge-warning',cancelled:'badge-danger'};
+async function loadDropdowns(){
+  try{
+    const [suppliers,products]=await Promise.all([apiFetch('/api/dashboard/suppliers'),apiFetch('/api/dashboard/products')]);
+    productList=products;
+    const sel=document.querySelector('[name="supplier_id"]');
+    sel.innerHTML='<option value="">Select supplier...</option>'+suppliers.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+  }catch(e){}
 }
+function addItemRow(product_id='',quantity=1,unit_cost=0){
+  const tr=document.createElement('tr');
+  tr.style.borderTop='1px solid #e2e8f0';
+  tr.innerHTML=`<td style="padding:0.4rem;">
+    <select class="form-control item-product" style="font-size:0.8rem;" onchange="updateRowCost(this)">
+      <option value="">Select product...</option>
+      ${productList.map(p=>`<option value="${p.id}" data-cost="${p.purchase_price||0}" ${p.id==product_id?'selected':''}>${p.name}</option>`).join('')}
+    </select></td>
+    <td style="padding:0.4rem;"><input type="number" class="form-control item-qty" style="font-size:0.8rem;text-align:right;" value="${quantity}" min="0.01" step="0.01" oninput="calcTotals()"></td>
+    <td style="padding:0.4rem;"><input type="number" class="form-control item-cost" style="font-size:0.8rem;text-align:right;" value="${unit_cost}" min="0" step="0.01" oninput="calcTotals()"></td>
+    <td style="padding:0.4rem;text-align:right;font-weight:600;font-size:0.8rem;" class="row-total">0.00</td>
+    <td style="padding:0.4rem;text-align:center;"><button type="button" onclick="this.closest('tr').remove();calcTotals();" style="background:none;border:none;color:#e03057;cursor:pointer;font-size:1rem;">×</button></td>`;
+  document.getElementById('itemsBody').appendChild(tr);
+  if(product_id)updateRowCost(tr.querySelector('.item-product'));
+  calcTotals();
+}
+function updateRowCost(sel){
+  const opt=sel.selectedOptions[0];
+  const cost=opt?parseFloat(opt.dataset.cost||0):0;
+  sel.closest('tr').querySelector('.item-cost').value=cost.toFixed(2);
+  calcTotals();
+}
+function calcTotals(){
+  let sub=0;
+  document.querySelectorAll('#itemsBody tr').forEach(tr=>{
+    const qty=parseFloat(tr.querySelector('.item-qty')?.value||0);
+    const cost=parseFloat(tr.querySelector('.item-cost')?.value||0);
+    const rowTotal=qty*cost; sub+=rowTotal;
+    const td=tr.querySelector('.row-total'); if(td)td.textContent=rowTotal.toFixed(2);
+  });
+  const disc=parseFloat(document.querySelector('[name="discount"]')?.value||0);
+  const ship=parseFloat(document.querySelector('[name="shipping"]')?.value||0);
+  const total=sub-disc+ship;
+  document.getElementById('subtotalDisp').textContent=sub.toFixed(2);
+  document.getElementById('totalDisp').textContent=total.toFixed(2);
+  document.getElementById('subtotalInput').value=sub.toFixed(2);
+  document.getElementById('totalInput').value=total.toFixed(2);
+}
+async function loadList(){
+  const s=document.getElementById('searchInput').value;
+  const st=document.getElementById('statusFilter').value;
+  const tbody=document.getElementById('tableBody');
+  tbody.innerHTML='<tr><td colspan="8" class="tbl-empty">Loading...</td></tr>';
+  try{
+    const items=await apiFetch(`${API}?search=${encodeURIComponent(s)}&status=${st}`);
+    if(!items.length){tbody.innerHTML='<tr><td colspan="8" class="tbl-empty">No purchases found.</td></tr>';return;}
+    tbody.innerHTML=items.map((p,i)=>`<tr>
+      <td class="text-slate-400">${i+1}</td>
+      <td class="font-mono text-xs text-blue-600">${p.reference}</td>
+      <td class="font-semibold">${p.supplier?p.supplier.name:'N/A'}</td>
+      <td class="text-slate-500 text-xs">${p.purchase_date}</td>
+      <td class="font-semibold">${parseFloat(p.total).toFixed(2)}</td>
+      <td><span class="badge ${payColors[p.payment_status]||'badge-gray'}">${p.payment_status}</span></td>
+      <td><span class="badge ${statusColors[p.status]||'badge-gray'}">${p.status}</span></td>
+      <td><div style="display:flex;gap:0.4rem;">
+        <button class="btn btn-sm btn-edit btn-icon" onclick="editItem(${p.id})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+        <button class="btn btn-sm btn-delete btn-icon" onclick="deleteItem(${p.id},'${p.reference}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+      </div></td>
+    </tr>`).join('');
+  }catch(e){tbody.innerHTML='<tr><td colspan="8" class="tbl-empty">Error loading data.</td></tr>';}
+}
+async function openAddModal(){editId=null;document.getElementById('modal-title').textContent='Add Purchase';
+  document.getElementById('itemForm').reset();document.getElementById('itemsBody').innerHTML='';
+  document.querySelector('[name="purchase_date"]').value=new Date().toISOString().split('T')[0];
+  calcTotals();clearFormErrors('itemForm');await loadDropdowns();addItemRow();openModal('modal');}
+async function editItem(id){
+  try{const p=await apiFetch(`${API}/${id}`);editId=id;document.getElementById('modal-title').textContent='Edit Purchase';
+  await loadDropdowns();
+  const form=document.getElementById('itemForm');
+  ['supplier_id','purchase_date','status','payment_status','discount','shipping','notes'].forEach(k=>{const el=form.querySelector(`[name="${k}"]`);if(el)el.value=p[k]??'';});
+  document.getElementById('itemsBody').innerHTML='';
+  (p.items||[]).forEach(item=>addItemRow(item.product_id,item.quantity,item.unit_cost));
+  calcTotals();clearFormErrors('itemForm');openModal('modal');}catch(e){showToast('Failed to load','error');}
+}
+async function saveItem(){
+  clearFormErrors('itemForm');
+  const form=document.getElementById('itemForm');
+  const data=Object.fromEntries(new FormData(form));
+  data.items=Array.from(document.querySelectorAll('#itemsBody tr')).map(tr=>({
+    product_id:tr.querySelector('.item-product')?.value,
+    quantity:tr.querySelector('.item-qty')?.value,
+    unit_cost:tr.querySelector('.item-cost')?.value
+  })).filter(i=>i.product_id);
+  const btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving...';
+  try{if(editId)await apiFetch(`${API}/${editId}`,{method:'PUT',body:JSON.stringify(data)});
+  else await apiFetch(API,{method:'POST',body:JSON.stringify(data)});
+  closeModal('modal');showToast(editId?'Purchase updated!':'Purchase created! Stock updated.');loadList();}
+  catch(e){if(e.errors)showFormErrors('itemForm',e.errors);else showToast(e.message||'Save failed','error');}
+  finally{btn.disabled=false;btn.textContent='Save Purchase';}
+}
+function deleteItem(id,ref){
+  showConfirm('Delete Purchase',`Delete purchase "${ref}"?`,async()=>{
+    try{await apiFetch(`${API}/${id}`,{method:'DELETE'});showToast('Purchase deleted!');loadList();}
+    catch(e){showToast(e.message||'Delete failed','error');}
+  });
+}
+loadList();
 </script>
-
-</body>
-</html>
+@endsection
