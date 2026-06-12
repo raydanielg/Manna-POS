@@ -168,6 +168,37 @@ class _RegisterPageState extends State<RegisterPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Center(
+          child: Container(
+            width: 80, height: 80,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              shape: BoxShape.circle,
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 72, height: 72,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryLt,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.primary, width: 2),
+                  ),
+                ),
+                Container(
+                  width: 56, height: 56,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const Icon(Icons.storefront, size: 32, color: AppColors.primary),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
         const Text('Let\'s get started', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColors.textPri)),
         const SizedBox(height: 8),
         const Text('First, tell us your name and email', style: TextStyle(color: AppColors.textSec, fontSize: 15)),
