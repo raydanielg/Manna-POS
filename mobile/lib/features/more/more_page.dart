@@ -25,9 +25,11 @@ class MorePage extends StatelessWidget {
           const SizedBox(width: 14),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(user?.name ?? 'User', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-            Text(user?.email ?? '', style: const TextStyle(color: AppColors.textSec, fontSize: 13)),
+            Text(user?.displayBusiness ?? 'My Business', style: const TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w600)),
+            Text(user?.email ?? '', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
           ])),
-          const Icon(Icons.verified_user_outlined, color: AppColors.success),
+          Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), decoration: BoxDecoration(color: AppColors.successLt, borderRadius: BorderRadius.circular(20)),
+            child: Text(user?.currencySymbol ?? 'TSh', style: const TextStyle(color: AppColors.success, fontWeight: FontWeight.w700, fontSize: 11))),
         ]))),
 
         const SizedBox(height: 20),
