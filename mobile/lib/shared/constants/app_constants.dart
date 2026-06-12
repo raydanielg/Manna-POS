@@ -1,6 +1,6 @@
 ﻿class AppConstants {
   // Change to your server IP for real device, or keep 10.0.2.2 for Android emulator
-  static const String baseUrl = 'http://10.0.2.2:8000/api';
+  static const String baseUrl = 'http://0.0.0.0:8081/api';
   static const String tokenKey = 'manna_token';
   static const String userKey  = 'manna_user';
   static const String currency  = 'TSh';
