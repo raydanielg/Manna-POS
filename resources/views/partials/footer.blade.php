@@ -20,37 +20,37 @@
                 <div class="footer-links-column">
                     <h4 class="footer-links-title">Product</h4>
                     <ul class="footer-links-list">
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#">Integrations</a></li>
-                        <li><a href="#">Updates</a></li>
+                        <li><a href="/features">Features</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
+                        <li><a href="/integrations">Integrations</a></li>
+                        <li><a href="/updates">Updates</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-column">
                     <h4 class="footer-links-title">Company</h4>
                     <ul class="footer-links-list">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/careers">Careers</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-column">
                     <h4 class="footer-links-title">Support</h4>
                     <ul class="footer-links-list">
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">API Reference</a></li>
-                        <li><a href="#">Status</a></li>
+                        <li><a href="/help">Help Center</a></li>
+                        <li><a href="/documentation">Documentation</a></li>
+                        <li><a href="/api">API Reference</a></li>
+                        <li><a href="/status">Status</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-column">
                     <h4 class="footer-links-title">Legal</h4>
                     <ul class="footer-links-list">
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
-                        <li><a href="#">GDPR</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/cookies">Cookie Policy</a></li>
+                        <li><a href="/gdpr">GDPR</a></li>
                     </ul>
                 </div>
             </div>
@@ -60,9 +60,9 @@
                 &copy; {{ date('Y') }} {{ config('app.name', 'MannaPOS') }}. All rights reserved.
             </div>
             <div class="footer-bottom-links">
-                <a href="#">Privacy</a>
-                <a href="#">Terms</a>
-                <a href="#">Cookies</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="/cookies">Cookies</a>
             </div>
         </div>
     </div>
