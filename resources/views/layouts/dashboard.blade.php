@@ -385,7 +385,7 @@
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-200">
                 <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-5 h-5 object-contain brightness-0 invert">
             </div>
-            <div class="min-w-0">
+            <div class="min-w-0 logo-text">
                 <div class="text-[0.95rem] font-extrabold text-slate-900 leading-none tracking-tight truncate">{{ config('app.name','MannaPOS') }}</div>
                 <div class="text-[0.58rem] font-bold tracking-[0.16em] uppercase text-brand-500 mt-0.5">Admin Panel</div>
             </div>
@@ -397,9 +397,9 @@
 
         <div class="nav-section-label">Main</div>
 
-        <a href="{{ route('dashboard') }}" class="nav-item {{ $isHome ? 'active' : '' }}">
+        <a href="{{ route('dashboard') }}" class="nav-item {{ $isHome ? 'active' : '' }}" data-tip="Dashboard">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12l-2 0l9-9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M10 12h4v4h-4z"/></svg>
-            Dashboard
+            <span class="nav-label">Dashboard</span>
         </a>
 
         <div class="nav-section-label">Management</div>
@@ -560,9 +560,9 @@
         <div class="nav-section-label">System</div>
 
         {{-- Notification Templates --}}
-        <a href="{{ route('dashboard.notification-templates') }}" class="nav-item {{ $isNotifTpl ? 'active' : '' }}">
+        <a href="{{ route('dashboard.notification-templates') }}" class="nav-item {{ $isNotifTpl ? 'active' : '' }}" data-tip="Notifications">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-14a2 2 0 0 1-2-2v-10z"/><path d="M3 7l9 6l9-6"/></svg>
-            Notification Templates
+            <span class="nav-label">Notification Templates</span>
         </a>
 
         {{-- Settings --}}
