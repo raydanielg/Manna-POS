@@ -54,6 +54,37 @@ class ApiService {
     return _handle(res);
   }
 
+  static Future<dynamic> postMultipart(String path, Map<String, String> fields, {String? filePath, String? fileField = 'image'}) async {
+    final request = http.MultipartRequest('POST', _uri(path));
+    request.headers.addAll({
+      'Accept': 'application/json',
+      if (_token != null) 'Authorization': 'Bearer $_token',
+    });
+    request.fields.addAll(fields);
+    if (filePath != null && fileField != null) {
+      request.files.add(await http.MultipartFile.fromPath(fileField, filePath));
+    }
+    final streamed = await request.send().timeout(const Duration(seconds: AppConstants.timeout));
+    final res = await http.Response.fromStream(streamed);
+    return _handle(res);
+  }
+
+  static Future<dynamic> putMultipart(String path, Map<String, String> fields, {String? filePath, String? fileField = 'image'}) async {
+    final request = http.MultipartRequest('POST', _uri(path));
+    request.headers.addAll({
+      'Accept': 'application/json',
+      if (_token != null) 'Authorization': 'Bearer $_token',
+    });
+    request.fields['_method'] = 'PUT';
+    request.fields.addAll(fields);
+    if (filePath != null && fileField != null) {
+      request.files.add(await http.MultipartFile.fromPath(fileField, filePath));
+    }
+    final streamed = await request.send().timeout(const Duration(seconds: AppConstants.timeout));
+    final res = await http.Response.fromStream(streamed);
+    return _handle(res);
+  }
+
   static dynamic _handle(http.Response res) {
     dynamic data;
     try { data = jsonDecode(res.body); } catch (_) { data = {}; }
