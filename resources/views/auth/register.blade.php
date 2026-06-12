@@ -339,14 +339,14 @@
             </div>
         </div>
 
-            <div class="wizard-buttons">
-                <button type="button" class="btn btn-secondary prev-btn">
-                    <span class="btn-text">Previous</span>
-                </button>
-                <button type="submit" class="btn btn-primary submit-btn">
-                    <span class="btn-text">Complete Registration</span>
-                </button>
             </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-submit-section">
+            <button type="submit" class="btn btn-primary btn-block submit-btn">
+                <span class="btn-text">Complete Registration</span>
+            </button>
         </div>
     </form>
 
@@ -374,138 +374,82 @@
     </script>
 
     <style>
-        .section-title {
-            font-size: 1.1rem;
+        /* Accordion Styles */
+        .accordion-section {
+            margin-bottom: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .accordion-section.active .accordion-content {
+            display: block;
+        }
+
+        .accordion-section.active .accordion-icon svg {
+            transform: rotate(180deg);
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            background: #f9fafb;
+            transition: background 0.2s ease;
+        }
+
+        .accordion-header:hover {
+            background: #f3f4f6;
+        }
+
+        .accordion-header-content {
+            flex: 1;
+        }
+
+        .accordion-title {
+            font-size: 1rem;
             font-weight: 600;
             color: #1e1e1e;
-            margin: 1.5rem 0 1rem 0;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        .section-title:first-of-type {
-            margin-top: 0;
+            margin: 0;
         }
 
-        .wizard-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            padding: 0 1rem;
-        }
-
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            opacity: 0.5;
-            transition: opacity 0.3s ease;
-        }
-
-        .step.active {
-            opacity: 1;
-        }
-
-        .step.completed {
-            opacity: 1;
-        }
-
-        .step-number {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #e5e7eb;
+        .accordion-subtitle {
+            font-size: 0.875rem;
             color: #6b7280;
+            margin: 0.25rem 0 0 0;
+        }
+
+        .accordion-icon {
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .step.active .step-number {
-            background: #10B981;
-            color: white;
-        }
-
-        .step.completed .step-number {
-            background: #10B981;
-            color: white;
-        }
-
-        .step-label {
-            font-size: 0.75rem;
-            font-weight: 500;
             color: #6b7280;
-            text-align: center;
+            transition: transform 0.3s ease;
         }
 
-        .step.active .step-label {
-            color: #10B981;
+        .accordion-icon svg {
+            width: 20px;
+            height: 20px;
         }
 
-        .wizard-step {
+        .accordion-content {
             display: none;
-            opacity: 0;
-            transform: translateX(20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            padding: 1.5rem;
+            background: white;
         }
 
-        .wizard-step.active {
-            display: block;
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .wizard-step.fade-in {
-            animation: fadeInUp 0.4s ease forwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .wizard-buttons {
-            display: flex;
-            gap: 1rem;
+        .form-submit-section {
             margin-top: 2rem;
         }
 
-        .wizard-buttons .btn {
-            flex: 1;
-        }
-
-        .next-btn {
-            background: #10B981;
-            color: white;
-            border: none;
-            box-shadow: none;
-        }
-
-        .next-btn:hover {
-            background: #059669;
-            box-shadow: none;
-        }
-
-        .btn-secondary {
-            background: #e5e7eb;
-            color: #374151;
-            border: none;
-            box-shadow: none;
-        }
-
-        .btn-secondary:hover {
-            background: #d1d5db;
-            box-shadow: none;
+        .form-submit-section .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
         }
 
         /* Toast Notifications */
