@@ -534,11 +534,19 @@
             </div>
 
         </div>
+            </div>
+        </div>
 
     </div>{{-- /dash-content --}}
 </div>{{-- /main-wrap --}}
 
 <script>
+// ── Section Toggle ───────────────────────────────────────
+function toggleSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    section.classList.toggle('collapsed');
+}
+
 // ── Trend Chart ──────────────────────────────────────────
 (function() {
     const labels = [];
