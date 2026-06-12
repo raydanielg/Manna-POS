@@ -53,9 +53,14 @@ class _HomeTabState extends State<HomeTab> {
   bool _refreshing = false;
   String? _error;
   final fmt = NumberFormat('#,##0.00');
+  Timer? _timer;
 
   @override
-  void initState() { super.initState(); _load(); }
+  void initState() {
+    super.initState();
+    _load();
+    _timer = Timer.periodic(const Duration(seconds: 60), (_) => _load());
+  }
 
   Future<void> _load() async {
     if (_loading) {
