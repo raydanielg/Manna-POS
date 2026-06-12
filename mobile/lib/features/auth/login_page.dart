@@ -18,13 +18,23 @@ class _LoginPageState extends State<LoginPage> {
   String? _error;
 
   @override
+  void initState() {
+    super.initState();
+    final auth = context.read<AuthProvider>();
+    _remember = auth.rememberMe;
+    if (auth.savedEmail != null) {
+      _email.text = auth.savedEmail!;
+    }
+  }
+
+  @override
   void dispose() { _email.dispose(); _pass.dispose(); super.dispose(); }
 
   Future<void> _login() async {
     if (!_form.currentState!.validate()) return;
     setState(() => _error = null);
     try {
-      await context.read<AuthProvider>().login(_email.text.trim(), _pass.text);
+      await context.read<AuthProvider>().login(_email.text.trim(), _pass.text, remember: _remember);
       if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
     } on ApiException catch (e) {
       setState(() => _error = e.message);
