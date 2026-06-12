@@ -12,12 +12,13 @@ class AppColors {
   static const warningLt  = Color(0xFFFFFBEB);
   static const danger     = Color(0xFFEF4444);
   static const dangerLt   = Color(0xFFFEF2F2);
-  static const bg         = Color(0xFFF1F5F9);
+  static const bg         = Color(0xFFFAFAFA);
   static const surface    = Color(0xFFFFFFFF);
-  static const textPri    = Color(0xFF1E293B);
+  static const textPri    = Color(0xFF0F172A);
   static const textSec    = Color(0xFF64748B);
-  static const border     = Color(0xFFE2E8F0);
-  static const divider    = Color(0xFFF1F5F9);
+  static const border     = Color(0xFFE5E7EB);
+  static const divider    = Color(0xFFF3F4F6);
+  static const line       = Color(0xFFE5E7EB);
 }
 
 class AppTheme {
@@ -26,21 +27,22 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary, brightness: Brightness.light),
     scaffoldBackgroundColor: AppColors.bg,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white,
+      backgroundColor: Colors.white,
+      foregroundColor: AppColors.textPri,
       elevation: 0,
       centerTitle: false,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: AppColors.primaryDk,
-        statusBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
       ),
-      titleTextStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white),
+      titleTextStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPri),
     ),
     cardTheme: CardThemeData(
       color: AppColors.surface,
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
       margin: EdgeInsets.zero,
+      shadowColor: Colors.black.withOpacity(0.03),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true, fillColor: AppColors.surface,
@@ -78,7 +80,7 @@ class AppTheme {
       unselectedLabelStyle: TextStyle(fontSize: 11),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: AppColors.primary, foregroundColor: Colors.white, elevation: 4,
+      backgroundColor: AppColors.primary, foregroundColor: Colors.white, elevation: 2,
     ),
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.primaryLt, labelStyle: TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w500),
