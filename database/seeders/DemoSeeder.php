@@ -20,22 +20,24 @@ class DemoSeeder extends Seeder
 {
     public function run()
     {
-        // Create Demo User
-        $user = User::create([
-            'name' => 'Mama Pita',
-            'email' => 'demo@mannapos.com',
-            'password' => Hash::make('password123'),
-            'phone' => '+255712345678',
-            'role' => 'user',
-            'business_name' => 'Duka la Mama Pita',
-            'business_type' => 'retail',
-            'business_city' => 'Dar es Salaam',
-            'business_country' => 'Tanzania',
-            'business_address' => 'Sinza Mori, Plot 45',
-            'currency' => 'TZS',
-            'tax_percentage' => 18.0,
-            'fiscal_year_start' => 'January',
-        ]);
+        // Create or Update Demo User
+        $user = User::updateOrCreate(
+            ['email' => 'demo@mannapos.com'],
+            [
+                'name' => 'Mama Pita',
+                'password' => Hash::make('password123'),
+                'phone' => '+255712345678',
+                'role' => 'user',
+                'business_name' => 'Duka la Mama Pita',
+                'business_type' => 'retail',
+                'business_city' => 'Dar es Salaam',
+                'business_country' => 'Tanzania',
+                'business_address' => 'Sinza Mori, Plot 45',
+                'currency' => 'TZS',
+                'tax_percentage' => 18.0,
+                'fiscal_year_start' => 'January',
+            ]
+        );
 
         // Create Categories
         $categories = [
@@ -65,11 +67,11 @@ class DemoSeeder extends Seeder
 
         // Create Units
         $units = [
-            ['name' => 'Piece', 'abbreviation' => 'pcs'],
-            ['name' => 'Kilogram', 'abbreviation' => 'kg'],
-            ['name' => 'Liter', 'abbreviation' => 'L'],
-            ['name' => 'Carton', 'abbreviation' => 'ctn'],
-            ['name' => 'Dozen', 'abbreviation' => 'dz'],
+            ['name' => 'Piece', 'short_name' => 'pcs'],
+            ['name' => 'Kilogram', 'short_name' => 'kg'],
+            ['name' => 'Liter', 'short_name' => 'L'],
+            ['name' => 'Carton', 'short_name' => 'ctn'],
+            ['name' => 'Dozen', 'short_name' => 'dz'],
         ];
 
         foreach ($units as $unit) {
