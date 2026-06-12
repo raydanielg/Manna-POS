@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(24),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             const SizedBox(height: 60),
-            const Text('Welcome back', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.textPri)),
+            const Text('👋 Welcome back', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.textPri)),
             const SizedBox(height: 8),
             const Text('Sign in to your account to continue your journey with us.', style: TextStyle(color: AppColors.textSec, fontSize: 15, height: 1.5)),
             const SizedBox(height: 48),
