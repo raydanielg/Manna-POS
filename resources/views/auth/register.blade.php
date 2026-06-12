@@ -446,14 +446,28 @@
             flex: 1;
         }
 
+        .next-btn {
+            background: #10B981;
+            color: white;
+            border: none;
+            box-shadow: none;
+        }
+
+        .next-btn:hover {
+            background: #059669;
+            box-shadow: none;
+        }
+
         .btn-secondary {
             background: #e5e7eb;
             color: #374151;
             border: none;
+            box-shadow: none;
         }
 
         .btn-secondary:hover {
             background: #d1d5db;
+            box-shadow: none;
         }
     </style>
 
