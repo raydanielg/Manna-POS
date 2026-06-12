@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../shared/theme/app_theme.dart';
 import '../../shared/constants/app_constants.dart';
+import '../pos/pos_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
