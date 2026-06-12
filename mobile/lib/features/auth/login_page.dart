@@ -47,11 +47,25 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final loading = context.watch<AuthProvider>().loading;
     return Scaffold(
-      backgroundColor: AppColors.bg,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFF8FAFC), Color(0xFFF1F5F9)],
+          ),
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _FintechBackgroundPainter(),
+              ),
+            ),
+            SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             const SizedBox(height: 60),
             const Text('👋 Welcome back', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.textPri)),
             const SizedBox(height: 8),
