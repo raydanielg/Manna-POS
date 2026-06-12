@@ -152,73 +152,196 @@
     </div>
 
     {{-- Nav --}}
-    <nav class="flex-1 py-2">
+    <div class="sidebar-content">
 
-        <div class="nav-group-label">Main</div>
+        {{-- Home --}}
         <a href="{{ route('dashboard') }}" class="nav-item active">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-            Dashboard
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M10 12h4v4h-4z"/></svg>
+            Home
         </a>
 
-        <div class="nav-group-label">Sales</div>
+        {{-- User Management Dropdown --}}
+        <div class="dropdown" id="dropdown-user">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-user')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/></svg>
+                User Management
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">Users</a>
+                <a href="#" class="child-item">Roles</a>
+                <a href="#" class="child-item">Sales Commission Agents</a>
+            </div>
+        </div>
+
+        {{-- Contacts Dropdown --}}
+        <div class="dropdown" id="dropdown-contacts">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-contacts')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z"/><path d="M10 16h6"/><path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 8h3"/><path d="M4 12h3"/><path d="M4 16h3"/></svg>
+                Contacts
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">Suppliers</a>
+                <a href="#" class="child-item">Customers</a>
+                <a href="#" class="child-item">Customer Groups</a>
+                <a href="#" class="child-item">Import Contacts</a>
+            </div>
+        </div>
+
+        {{-- Products Dropdown --}}
+        <div class="dropdown" id="dropdown-products">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-products')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M8.2 9.8l7.6 -4.6"/><path d="M12 12v9"/><path d="M12 12l-8 -4.5"/></svg>
+                Products
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">List Products</a>
+                <a href="#" class="child-item">Add Product</a>
+                <a href="#" class="child-item">Update Price</a>
+                <a href="#" class="child-item">Print Labels</a>
+                <a href="#" class="child-item">Variations</a>
+                <a href="#" class="child-item">Import Products</a>
+                <a href="#" class="child-item">Import Opening Stock</a>
+                <a href="#" class="child-item">Selling Price Group</a>
+                <a href="#" class="child-item">Units</a>
+                <a href="#" class="child-item">Categories</a>
+                <a href="#" class="child-item">Brands</a>
+                <a href="#" class="child-item">Warranties</a>
+            </div>
+        </div>
+
+        {{-- Purchases Dropdown --}}
+        <div class="dropdown" id="dropdown-purchases">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-purchases')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12"/><path d="M16 11l-4 4l-4 -4"/><path d="M3 12a9 9 0 0 0 18 0"/></svg>
+                Purchases
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">List Purchases</a>
+                <a href="#" class="child-item">Add Purchase</a>
+                <a href="#" class="child-item">List Purchase Return</a>
+            </div>
+        </div>
+
+        {{-- Sell Dropdown --}}
+        <div class="dropdown" id="dropdown-sell">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-sell')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v-12"/><path d="M16 7l-4 -4l-4 4"/><path d="M3 12a9 9 0 0 0 18 0"/></svg>
+                Sell
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">All Sales</a>
+                <a href="#" class="child-item">Add Sale</a>
+                <a href="#" class="child-item">List POS</a>
+                <a href="#" class="child-item">POS</a>
+                <a href="#" class="child-item">Add Draft</a>
+                <a href="#" class="child-item">List Drafts</a>
+                <a href="#" class="child-item">Add Quotation</a>
+                <a href="#" class="child-item">List Quotations</a>
+                <a href="#" class="child-item">List Sell Return</a>
+                <a href="#" class="child-item">Shipments</a>
+                <a href="#" class="child-item">Discounts</a>
+                <a href="#" class="child-item">Import Sales</a>
+            </div>
+        </div>
+
+        {{-- Stock Transfers Dropdown --}}
+        <div class="dropdown" id="dropdown-stock-transfers">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-stock-transfers')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"/><path d="M3 9l4 0"/></svg>
+                Stock Transfers
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">List Stock Transfers</a>
+                <a href="#" class="child-item">Add Stock Transfer</a>
+            </div>
+        </div>
+
+        {{-- Stock Adjustment Dropdown --}}
+        <div class="dropdown" id="dropdown-stock-adjustment">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-stock-adjustment')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"/><path d="M4 6v6a8 3 0 0 0 16 0v-6"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/></svg>
+                Stock Adjustment
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">List Stock Adjustments</a>
+                <a href="#" class="child-item">Add Stock Adjustment</a>
+            </div>
+        </div>
+
+        {{-- Expenses Dropdown --}}
+        <div class="dropdown" id="dropdown-expenses">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-expenses')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2"/><path d="M14.8 8a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"/><path d="M12 6v10"/></svg>
+                Expenses
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">List Expenses</a>
+                <a href="#" class="child-item">Add Expense</a>
+                <a href="#" class="child-item">Expense Categories</a>
+            </div>
+        </div>
+
+        {{-- Reports Dropdown --}}
+        <div class="dropdown" id="dropdown-reports">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-reports')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697"/><path d="M18 14v4h4"/><path d="M18 11v-4a2 2 0 0 0 -2 -2h-2"/><path d="M8 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"/><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M8 11h4"/><path d="M8 15h3"/></svg>
+                Reports
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">Profit / Loss Report</a>
+                <a href="#" class="child-item">Purchase & Sale</a>
+                <a href="#" class="child-item">Tax Report</a>
+                <a href="#" class="child-item">Supplier & Customer Report</a>
+                <a href="#" class="child-item">Customer Groups Report</a>
+                <a href="#" class="child-item">Stock Report</a>
+                <a href="#" class="child-item">Stock Adjustment Report</a>
+                <a href="#" class="child-item">Trending Products</a>
+                <a href="#" class="child-item">Items Report</a>
+                <a href="#" class="child-item">Product Purchase Report</a>
+                <a href="#" class="child-item">Product Sell Report</a>
+                <a href="#" class="child-item">Purchase Payment Report</a>
+                <a href="#" class="child-item">Sell Payment Report</a>
+                <a href="#" class="child-item">Expense Report</a>
+                <a href="#" class="child-item">Register Report</a>
+                <a href="#" class="child-item">Sales Representative Report</a>
+                <a href="#" class="child-item">Activity Log</a>
+            </div>
+        </div>
+
+        {{-- Notification Templates --}}
         <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 6h13M10 19a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2z"/></svg>
-            Point of Sale
-        </a>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-            Transactions
-        </a>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            Receipts
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"/><path d="M3 7l9 6l9 -6"/></svg>
+            Notification Templates
         </a>
 
-        <div class="nav-group-label">Inventory</div>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/></svg>
-            Products
-        </a>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-            Categories
-        </a>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-            Stock Alerts
-            <span class="nav-item-badge">3</span>
-        </a>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
-            Suppliers
-        </a>
+        {{-- Settings Dropdown --}}
+        <div class="dropdown" id="dropdown-settings">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-settings')">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></svg>
+                Settings
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="#" class="child-item">Business Settings</a>
+                <a href="#" class="child-item">Business Locations</a>
+                <a href="#" class="child-item">Invoice Settings</a>
+                <a href="#" class="child-item">Barcode Settings</a>
+                <a href="#" class="child-item">Receipt Printers</a>
+                <a href="#" class="child-item">Tax Rates</a>
+                <a href="#" class="child-item">Package Subscription</a>
+            </div>
+        </div>
 
-        <div class="nav-group-label">Customers</div>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-            All Customers
-        </a>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-            Loyalty Program
-        </a>
-
-        <div class="nav-group-label">Reports</div>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            Sales Reports
-        </a>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/></svg>
-            Inventory Reports
-        </a>
-
-        <div class="nav-group-label">Settings</div>
-        <a href="#" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
-            Settings
-        </a>
-    </nav>
+    </div>
 
     {{-- Sign out --}}
     <div class="sidebar-bottom">
