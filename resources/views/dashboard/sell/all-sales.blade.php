@@ -249,6 +249,64 @@ function deleteSale(id,ref){
     catch(e){showToast(e.message||'Delete failed','error');}
   });
 }
+async function viewReceipt(id) {
+  document.getElementById('receipt-body').innerHTML = '<div style="text-align:center;color:#64748b;padding:2rem;">Loading...</div>';
+  openModal('receipt-modal');
+  try {
+    const s = await apiFetch(`${API}/${id}`);
+    const items = s.items || [];
+    const fmt = n => parseFloat(n||0).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const payBadge = {'cash':'💵 Cash','card':'💳 Card','mobile_money':'📱 Mobile Money','credit':'🕐 Credit'};
+    const statusBadge = {'completed':'✅ Completed','draft':'📝 Draft','quotation':'📄 Quotation','cancelled':'❌ Cancelled'};
+    document.getElementById('receipt-body').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1rem;font-size:0.8rem;">
+        <div><span style="color:#64748b;">Invoice #</span><br><strong style="font-family:monospace;color:#2563eb;">${s.reference}</strong></div>
+        <div style="text-align:right;"><span style="color:#64748b;">Date</span><br><strong>${s.sale_date}</strong></div>
+        <div><span style="color:#64748b;">Customer</span><br><strong>${s.customer?.name||'Walk-in Customer'}</strong></div>
+        <div style="text-align:right;"><span style="color:#64748b;">Payment</span><br><strong>${payBadge[s.payment_method]||s.payment_method}</strong></div>
+      </div>
+      <div style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:1rem;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+          <thead><tr style="background:#f8fafc;border-bottom:1px solid #e2e8f0;">
+            <th style="padding:0.5rem 0.75rem;text-align:left;color:#64748b;font-size:0.72rem;font-weight:700;">ITEM</th>
+            <th style="padding:0.5rem 0.75rem;text-align:right;color:#64748b;font-size:0.72rem;font-weight:700;">QTY</th>
+            <th style="padding:0.5rem 0.75rem;text-align:right;color:#64748b;font-size:0.72rem;font-weight:700;">PRICE</th>
+            <th style="padding:0.5rem 0.75rem;text-align:right;color:#64748b;font-size:0.72rem;font-weight:700;">TOTAL</th>
+          </tr></thead>
+          <tbody>
+            ${items.map(i=>`<tr style="border-top:1px solid #f1f5f9;">
+              <td style="padding:0.5rem 0.75rem;font-weight:500;">${i.product?.name||i.product_name||'Unknown'}</td>
+              <td style="padding:0.5rem 0.75rem;text-align:right;color:#64748b;">${i.quantity}</td>
+              <td style="padding:0.5rem 0.75rem;text-align:right;color:#64748b;">${fmt(i.unit_price)}</td>
+              <td style="padding:0.5rem 0.75rem;text-align:right;font-weight:600;">${fmt(parseFloat(i.unit_price)*parseFloat(i.quantity)-(parseFloat(i.discount)||0))}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:0.75rem;font-size:0.82rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="color:#64748b;">Subtotal</span><span>${fmt(s.subtotal||s.total)}</span></div>
+        ${parseFloat(s.discount||0)>0?`<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="color:#64748b;">Discount</span><span style="color:#e03057;">-${fmt(s.discount)}</span></div>`:''}
+        ${parseFloat(s.tax||0)>0?`<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="color:#64748b;">Tax (VAT)</span><span>${fmt(s.tax)}</span></div>`:''}
+        <div style="display:flex;justify-content:space-between;border-top:1px solid #e2e8f0;padding-top:0.5rem;margin-top:0.3rem;font-weight:800;font-size:0.95rem;"><span>Total</span><span style="color:#2563eb;">TSh ${fmt(s.total)}</span></div>
+        <div style="display:flex;justify-content:space-between;margin-top:0.3rem;"><span style="color:#64748b;">Paid</span><span style="color:#10b981;font-weight:600;">TSh ${fmt(s.paid||s.total)}</span></div>
+        ${parseFloat(s.total||0)>parseFloat(s.paid||0)?`<div style="display:flex;justify-content:space-between;margin-top:0.3rem;"><span style="color:#64748b;">Balance Due</span><span style="color:#e03057;font-weight:600;">TSh ${fmt(parseFloat(s.total)-parseFloat(s.paid||0))}</span></div>`:'<div style="margin-top:0.3rem;text-align:center;color:#10b981;font-weight:700;font-size:0.8rem;">✅ PAID IN FULL</div>'}
+      </div>
+      ${s.notes?`<div style="margin-top:0.75rem;padding:0.6rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;font-size:0.78rem;color:#92400e;"><strong>Note:</strong> ${s.notes}</div>`:''}
+      <div style="text-align:center;margin-top:1rem;font-size:0.72rem;color:#94a3b8;">
+        <div>${statusBadge[s.status]||s.status}</div>
+        <div style="margin-top:4px;">Thank you for your business!</div>
+        <div style="font-family:monospace;margin-top:2px;">MannaPOS · ${new Date().toLocaleDateString()}</div>
+      </div>`;
+  } catch(e) {
+    document.getElementById('receipt-body').innerHTML = '<div style="text-align:center;color:#ef4444;padding:2rem;">Failed to load receipt</div>';
+  }
+}
+function printReceipt() {
+  const printContent = document.getElementById('receipt-content').innerHTML;
+  const w = window.open('', '_blank', 'width=420,height=700');
+  w.document.write(`<!DOCTYPE html><html><head><title>Receipt</title><style>body{font-family:'Inter',sans-serif;margin:0;padding:16px;background:#fff;}@page{margin:12px;}</style></head><body>${printContent}</body></html>`);
+  w.document.close(); w.focus(); setTimeout(()=>{w.print();w.close();},300);
+}
 loadList();
 </script>
 @endsection
