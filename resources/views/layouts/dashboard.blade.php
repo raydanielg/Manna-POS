@@ -521,9 +521,9 @@
 
         {{-- Expenses --}}
         <div class="dropdown {{ $isExpenses ? 'open' : '' }}" id="dropdown-expenses">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-expenses')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-expenses')" data-tip="Expenses">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v10"/></svg>
-                Expenses
+                <span class="nav-label">Expenses</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
@@ -537,9 +537,9 @@
 
         {{-- Reports --}}
         <div class="dropdown {{ $isReports ? 'open' : '' }}" id="dropdown-reports">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-reports')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-reports')" data-tip="Reports">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5h-2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5.697"/><path d="M18 14v4h4"/><path d="M18 11v-4a2 2 0 0 0-2-2h-2"/><path d="M8 3m0 2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0"/><path d="M8 11h4"/><path d="M8 15h3"/></svg>
-                Reports
+                <span class="nav-label">Reports</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
