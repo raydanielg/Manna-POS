@@ -630,24 +630,112 @@
 
 </div>{{-- /main-wrap --}}
 
+{{-- ══ TOAST CONTAINER ══════════════════════════════════ --}}
+<div id="toast-container"></div>
+
+{{-- ══ CONFIRM DIALOG ═══════════════════════════════════ --}}
+<div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-box">
+        <div class="confirm-icon">
+            <svg width="28" height="28" fill="none" stroke="#e03057" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+        </div>
+        <div class="confirm-title" id="confirm-title">Delete Record?</div>
+        <div class="confirm-desc"  id="confirm-desc">This action cannot be undone. Are you sure?</div>
+        <div class="confirm-actions">
+            <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+            <button class="btn btn-danger"    id="confirm-ok-btn">Delete</button>
+        </div>
+    </div>
+</div>
+
 <script>
+// ── Sidebar dropdown ─────────────────────────────────────
 function toggleDropdown(id) {
     document.getElementById(id).classList.toggle('open');
 }
+// ── Header dropdown ──────────────────────────────────────
 function toggleHeaderDropdown(id) {
     const el = document.getElementById(id);
-    document.querySelectorAll('.header-dropdown.open').forEach(function(d) {
-        if (d !== el) d.classList.remove('open');
-    });
+    document.querySelectorAll('.header-dropdown.open').forEach(d => { if (d !== el) d.classList.remove('open'); });
     el.classList.toggle('open');
 }
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.header-dropdown')) {
-        document.querySelectorAll('.header-dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+document.addEventListener('click', e => {
+    if (!e.target.closest('.header-dropdown'))
+        document.querySelectorAll('.header-dropdown.open').forEach(d => d.classList.remove('open'));
+});
+
+// ── Toast ─────────────────────────────────────────────────
+function showToast(message, type = 'success') {
+    const icons = {
+        success: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        error:   `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        info:    `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+    };
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.innerHTML = (icons[type]||'') + `<span>${message}</span>`;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => { t.style.cssText = 'opacity:0;transform:translateX(20px);transition:all .3s'; setTimeout(() => t.remove(), 320); }, 3500);
+}
+
+// ── AJAX helper ───────────────────────────────────────────
+const CSRF = document.querySelector('meta[name="csrf-token"]').content;
+async function apiFetch(url, opts = {}) {
+    const res = await fetch(url, {
+        headers: { 'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN': CSRF },
+        ...opts,
+        headers: { 'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN': CSRF, ...(opts.headers||{}) }
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw data;
+    return data;
+}
+
+// ── Modal helpers ─────────────────────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+        closeConfirm();
     }
 });
-</script>
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+});
 
+// ── Confirm dialog ────────────────────────────────────────
+let _confirmCb = null;
+function showConfirm(title, desc, cb) {
+    document.getElementById('confirm-title').textContent = title;
+    document.getElementById('confirm-desc').textContent  = desc;
+    _confirmCb = cb;
+    document.getElementById('confirm-overlay').classList.add('open');
+}
+function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.remove('open');
+    _confirmCb = null;
+}
+document.getElementById('confirm-ok-btn').addEventListener('click', () => { if (_confirmCb) { _confirmCb(); closeConfirm(); } });
+document.getElementById('confirm-overlay').addEventListener('click', e => { if (e.target.id === 'confirm-overlay') closeConfirm(); });
+
+// ── Form error helpers ────────────────────────────────────
+function clearFormErrors(formId) {
+    document.querySelectorAll(`#${formId} .is-invalid`).forEach(el => el.classList.remove('is-invalid'));
+    document.querySelectorAll(`#${formId} .invalid-feedback`).forEach(el => { el.style.display='none'; el.textContent=''; });
+}
+function showFormErrors(formId, errors) {
+    if (!errors) return;
+    Object.entries(errors).forEach(([field, msgs]) => {
+        const el = document.querySelector(`#${formId} [name="${field}"]`);
+        if (el) {
+            el.classList.add('is-invalid');
+            const fb = el.closest('.form-group')?.querySelector('.invalid-feedback');
+            if (fb) { fb.textContent = Array.isArray(msgs) ? msgs[0] : msgs; fb.style.display = 'block'; }
+        }
+    });
+}
+</script>
 @yield('scripts')
 
 </body>
