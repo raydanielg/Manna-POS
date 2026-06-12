@@ -204,6 +204,88 @@
         .user-name { font-size: 0.8rem; font-weight: 600; color: #0f172a; }
         .user-role { font-size: 0.68rem; color: #94a3b8; }
 
+        /* Header Dropdowns */
+        .header-dropdown { position: relative; }
+        .header-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            min-width: 280px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e9edf5;
+            box-shadow: 0 4px 20px rgba(15,23,42,0.08);
+            z-index: 50;
+            overflow: hidden;
+        }
+        .header-dropdown.open .header-dropdown-menu { display: block; animation: slideDown 0.2s ease; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .header-dropdown-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+            background: #fafbff;
+        }
+        .header-dropdown-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .header-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.82rem;
+            color: #475569;
+            transition: background 0.15s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .header-dropdown-item:hover { background: #f8fafc; color: #0f172a; }
+        .header-dropdown-item svg { width: 18px; height: 18px; color: #94a3b8; }
+        .header-dropdown-item:hover svg { color: #475569; }
+        .header-dropdown-divider {
+            height: 1px;
+            background: #f1f5f9;
+            margin: 0.25rem 0;
+        }
+        .header-dropdown-footer {
+            padding: 0.75rem 1.25rem;
+            border-top: 1px solid #f1f5f9;
+            background: #fafbff;
+        }
+        .notification-item {
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+        .notification-item:hover { background: #f8fafc; }
+        .notification-item:last-child { border-bottom: none; }
+        .notification-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+        .notification-desc {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        .notification-time {
+            font-size: 0.68rem;
+            color: #94a3b8;
+            margin-top: 0.35rem;
+        }
+        .notification-unread {
+            background: #f0f9ff;
+        }
+        .notification-unread .notification-title { color: #0284c7; }
+
         /* Content */
         .dash-content { padding: 1.75rem 2rem; flex: 1; }
 
