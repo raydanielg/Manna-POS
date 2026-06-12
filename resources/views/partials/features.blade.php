@@ -242,88 +242,24 @@
     border-radius: 20px;
     padding: 2rem 1.85rem 1.7rem;
     border: 1.5px solid #e2e8f0;
-    overflow: hidden;
     cursor: default;
-    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1),
-                border-color 0.3s ease,
-                box-shadow 0.4s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
-    gap: 0;
 }
 
-/* Glow border ring (hidden by default) */
-.feat-card-glow {
-    position: absolute;
-    inset: -2px;
-    border-radius: 22px;
-    opacity: 0;
-    transition: opacity 0.35s ease;
-    pointer-events: none;
-    z-index: 0;
+.feat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
 }
 
-/* Sliding bg gradient (hidden by default) */
-.feat-card-bg {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    border-radius: 20px;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.feat-content { position: relative; z-index: 1; }
-
-/* ─── Per-colour theming ─────────────────────────────────── */
-/* blue */
-[data-color="blue"] .feat-icon-wrap   { background: linear-gradient(135deg,#eff6ff,#dbeafe); box-shadow: 0 0 0 8px #eff6ff; }
-[data-color="blue"] .feat-icon-wrap::after { background: #2563eb; }
-[data-color="blue"] .feat-card-glow   { background: conic-gradient(from 180deg, #2563eb, #7c3aed, #2563eb); }
-[data-color="blue"] .feat-card-bg     { background: linear-gradient(145deg, rgba(37,99,235,0.04) 0%, rgba(124,58,237,0.04) 100%); }
-[data-color="blue"]:hover .feat-card-title { color: #2563eb; }
-[data-color="blue"]:hover .feat-learn, [data-color="blue"]:hover .feat-arrow { color: #2563eb; }
-
-/* violet */
-[data-color="violet"] .feat-icon-wrap { background: linear-gradient(135deg,#f5f3ff,#ede9fe); box-shadow: 0 0 0 8px #f5f3ff; }
-[data-color="violet"] .feat-icon-wrap::after { background: #7c3aed; }
-[data-color="violet"] .feat-card-glow { background: conic-gradient(from 180deg, #7c3aed, #db2777, #7c3aed); }
-[data-color="violet"] .feat-card-bg   { background: linear-gradient(145deg, rgba(124,58,237,0.04) 0%, rgba(219,39,119,0.04) 100%); }
-[data-color="violet"]:hover .feat-card-title { color: #7c3aed; }
-[data-color="violet"]:hover .feat-learn, [data-color="violet"]:hover .feat-arrow { color: #7c3aed; }
-
-/* cyan */
-[data-color="cyan"] .feat-icon-wrap   { background: linear-gradient(135deg,#ecfeff,#cffafe); box-shadow: 0 0 0 8px #ecfeff; }
-[data-color="cyan"] .feat-icon-wrap::after { background: #0891b2; }
-[data-color="cyan"] .feat-card-glow   { background: conic-gradient(from 180deg, #0891b2, #2563eb, #0891b2); }
-[data-color="cyan"] .feat-card-bg     { background: linear-gradient(145deg, rgba(8,145,178,0.04) 0%, rgba(37,99,235,0.04) 100%); }
-[data-color="cyan"]:hover .feat-card-title { color: #0891b2; }
-[data-color="cyan"]:hover .feat-learn, [data-color="cyan"]:hover .feat-arrow { color: #0891b2; }
-
-/* orange */
-[data-color="orange"] .feat-icon-wrap { background: linear-gradient(135deg,#fff7ed,#ffedd5); box-shadow: 0 0 0 8px #fff7ed; }
-[data-color="orange"] .feat-icon-wrap::after { background: #ea580c; }
-[data-color="orange"] .feat-card-glow { background: conic-gradient(from 180deg, #ea580c, #eab308, #ea580c); }
-[data-color="orange"] .feat-card-bg   { background: linear-gradient(145deg, rgba(234,88,12,0.04) 0%, rgba(234,179,8,0.04) 100%); }
-[data-color="orange"]:hover .feat-card-title { color: #ea580c; }
-[data-color="orange"]:hover .feat-learn, [data-color="orange"]:hover .feat-arrow { color: #ea580c; }
-
-/* green */
-[data-color="green"] .feat-icon-wrap  { background: linear-gradient(135deg,#f0fdf4,#dcfce7); box-shadow: 0 0 0 8px #f0fdf4; }
-[data-color="green"] .feat-icon-wrap::after { background: #16a34a; }
-[data-color="green"] .feat-card-glow  { background: conic-gradient(from 180deg, #16a34a, #0891b2, #16a34a); }
-[data-color="green"] .feat-card-bg    { background: linear-gradient(145deg, rgba(22,163,74,0.04) 0%, rgba(8,145,178,0.04) 100%); }
-[data-color="green"]:hover .feat-card-title { color: #16a34a; }
-[data-color="green"]:hover .feat-learn, [data-color="green"]:hover .feat-arrow { color: #16a34a; }
-
-/* rose */
-[data-color="rose"] .feat-icon-wrap   { background: linear-gradient(135deg,#fff1f2,#ffe4e6); box-shadow: 0 0 0 8px #fff1f2; }
-[data-color="rose"] .feat-icon-wrap::after { background: #e11d48; }
-[data-color="rose"] .feat-card-glow   { background: conic-gradient(from 180deg, #e11d48, #7c3aed, #e11d48); }
-[data-color="rose"] .feat-card-bg     { background: linear-gradient(145deg, rgba(225,29,72,0.04) 0%, rgba(124,58,237,0.04) 100%); }
-[data-color="rose"]:hover .feat-card-title { color: #e11d48; }
-[data-color="rose"]:hover .feat-learn, [data-color="rose"]:hover .feat-arrow { color: #e11d48; }
+/* ─── Per-colour icon backgrounds ───────────────────────── */
+[data-color="blue"]   .feat-icon-wrap { background: linear-gradient(135deg,#eff6ff,#dbeafe); }
+[data-color="violet"] .feat-icon-wrap { background: linear-gradient(135deg,#f5f3ff,#ede9fe); }
+[data-color="cyan"]   .feat-icon-wrap { background: linear-gradient(135deg,#ecfeff,#cffafe); }
+[data-color="orange"] .feat-icon-wrap { background: linear-gradient(135deg,#fff7ed,#ffedd5); }
+[data-color="green"]  .feat-icon-wrap { background: linear-gradient(135deg,#f0fdf4,#dcfce7); }
+[data-color="rose"]   .feat-icon-wrap { background: linear-gradient(135deg,#fff1f2,#ffe4e6); }
 
 /* ─── Icon wrapper ──────────────────────────────────────── */
 .feat-icon-wrap {
