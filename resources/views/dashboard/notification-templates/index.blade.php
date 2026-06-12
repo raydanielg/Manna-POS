@@ -1,105 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Notification Templates — {{ config('app.name', 'MannaPOS') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #f1f4fb; }
-        .sidebar { width: 220px; min-width: 220px; height: 100vh; position: fixed; top: 0; left: 0; background: #fff; border-right: 1px solid #e9edf5; display: flex; flex-direction: column; z-index: 40; }
-        .sidebar-logo { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; }
-        .sidebar-content { flex: 1; padding: 0.75rem 0.5rem; overflow-y: auto; }
-        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
-        .nav-item:hover { background: #f8fafc; color: #0f172a; }
-        .nav-item.active { background: #e9edf5; color: #0f172a; font-weight: 600; }
-        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .sidebar-bottom { margin-top: auto; padding: 1rem 0.5rem 1.25rem; border-top: 1px solid #f1f5f9; }
-        .sign-out-btn { display: flex; align-items: center; gap: 0.65rem; padding: 0.52rem 1.25rem; font-size: 0.84rem; font-weight: 600; color: #e03057; width: 100%; border-radius: 10px; background: none; border: none; cursor: pointer; transition: background 0.15s; }
-        .sign-out-btn:hover { background: #fff0f3; }
-        .sign-out-btn svg { width: 16px; height: 16px; }
-        .main-wrap { margin-left: 220px; min-height: 100vh; }
-        .top-header { background: #fff; border-bottom: 1px solid #e9edf5; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
-        .page-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; }
-        .content { padding: 1.75rem 2rem; }
-        .table-card { background: #fff; border-radius: 14px; border: 1px solid #e9edf5; padding: 1.5rem; }
-        .section-title { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem; }
-        .tbl { width: 100%; border-collapse: collapse; }
-        .tbl th { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; padding: 0.6rem 1.25rem; text-align: left; }
-        .tbl td { font-size: 0.8rem; color: #374151; padding: 0.65rem 1.25rem; border-top: 1px solid #f8fafc; }
-        .btn-add { padding: 0.5rem 1rem; background: #10B981; color: white; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-        .btn-add:hover { background: #059669; }
-    </style>
-</head>
-<body class="font-sans antialiased">
-
-<aside class="sidebar">
-    <div class="sidebar-logo">
-        <div class="flex items-center justify-center">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
-                <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-6 h-6 object-contain brightness-0 invert">
-            </div>
-        </div>
+﻿@extends('layouts.dashboard')
+@section('page_title','Notification Templates')
+@section('content')
+<div class="dash-content">
+<div class="page-card">
+  <div class="card-header">
+    <div class="card-title">Notification Templates</div>
+    <div class="filters-row">
+      <div class="search-wrap">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Search templates..." oninput="loadList()">
+      </div>
+      <button class="btn btn-success" onclick="openAddModal()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Add Template
+      </button>
     </div>
-    <div class="sidebar-content">
-        <a href="{{ route('dashboard') }}" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M10 12h4v4h-4z"/></svg>
-            Home
-        </a>
-        <a href="#" class="nav-item active">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405 -1.405a2.032 2.032 0 0 1 -0.595 -1.4v-3.935a7 7 0 1 0 -14 0v3.935a2.032 2.032 0 0 1 -0.595 1.4l-1.405 1.405h5Z"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>
-            Notification Templates
-        </a>
-    </div>
-    <div class="sidebar-bottom">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="sign-out-btn">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                Sign Out
-            </button>
-        </form>
-    </div>
-</aside>
-
-<div class="main-wrap">
-    <header class="top-header">
-        <h1 class="page-title">Notification Templates</h1>
-        <div class="user-chip">
-            <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
-            <div>
-                <div class="user-name">{{ Auth::user()->name ?? 'Admin' }}</div>
-                <div class="user-role">{{ ucfirst(Auth::user()->role ?? 'user') }}</div>
-            </div>
-        </div>
-    </header>
-
-    <div class="content">
-        <div class="table-card">
-            <div class="flex justify-between items-center mb-4">
-                <div class="section-title mb-0">All Notification Templates</div>
-                <button class="btn-add">+ Add Template</button>
-            </div>
-            <table class="tbl">
-                <thead>
-                    <tr>
-                        <th>Template Name</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td colspan="3" class="text-center text-gray-400 py-8">No notification templates yet.</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Type</th><th>Subject</th><th>Active</th><th>Actions</th></tr></thead>
+      <tbody id="tableBody"><tr><td colspan="5" class="tbl-empty">Loading...</td></tr></tbody>
+    </table>
+  </div>
 </div>
-
-</body>
-</html>
+</div>
+<div class="modal-overlay" id="modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Add Template</div>
+      <button class="modal-close" onclick="closeModal('modal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="itemForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Type *</label>
+            <select name="type" class="form-control" required>
+              <option value="">Select type...</option>
+              <option value="invoice">Invoice</option>
+              <option value="payment_reminder">Payment Reminder</option>
+              <option value="low_stock">Low Stock Alert</option>
+              <option value="sale_confirmation">Sale Confirmation</option>
+              <option value="purchase_order">Purchase Order</option>
+              <option value="stock_adjustment">Stock Adjustment</option>
+              <option value="customer_welcome">Customer Welcome</option>
+            </select>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Active</label>
+            <select name="is_active" class="form-control">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Subject *</label><input name="subject" class="form-control" required placeholder="Email/SMS subject line"><div class="invalid-feedback"></div></div>
+        <div class="form-group">
+          <label class="form-label">Body *</label>
+          <textarea name="body" class="form-control" rows="8" required placeholder="Template body. Use {customer_name}, {invoice_no}, {amount}, {date} as placeholders."></textarea>
+          <div class="invalid-feedback"></div>
+          <small class="text-slate-400 mt-1 block">Available: {customer_name}, {invoice_no}, {amount}, {date}, {product_name}, {stock_qty}</small>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal')">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="saveItem()">Save Template</button>
+    </div>
+  </div>
+</div>
+@endsection
+@section('scripts')
+<script>
+const API='/api/dashboard/notification-templates'; let editId=null;
+async function loadList(){
+  const s=document.getElementById('searchInput').value; const tbody=document.getElementById('tableBody');
+  tbody.innerHTML='<tr><td colspan="5" class="tbl-empty">Loading...</td></tr>';
+  try{
+    const items=await apiFetch(`${API}?search=${encodeURIComponent(s)}`);
+    if(!items.length){tbody.innerHTML='<tr><td colspan="5" class="tbl-empty">No templates found.</td></tr>';return;}
+    tbody.innerHTML=items.map((t,i)=>`<tr>
+      <td class="text-slate-400">${i+1}</td>
+      <td><span class="badge badge-info">${t.type.replace(/_/g,' ')}</span></td>
+      <td class="font-semibold">${t.subject}</td>
+      <td><span class="badge ${t.is_active?'badge-success':'badge-gray'}">${t.is_active?'Active':'Inactive'}</span></td>
+      <td><div style="display:flex;gap:0.4rem;">
+        <button class="btn btn-sm btn-edit btn-icon" onclick="editItem(${t.id})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+        <button class="btn btn-sm btn-delete btn-icon" onclick="deleteItem(${t.id},'${t.subject}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+      </div></td>
+    </tr>`).join('');
+  }catch(e){tbody.innerHTML='<tr><td colspan="5" class="tbl-empty">Error loading data.</td></tr>';}
+}
+function openAddModal(){editId=null;document.getElementById('modal-title').textContent='Add Template';document.getElementById('itemForm').reset();clearFormErrors('itemForm');openModal('modal');}
+async function editItem(id){
+  try{const t=await apiFetch(`${API}/${id}`);editId=id;document.getElementById('modal-title').textContent='Edit Template';
+  const form=document.getElementById('itemForm');Object.entries(t).forEach(([k,v])=>{const el=form.querySelector(`[name="${k}"]`);if(el)el.value=v??'';});
+  clearFormErrors('itemForm');openModal('modal');}catch(e){showToast('Failed to load','error');}
+}
+async function saveItem(){
+  clearFormErrors('itemForm');const data=Object.fromEntries(new FormData(document.getElementById('itemForm')));
+  const btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving...';
+  try{if(editId)await apiFetch(`${API}/${editId}`,{method:'PUT',body:JSON.stringify(data)});
+  else await apiFetch(API,{method:'POST',body:JSON.stringify(data)});
+  closeModal('modal');showToast(editId?'Template updated!':'Template added!');loadList();}
+  catch(e){if(e.errors)showFormErrors('itemForm',e.errors);else showToast(e.message||'Save failed','error');}
+  finally{btn.disabled=false;btn.textContent='Save Template';}
+}
+function deleteItem(id,name){
+  showConfirm('Delete Template',`Delete template "${name}"?`,async()=>{
+    try{await apiFetch(`${API}/${id}`,{method:'DELETE'});showToast('Template deleted!');loadList();}
+    catch(e){showToast(e.message||'Delete failed','error');}
+  });
+}
+loadList();
+</script>
+@endsection
