@@ -1,21 +1,24 @@
 @extends('layouts.auth')
 
 @section('form-header')
-    <h2 class="auth-form-title">Create your account</h2>
-    <p class="auth-form-subtitle">Start your journey today by creating a new account. We're ready to help you achieve your dreams.</p>
+    <h2 class="auth-form-title">Register your business</h2>
+    <p class="auth-form-subtitle">Start your journey with MannaPOS by registering your business details.</p>
 @endsection
 
 @section('form-content')
     <form method="POST" action="{{ route('register') }}" id="registerForm">
         @csrf
 
+        <!-- Business Details Section -->
+        <h3 class="section-title">Business Details</h3>
+
         <div class="form-group">
-            <label for="name" class="form-label">Full name</label>
+            <label for="business_name" class="form-label">Business Name *</label>
             <div class="input-wrapper">
-                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" placeholder="John Doe">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                <input id="business_name" type="text" class="form-control @error('business_name') is-invalid @enderror" name="business_name" value="{{ old('business_name') }}" required placeholder="Your Business Name">
             </div>
-            @error('name')
+            @error('business_name')
                 <div class="invalid-feedback">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     {{ $message }}
@@ -24,7 +27,178 @@
         </div>
 
         <div class="form-group">
-            <label for="email" class="form-label">Email address</label>
+            <label for="currency" class="form-label">Currency *</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <select id="currency" class="form-control @error('currency') is-invalid @enderror" name="currency" required>
+                    <option value="">Select Currency</option>
+                    <option value="USD">USD - US Dollar</option>
+                    <option value="TZS">TZS - Tanzanian Shilling</option>
+                    <option value="KES">KES - Kenyan Shilling</option>
+                    <option value="UGX">UGX - Ugandan Shilling</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="GBP">GBP - British Pound</option>
+                </select>
+            </div>
+            @error('currency')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="business_logo" class="form-label">Business Logo</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <input id="business_logo" type="file" class="form-control" name="business_logo" accept="image/*">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="website" class="form-label">Website</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                <input id="website" type="url" class="form-control @error('website') is-invalid @enderror" name="website" value="{{ old('website') }}" placeholder="https://yourwebsite.com">
+            </div>
+            @error('website')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="phone" class="form-label">Business Contact Number *</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                <input id="phone" type="tel" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required placeholder="+255 123 456 789">
+            </div>
+            @error('phone')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="country" class="form-label">Country *</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <input id="country" type="text" class="form-control @error('country') is-invalid @enderror" name="country" value="{{ old('country') }}" required placeholder="Tanzania">
+            </div>
+            @error('country')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="city" class="form-label">City *</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <input id="city" type="text" class="form-control @error('city') is-invalid @enderror" name="city" value="{{ old('city') }}" required placeholder="Dar es Salaam">
+            </div>
+            @error('city')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="timezone" class="form-label">Time Zone *</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <select id="timezone" class="form-control @error('timezone') is-invalid @enderror" name="timezone" required>
+                    <option value="">Select Time Zone</option>
+                    <option value="Africa/Dar_es_Salaam">Africa/Dar_es_Salaam</option>
+                    <option value="Africa/Nairobi">Africa/Nairobi</option>
+                    <option value="Africa/Kampala">Africa/Kampala</option>
+                    <option value="Africa/Cairo">Africa/Cairo</option>
+                    <option value="Africa/Johannesburg">Africa/Johannesburg</option>
+                    <option value="Africa/Lagos">Africa/Lagos</option>
+                    <option value="UTC">UTC</option>
+                </select>
+            </div>
+            @error('timezone')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <!-- Business Settings Section -->
+        <h3 class="section-title">Business Settings</h3>
+
+        <div class="form-group">
+            <label for="tax_label" class="form-label">Tax Label</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 14h.01M12 7h.01M9 10h.01M12 10h.01M15 10h.01M9 20h6"/></svg>
+                <input id="tax_label" type="text" class="form-control @error('tax_label') is-invalid @enderror" name="tax_label" value="{{ old('tax_label') }}" placeholder="VAT / GST">
+            </div>
+            @error('tax_label')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="tax_number" class="form-label">Tax Number</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 14h.01M12 7h.01M9 10h.01M12 10h.01M15 10h.01M9 20h6"/></svg>
+                <input id="tax_number" type="text" class="form-control @error('tax_number') is-invalid @enderror" name="tax_number" value="{{ old('tax_number') }}" placeholder="Tax Registration Number">
+            </div>
+            @error('tax_number')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <!-- Owner Information Section -->
+        <h3 class="section-title">Owner Information</h3>
+
+        <div class="form-group">
+            <label for="first_name" class="form-label">First Name *</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <input id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') }}" required autocomplete="first_name" placeholder="John">
+            </div>
+            @error('first_name')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="last_name" class="form-label">Last Name *</label>
+            <div class="input-wrapper">
+                <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <input id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" placeholder="Doe">
+            </div>
+            @error('last_name')
+                <div class="invalid-feedback">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="form-label">Email Address *</label>
             <div class="input-wrapper">
                 <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="name@company.com">
@@ -38,7 +212,7 @@
         </div>
 
         <div class="form-group">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Password *</label>
             <div class="input-wrapper">
                 <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="••••••••">
@@ -52,7 +226,7 @@
         </div>
 
         <div class="form-group">
-            <label for="password-confirm" class="form-label">Confirm password</label>
+            <label for="password-confirm" class="form-label">Confirm Password *</label>
             <div class="input-wrapper">
                 <svg class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" placeholder="••••••••">
@@ -60,7 +234,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">
-            <span class="btn-text">Create account</span>
+            <span class="btn-text">Register Business</span>
         </button>
     </form>
 
@@ -68,6 +242,20 @@
         <span>Already have an account?</span>
         <a href="{{ route('login') }}" class="auth-footer-link">Sign in</a>
     </div>
+
+    <style>
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e1e1e;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+    </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -77,7 +265,7 @@
                 const btn = this.querySelector('.btn-primary');
                 const btnText = btn.querySelector('.btn-text');
                 btn.classList.add('loading');
-                btnText.textContent = 'Creating account...';
+                btnText.textContent = 'Registering...';
             });
         });
     </script>
