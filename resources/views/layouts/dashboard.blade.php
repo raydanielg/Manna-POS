@@ -783,10 +783,41 @@
 </div>
 
 <script>
+// ── Sidebar collapse ──────────────────────────────────
+function toggleSidebar() {
+    const sb = document.getElementById('sidebar');
+    const mw = document.getElementById('main-wrap');
+    // Wrap text nodes on first call
+    if (!window._navWrapped) {
+        document.querySelectorAll('.nav-item, .dropdown-toggle, .sign-out-btn').forEach(el => {
+            Array.from(el.childNodes).forEach(n => {
+                if (n.nodeType === 3 && n.textContent.trim()) {
+                    const sp = document.createElement('span');
+                    sp.className = 'nav-label';
+                    sp.textContent = n.textContent;
+                    n.replaceWith(sp);
+                }
+            });
+        });
+        window._navWrapped = true;
+    }
+    const col = sb.classList.toggle('collapsed');
+    mw.classList.toggle('sidebar-collapsed', col);
+    localStorage.setItem('sb-collapsed', col ? '1' : '0');
+}
+// Restore collapse state
+(function() {
+    if (localStorage.getItem('sb-collapsed') === '1') {
+        document.getElementById('sidebar').classList.add('collapsed');
+        document.getElementById('main-wrap').classList.add('sidebar-collapsed');
+    }
+})();
+
 // ── Sidebar dropdown ─────────────────────────────────────
 function toggleDropdown(id) {
     document.getElementById(id).classList.toggle('open');
 }
+
 // ── Header dropdown ──────────────────────────────────────
 function toggleHeaderDropdown(id) {
     const el = document.getElementById(id);
@@ -797,6 +828,34 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.header-dropdown'))
         document.querySelectorAll('.header-dropdown.open').forEach(d => d.classList.remove('open'));
 });
+
+// ── Today's Profit ────────────────────────────────────────
+async function loadProfit() {
+    const el = document.getElementById('profit-content');
+    try {
+        const d = await apiFetch('/api/dashboard/stats');
+        const rev = parseFloat(d.today_sales||0);
+        const exp = parseFloat(d.month_expenses||0)/30;
+        const profit = rev - exp;
+        const fmt = n => 'TSh ' + n.toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0});
+        el.innerHTML = `
+            <div style="display:grid;gap:0.6rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:0.78rem;color:#64748b;">Revenue Today</span>
+                    <span style="font-size:0.85rem;font-weight:700;color:#16a34a;">${fmt(rev)}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:0.78rem;color:#64748b;">Est. Expenses</span>
+                    <span style="font-size:0.85rem;font-weight:700;color:#dc2626;">${fmt(exp)}</span>
+                </div>
+                <div style="border-top:1px solid #f1f5f9;padding-top:0.6rem;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:0.8rem;font-weight:700;color:#0f172a;">Net Profit</span>
+                    <span style="font-size:1rem;font-weight:800;color:${profit>=0?'#16a34a':'#dc2626'};">${fmt(profit)}</span>
+                </div>
+                <div style="font-size:0.68rem;color:#94a3b8;text-align:right;">Today · ${new Date().toLocaleDateString()}</div>
+            </div>`;
+    } catch(e) { el.innerHTML = '<div style="color:#ef4444;font-size:0.8rem;">Failed to load</div>'; }
+}
 
 // ── Toast ─────────────────────────────────────────────────
 function showToast(message, type = 'success') {
@@ -816,7 +875,6 @@ function showToast(message, type = 'success') {
 const CSRF = document.querySelector('meta[name="csrf-token"]').content;
 async function apiFetch(url, opts = {}) {
     const res = await fetch(url, {
-        headers: { 'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN': CSRF },
         ...opts,
         headers: { 'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN': CSRF, ...(opts.headers||{}) }
     });
@@ -831,8 +889,9 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
-        closeConfirm();
+        closeConfirm(); closeCalc();
     }
+    if ((e.altKey||e.ctrlKey) && e.key.toLowerCase() === 'c') { e.preventDefault(); openCalc(); }
 });
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
@@ -869,6 +928,53 @@ function showFormErrors(formId, errors) {
         }
     });
 }
+
+// ── Calculator ────────────────────────────────────────────
+let _calcVal = '0', _calcExpr = '', _calcOp = '', _calcPrev = '';
+function openCalc()  { document.getElementById('calc-overlay').classList.add('open'); }
+function closeCalc() { document.getElementById('calc-overlay').classList.remove('open'); }
+function calcAction(a) {
+    const nums = '0123456789.';
+    if (nums.includes(a)) {
+        if (a === '.' && _calcVal.includes('.')) return;
+        _calcVal = (_calcVal === '0' && a !== '.') ? a : _calcVal + a;
+    } else if (a === 'AC') {
+        _calcVal = '0'; _calcExpr = ''; _calcOp = ''; _calcPrev = '';
+    } else if (a === '±') {
+        _calcVal = _calcVal.startsWith('-') ? _calcVal.slice(1) : '-' + _calcVal;
+    } else if (a === '%') {
+        _calcVal = String(parseFloat(_calcVal) / 100);
+    } else if (['+','−','×','÷'].includes(a)) {
+        _calcPrev = _calcVal; _calcOp = a;
+        _calcExpr = _calcVal + ' ' + a;
+        _calcVal = '0';
+    } else if (a === '=') {
+        if (!_calcOp) return;
+        const p = parseFloat(_calcPrev), c = parseFloat(_calcVal);
+        let r = p;
+        if (_calcOp==='+') r = p + c;
+        else if (_calcOp==='−') r = p - c;
+        else if (_calcOp==='×') r = p * c;
+        else if (_calcOp==='÷') r = c !== 0 ? p / c : 0;
+        _calcExpr = _calcPrev + ' ' + _calcOp + ' ' + _calcVal + ' =';
+        _calcVal = String(parseFloat(r.toFixed(10)));
+        _calcOp = ''; _calcPrev = '';
+    }
+    document.getElementById('calc-val').textContent = parseFloat(_calcVal).toLocaleString('en',{maximumFractionDigits:8});
+    document.getElementById('calc-expr').textContent = _calcExpr;
+}
+document.addEventListener('keydown', e => {
+    if (!document.getElementById('calc-overlay').classList.contains('open')) return;
+    if (e.key >= '0' && e.key <= '9') calcAction(e.key);
+    else if (e.key === '.') calcAction('.');
+    else if (e.key === '+') calcAction('+');
+    else if (e.key === '-') calcAction('−');
+    else if (e.key === '*') calcAction('×');
+    else if (e.key === '/') { e.preventDefault(); calcAction('÷'); }
+    else if (e.key === 'Enter' || e.key === '=') calcAction('=');
+    else if (e.key === 'Backspace') { _calcVal = _calcVal.length > 1 ? _calcVal.slice(0,-1) : '0'; document.getElementById('calc-val').textContent = _calcVal; }
+    else if (e.key === 'Escape') closeCalc();
+});
 </script>
 @yield('scripts')
 
