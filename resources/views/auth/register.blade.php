@@ -430,10 +430,30 @@
 
         .wizard-step {
             display: none;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .wizard-step.active {
             display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .wizard-step.fade-in {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .wizard-buttons {
@@ -482,20 +502,39 @@
             const totalSteps = 3;
 
             function updateStepUI(step) {
-                // Update step visibility
-                steps.forEach(step => step.classList.remove('active'));
-                document.querySelector(`.wizard-step[data-step="${step}"]`).classList.add('active');
+                const currentStepEl = document.querySelector(`.wizard-step[data-step="${currentStep}"]`);
+                const nextStepEl = document.querySelector(`.wizard-step[data-step="${step}"]`);
 
-                // Update step indicators
-                stepIndicators.forEach(indicator => {
-                    const indicatorStep = parseInt(indicator.dataset.step);
-                    indicator.classList.remove('active', 'completed');
-                    if (indicatorStep === step) {
-                        indicator.classList.add('active');
-                    } else if (indicatorStep < step) {
-                        indicator.classList.add('completed');
+                // Fade out current step
+                if (currentStepEl) {
+                    currentStepEl.style.opacity = '0';
+                    currentStepEl.style.transform = 'translateX(-20px)';
+                }
+
+                setTimeout(() => {
+                    // Hide current step
+                    steps.forEach(s => s.classList.remove('active'));
+
+                    // Show next step with animation
+                    if (nextStepEl) {
+                        nextStepEl.classList.add('active');
+                        nextStepEl.classList.add('fade-in');
+                        setTimeout(() => {
+                            nextStepEl.classList.remove('fade-in');
+                        }, 400);
                     }
-                });
+
+                    // Update step indicators
+                    stepIndicators.forEach(indicator => {
+                        const indicatorStep = parseInt(indicator.dataset.step);
+                        indicator.classList.remove('active', 'completed');
+                        if (indicatorStep === step) {
+                            indicator.classList.add('active');
+                        } else if (indicatorStep < step) {
+                            indicator.classList.add('completed');
+                        }
+                    });
+                }, 200);
             }
 
             function validateStep(step) {
