@@ -1,4 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Camera for barcode scanning -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- Storage for image picking -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- Internet -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Flashlight for barcode scanner -->
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <application
         android:label="MannaPOS"
         android:name="${applicationName}"
