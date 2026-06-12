@@ -49,13 +49,13 @@ class MorePage extends StatelessWidget {
         const SizedBox(height: 8),
 
         AppCard(child: Column(children: [
-          _navTile(context, Icons.inventory_2_outlined, 'Stock Adjustment', 'Adjust inventory levels', AppColors.warning, AppColors.warningLt, null),
+          _navTile(context, Icons.inventory_2_outlined, 'Stock Adjustment', 'Adjust inventory levels', AppColors.warning, AppColors.warningLt, const _StockAdjPage()),
           const Divider(height: 1),
-          _navTile(context, Icons.local_offer_outlined, 'Discounts', 'Manage promotions', AppColors.secondary, const Color(0xFFF5F3FF), null),
+          _navTile(context, Icons.local_offer_outlined, 'Discounts', 'Manage promotions', AppColors.secondary, const Color(0xFFF5F3FF), const _DiscountsPage()),
           const Divider(height: 1),
-          _navTile(context, Icons.category_outlined, 'Categories', 'Product categories', AppColors.success, AppColors.successLt, null),
+          _navTile(context, Icons.category_outlined, 'Categories', 'Product categories', AppColors.success, AppColors.successLt, const _CategoriesPage()),
           const Divider(height: 1),
-          _navTile(context, Icons.branding_watermark_outlined, 'Brands', 'Product brands', AppColors.primary, AppColors.primaryLt, null),
+          _navTile(context, Icons.branding_watermark_outlined, 'Brands', 'Product brands', AppColors.primary, AppColors.primaryLt, const _BrandsPage()),
         ])),
 
         const SizedBox(height: 20),
@@ -65,7 +65,7 @@ class MorePage extends StatelessWidget {
         AppCard(child: Column(children: [
           _navTile(context, Icons.group_outlined, 'User Management', 'Manage app users', AppColors.primary, AppColors.primaryLt, null),
           const Divider(height: 1),
-          _navTile(context, Icons.business_outlined, 'Suppliers', 'Manage suppliers', AppColors.warning, AppColors.warningLt, null),
+          _navTile(context, Icons.business_outlined, 'Suppliers', 'Manage suppliers', AppColors.warning, AppColors.warningLt, const _SuppliersPage()),
           const Divider(height: 1),
           _navTile(context, Icons.help_outline, 'Help & Support', 'Get help using MannaPOS', AppColors.textSec, AppColors.border, null),
         ])),
