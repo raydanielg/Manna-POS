@@ -49,6 +49,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   Map<String, dynamic>? _stats;
   bool _loading = true;
+  bool _refreshing = false;
   String? _error;
   final fmt = NumberFormat('#,##0.00');
 
@@ -56,14 +57,18 @@ class _HomeTabState extends State<HomeTab> {
   void initState() { super.initState(); _load(); }
 
   Future<void> _load() async {
-    setState(() { _loading = true; _error = null; });
+    if (_loading) {
+      setState(() { _loading = true; _error = null; });
+    } else {
+      setState(() { _refreshing = true; _error = null; });
+    }
     try {
       final data = await ApiService.get('/dashboard/stats');
-      setState(() { _stats = data; _loading = false; });
+      setState(() { _stats = data; _loading = false; _refreshing = false; });
     } on ApiException catch (e) {
-      setState(() { _error = e.message; _loading = false; });
+      setState(() { _error = e.message; _loading = false; _refreshing = false; });
     } catch (_) {
-      setState(() { _error = 'Connection error'; _loading = false; });
+      setState(() { _error = 'Connection error'; _loading = false; _refreshing = false; });
     }
   }
 
@@ -76,12 +81,17 @@ class _HomeTabState extends State<HomeTab> {
       backgroundColor: AppColors.bg,
       body: CustomScrollView(slivers: [
         SliverAppBar(
-          expandedHeight: 140,
+          expandedHeight: 160,
           pinned: true,
           backgroundColor: Colors.white,
           elevation: 0,
           actions: [
-            IconButton(icon: const Icon(Icons.refresh, color: AppColors.textPri), onPressed: _load),
+            IconButton(
+              icon: _refreshing 
+                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2))
+                : const Icon(Icons.refresh_rounded, color: AppColors.primary),
+              onPressed: _refreshing ? null : _load,
+            ),
             IconButton(icon: const Icon(Icons.notifications_outlined, color: AppColors.textPri), onPressed: () {}),
             const SizedBox(width: 8),
           ],
@@ -90,9 +100,20 @@ class _HomeTabState extends State<HomeTab> {
               color: Colors.white,
               child: SafeArea(child: Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const SizedBox(height: 48),
-                Text('Good ${_greeting()}, ${user?.name.split(' ').first ?? ''}! 👋', style: const TextStyle(color: AppColors.textPri, fontSize: 18, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 4),
-                Text(DateFormat('EEEE, MMM d yyyy').format(DateTime.now()), style: const TextStyle(color: AppColors.textSec, fontSize: 13)),
+                Row(children: [
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(user?.displayBusiness ?? 'My Business', style: const TextStyle(color: AppColors.textPri, fontSize: 22, fontWeight: FontWeight.w800)),
+                    const SizedBox(height: 4),
+                    Text('Good ${_greeting()}, ${user?.name.split(' ').first ?? ''}!', style: const TextStyle(color: AppColors.textSec, fontSize: 14)),
+                  ])),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(color: AppColors.primaryLt, borderRadius: BorderRadius.circular(20)),
+                    child: Text(user?.currencySymbol ?? 'TSh', style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 12)),
+                  ),
+                ]),
+                const SizedBox(height: 8),
+                Text(DateFormat('EEEE, MMM d yyyy').format(DateTime.now()), style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
               ]))),
             ),
           ),
