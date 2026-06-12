@@ -367,14 +367,160 @@
         .section-title:first-of-type {
             margin-top: 0;
         }
+
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .step.active {
+            opacity: 1;
+        }
+
+        .step.completed {
+            opacity: 1;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: #10B981;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #10B981;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: #10B981;
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        .wizard-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .wizard-buttons .btn {
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
     </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const registerForm = document.getElementById('registerForm');
+            const steps = document.querySelectorAll('.wizard-step');
+            const stepIndicators = document.querySelectorAll('.step');
+            const nextBtns = document.querySelectorAll('.next-btn');
+            const prevBtns = document.querySelectorAll('.prev-btn');
+            let currentStep = 1;
+            const totalSteps = 3;
+
+            function updateStepUI(step) {
+                // Update step visibility
+                steps.forEach(step => step.classList.remove('active'));
+                document.querySelector(`.wizard-step[data-step="${step}"]`).classList.add('active');
+
+                // Update step indicators
+                stepIndicators.forEach(indicator => {
+                    const indicatorStep = parseInt(indicator.dataset.step);
+                    indicator.classList.remove('active', 'completed');
+                    if (indicatorStep === step) {
+                        indicator.classList.add('active');
+                    } else if (indicatorStep < step) {
+                        indicator.classList.add('completed');
+                    }
+                });
+            }
+
+            function validateStep(step) {
+                const currentStepEl = document.querySelector(`.wizard-step[data-step="${step}"]`);
+                const requiredFields = currentStepEl.querySelectorAll('input[required], select[required]');
+                let isValid = true;
+
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.classList.add('is-invalid');
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+
+                return isValid;
+            }
+
+            nextBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (validateStep(currentStep) && currentStep < totalSteps) {
+                        currentStep++;
+                        updateStepUI(currentStep);
+                    }
+                });
+            });
+
+            prevBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (currentStep > 1) {
+                        currentStep--;
+                        updateStepUI(currentStep);
+                    }
+                });
+            });
 
             registerForm.addEventListener('submit', function(e) {
-                const btn = this.querySelector('.btn-primary');
+                const btn = this.querySelector('.submit-btn');
                 const btnText = btn.querySelector('.btn-text');
                 btn.classList.add('loading');
                 btnText.textContent = 'Registering...';
