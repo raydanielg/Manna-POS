@@ -311,3 +311,46 @@ Route::get('/dashboard/settings/barcode-settings', function () {
 Route::get('/dashboard/settings/tax-rates', function () {
     return view('dashboard.settings.tax-rates');
 })->middleware('auth')->name('dashboard.settings.tax-rates');
+
+// ─── API / AJAX Resource Routes ────────────────────────────────────────────
+use App\Http\Controllers\Dashboard\SupplierController;
+use App\Http\Controllers\Dashboard\CustomerGroupController;
+use App\Http\Controllers\Dashboard\CustomerController;
+use App\Http\Controllers\Dashboard\BrandController;
+use App\Http\Controllers\Dashboard\UnitController;
+use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\ExpenseCategoryController;
+use App\Http\Controllers\Dashboard\ExpenseController;
+use App\Http\Controllers\Dashboard\TaxRateController;
+use App\Http\Controllers\Dashboard\WarrantyController;
+use App\Http\Controllers\Dashboard\DiscountController;
+use App\Http\Controllers\Dashboard\NotificationTemplateController;
+use App\Http\Controllers\Dashboard\RoleController;
+use App\Http\Controllers\Dashboard\StockAdjustmentController;
+use App\Http\Controllers\Dashboard\StockTransferController;
+use App\Http\Controllers\Dashboard\PurchaseController;
+use App\Http\Controllers\Dashboard\SaleController;
+use App\Http\Controllers\Dashboard\UserManagementController;
+
+Route::middleware('auth')->prefix('api/dashboard')->group(function () {
+    Route::apiResource('suppliers',              SupplierController::class);
+    Route::apiResource('customer-groups',        CustomerGroupController::class);
+    Route::apiResource('customers',              CustomerController::class);
+    Route::apiResource('brands',                 BrandController::class);
+    Route::apiResource('units',                  UnitController::class);
+    Route::apiResource('categories',             CategoryController::class);
+    Route::apiResource('products',               ProductController::class);
+    Route::apiResource('expense-categories',     ExpenseCategoryController::class);
+    Route::apiResource('expenses',               ExpenseController::class);
+    Route::apiResource('tax-rates',              TaxRateController::class);
+    Route::apiResource('warranties',             WarrantyController::class);
+    Route::apiResource('discounts',              DiscountController::class);
+    Route::apiResource('notification-templates', NotificationTemplateController::class);
+    Route::apiResource('roles',                  RoleController::class);
+    Route::apiResource('stock-adjustments',      StockAdjustmentController::class);
+    Route::apiResource('stock-transfers',        StockTransferController::class);
+    Route::apiResource('purchases',              PurchaseController::class);
+    Route::apiResource('sales',                  SaleController::class);
+    Route::apiResource('users',                  UserManagementController::class);
+});
