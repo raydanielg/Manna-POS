@@ -114,8 +114,11 @@
         margin-bottom: 1.5rem;
     }
 
-    .feature-icon svg {
-        color: white;
+    .feature-icon-img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
     }
 
     .feature-title {
