@@ -1,11 +1,6 @@
-<?php
-
+﻿<?php
 namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class Warranty extends Model
-{
-    use HasFactory;
+class Warranty extends Model {
+    protected $fillable = ['name','duration','duration_unit','description'];
 }
