@@ -15,7 +15,11 @@ use App\Http\Controllers\BlogController;
 */
 
 Route::get('/', function () {
-    return view('landing');
+    $latestBlogs = \App\Models\Blog::where('is_published', true)
+        ->orderByDesc('published_at')
+        ->take(3)
+        ->get();
+    return view('landing', compact('latestBlogs'));
 });
 
 // Product pages

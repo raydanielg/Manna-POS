@@ -531,7 +531,9 @@
 
                 setTimeout(() => {
                     // Hide current step
-                    steps.forEach(s => s.classList.remove('active'));
+                    if (currentStepEl) {
+                        currentStepEl.classList.remove('active');
+                    }
 
                     // Show next step with animation
                     if (nextStepEl) {
