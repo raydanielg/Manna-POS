@@ -6,7 +6,6 @@ import '../../core/api_service.dart';
 import '../../core/auth_provider.dart';
 import '../../shared/theme/app_theme.dart';
 import '../../shared/models/product.dart';
-import '../../shared/constants/app_constants.dart';
 
 class CartItem {
   final Product product;
@@ -416,7 +415,7 @@ class _BarcodeScannerPageState extends State<_BarcodeScannerPage> {
     appBar: AppBar(
       backgroundColor: Colors.black, foregroundColor: Colors.white,
       title: const Text('Scan Barcode'),
-      actions: [IconButton(icon: ValueListenableBuilder(valueListenable: _ctrl.torchState, builder: (_, state, __) => Icon(state == TorchState.on ? Icons.flash_on : Icons.flash_off, color: Colors.white)), onPressed: () => _ctrl.toggleTorch())],
+      actions: [IconButton(icon: const Icon(Icons.flash_on, color: Colors.white), onPressed: () => _ctrl.toggleTorch())],
     ),
     body: Stack(children: [
       MobileScanner(controller: _ctrl, onDetect: (capture) {
