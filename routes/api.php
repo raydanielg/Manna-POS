@@ -21,6 +21,9 @@ Route::prefix('auth')->group(function () {
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 });
 
+// ── Public Lookup (for form data) ────────────────────────────────────────────
+Route::get('categories', fn() => response()->json(ProductCategory::select('id','name')->orderBy('name')->get()));
+
 // ── Protected Routes ───────────────────────────────────────────────────────
 Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
 
