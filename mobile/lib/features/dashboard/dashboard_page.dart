@@ -76,22 +76,23 @@ class _HomeTabState extends State<HomeTab> {
       backgroundColor: AppColors.bg,
       body: CustomScrollView(slivers: [
         SliverAppBar(
-          expandedHeight: 160,
+          expandedHeight: 140,
           pinned: true,
-          backgroundColor: AppColors.primary,
+          backgroundColor: Colors.white,
+          elevation: 0,
           actions: [
-            IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _load),
-            IconButton(icon: const Icon(Icons.notifications_outlined, color: Colors.white), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.refresh, color: AppColors.textPri), onPressed: _load),
+            IconButton(icon: const Icon(Icons.notifications_outlined, color: AppColors.textPri), onPressed: () {}),
             const SizedBox(width: 8),
           ],
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
-              decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFF1D4ED8), Color(0xFF2563EB), Color(0xFF7C3AED)])),
+              color: Colors.white,
               child: SafeArea(child: Padding(padding: const EdgeInsets.fromLTRB(20, 16, 20, 0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const SizedBox(height: 48),
-                Text('Good ${_greeting()}, ${user?.name.split(' ').first ?? ''}! 👋', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
+                Text('Good ${_greeting()}, ${user?.name.split(' ').first ?? ''}! 👋', style: const TextStyle(color: AppColors.textPri, fontSize: 18, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
-                Text(DateFormat('EEEE, MMM d yyyy').format(DateTime.now()), style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13)),
+                Text(DateFormat('EEEE, MMM d yyyy').format(DateTime.now()), style: const TextStyle(color: AppColors.textSec, fontSize: 13)),
               ]))),
             ),
           ),
