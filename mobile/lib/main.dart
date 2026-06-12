@@ -69,20 +69,37 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight,
-            colors: [Color(0xFF1D4ED8), Color(0xFF2563EB), Color(0xFF7C3AED)])),
-        child: FadeTransition(opacity: _fade, child: Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Container(width: 100, height: 100, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(28)),
-            child: const Icon(Icons.point_of_sale, size: 52, color: Colors.white)),
-          const SizedBox(height: 24),
-          const Text('MannaPOS', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: -0.5)),
-          const SizedBox(height: 8),
-          Text('Smart Point of Sale', style: TextStyle(fontSize: 16, color: Colors.white.withValues(alpha: 0.8), fontWeight: FontWeight.w400)),
-          const SizedBox(height: 60),
-          SizedBox(width: 36, height: 36, child: CircularProgressIndicator(color: Colors.white.withValues(alpha: 0.7), strokeWidth: 3)),
-        ]))),
+      backgroundColor: AppColors.bg,
+      body: FadeTransition(
+        opacity: _fade,
+        child: Center(
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 800),
+              curve: Curves.easeOut,
+              builder: (_, value, child) => Transform.scale(
+                scale: 0.8 + (0.2 * value),
+                child: Opacity(opacity: value, child: child),
+              ),
+              child: Container(
+                width: 100, height: 100,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLt,
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(color: AppColors.line, width: 1),
+                ),
+                child: const Icon(Icons.point_of_sale, size: 52, color: AppColors.primary),
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text('MannaPOS', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: AppColors.textPri, letterSpacing: -0.5)),
+            const SizedBox(height: 8),
+            Text('Smart Point of Sale', style: TextStyle(fontSize: 16, color: AppColors.textSec, fontWeight: FontWeight.w400)),
+            const SizedBox(height: 60),
+            SizedBox(width: 36, height: 36, child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 3)),
+          ]),
+        ),
       ),
     );
   }
