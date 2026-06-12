@@ -237,7 +237,7 @@
                 <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
                 <div>
                     <div class="user-name">{{ Auth::user()->name ?? 'Admin' }}</div>
-                    <div class="user-role">Administrator</div>
+                    <div class="user-role">{{ ucfirst(Auth::user()->role ?? 'user') }}</div>
                 </div>
                 <svg class="w-3.5 h-3.5 text-slate-400 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </div>
@@ -490,7 +490,7 @@
                     <tbody>
                         <tr>
                             <td class="font-medium">{{ Auth::user()->name ?? 'Admin' }}</td>
-                            <td class="text-slate-400">Administrator</td>
+                            <td class="text-slate-400">{{ ucfirst(Auth::user()->role ?? 'user') }}</td>
                             <td class="text-slate-400">{{ now()->format('g:ia') }}</td>
                             <td><span class="badge-success">Active</span></td>
                         </tr>
