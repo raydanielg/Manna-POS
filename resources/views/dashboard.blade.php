@@ -427,6 +427,8 @@
             </div>
         </div>
 
+        <div class="nav-section-label">Analytics</div>
+
         {{-- Reports Dropdown --}}
         <div class="dropdown" id="dropdown-reports">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-reports')">
@@ -454,6 +456,8 @@
                 <a href="#" class="child-item">Activity Log</a>
             </div>
         </div>
+
+        <div class="nav-section-label">System</div>
 
         {{-- Notification Templates --}}
         <a href="#" class="nav-item">
