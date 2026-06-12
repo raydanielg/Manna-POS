@@ -24,7 +24,6 @@ class _PosPageState extends State<PosPage> {
   List<Product> _filtered = [];
   final Map<int, CartItem> _cart = {};
   bool _loading = true;
-  String _search = '';
   String _payMethod = 'cash';
   final _paidCtrl = TextEditingController();
   final _searchCtrl = TextEditingController();
@@ -45,7 +44,7 @@ class _PosPageState extends State<PosPage> {
   }
 
   void _filter(String q) {
-    setState(() { _search = q; _filtered = q.isEmpty ? _products : _products.where((p) => p.name.toLowerCase().contains(q.toLowerCase()) || (p.sku ?? '').toLowerCase().contains(q.toLowerCase())).toList(); });
+    setState(() { _filtered = q.isEmpty ? _products : _products.where((p) => p.name.toLowerCase().contains(q.toLowerCase()) || (p.sku ?? '').toLowerCase().contains(q.toLowerCase())).toList(); });
   }
 
   void _addToCart(Product p) {
