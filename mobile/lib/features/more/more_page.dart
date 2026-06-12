@@ -535,68 +535,6 @@ class _CalculatorPageState extends State<_CalculatorPage> {
   );
 }
 
-// ── User Management Page ──────────────────────────────────
-class _UserManagementPage extends StatefulWidget {
-  const _UserManagementPage();
-  @override State<_UserManagementPage> createState() => _UserManagementPageState();
-}
-class _UserManagementPageState extends State<_UserManagementPage> {
-  List<dynamic> _users = [];
-  bool _loading = true;
-  String? _error;
-
-  @override void initState() { super.initState(); _load(); }
-
-  Future<void> _load() async {
-    setState(() { _loading = true; _error = null; });
-    try { final d = await ApiService.get('/users'); setState(() { _users = d as List; _loading = false; }); }
-    catch (e) { setState(() { _error = e.toString(); _loading = false; }); }
-  }
-
-  Color _roleColor(String? role) => role == 'admin' ? AppColors.primary : role == 'manager' ? AppColors.secondary : AppColors.success;
-  Color _roleBg(String? role) => role == 'admin' ? AppColors.primaryLt : role == 'manager' ? const Color(0xFFF5F3FF) : AppColors.successLt;
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: AppColors.bg,
-    appBar: AppBar(backgroundColor: AppColors.primary, foregroundColor: Colors.white,
-      title: const Text('User Management', style: TextStyle(color: Colors.white)),
-      actions: [IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _load)]),
-    body: _loading ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
-      : _error != null ? Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.wifi_off_rounded, size: 48, color: AppColors.textSec),
-          const SizedBox(height: 12),
-          const Text('Failed to load users', style: TextStyle(color: AppColors.textSec)),
-          const SizedBox(height: 16),
-          ElevatedButton(onPressed: _load, child: const Text('Retry')),
-        ]))
-      : _users.isEmpty ? const Center(child: Text('No users found', style: TextStyle(color: AppColors.textSec)))
-      : ListView.separated(padding: const EdgeInsets.all(16), itemCount: _users.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemBuilder: (_, i) {
-            final u = _users[i];
-            final role = (u['role'] ?? 'user').toString();
-            final initials = (u['name'] as String? ?? 'U').trim().split(' ').where((w) => w.isNotEmpty).map((w) => w[0]).take(2).join().toUpperCase();
-            return Container(
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: AppColors.border)),
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                leading: Container(width: 46, height: 46, decoration: BoxDecoration(gradient: const LinearGradient(colors: [AppColors.primary, AppColors.secondary], begin: Alignment.topLeft, end: Alignment.bottomRight), borderRadius: BorderRadius.circular(14)),
-                  child: Center(child: Text(initials, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)))),
-                title: Text(u['name'] ?? 'Unknown', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(u['email'] ?? '', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
-                  if (u['business_name'] != null) Text(u['business_name'], style: const TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w600)),
-                ]),
-                trailing: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(color: _roleBg(role), borderRadius: BorderRadius.circular(20)),
-                  child: Text(role.toUpperCase(), style: TextStyle(color: _roleColor(role), fontSize: 10, fontWeight: FontWeight.w800))),
-              ),
-            );
-          }),
-  );
-}
-
 // ── Help & Support Page ───────────────────────────────────
 class _HelpSupportPage extends StatelessWidget {
   const _HelpSupportPage();
