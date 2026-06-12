@@ -86,8 +86,9 @@ class _ProductsPageState extends State<ProductsPage> {
     return AppCard(
       onTap: () => _showForm(p),
       child: Padding(padding: const EdgeInsets.all(16), child: Row(children: [
-        Container(width: 52, height: 52, decoration: BoxDecoration(color: isOut ? AppColors.dangerLt : isLow ? AppColors.warningLt : AppColors.primaryLt, borderRadius: BorderRadius.circular(14)),
-          child: Icon(Icons.inventory_2_outlined, color: isOut ? AppColors.danger : isLow ? AppColors.warning : AppColors.primary, size: 24)),
+        ClipRRect(borderRadius: BorderRadius.circular(14), child: SizedBox(width: 52, height: 52, child: p.imageUrl != null
+          ? Image.network(p.imageUrl!, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(color: isOut ? AppColors.dangerLt : isLow ? AppColors.warningLt : AppColors.primaryLt, child: Icon(Icons.inventory_2_outlined, color: isOut ? AppColors.danger : isLow ? AppColors.warning : AppColors.primary, size: 24)))
+          : Container(color: isOut ? AppColors.dangerLt : isLow ? AppColors.warningLt : AppColors.primaryLt, child: Icon(Icons.inventory_2_outlined, color: isOut ? AppColors.danger : isLow ? AppColors.warning : AppColors.primary, size: 24)))),
         const SizedBox(width: 14),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(p.name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: AppColors.textPri)),
@@ -213,6 +214,28 @@ class _ProductFormState extends State<_ProductForm> {
           IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
         ]),
         if (_err != null) ...[const SizedBox(height: 12), Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(10)), child: Text(_err!, style: const TextStyle(color: AppColors.danger)))],
+        const SizedBox(height: 16),
+        // Image picker
+        GestureDetector(
+          onTap: _pickImage,
+          child: Container(
+            height: 120,
+            decoration: BoxDecoration(
+              color: AppColors.bg,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: _imageFile != null
+              ? ClipRRect(borderRadius: BorderRadius.circular(11), child: Image.file(File(_imageFile!.path), fit: BoxFit.cover, width: double.infinity))
+              : _imageUrl != null
+                ? ClipRRect(borderRadius: BorderRadius.circular(11), child: Image.network(_imageUrl!, fit: BoxFit.cover, width: double.infinity, errorBuilder: (_, __, ___) => const Column(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.add_photo_alternate_outlined, size: 36, color: AppColors.textSec), SizedBox(height: 8), Text('Tap to add product image', style: TextStyle(color: AppColors.textSec, fontSize: 13))])))
+                : const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Icon(Icons.add_photo_alternate_outlined, size: 36, color: AppColors.textSec),
+                    SizedBox(height: 8),
+                    Text('Tap to add product image', style: TextStyle(color: AppColors.textSec, fontSize: 13)),
+                  ]),
+          ),
+        ),
         const SizedBox(height: 16),
         TextFormField(controller: _name, decoration: const InputDecoration(labelText: 'Product Name *'), validator: (v) => v!.isNotEmpty ? null : 'Required'),
         const SizedBox(height: 12),
