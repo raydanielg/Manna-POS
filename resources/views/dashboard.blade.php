@@ -542,7 +542,7 @@
         <div class="nav-section-label">System</div>
 
         {{-- Notification Templates --}}
-        <a href="#" class="nav-item">
+        <a href="{{ route('dashboard.notification-templates') }}" class="nav-item">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"/><path d="M3 7l9 6l9 -6"/></svg>
             Notification Templates
         </a>
@@ -555,12 +555,12 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">Business Settings</a>
-                <a href="#" class="child-item">Business Locations</a>
-                <a href="#" class="child-item">Invoice Settings</a>
-                <a href="#" class="child-item">Barcode Settings</a>
+                <a href="{{ route('dashboard.settings.general') }}" class="child-item">Business Settings</a>
+                <a href="{{ route('dashboard.settings.business-location') }}" class="child-item">Business Locations</a>
+                <a href="{{ route('dashboard.settings.invoice-settings') }}" class="child-item">Invoice Settings</a>
+                <a href="{{ route('dashboard.settings.barcode-settings') }}" class="child-item">Barcode Settings</a>
                 <a href="#" class="child-item">Receipt Printers</a>
-                <a href="#" class="child-item">Tax Rates</a>
+                <a href="{{ route('dashboard.settings.tax-rates') }}" class="child-item">Tax Rates</a>
                 <a href="#" class="child-item">Package Subscription</a>
             </div>
         </div>
