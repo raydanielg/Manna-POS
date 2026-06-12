@@ -402,10 +402,10 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">Suppliers</a>
-                <a href="#" class="child-item">Customers</a>
-                <a href="#" class="child-item">Customer Groups</a>
-                <a href="#" class="child-item">Import Contacts</a>
+                <a href="{{ route('dashboard.contacts.suppliers') }}" class="child-item">Suppliers</a>
+                <a href="{{ route('dashboard.contacts.customers') }}" class="child-item">Customers</a>
+                <a href="{{ route('dashboard.contacts.customer-groups') }}" class="child-item">Customer Groups</a>
+                <a href="{{ route('dashboard.contacts.import-contacts') }}" class="child-item">Import Contacts</a>
             </div>
         </div>
 
@@ -417,18 +417,18 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">List Products</a>
-                <a href="#" class="child-item">Add Product</a>
-                <a href="#" class="child-item">Update Price</a>
-                <a href="#" class="child-item">Print Labels</a>
-                <a href="#" class="child-item">Variations</a>
-                <a href="#" class="child-item">Import Products</a>
-                <a href="#" class="child-item">Import Opening Stock</a>
-                <a href="#" class="child-item">Selling Price Group</a>
-                <a href="#" class="child-item">Units</a>
-                <a href="#" class="child-item">Categories</a>
-                <a href="#" class="child-item">Brands</a>
-                <a href="#" class="child-item">Warranties</a>
+                <a href="{{ route('dashboard.inventory.list-products') }}" class="child-item">List Products</a>
+                <a href="{{ route('dashboard.inventory.add-product') }}" class="child-item">Add Product</a>
+                <a href="{{ route('dashboard.inventory.update-price') }}" class="child-item">Update Price</a>
+                <a href="{{ route('dashboard.inventory.print-labels') }}" class="child-item">Print Labels</a>
+                <a href="{{ route('dashboard.inventory.variations') }}" class="child-item">Variations</a>
+                <a href="{{ route('dashboard.inventory.import-products') }}" class="child-item">Import Products</a>
+                <a href="{{ route('dashboard.inventory.import-opening-stock') }}" class="child-item">Import Opening Stock</a>
+                <a href="{{ route('dashboard.inventory.selling-price-group') }}" class="child-item">Selling Price Group</a>
+                <a href="{{ route('dashboard.inventory.units') }}" class="child-item">Units</a>
+                <a href="{{ route('dashboard.inventory.product-categories') }}" class="child-item">Categories</a>
+                <a href="{{ route('dashboard.inventory.brands') }}" class="child-item">Brands</a>
+                <a href="{{ route('dashboard.inventory.warranties') }}" class="child-item">Warranties</a>
             </div>
         </div>
 
