@@ -50,19 +50,19 @@
             Dashboard
         </a>
         <div class="nav-group-label">Inventory</div>
-        <a href="#" class="nav-item">
+        <a href="{{ route('dashboard.inventory.products') }}" class="nav-item">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/></svg>
             Products
         </a>
-        <a href="#" class="nav-item active">
+        <a href="{{ route('dashboard.inventory.categories') }}" class="nav-item active">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
             Categories
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('dashboard.inventory.stock') }}" class="nav-item">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
             Stock Alerts
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('dashboard.inventory.suppliers') }}" class="nav-item">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
             Suppliers
         </a>
