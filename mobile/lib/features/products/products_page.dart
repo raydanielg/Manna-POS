@@ -6,7 +6,6 @@ import '../../shared/models/product.dart';
 import '../../shared/widgets/app_card.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/search_bar_widget.dart';
-import '../../shared/widgets/status_badge.dart';
 import '../../shared/constants/app_constants.dart';
 
 class ProductsPage extends StatefulWidget {
