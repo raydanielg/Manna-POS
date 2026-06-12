@@ -507,6 +507,86 @@
             background: #d1d5db;
             box-shadow: none;
         }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .toast-success .toast-icon {
+            background: #10B981;
+            color: white;
+        }
+
+        .toast-error .toast-icon {
+            background: #EF4444;
+            color: white;
+        }
+
+        .toast-info .toast-icon {
+            background: #3B82F6;
+            color: white;
+        }
+
+        .toast-message {
+            flex: 1;
+            color: #1e1e1e;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .toast-close:hover {
+            background: #f3f4f6;
+            color: #1e1e1e;
+        }
     </style>
 
     <script>
@@ -641,7 +721,43 @@
                 const btnText = btn.querySelector('.btn-text');
                 btn.classList.add('loading');
                 btnText.textContent = 'Registering...';
+                
+                // Clear saved data on successful submit
+                clearFormData();
             });
+
+            // Toast notification system
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `
+                    <div class="toast-icon">
+                        ${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}
+                    </div>
+                    <div class="toast-message">${message}</div>
+                    <button class="toast-close">&times;</button>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // Animate in
+                setTimeout(() => toast.classList.add('show'), 10);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 5000);
+                
+                // Close on click
+                toast.querySelector('.toast-close').addEventListener('click', () => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                });
+            }
+
+            // Expose showToast globally
+            window.showToast = showToast;
         });
     </script>
 @endsection

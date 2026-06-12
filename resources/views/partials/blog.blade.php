@@ -37,31 +37,14 @@
 
             {{-- fallback placeholder card (invisible — kept so grid never breaks) --}}
             @if(($latestBlogs ?? collect())->isEmpty())
-            <article class="blog-card">
-                <div class="blog-card-img-wrap" style="background:#e2e8f0;"></div>
-                <div class="blog-card-body">
-                    <span class="blog-badge">Article</span>
-                    <h3 class="blog-card-title">Coming Soon</h3>
-                    <p class="blog-card-desc">Our first blog posts are on their way. Check back soon!</p>
-                    <div class="blog-card-author">
-                        <img
-                            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&auto=format&fit=crop&q=60"
-                            alt="Grace Omondi"
-                            class="blog-author-avatar"
-                        >
-                        <div class="blog-author-info">
-                            <span class="blog-author-name">Grace Omondi</span>
-                            <span class="blog-author-meta">May 14, 2025 &middot; 10 min read</span>
-                        </div>
-                    </div>
-                </div>
             </article>
+            @endif
 
         </div>{{-- /grid --}}
 
         {{-- View all link --}}
         <div class="blog-footer">
-            <a href="#" class="blog-view-all">
+            <a href="{{ route('blog.index') }}" class="blog-view-all">
                 View all articles
                 <svg viewBox="0 0 20 20" fill="currentColor" class="blog-view-all-icon">
                     <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
