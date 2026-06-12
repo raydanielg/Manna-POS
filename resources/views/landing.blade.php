@@ -82,6 +82,7 @@
     @include('partials.features')
     @include('partials.why-choose-us')
     @include('partials.testimonials')
+    @include('partials.blog')
     @include('partials.footer')
 
     <script>
