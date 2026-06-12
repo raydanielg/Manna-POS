@@ -495,9 +495,9 @@
 
         {{-- Stock Transfers --}}
         <div class="dropdown {{ $isStockTrans ? 'open' : '' }}" id="dropdown-stock-transfers">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-stock-transfers')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-stock-transfers')" data-tip="Stock Transfers">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M5 17h-2v-4m-1-8h11v12m-4 0h6m4 0h2v-6h-8m0-5h5l3 5"/><path d="M3 9l4 0"/></svg>
-                Stock Transfers
+                <span class="nav-label">Stock Transfers</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
@@ -508,9 +508,9 @@
 
         {{-- Stock Adjustment --}}
         <div class="dropdown {{ $isStockAdj ? 'open' : '' }}" id="dropdown-stock-adjustment">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-stock-adjustment')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-stock-adjustment')" data-tip="Stock Adj.">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0-16 0"/><path d="M4 6v6a8 3 0 0 0 16 0v-6"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/></svg>
-                Stock Adjustment
+                <span class="nav-label">Stock Adjustment</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
