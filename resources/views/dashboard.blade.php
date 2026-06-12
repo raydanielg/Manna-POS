@@ -688,6 +688,12 @@ function toggleSection(sectionId) {
     section.classList.toggle('collapsed');
 }
 
+// ── Dropdown Toggle ───────────────────────────────────────
+function toggleDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.classList.toggle('open');
+}
+
 // ── Trend Chart ──────────────────────────────────────────
 (function() {
     const labels = [];
