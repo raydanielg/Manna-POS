@@ -52,13 +52,32 @@ class _LoginPageState extends State<LoginPage> {
                   child: Opacity(opacity: value, child: child),
                 ),
                 child: Container(
-                  width: 80, height: 80,
+                  width: 100, height: 100,
                   decoration: BoxDecoration(
-                    color: AppColors.primaryLt,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.line, width: 1),
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Icon(Icons.point_of_sale, size: 40, color: AppColors.primary),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 90, height: 90,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryLt,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.primary, width: 2),
+                        ),
+                      ),
+                      Container(
+                        width: 70, height: 70,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const Icon(Icons.storefront, size: 42, color: AppColors.primary),
+                    ],
+                  ),
                 ),
               ),
             ),

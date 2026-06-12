@@ -58,14 +58,15 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> _register() async {
+    if (!mounted) return;
     setState(() => _error = null);
     try {
       await context.read<AuthProvider>().register(_name.text.trim(), _email.text.trim(), _pass.text);
       if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
     } on ApiException catch (e) {
-      setState(() => _error = e.message);
+      if (mounted) setState(() => _error = e.message);
     } catch (e) {
-      setState(() => _error = 'Connection error. Check your network.');
+      if (mounted) setState(() => _error = 'Connection error. Check your network.');
     }
   }
 
