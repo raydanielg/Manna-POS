@@ -172,30 +172,13 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Container(
             width: 80, height: 80,
             decoration: BoxDecoration(
-              color: Colors.transparent,
-              shape: BoxShape.circle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.line, width: 1),
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 15, offset: const Offset(0, 4))],
             ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 72, height: 72,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryLt,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primary, width: 2),
-                  ),
-                ),
-                Container(
-                  width: 56, height: 56,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const Icon(Icons.storefront, size: 32, color: AppColors.primary),
-              ],
-            ),
+            padding: const EdgeInsets.all(12),
+            child: Image.asset('assets/icons/app_logo.png', fit: BoxFit.contain),
           ),
         ),
         const SizedBox(height: 24),

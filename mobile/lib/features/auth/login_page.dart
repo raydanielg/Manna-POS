@@ -54,30 +54,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   width: 100, height: 100,
                   decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(24),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.line, width: 1),
+                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 15, offset: const Offset(0, 4))],
                   ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: 90, height: 90,
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryLt,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primary, width: 2),
-                        ),
-                      ),
-                      Container(
-                        width: 70, height: 70,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const Icon(Icons.storefront, size: 42, color: AppColors.primary),
-                    ],
-                  ),
+                  padding: const EdgeInsets.all(16),
+                  child: Image.asset('assets/icons/app_logo.png', fit: BoxFit.contain),
                 ),
               ),
             ),
