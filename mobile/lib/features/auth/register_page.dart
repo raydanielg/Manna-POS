@@ -151,40 +151,32 @@ class _RegisterPageState extends State<RegisterPage> {
     const subs   = ['Basic information about your business', 'Tax and financial settings', 'Your personal details'];
     const icons  = [Icons.store_outlined, Icons.tune_outlined, Icons.person_outlined];
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [Color(0xFF2563EB), Color(0xFF7C3AED)], begin: Alignment.topLeft, end: Alignment.bottomRight),
-      ),
+      color: Colors.white,
+      padding: const EdgeInsets.all(20),
       child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 8, 16, 0),
-          child: Row(children: [
-            IconButton(icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20), onPressed: _prev),
-            const Spacer(),
-            TextButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-              child: const Text('Sign In', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w600, fontSize: 14)),
-            ),
+        Row(children: [
+          IconButton(icon: const Icon(Icons.arrow_back_ios, size: 20), onPressed: _prev),
+          const Spacer(),
+          TextButton(
+            onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+            child: const Text('Sign In', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+          ),
+        ]),
+        const SizedBox(height: 16),
+        _stepIndicator(),
+        const SizedBox(height: 20),
+        Row(children: [
+          Container(
+            width: 48, height: 48,
+            decoration: BoxDecoration(color: AppColors.primaryLt, borderRadius: BorderRadius.circular(14)),
+            child: Icon(icons[_step], color: AppColors.primary, size: 24),
+          ),
+          const SizedBox(width: 14),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(titles[_step], style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3)),
+            Text(subs[_step], style: const TextStyle(color: AppColors.textSec, fontSize: 13)),
           ]),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 4, 24, 24),
-          child: Column(children: [
-            _stepIndicator(),
-            const SizedBox(height: 20),
-            Row(children: [
-              Container(
-                width: 48, height: 48,
-                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(14)),
-                child: Icon(icons[_step], color: Colors.white, size: 24),
-              ),
-              const SizedBox(width: 14),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(titles[_step], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3)),
-                Text(subs[_step], style: const TextStyle(color: Colors.white70, fontSize: 13)),
-              ]),
-            ]),
-          ]),
-        ),
+        ]),
       ]),
     );
   }
@@ -193,23 +185,23 @@ class _RegisterPageState extends State<RegisterPage> {
     const labels = ['Business', 'Settings', 'Owner'];
     return Row(children: [
       for (int i = 0; i < 3; i++) ...[
-        if (i > 0) Expanded(child: AnimatedContainer(duration: const Duration(milliseconds: 300), height: 2, margin: const EdgeInsets.only(bottom: 22), color: _step > i - 1 ? Colors.white : Colors.white30)),
+        if (i > 0) Expanded(child: AnimatedContainer(duration: const Duration(milliseconds: 300), height: 2, margin: const EdgeInsets.only(bottom: 22), color: _step > i - 1 ? AppColors.primary : AppColors.border)),
         Column(children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             width: 34, height: 34,
             decoration: BoxDecoration(
-              color: _step >= i ? Colors.white : Colors.transparent,
-              border: Border.all(color: _step >= i ? Colors.white : Colors.white54, width: 2),
+              color: _step >= i ? AppColors.primary : Colors.transparent,
+              border: Border.all(color: _step >= i ? AppColors.primary : AppColors.border, width: 2),
               shape: BoxShape.circle,
             ),
             child: Center(child: _step > i
-              ? Icon(Icons.check_rounded, color: AppColors.primary, size: 18)
-              : Text('${i+1}', style: TextStyle(color: _step == i ? AppColors.primary : Colors.white60, fontWeight: FontWeight.w800, fontSize: 13)),
+              ? Icon(Icons.check_rounded, color: Colors.white, size: 18)
+              : Text('${i+1}', style: TextStyle(color: _step == i ? Colors.white : AppColors.textSec, fontWeight: FontWeight.w800, fontSize: 13)),
             ),
           ),
           const SizedBox(height: 6),
-          Text(labels[i], style: TextStyle(color: _step >= i ? Colors.white : Colors.white54, fontSize: 11, fontWeight: FontWeight.w600)),
+          Text(labels[i], style: TextStyle(color: _step >= i ? AppColors.primary : AppColors.textSec, fontSize: 11, fontWeight: FontWeight.w600)),
         ]),
       ],
     ]);
