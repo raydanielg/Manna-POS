@@ -6,28 +6,21 @@
 @endsection
 
 @section('form-content')
-    <!-- Progress Steps -->
-    <div class="wizard-steps">
-        <div class="step active" data-step="1">
-            <div class="step-number">1</div>
-            <div class="step-label">Business Details</div>
-        </div>
-        <div class="step" data-step="2">
-            <div class="step-number">2</div>
-            <div class="step-label">Business Settings</div>
-        </div>
-        <div class="step" data-step="3">
-            <div class="step-number">3</div>
-            <div class="step-label">Owner Info</div>
-        </div>
-    </div>
-
     <form method="POST" action="{{ route('register') }}" id="registerForm">
         @csrf
 
-        <!-- Step 1: Business Details -->
-        <div class="wizard-step active" data-step="1">
-            <h3 class="section-title">Business Details</h3>
+        <!-- Accordion Section 1: Business Details -->
+        <div class="accordion-section active" data-section="1">
+            <div class="accordion-header" onclick="toggleAccordion(1)">
+                <div class="accordion-header-content">
+                    <h3 class="accordion-title">Business Details</h3>
+                    <p class="accordion-subtitle">Basic information about your business</p>
+                </div>
+                <div class="accordion-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+            </div>
+            <div class="accordion-content">
 
         <div class="form-group">
             <label for="business_name" class="form-label">Business Name *</label>
@@ -222,16 +215,21 @@
             @enderror
         </div>
 
-            <div class="wizard-buttons">
-                <button type="button" class="btn btn-primary btn-block next-btn">
-                    <span class="btn-text">Next</span>
-                </button>
             </div>
         </div>
 
-        <!-- Step 2: Business Settings -->
-        <div class="wizard-step" data-step="2">
-            <h3 class="section-title">Business Settings</h3>
+        <!-- Accordion Section 2: Business Settings -->
+        <div class="accordion-section" data-section="2">
+            <div class="accordion-header" onclick="toggleAccordion(2)">
+                <div class="accordion-header-content">
+                    <h3 class="accordion-title">Business Settings</h3>
+                    <p class="accordion-subtitle">Tax and financial settings</p>
+                </div>
+                <div class="accordion-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+            </div>
+            <div class="accordion-content">
 
         <div class="form-group">
             <label for="tax_label" class="form-label">Tax Label</label>
