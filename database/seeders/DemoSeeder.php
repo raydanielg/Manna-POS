@@ -279,7 +279,7 @@ class DemoSeeder extends Seeder
                 'total' => 28910,
                 'paid' => 28910,
                 'payment_status' => 'paid',
-                'payment_method' => 'mpesa',
+                'payment_method' => 'cash',
                 'status' => 'completed',
                 'items' => [
                     ['product_id' => 3, 'product_name' => 'Cooking Oil 1L', 'quantity' => 3, 'unit_price' => 4800, 'discount' => 0, 'total' => 14400],
@@ -330,7 +330,7 @@ class DemoSeeder extends Seeder
                 'total' => 21240,
                 'paid' => 21240,
                 'payment_status' => 'paid',
-                'payment_method' => 'mpesa',
+                'payment_method' => 'cash',
                 'status' => 'completed',
                 'items' => [
                     ['product_id' => 8, 'product_name' => 'Detergent Powder 1kg', 'quantity' => 3, 'unit_price' => 5500, 'discount' => 0, 'total' => 16500],
