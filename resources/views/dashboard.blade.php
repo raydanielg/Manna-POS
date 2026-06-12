@@ -118,13 +118,9 @@
 
     {{-- Logo --}}
     <div class="sidebar-logo">
-        <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center flex-shrink-0">
-                <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-5 h-5 object-contain brightness-0 invert">
-            </div>
-            <div>
-                <div class="sidebar-logo-name">{{ config('app.name','MannaPOS') }}</div>
-                <div class="sidebar-logo-sub">Admin Panel</div>
+        <div class="flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center flex-shrink-0">
+                <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-6 h-6 object-contain brightness-0 invert">
             </div>
         </div>
     </div>
