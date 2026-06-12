@@ -103,3 +103,213 @@ class _NavItem {
   final Widget? page;
   const _NavItem({required this.icon, required this.label, required this.color, required this.bg, this.page});
 }
+
+// ── Categories Page ───────────────────────────────────────
+class _CategoriesPage extends StatefulWidget {
+  const _CategoriesPage();
+  @override State<_CategoriesPage> createState() => _CategoriesPageState();
+}
+class _CategoriesPageState extends State<_CategoriesPage> {
+  List<dynamic> _items = [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() { super.initState(); _load(); }
+
+  Future<void> _load() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      final data = await ApiService.get('/categories');
+      setState(() { _items = data as List; _loading = false; });
+    } catch (e) { setState(() { _error = e.toString(); _loading = false; }); }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Categories'), actions: [IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _load)]),
+    body: _loading ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+      : _error != null ? Center(child: Text(_error!, style: const TextStyle(color: AppColors.danger)))
+      : _items.isEmpty ? const Center(child: Text('No categories found', style: TextStyle(color: AppColors.textSec)))
+      : ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: _items.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (_, i) {
+            final item = _items[i];
+            return ListTile(
+              leading: Container(width: 36, height: 36, decoration: BoxDecoration(color: AppColors.successLt, borderRadius: BorderRadius.circular(9)), child: const Icon(Icons.category_outlined, color: AppColors.success, size: 20)),
+              title: Text(item['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: item['description'] != null ? Text(item['description'], style: const TextStyle(color: AppColors.textSec, fontSize: 12)) : null,
+            );
+          }),
+  );
+}
+
+// ── Brands Page ───────────────────────────────────────────
+class _BrandsPage extends StatefulWidget {
+  const _BrandsPage();
+  @override State<_BrandsPage> createState() => _BrandsPageState();
+}
+class _BrandsPageState extends State<_BrandsPage> {
+  List<dynamic> _items = [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() { super.initState(); _load(); }
+
+  Future<void> _load() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      final data = await ApiService.get('/brands');
+      setState(() { _items = data as List; _loading = false; });
+    } catch (e) { setState(() { _error = e.toString(); _loading = false; }); }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Brands'), actions: [IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _load)]),
+    body: _loading ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+      : _error != null ? Center(child: Text(_error!, style: const TextStyle(color: AppColors.danger)))
+      : _items.isEmpty ? const Center(child: Text('No brands found', style: TextStyle(color: AppColors.textSec)))
+      : ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: _items.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (_, i) {
+            final item = _items[i];
+            return ListTile(
+              leading: Container(width: 36, height: 36, decoration: BoxDecoration(color: AppColors.primaryLt, borderRadius: BorderRadius.circular(9)), child: const Icon(Icons.branding_watermark_outlined, color: AppColors.primary, size: 20)),
+              title: Text(item['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: item['description'] != null ? Text(item['description'], style: const TextStyle(color: AppColors.textSec, fontSize: 12)) : null,
+            );
+          }),
+  );
+}
+
+// ── Suppliers Page ────────────────────────────────────────
+class _SuppliersPage extends StatefulWidget {
+  const _SuppliersPage();
+  @override State<_SuppliersPage> createState() => _SuppliersPageState();
+}
+class _SuppliersPageState extends State<_SuppliersPage> {
+  List<dynamic> _items = [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() { super.initState(); _load(); }
+
+  Future<void> _load() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      final data = await ApiService.get('/suppliers');
+      setState(() { _items = data as List; _loading = false; });
+    } catch (e) { setState(() { _error = e.toString(); _loading = false; }); }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Suppliers'), actions: [IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _load)]),
+    body: _loading ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+      : _error != null ? Center(child: Text(_error!, style: const TextStyle(color: AppColors.danger)))
+      : _items.isEmpty ? const Center(child: Text('No suppliers found', style: TextStyle(color: AppColors.textSec)))
+      : ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: _items.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (_, i) {
+            final item = _items[i];
+            return ListTile(
+              leading: Container(width: 36, height: 36, decoration: BoxDecoration(color: AppColors.warningLt, borderRadius: BorderRadius.circular(9)), child: const Icon(Icons.business_outlined, color: AppColors.warning, size: 20)),
+              title: Text(item['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: Text(item['company'] ?? item['email'] ?? '', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
+            );
+          }),
+  );
+}
+
+// ── Stock Adjustment Page ─────────────────────────────────
+class _StockAdjPage extends StatefulWidget {
+  const _StockAdjPage();
+  @override State<_StockAdjPage> createState() => _StockAdjPageState();
+}
+class _StockAdjPageState extends State<_StockAdjPage> {
+  List<dynamic> _items = [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() { super.initState(); _load(); }
+
+  Future<void> _load() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      final data = await ApiService.get('/stock-adjustments');
+      setState(() { _items = data as List; _loading = false; });
+    } catch (e) { setState(() { _error = e.toString(); _loading = false; }); }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Stock Adjustments'), actions: [IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _load)]),
+    body: _loading ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+      : _error != null ? Center(child: Text(_error!, style: const TextStyle(color: AppColors.danger)))
+      : _items.isEmpty ? const Center(child: Text('No adjustments found', style: TextStyle(color: AppColors.textSec)))
+      : ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: _items.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (_, i) {
+            final item = _items[i];
+            return ListTile(
+              leading: Container(width: 36, height: 36, decoration: BoxDecoration(color: AppColors.warningLt, borderRadius: BorderRadius.circular(9)), child: const Icon(Icons.inventory_2_outlined, color: AppColors.warning, size: 20)),
+              title: Text(item['reference_no'] ?? item['id']?.toString() ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: Text(item['date'] ?? item['created_at'] ?? '', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
+            );
+          }),
+  );
+}
+
+// ── Discounts Page ────────────────────────────────────────
+class _DiscountsPage extends StatefulWidget {
+  const _DiscountsPage();
+  @override State<_DiscountsPage> createState() => _DiscountsPageState();
+}
+class _DiscountsPageState extends State<_DiscountsPage> {
+  List<dynamic> _items = [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() { super.initState(); _load(); }
+
+  Future<void> _load() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      final data = await ApiService.get('/discounts');
+      setState(() { _items = data as List; _loading = false; });
+    } catch (e) { setState(() { _error = e.toString(); _loading = false; }); }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Discounts'), actions: [IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _load)]),
+    body: _loading ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+      : _error != null ? Center(child: Text(_error!, style: const TextStyle(color: AppColors.danger)))
+      : _items.isEmpty ? const Center(child: Text('No discounts found', style: TextStyle(color: AppColors.textSec)))
+      : ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: _items.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (_, i) {
+            final item = _items[i];
+            return ListTile(
+              leading: Container(width: 36, height: 36, decoration: BoxDecoration(color: const Color(0xFFF5F3FF), borderRadius: BorderRadius.circular(9)), child: Icon(Icons.local_offer_outlined, color: AppColors.secondary, size: 20)),
+              title: Text(item['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: Text('${item['discount_type'] ?? 'fixed'} · ${item['discount'] ?? 0}', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
+            );
+          }),
+  );
+}
