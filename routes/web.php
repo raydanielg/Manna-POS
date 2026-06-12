@@ -149,9 +149,7 @@ Route::get('/dashboard/user-management/sales-commission-agents', function () {
 Route::get('/dashboard/contacts/suppliers', function () {
     return view('dashboard.contacts.suppliers');
 })->middleware('auth')->name('dashboard.contacts.suppliers');
-Route::get('/dashboard/contacts/customers', function () {
-    return view('dashboard.contacts.customers');
-})->middleware('auth')->name('dashboard.contacts.customers');
+Route::get('/dashboard/contacts/customers', [App\Http\Controllers\Dashboard\CustomerController::class, 'index'])->middleware('auth')->name('dashboard.contacts.customers');
 Route::get('/dashboard/contacts/customer-groups', function () {
     return view('dashboard.contacts.customer-groups');
 })->middleware('auth')->name('dashboard.contacts.customer-groups');
