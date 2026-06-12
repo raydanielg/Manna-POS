@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../core/auth_provider.dart';
 import '../../core/api_service.dart';
@@ -10,39 +11,76 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final PageController _pageCtrl = PageController();
+  final _pageCtrl = PageController();
   int _step = 0;
-  final _name = TextEditingController();
-  final _email = TextEditingController();
-  final _phone = TextEditingController();
-  final _pass = TextEditingController();
+
+  // Step 1: Business Details
+  final _bizName   = TextEditingController();
+  String _bizType  = 'retail';
+  final _bizCity   = TextEditingController();
+  final _bizCountry = TextEditingController(text: 'Tanzania');
+  final _bizAddr   = TextEditingController();
+
+  // Step 2: Business Settings
+  String _currency    = 'TZS';
+  final _taxPct       = TextEditingController(text: '18');
+  String _fiscalStart = 'January';
+
+  // Step 3: Owner Info
+  final _name        = TextEditingController();
+  final _phone       = TextEditingController();
+  final _email       = TextEditingController();
+  final _pass        = TextEditingController();
   final _confirmPass = TextEditingController();
-  bool _showPass = false;
-  bool _showConfirm = false;
+  bool _showPass     = false;
+  bool _showConfirm  = false;
   String? _error;
+
+  static const _bizTypes = [
+    ('retail',     '🏪', 'Retail'),
+    ('wholesale',  '🏭', 'Wholesale'),
+    ('restaurant', '🍽️', 'Restaurant'),
+    ('service',    '⚙️', 'Service'),
+    ('other',      '📦', 'Other'),
+  ];
+
+  static const _currencies = [
+    ('TZS', '🇹🇿', 'Tanzanian Shilling'),
+    ('USD', '🇺🇸', 'US Dollar'),
+    ('EUR', '🇪🇺', 'Euro'),
+    ('KES', '🇰🇪', 'Kenyan Shilling'),
+    ('UGX', '🇺🇬', 'Ugandan Shilling'),
+    ('GBP', '🇬🇧', 'British Pound'),
+    ('ZAR', '🇿🇦', 'South African Rand'),
+  ];
+
+  static const _months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
   @override
   void dispose() {
     _pageCtrl.dispose();
-    _name.dispose();
-    _email.dispose();
-    _phone.dispose();
-    _pass.dispose();
-    _confirmPass.dispose();
+    for (final c in [_bizName, _bizCity, _bizCountry, _bizAddr, _taxPct, _name, _phone, _email, _pass, _confirmPass]) c.dispose();
     super.dispose();
   }
 
   bool _canNext() {
-    if (_step == 0) return _name.text.trim().length >= 2 && _email.text.contains('@');
-    if (_step == 1) return _phone.text.trim().length >= 10 && _pass.text.length >= 8 && _pass.text == _confirmPass.text;
-    return true;
+    switch (_step) {
+      case 0: return _bizName.text.trim().length >= 2 && _bizCity.text.trim().length >= 2;
+      case 1: return true;
+      case 2: return _name.text.trim().length >= 2 &&
+                     _phone.text.trim().length == 9 &&
+                     _email.text.contains('@') &&
+                     _pass.text.length >= 8 &&
+                     _pass.text == _confirmPass.text;
+      default: return false;
+    }
   }
 
   void _next() {
     if (!_canNext()) return;
     if (_step < 2) {
-      _pageCtrl.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-      setState(() => _step++);
+      _pageCtrl.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
+      setState(() { _step++; _error = null; });
     } else {
       _register();
     }
@@ -50,334 +88,464 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _prev() {
     if (_step > 0) {
-      _pageCtrl.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-      setState(() => _step--);
+      _pageCtrl.previousPage(duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
+      setState(() { _step--; _error = null; });
     } else {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pop(context);
     }
   }
 
+  String _normalizePhone(String p) {
+    p = p.trim();
+    if (p.startsWith('0')) p = p.substring(1);
+    return '+255$p';
+  }
+
   Future<void> _register() async {
-    if (!mounted) return;
     setState(() => _error = null);
     try {
-      await context.read<AuthProvider>().register(_name.text.trim(), _email.text.trim(), _pass.text);
+      await context.read<AuthProvider>().register({
+        'name'             : _name.text.trim(),
+        'email'            : _email.text.trim(),
+        'password'         : _pass.text,
+        'phone'            : _normalizePhone(_phone.text),
+        'business_name'    : _bizName.text.trim(),
+        'business_type'    : _bizType,
+        'business_city'    : _bizCity.text.trim(),
+        'business_country' : _bizCountry.text.trim().isEmpty ? 'Tanzania' : _bizCountry.text.trim(),
+        'business_address' : _bizAddr.text.trim(),
+        'currency'         : _currency,
+        'tax_percentage'   : double.tryParse(_taxPct.text) ?? 18.0,
+        'fiscal_year_start': _fiscalStart,
+      });
       if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
     } on ApiException catch (e) {
-      if (mounted) setState(() => _error = e.message);
-    } catch (e) {
-      if (mounted) setState(() => _error = 'Connection error. Check your network.');
+      setState(() => _error = e.message);
+    } catch (_) {
+      setState(() => _error = 'Connection error. Check your network.');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final loading = context.watch<AuthProvider>().loading;
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFFF8FAFC), Color(0xFFF1F5F9)],
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: CustomPaint(
-                painter: _FintechBackgroundPainter(),
-              ),
-            ),
-            SafeArea(
-              child: Column(children: [
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back, color: AppColors.textPri),
-                onPressed: _prev,
-              ),
-              const Spacer(),
-              Text('Step ${_step + 1} of 3', style: const TextStyle(color: AppColors.textSec, fontSize: 14, fontWeight: FontWeight.w600)),
-              const Spacer(),
-              const SizedBox(width: 48),
-            ]),
-          ),
-          const SizedBox(height: 16),
-          _stepIndicator(),
-          const SizedBox(height: 24),
+      backgroundColor: AppColors.bg,
+      body: SafeArea(
+        child: Column(children: [
+          _header(),
           Expanded(
             child: PageView(
               controller: _pageCtrl,
               physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _step1(),
-                _step2(),
-                _step3(),
-              ],
+              children: [_step1(), _step2(), _step3()],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: SizedBox(
-              height: 52,
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: loading ? null : (_canNext() ? _next : null),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _canNext() ? AppColors.primary : AppColors.textSec.withValues(alpha: 0.3),
-                ),
-                child: loading
-                    ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))
-                    : Text(_step == 2 ? 'Create Account' : 'Continue', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-              ),
-            ),
-          ),
+          _bottomNav(),
         ]),
       ),
     );
   }
 
-  Widget _stepIndicator() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(children: [
-        _dot(0),
-        Expanded(child: _line(0)),
-        _dot(1),
-        Expanded(child: _line(1)),
-        _dot(2),
+  // ── Header ─────────────────────────────────────────────────────────────────
+  Widget _header() {
+    const titles = ['Business Details', 'Business Settings', 'Owner Information'];
+    const subs   = ['Basic information about your business', 'Tax and financial settings', 'Your personal details'];
+    const icons  = [Icons.store_outlined, Icons.tune_outlined, Icons.person_outlined];
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(colors: [Color(0xFF2563EB), Color(0xFF7C3AED)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+      ),
+      child: Column(children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 8, 16, 0),
+          child: Row(children: [
+            IconButton(icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20), onPressed: _prev),
+            const Spacer(),
+            TextButton(
+              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+              child: const Text('Sign In', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w600, fontSize: 14)),
+            ),
+          ]),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 4, 24, 24),
+          child: Column(children: [
+            _stepIndicator(),
+            const SizedBox(height: 20),
+            Row(children: [
+              Container(
+                width: 48, height: 48,
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(14)),
+                child: Icon(icons[_step], color: Colors.white, size: 24),
+              ),
+              const SizedBox(width: 14),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(titles[_step], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3)),
+                Text(subs[_step], style: const TextStyle(color: Colors.white70, fontSize: 13)),
+              ]),
+            ]),
+          ]),
+        ),
       ]),
     );
   }
 
-  Widget _dot(int i) {
-    final active = _step >= i;
-    return Container(
-      width: 28,
-      height: 28,
-      decoration: BoxDecoration(
-        color: active ? AppColors.primary : AppColors.line,
-        shape: BoxShape.circle,
-        border: Border.all(color: active ? AppColors.primary : AppColors.line, width: 2),
-      ),
-      child: Center(
-        child: Text('${i + 1}', style: TextStyle(color: active ? Colors.white : AppColors.textSec, fontSize: 12, fontWeight: FontWeight.w700)),
-      ),
-    );
-  }
-
-  Widget _line(int i) {
-    final active = _step > i;
-    return Container(
-      height: 2,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(color: active ? AppColors.primary : AppColors.line),
-    );
-  }
-
-  Widget _step1() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Center(
-          child: SizedBox(
-            width: 80, height: 80,
-            child: Image.asset('assets/icons/app_logo.png', fit: BoxFit.contain),
-          ),
-        ),
-        const SizedBox(height: 24),
-        const Text('Let\'s get started', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColors.textPri)),
-        const SizedBox(height: 8),
-        const Text('First, tell us your name and email', style: TextStyle(color: AppColors.textSec, fontSize: 15)),
-        const SizedBox(height: 32),
-        Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.line, width: 1),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 20, offset: const Offset(0, 4))],
-          ),
-          child: Column(children: [
-            TextFormField(
-              controller: _name,
-              decoration: const InputDecoration(labelText: 'Full Name', prefixIcon: Icon(Icons.person_outline)),
-              onChanged: (_) => setState(() {}),
+  Widget _stepIndicator() {
+    const labels = ['Business', 'Settings', 'Owner'];
+    return Row(children: [
+      for (int i = 0; i < 3; i++) ...[
+        if (i > 0) Expanded(child: AnimatedContainer(duration: const Duration(milliseconds: 300), height: 2, margin: const EdgeInsets.only(bottom: 22), color: _step > i - 1 ? Colors.white : Colors.white30)),
+        Column(children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            width: 34, height: 34,
+            decoration: BoxDecoration(
+              color: _step >= i ? Colors.white : Colors.transparent,
+              border: Border.all(color: _step >= i ? Colors.white : Colors.white54, width: 2),
+              shape: BoxShape.circle,
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _email,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(labelText: 'Email Address', prefixIcon: Icon(Icons.email_outlined)),
-              onChanged: (_) => setState(() {}),
+            child: Center(child: _step > i
+              ? Icon(Icons.check_rounded, color: AppColors.primary, size: 18)
+              : Text('${i+1}', style: TextStyle(color: _step == i ? AppColors.primary : Colors.white60, fontWeight: FontWeight.w800, fontSize: 13)),
             ),
-          ]),
-        ),
-      ])),
-    );
-  }
-
-  Widget _step2() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text('Contact Info', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColors.textPri)),
-        const SizedBox(height: 8),
-        const Text('Add your phone number and set a password', style: TextStyle(color: AppColors.textSec, fontSize: 15)),
-        const SizedBox(height: 32),
-        Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.line, width: 1),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 20, offset: const Offset(0, 4))],
           ),
-          child: Column(children: [
-            TextFormField(
-              controller: _phone,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(labelText: 'Phone Number', prefixIcon: Icon(Icons.phone_outlined)),
-              onChanged: (_) => setState(() {}),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _pass,
-              obscureText: !_showPass,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock_outlined),
-                suffixIcon: IconButton(
-                  icon: Icon(_showPass ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec),
-                  onPressed: () => setState(() => _showPass = !_showPass),
-                ),
-              ),
-              onChanged: (_) => setState(() {}),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _confirmPass,
-              obscureText: !_showConfirm,
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
-                prefixIcon: const Icon(Icons.lock_outlined),
-                suffixIcon: IconButton(
-                  icon: Icon(_showConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec),
-                  onPressed: () => setState(() => _showConfirm = !_showConfirm),
-                ),
-                errorText: _pass.text.isNotEmpty && _pass.text != _confirmPass.text ? 'Passwords do not match' : null,
-              ),
-              onChanged: (_) => setState(() {}),
-            ),
-          ]),
-        ),
-      ])),
-    );
-  }
-
-  Widget _step3() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text('Review & Create', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColors.textPri)),
-        const SizedBox(height: 8),
-        const Text('Review your information before creating account', style: TextStyle(color: AppColors.textSec, fontSize: 15)),
-        const SizedBox(height: 32),
-        if (_error != null) Container(
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.danger.withValues(alpha: 0.2))),
-          child: Row(children: [const Icon(Icons.error_outline, color: AppColors.danger, size: 18), const SizedBox(width: 8), Expanded(child: Text(_error!, style: const TextStyle(color: AppColors.danger, fontSize: 13)))]),
-        ),
-        Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.line, width: 1),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 20, offset: const Offset(0, 4))],
-          ),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _infoRow('Name', _name.text),
-            const Divider(height: 24),
-            _infoRow('Email', _email.text),
-            const Divider(height: 24),
-            _infoRow('Phone', _phone.text),
-            const Divider(height: 24),
-            _infoRow('Password', '•' * _pass.text.length),
-          ]),
-        ),
-        const SizedBox(height: 24),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text('Already have an account? ', style: TextStyle(color: AppColors.textSec)),
-          GestureDetector(
-            onTap: () => Navigator.pushReplacementNamed(context, '/login'),
-            child: const Text('Sign In', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700)),
-          ),
+          const SizedBox(height: 6),
+          Text(labels[i], style: TextStyle(color: _step >= i ? Colors.white : Colors.white54, fontSize: 11, fontWeight: FontWeight.w600)),
         ]),
-      ])),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _infoRow(String label, String value) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(label, style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
-      const SizedBox(height: 4),
-      Text(value, style: const TextStyle(color: AppColors.textPri, fontSize: 16, fontWeight: FontWeight.w600)),
+      ],
     ]);
   }
-}
 
-class _FintechBackgroundPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFFE2E8F0).withOpacity(0.3)
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
+  // ── Step 1: Business Details ───────────────────────────────────────────────
+  Widget _step1() => SingleChildScrollView(
+    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      _card(children: [
+        _label('Business Name', required: true),
+        TextFormField(
+          controller: _bizName,
+          decoration: const InputDecoration(labelText: 'e.g. Duka la Mama Pita', prefixIcon: Icon(Icons.storefront_outlined, size: 20)),
+          onChanged: (_) => setState(() {}),
+        ),
+        const SizedBox(height: 20),
+        _label('Business Type', required: true),
+        const SizedBox(height: 10),
+        Wrap(spacing: 10, runSpacing: 10, children: _bizTypes.map((t) {
+          final (val, emoji, lab) = t;
+          final sel = _bizType == val;
+          return GestureDetector(
+            onTap: () => setState(() => _bizType = val),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+              decoration: BoxDecoration(
+                color: sel ? AppColors.primaryLt : Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: sel ? AppColors.primary : AppColors.border, width: sel ? 2 : 1),
+                boxShadow: sel ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.15), blurRadius: 8)] : [],
+              ),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                Text(emoji, style: const TextStyle(fontSize: 16)),
+                const SizedBox(width: 8),
+                Text(lab, style: TextStyle(color: sel ? AppColors.primary : AppColors.textPri, fontWeight: sel ? FontWeight.w700 : FontWeight.w500, fontSize: 14)),
+              ]),
+            ),
+          );
+        }).toList()),
+      ]),
+      const SizedBox(height: 14),
+      _card(children: [
+        Row(children: [
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            _label('City', required: true),
+            TextFormField(controller: _bizCity, decoration: const InputDecoration(labelText: 'e.g. Dar es Salaam', prefixIcon: Icon(Icons.location_city_outlined, size: 20)), onChanged: (_) => setState(() {})),
+          ])),
+          const SizedBox(width: 12),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            _label('Country'),
+            TextFormField(controller: _bizCountry, decoration: const InputDecoration(prefixText: '🇹🇿  ')),
+          ])),
+        ]),
+        const SizedBox(height: 16),
+        _label('Business Address (optional)'),
+        TextFormField(controller: _bizAddr, decoration: const InputDecoration(labelText: 'Street, building...', prefixIcon: Icon(Icons.place_outlined, size: 20))),
+      ]),
+    ]),
+  );
 
-    final paint2 = Paint()
-      ..color = const Color(0xFFCBD5E1).withOpacity(0.2)
-      ..strokeWidth = 0.5
-      ..style = PaintingStyle.stroke;
+  // ── Step 2: Business Settings ──────────────────────────────────────────────
+  Widget _step2() => SingleChildScrollView(
+    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      _infoChip('🇹🇿 Tanzania defaults are pre-filled — adjust if needed'),
+      const SizedBox(height: 14),
+      _card(children: [
+        _label('Currency'),
+        DropdownButtonFormField<String>(
+          value: _currency,
+          decoration: const InputDecoration(prefixIcon: Icon(Icons.payments_outlined, size: 20)),
+          isExpanded: true,
+          items: _currencies.map((c) {
+            final (code, flag, name) = c;
+            return DropdownMenuItem(value: code, child: Text('$flag  $code — $name', overflow: TextOverflow.ellipsis));
+          }).toList(),
+          onChanged: (v) => setState(() => _currency = v!),
+        ),
+        const SizedBox(height: 20),
+        _label('VAT / Tax Rate'),
+        TextFormField(
+          controller: _taxPct,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: const InputDecoration(
+            labelText: 'Percentage (%)',
+            hintText: '18',
+            prefixIcon: Icon(Icons.percent_outlined, size: 20),
+            helperText: 'Tanzania standard VAT is 18%',
+          ),
+        ),
+        const SizedBox(height: 20),
+        _label('Fiscal Year Starts'),
+        DropdownButtonFormField<String>(
+          value: _fiscalStart,
+          decoration: const InputDecoration(prefixIcon: Icon(Icons.calendar_month_outlined, size: 20)),
+          items: _months.map((m) => DropdownMenuItem(value: m, child: Text(m))).toList(),
+          onChanged: (v) => setState(() => _fiscalStart = v!),
+        ),
+      ]),
+      const SizedBox(height: 14),
+      _card(children: [
+        Row(children: [
+          Container(width: 40, height: 40, decoration: BoxDecoration(color: AppColors.successLt, borderRadius: BorderRadius.circular(10)), child: const Icon(Icons.lock_outline, color: AppColors.success, size: 20)),
+          const SizedBox(width: 12),
+          const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Secure & Private', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+            Text('Your business data is encrypted and never shared.', style: TextStyle(color: AppColors.textSec, fontSize: 12)),
+          ])),
+        ]),
+      ]),
+    ]),
+  );
 
-    final paint3 = Paint()
-      ..color = const Color(0xFF94A3B8).withOpacity(0.1)
-      ..strokeWidth = 0.3
-      ..style = PaintingStyle.stroke;
+  // ── Step 3: Owner Information ──────────────────────────────────────────────
+  Widget _step3() => SingleChildScrollView(
+    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      if (_error != null) ...[
+        Container(
+          padding: const EdgeInsets.all(14),
+          margin: const EdgeInsets.only(bottom: 14),
+          decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.danger.withValues(alpha: 0.3))),
+          child: Row(children: [
+            const Icon(Icons.error_outline, color: AppColors.danger, size: 20),
+            const SizedBox(width: 10),
+            Expanded(child: Text(_error!, style: const TextStyle(color: AppColors.danger, fontSize: 13))),
+          ]),
+        ),
+      ],
+      _card(children: [
+        _label('Full Name', required: true),
+        TextFormField(
+          controller: _name,
+          decoration: const InputDecoration(labelText: 'Your full name', prefixIcon: Icon(Icons.person_outline, size: 20)),
+          onChanged: (_) => setState(() {}),
+        ),
+        const SizedBox(height: 16),
+        _label('Phone Number', required: true),
+        _tanzaniaPhone(),
+        const SizedBox(height: 4),
+        const Text('9 digits after +255  •  e.g. 712 345 678', style: TextStyle(color: AppColors.textSec, fontSize: 11)),
+        const SizedBox(height: 16),
+        _label('Email Address', required: true),
+        TextFormField(
+          controller: _email,
+          keyboardType: TextInputType.emailAddress,
+          decoration: const InputDecoration(labelText: 'you@example.com', prefixIcon: Icon(Icons.email_outlined, size: 20)),
+          onChanged: (_) => setState(() {}),
+        ),
+      ]),
+      const SizedBox(height: 14),
+      _card(children: [
+        _label('Password', required: true),
+        TextFormField(
+          controller: _pass,
+          obscureText: !_showPass,
+          decoration: InputDecoration(
+            labelText: 'Min. 8 characters',
+            prefixIcon: const Icon(Icons.lock_outline, size: 20),
+            suffixIcon: IconButton(
+              icon: Icon(_showPass ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec, size: 20),
+              onPressed: () => setState(() => _showPass = !_showPass),
+            ),
+          ),
+          onChanged: (_) => setState(() {}),
+        ),
+        if (_pass.text.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          _strengthBar(_pass.text),
+        ],
+        const SizedBox(height: 16),
+        _label('Confirm Password', required: true),
+        TextFormField(
+          controller: _confirmPass,
+          obscureText: !_showConfirm,
+          decoration: InputDecoration(
+            labelText: 'Re-enter your password',
+            prefixIcon: const Icon(Icons.lock_outline, size: 20),
+            suffixIcon: IconButton(
+              icon: Icon(_showConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec, size: 20),
+              onPressed: () => setState(() => _showConfirm = !_showConfirm),
+            ),
+            errorText: _confirmPass.text.isNotEmpty && _pass.text != _confirmPass.text ? 'Passwords do not match' : null,
+            suffixIconConstraints: const BoxConstraints(minWidth: 48),
+          ),
+          onChanged: (_) => setState(() {}),
+        ),
+      ]),
+      const SizedBox(height: 14),
+      Center(child: Wrap(children: [
+        const Text('Already have an account? ', style: TextStyle(color: AppColors.textSec, fontSize: 13)),
+        GestureDetector(
+          onTap: () => Navigator.pushReplacementNamed(context, '/login'),
+          child: const Text('Sign In', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 13)),
+        ),
+      ])),
+    ]),
+  );
 
-    for (int i = 0; i < size.width; i += 40) {
-      canvas.drawLine(Offset(i.toDouble(), 0), Offset(i.toDouble(), size.height), paint);
-    }
+  // ── Tanzania phone field ───────────────────────────────────────────────────
+  Widget _tanzaniaPhone() => Container(
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: _phone.text.length == 9 ? AppColors.primary : AppColors.border, width: _phone.text.length == 9 ? 2 : 1),
+    ),
+    child: Row(children: [
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: const BoxDecoration(
+          color: AppColors.primaryLt,
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(11), bottomLeft: Radius.circular(11)),
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: const [
+          Text('🇹🇿', style: TextStyle(fontSize: 20)),
+          SizedBox(width: 8),
+          Text('+255', style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.primary, fontSize: 15)),
+        ]),
+      ),
+      Container(width: 1, height: 30, color: AppColors.border),
+      Expanded(
+        child: TextField(
+          controller: _phone,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(9)],
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: 2),
+          decoration: const InputDecoration(
+            hintText: '7XX XXX XXX',
+            hintStyle: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w400, color: AppColors.textSec),
+            border: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          ),
+          onChanged: (_) => setState(() {}),
+        ),
+      ),
+      if (_phone.text.length == 9)
+        const Padding(padding: EdgeInsets.only(right: 12), child: Icon(Icons.check_circle, color: AppColors.success, size: 22)),
+    ]),
+  );
 
-    for (int i = 0; i < size.height; i += 40) {
-      canvas.drawLine(Offset(0, i.toDouble()), Offset(size.width, i.toDouble()), paint);
-    }
-
-    for (int i = 0; i < size.width; i += 80) {
-      canvas.drawLine(Offset(i.toDouble(), 0), Offset(i.toDouble() + 40, size.height), paint2);
-    }
-
-    for (int i = 0; i < size.height; i += 80) {
-      canvas.drawLine(Offset(0, i.toDouble()), Offset(size.width, i.toDouble() + 40), paint2);
-    }
-
-    for (int i = 0; i < size.width; i += 120) {
-      canvas.drawLine(Offset(i.toDouble(), 0), Offset(i.toDouble() - 60, size.height), paint3);
-    }
-
-    for (int i = 0; i < size.height; i += 120) {
-      canvas.drawLine(Offset(0, i.toDouble()), Offset(size.width, i.toDouble() - 60), paint3);
-    }
+  // ── Password strength bar ──────────────────────────────────────────────────
+  Widget _strengthBar(String p) {
+    int score = 0;
+    if (p.length >= 8) score++;
+    if (p.contains(RegExp(r'[A-Z]'))) score++;
+    if (p.contains(RegExp(r'[0-9]'))) score++;
+    if (p.contains(RegExp(r'[^A-Za-z0-9]'))) score++;
+    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+    const colors = [Colors.transparent, AppColors.danger, AppColors.warning, AppColors.success, AppColors.success];
+    return Row(children: [
+      ...List.generate(4, (i) => Expanded(child: Container(
+        height: 4, margin: const EdgeInsets.only(right: 4),
+        decoration: BoxDecoration(
+          color: i < score ? colors[score] : AppColors.border,
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ))),
+      const SizedBox(width: 8),
+      Text(labels[score], style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: colors[score])),
+    ]);
   }
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  // ── Bottom navigation bar ─────────────────────────────────────────────────
+  Widget _bottomNav() {
+    final loading = context.watch<AuthProvider>().loading;
+    final canProceed = _canNext() && !loading;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: AppColors.border, width: 1)),
+      ),
+      child: Row(children: [
+        if (_step > 0) ...[
+          Expanded(
+            flex: 2,
+            child: OutlinedButton(
+              onPressed: loading ? null : _prev,
+              child: const Text('← Back'),
+            ),
+          ),
+          const SizedBox(width: 12),
+        ],
+        Expanded(
+          flex: 3,
+          child: SizedBox(
+            height: 52,
+            child: ElevatedButton(
+              onPressed: canProceed ? _next : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: canProceed ? AppColors.primary : AppColors.border,
+                foregroundColor: Colors.white,
+              ),
+              child: loading
+                ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))
+                : Text(_step == 2 ? '🎉  Create Account' : 'Continue →', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  Widget _card({required List<Widget> children}) => Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: AppColors.border),
+      boxShadow: const [BoxShadow(color: Color(0x06000000), blurRadius: 20, offset: Offset(0, 4))],
+    ),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
+  );
+
+  Widget _label(String text, {bool required = false}) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: RichText(text: TextSpan(
+      text: text,
+      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textPri),
+      children: required ? const [TextSpan(text: '  *', style: TextStyle(color: AppColors.danger))] : [],
+    )),
+  );
+
+  Widget _infoChip(String text) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+    decoration: BoxDecoration(color: AppColors.primaryLt, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.primary.withValues(alpha: 0.3))),
+    child: Row(children: [
+      const Icon(Icons.info_outline, color: AppColors.primary, size: 16),
+      const SizedBox(width: 8),
+      Expanded(child: Text(text, style: const TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w500))),
+    ]),
+  );
 }
