@@ -103,17 +103,7 @@
             });
         });
 
-        // Header scroll effect
-        const header = document.querySelector('.landing-header');
-        if (header) {
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-                } else {
-                    header.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
-                }
-            });
-        }
+        // Header scroll effect handled in header partial
 
         // Intersection Observer for animations
         const observerOptions = {
