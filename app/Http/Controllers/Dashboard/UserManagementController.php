@@ -32,4 +32,21 @@ class UserManagementController extends Controller {
         $user->delete();
         return response()->json(["success"=>true]);
     }
+    public function profile() {
+        $user = auth()->user();
+        return view("dashboard.profile", compact("user"));
+    }
+    public function updateProfile(Request $req) {
+        $user = auth()->user();
+        $data = $req->validate(["name"=>"required|string|max:191","email"=>"required|email|unique:users,email,{$user->id}","phone"=>"nullable|string|max:30","current_password"=>"required_with:new_password","new_password"=>"nullable|string|min:8|confirmed"]);
+        if (!empty($req->new_password)) {
+            if (!Hash::check($req->current_password, $user->password)) {
+                return response()->json(["success"=>false,"message"=>"Current password is incorrect"], 422);
+            }
+            $data["password"] = Hash::make($req->new_password);
+        }
+        unset($data["current_password"], $data["new_password"], $data["new_password_confirmation"]);
+        $user->update($data);
+        return response()->json(["success"=>true,"user"=>$user]);
+    }
 }
