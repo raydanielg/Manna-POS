@@ -15,6 +15,14 @@ class CreateExpensesTable extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('expense_category_id')->nullable();
+            $table->string('reference')->nullable();
+            $table->date('expense_date');
+            $table->decimal('amount', 15, 2);
+            $table->string('payment_method')->default('cash');
+            $table->text('notes')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreign('expense_category_id')->references('id')->on('expense_categories')->nullOnDelete();
             $table->timestamps();
         });
     }
