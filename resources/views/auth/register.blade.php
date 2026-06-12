@@ -6,11 +6,28 @@
 @endsection
 
 @section('form-content')
+    <!-- Progress Steps -->
+    <div class="wizard-steps">
+        <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Business Details</div>
+        </div>
+        <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Business Settings</div>
+        </div>
+        <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Owner Info</div>
+        </div>
+    </div>
+
     <form method="POST" action="{{ route('register') }}" id="registerForm">
         @csrf
 
-        <!-- Business Details Section -->
-        <h3 class="section-title">Business Details</h3>
+        <!-- Step 1: Business Details -->
+        <div class="wizard-step active" data-step="1">
+            <h3 class="section-title">Business Details</h3>
 
         <div class="form-group">
             <label for="business_name" class="form-label">Business Name *</label>
