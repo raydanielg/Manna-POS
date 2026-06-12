@@ -30,16 +30,34 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
 
         /* Sidebar */
-        .sidebar { width: 220px; min-width: 220px; height: 100vh; position: fixed; top: 0; left: 0; background: #fff; border-right: 1px solid #e9edf5; display: flex; flex-direction: column; z-index: 40; overflow-y: auto; }
+        .sidebar { width: 220px; min-width: 220px; height: 100vh; position: fixed; top: 0; left: 0; background: #fff; border-right: 1px solid #e9edf5; display: flex; flex-direction: column; z-index: 40; }
         .sidebar-logo { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; }
-        .nav-group-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; padding: 1.1rem 1.25rem 0.35rem; }
-        .nav-item { display: flex; align-items: center; gap: 0.65rem; padding: 0.52rem 1.25rem; font-size: 0.84rem; font-weight: 500; color: #475569; border-radius: 10px; margin: 0 0.5rem; cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; }
+        .sidebar-content { flex: 1; padding: 0.75rem 0.5rem; overflow-y: auto; }
+        
+        /* Nav Items */
+        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
         .nav-item:hover { background: #f8fafc; color: #0f172a; }
-        .nav-item.active { background: #fff0f3; color: #e03057; font-weight: 600; }
-        .nav-item.active svg { color: #e03057; }
-        .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.75; }
-        .nav-item.active svg { opacity: 1; }
-        .nav-item-badge { margin-left: auto; font-size: 0.65rem; font-weight: 700; background: #fee2e2; color: #dc2626; padding: 0.1rem 0.5rem; border-radius: 9999px; }
+        .nav-item.active { background: #e9edf5; color: #0f172a; font-weight: 600; }
+        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
+        .nav-item.active svg { color: #0f172a; }
+        
+        /* Dropdown */
+        .dropdown { margin-bottom: 0.25rem; }
+        .dropdown-toggle { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .dropdown-toggle:hover { background: #f8fafc; color: #0f172a; }
+        .dropdown-toggle svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
+        .dropdown-toggle .chevron { margin-left: auto; width: 16px; height: 16px; color: #9ca3af; transition: transform 0.3s; }
+        .dropdown.open .dropdown-toggle .chevron { transform: rotate(90deg); }
+        
+        /* Dropdown Children */
+        .dropdown-children { display: none; position: relative; margin-top: 0.5rem; margin-bottom: 1rem; padding-left: 2.75rem; }
+        .dropdown.open .dropdown-children { display: block; }
+        .dropdown-children::before { content: ''; position: absolute; left: 1.25rem; top: 0; bottom: 0; width: 1px; background: #e5e7eb; }
+        .dropdown-children .child-item { display: flex; font-size: 0.875rem; font-weight: 500; color: #64748b; padding: 0.35rem 0; transition: color 0.2s; cursor: pointer; text-decoration: none; white-space: nowrap; }
+        .dropdown-children .child-item:hover { color: #0f172a; }
+        .dropdown-children .child-item.active { color: #0f172a; font-weight: 600; }
+        .dropdown-children .child-item + .child-item { margin-top: 0.875rem; }
+        
         .sidebar-bottom { margin-top: auto; padding: 1rem 0.5rem 1.25rem; border-top: 1px solid #f1f5f9; }
         .sign-out-btn { display: flex; align-items: center; gap: 0.65rem; padding: 0.52rem 1.25rem; font-size: 0.84rem; font-weight: 600; color: #e03057; width: 100%; border-radius: 10px; background: none; border: none; cursor: pointer; transition: background 0.15s; }
         .sign-out-btn:hover { background: #fff0f3; }
