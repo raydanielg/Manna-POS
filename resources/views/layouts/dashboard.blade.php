@@ -406,9 +406,9 @@
 
         {{-- User Management --}}
         <div class="dropdown {{ $isUserMgmt ? 'open' : '' }}" id="dropdown-user">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-user')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-user')" data-tip="User Management">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
-                User Management
+                <span class="nav-label">User Management</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
@@ -420,9 +420,9 @@
 
         {{-- Contacts --}}
         <div class="dropdown {{ $isContacts ? 'open' : '' }}" id="dropdown-contacts">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-contacts')">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-contacts')" data-tip="Contacts">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 6v12a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/><path d="M10 16h6"/><path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M4 8h3"/><path d="M4 12h3"/><path d="M4 16h3"/></svg>
-                Contacts
+                <span class="nav-label">Contacts</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
