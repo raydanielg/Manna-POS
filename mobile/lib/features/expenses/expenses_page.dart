@@ -5,7 +5,6 @@ import '../../shared/theme/app_theme.dart';
 import '../../shared/models/expense.dart';
 import '../../shared/widgets/app_card.dart';
 import '../../shared/widgets/empty_state.dart';
-import '../../shared/widgets/search_bar_widget.dart';
 
 class ExpensesPage extends StatefulWidget {
   const ExpensesPage({super.key});
