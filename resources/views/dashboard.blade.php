@@ -503,9 +503,9 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">List Expenses</a>
-                <a href="#" class="child-item">Add Expense</a>
-                <a href="#" class="child-item">Expense Categories</a>
+                <a href="{{ route('dashboard.expenses.list-expenses') }}" class="child-item">List Expenses</a>
+                <a href="{{ route('dashboard.expenses.add-expense') }}" class="child-item">Add Expense</a>
+                <a href="{{ route('dashboard.expenses.expense-categories') }}" class="child-item">Expense Categories</a>
             </div>
         </div>
 
@@ -519,20 +519,20 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">Profit / Loss Report</a>
-                <a href="#" class="child-item">Purchase & Sale</a>
+                <a href="{{ route('dashboard.reports.profit-loss-report') }}" class="child-item">Profit / Loss Report</a>
+                <a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item">Purchase & Sale</a>
                 <a href="#" class="child-item">Tax Report</a>
                 <a href="#" class="child-item">Supplier & Customer Report</a>
                 <a href="#" class="child-item">Customer Groups Report</a>
-                <a href="#" class="child-item">Stock Report</a>
+                <a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item">Stock Report</a>
                 <a href="#" class="child-item">Stock Adjustment Report</a>
                 <a href="#" class="child-item">Trending Products</a>
-                <a href="#" class="child-item">Items Report</a>
-                <a href="#" class="child-item">Product Purchase Report</a>
-                <a href="#" class="child-item">Product Sell Report</a>
-                <a href="#" class="child-item">Purchase Payment Report</a>
-                <a href="#" class="child-item">Sell Payment Report</a>
-                <a href="#" class="child-item">Expense Report</a>
+                <a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item">Items Report</a>
+                <a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item">Product Purchase Report</a>
+                <a href="{{ route('dashboard.reports.sales-report') }}" class="child-item">Product Sell Report</a>
+                <a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item">Purchase Payment Report</a>
+                <a href="{{ route('dashboard.reports.sales-report') }}" class="child-item">Sell Payment Report</a>
+                <a href="{{ route('dashboard.reports.expense-report') }}" class="child-item">Expense Report</a>
                 <a href="#" class="child-item">Register Report</a>
                 <a href="#" class="child-item">Sales Representative Report</a>
                 <a href="#" class="child-item">Activity Log</a>
