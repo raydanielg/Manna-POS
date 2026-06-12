@@ -265,8 +265,8 @@ class DemoSeeder extends Seeder
                 'payment_method' => 'cash',
                 'status' => 'completed',
                 'items' => [
-                    ['product_id' => 1, 'quantity' => 5, 'unit_price' => 1800, 'subtotal' => 9000],
-                    ['product_id' => 2, 'quantity' => 5, 'unit_price' => 1200, 'subtotal' => 6000],
+                    ['product_id' => 1, 'product_name' => 'Coca-Cola 500ml', 'quantity' => 5, 'unit_price' => 1800, 'discount' => 0, 'total' => 9000],
+                    ['product_id' => 2, 'product_name' => 'Bread - White Sliced', 'quantity' => 5, 'unit_price' => 1200, 'discount' => 0, 'total' => 6000],
                 ],
             ],
             [
@@ -282,8 +282,8 @@ class DemoSeeder extends Seeder
                 'payment_method' => 'mpesa',
                 'status' => 'completed',
                 'items' => [
-                    ['product_id' => 3, 'quantity' => 3, 'unit_price' => 4800, 'subtotal' => 14400],
-                    ['product_id' => 4, 'quantity' => 1, 'unit_price' => 18500, 'subtotal' => 18500],
+                    ['product_id' => 3, 'product_name' => 'Cooking Oil 1L', 'quantity' => 3, 'unit_price' => 4800, 'discount' => 0, 'total' => 14400],
+                    ['product_id' => 4, 'product_name' => 'Rice - Super 5kg', 'quantity' => 1, 'unit_price' => 18500, 'discount' => 500, 'total' => 18000],
                 ],
             ],
             [
@@ -299,8 +299,8 @@ class DemoSeeder extends Seeder
                 'payment_method' => 'cash',
                 'status' => 'completed',
                 'items' => [
-                    ['product_id' => 5, 'quantity' => 1, 'unit_price' => 7000, 'subtotal' => 7000],
-                    ['product_id' => 6, 'quantity' => 1, 'unit_price' => 3500, 'subtotal' => 3500],
+                    ['product_id' => 5, 'product_name' => 'Sugar - White 2kg', 'quantity' => 1, 'unit_price' => 7000, 'discount' => 0, 'total' => 7000],
+                    ['product_id' => 6, 'product_name' => 'Toothpaste - Mint 100ml', 'quantity' => 1, 'unit_price' => 3500, 'discount' => 0, 'total' => 3500],
                 ],
             ],
             [
@@ -316,8 +316,8 @@ class DemoSeeder extends Seeder
                 'payment_method' => 'cash',
                 'status' => 'completed',
                 'items' => [
-                    ['product_id' => 4, 'quantity' => 2, 'unit_price' => 18500, 'subtotal' => 37000],
-                    ['product_id' => 7, 'quantity' => 2, 'unit_price' => 2200, 'subtotal' => 4400],
+                    ['product_id' => 4, 'product_name' => 'Rice - Super 5kg', 'quantity' => 2, 'unit_price' => 18500, 'discount' => 0, 'total' => 37000],
+                    ['product_id' => 7, 'product_name' => 'Soap - Bath Bar', 'quantity' => 2, 'unit_price' => 2200, 'discount' => 0, 'total' => 4400],
                 ],
             ],
             [
@@ -333,8 +333,8 @@ class DemoSeeder extends Seeder
                 'payment_method' => 'mpesa',
                 'status' => 'completed',
                 'items' => [
-                    ['product_id' => 8, 'quantity' => 3, 'unit_price' => 5500, 'subtotal' => 16500],
-                    ['product_id' => 9, 'quantity' => 1, 'unit_price' => 4200, 'subtotal' => 4200],
+                    ['product_id' => 8, 'product_name' => 'Detergent Powder 1kg', 'quantity' => 3, 'unit_price' => 5500, 'discount' => 0, 'total' => 16500],
+                    ['product_id' => 9, 'product_name' => 'Bleach 750ml', 'quantity' => 1, 'unit_price' => 4200, 'discount' => 0, 'total' => 4200],
                 ],
             ],
             [
@@ -350,8 +350,8 @@ class DemoSeeder extends Seeder
                 'payment_method' => 'cash',
                 'status' => 'completed',
                 'items' => [
-                    ['product_id' => 1, 'quantity' => 10, 'unit_price' => 1800, 'subtotal' => 18000],
-                    ['product_id' => 10, 'quantity' => 4, 'unit_price' => 3800, 'subtotal' => 15200],
+                    ['product_id' => 1, 'product_name' => 'Coca-Cola 500ml', 'quantity' => 10, 'unit_price' => 1800, 'discount' => 0, 'total' => 18000],
+                    ['product_id' => 10, 'product_name' => 'Milk - Fresh 1L', 'quantity' => 4, 'unit_price' => 3800, 'discount' => 0, 'total' => 15200],
                 ],
             ],
             [
@@ -367,8 +367,8 @@ class DemoSeeder extends Seeder
                 'payment_method' => 'cash',
                 'status' => 'completed',
                 'items' => [
-                    ['product_id' => 3, 'quantity' => 4, 'unit_price' => 4800, 'subtotal' => 19200],
-                    ['product_id' => 5, 'quantity' => 2, 'unit_price' => 7000, 'subtotal' => 14000],
+                    ['product_id' => 3, 'product_name' => 'Cooking Oil 1L', 'quantity' => 4, 'unit_price' => 4800, 'discount' => 0, 'total' => 19200],
+                    ['product_id' => 5, 'product_name' => 'Sugar - White 2kg', 'quantity' => 2, 'unit_price' => 7000, 'discount' => 0, 'total' => 14000],
                 ],
             ],
         ];
@@ -383,9 +383,11 @@ class DemoSeeder extends Seeder
                 SaleItem::create([
                     'sale_id' => $sale->id,
                     'product_id' => $item['product_id'],
+                    'product_name' => $item['product_name'],
                     'quantity' => $item['quantity'],
                     'unit_price' => $item['unit_price'],
-                    'subtotal' => $item['subtotal'],
+                    'discount' => $item['discount'],
+                    'total' => $item['total'],
                 ]);
             }
         }
@@ -404,8 +406,8 @@ class DemoSeeder extends Seeder
                 'payment_status' => 'paid',
                 'status' => 'received',
                 'items' => [
-                    ['product_id' => 1, 'quantity' => 50, 'unit_price' => 1200, 'subtotal' => 60000],
-                    ['product_id' => 10, 'quantity' => 20, 'unit_price' => 2800, 'subtotal' => 56000],
+                    ['product_id' => 1, 'product_name' => 'Coca-Cola 500ml', 'quantity' => 50, 'unit_cost' => 1200, 'total' => 60000],
+                    ['product_id' => 10, 'product_name' => 'Milk - Fresh 1L', 'quantity' => 20, 'unit_cost' => 2800, 'total' => 56000],
                 ],
             ],
             [
@@ -420,8 +422,8 @@ class DemoSeeder extends Seeder
                 'payment_status' => 'paid',
                 'status' => 'received',
                 'items' => [
-                    ['product_id' => 4, 'quantity' => 10, 'unit_price' => 15000, 'subtotal' => 150000],
-                    ['product_id' => 5, 'quantity' => 5, 'unit_price' => 5500, 'subtotal' => 27500],
+                    ['product_id' => 4, 'product_name' => 'Rice - Super 5kg', 'quantity' => 10, 'unit_cost' => 15000, 'total' => 150000],
+                    ['product_id' => 5, 'product_name' => 'Sugar - White 2kg', 'quantity' => 5, 'unit_cost' => 5500, 'total' => 27500],
                 ],
             ],
         ];
@@ -436,9 +438,10 @@ class DemoSeeder extends Seeder
                 PurchaseItem::create([
                     'purchase_id' => $purchase->id,
                     'product_id' => $item['product_id'],
+                    'product_name' => $item['product_name'],
                     'quantity' => $item['quantity'],
-                    'unit_price' => $item['unit_price'],
-                    'subtotal' => $item['subtotal'],
+                    'unit_cost' => $item['unit_cost'],
+                    'total' => $item['total'],
                 ]);
             }
         }
