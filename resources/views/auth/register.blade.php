@@ -355,6 +355,24 @@
         <a href="{{ route('login') }}" class="auth-footer-link">Sign in</a>
     </div>
 
+    <script>
+        // Re-attach link listeners for AJAX navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const authFooterLink = document.querySelector('.auth-footer-link');
+            if (authFooterLink) {
+                authFooterLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('href');
+                    if (url && url !== '#' && typeof navigateToPage === 'function') {
+                        navigateToPage(url);
+                    } else if (url) {
+                        window.location.href = url;
+                    }
+                });
+            }
+        });
+    </script>
+
     <style>
         .section-title {
             font-size: 1.1rem;
