@@ -127,6 +127,8 @@ class _ProductFormState extends State<_ProductForm> {
   int? _catId;
   bool _saving = false;
   String? _err;
+  XFile? _imageFile;
+  String? _imageUrl;
 
   @override
   void initState() {
@@ -134,11 +136,12 @@ class _ProductFormState extends State<_ProductForm> {
     final p = widget.product;
     _name = TextEditingController(text: p?.name);
     _price = TextEditingController(text: p?.sellingPrice.toString());
-    _costPrice = TextEditingController(text: p?.purchasePrice.toString());
+    _costPrice = TextEditingController(text: p?.costPrice.toString());
     _stock = TextEditingController(text: p?.stockQuantity.toString() ?? '0');
     _reorder = TextEditingController(text: p?.reorderLevel.toString() ?? '5');
     _desc = TextEditingController(text: p?.description);
     _catId = p?.category?['id'];
+    _imageUrl = p?.imageUrl;
     _loadCategories();
   }
 
@@ -146,6 +149,11 @@ class _ProductFormState extends State<_ProductForm> {
   void dispose() {
     for (final c in [_name, _price, _costPrice, _stock, _reorder, _desc]) c.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 800, imageQuality: 80);
+    if (picked != null) setState(() => _imageFile = picked);
   }
 
   Future<void> _loadCategories() async {
@@ -158,15 +166,33 @@ class _ProductFormState extends State<_ProductForm> {
   Future<void> _save() async {
     if (!_form.currentState!.validate()) return;
     setState(() { _saving = true; _err = null; });
-    final body = {
-      'name': _name.text.trim(), 'selling_price': _price.text, 'purchase_price': _costPrice.text,
-      'stock_quantity': _stock.text, 'reorder_level': _reorder.text,
-      if (_desc.text.isNotEmpty) 'description': _desc.text,
-      if (_catId != null) 'category_id': _catId,
-    };
     try {
-      if (widget.product != null) await ApiService.put('/products/${widget.product!.id}', body);
-      else await ApiService.post('/products', body);
+      if (_imageFile != null) {
+        // Use multipart when image is selected
+        final fields = {
+          'name': _name.text.trim(),
+          'selling_price': _price.text,
+          'cost_price': _costPrice.text,
+          'stock_quantity': _stock.text,
+          'reorder_level': _reorder.text,
+          if (_desc.text.isNotEmpty) 'description': _desc.text,
+          if (_catId != null) 'product_category_id': _catId.toString(),
+        };
+        if (widget.product != null) {
+          await ApiService.putMultipart('/products/${widget.product!.id}', fields, filePath: _imageFile!.path);
+        } else {
+          await ApiService.postMultipart('/products', fields, filePath: _imageFile!.path);
+        }
+      } else {
+        final body = {
+          'name': _name.text.trim(), 'selling_price': _price.text, 'cost_price': _costPrice.text,
+          'stock_quantity': _stock.text, 'reorder_level': _reorder.text,
+          if (_desc.text.isNotEmpty) 'description': _desc.text,
+          if (_catId != null) 'product_category_id': _catId,
+        };
+        if (widget.product != null) await ApiService.put('/products/${widget.product!.id}', body);
+        else await ApiService.post('/products', body);
+      }
       widget.onSaved();
       if (mounted) Navigator.pop(context);
     } on ApiException catch (e) { setState(() { _err = e.message; _saving = false; }); }
