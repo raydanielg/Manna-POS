@@ -1,116 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Profit/Loss Report — {{ config('app.name', 'MannaPOS') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #f1f4fb; }
-        .sidebar { width: 220px; min-width: 220px; height: 100vh; position: fixed; top: 0; left: 0; background: #fff; border-right: 1px solid #e9edf5; display: flex; flex-direction: column; z-index: 40; }
-        .sidebar-logo { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; }
-        .sidebar-content { flex: 1; padding: 0.75rem 0.5rem; overflow-y: auto; }
-        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
-        .nav-item:hover { background: #f8fafc; color: #0f172a; }
-        .nav-item.active { background: #e9edf5; color: #0f172a; font-weight: 600; }
-        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .dropdown { margin-bottom: 0.25rem; }
-        .dropdown-toggle { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .dropdown-toggle:hover { background: #f8fafc; color: #0f172a; }
-        .dropdown-toggle svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .dropdown-toggle .chevron { margin-left: auto; width: 16px; height: 16px; color: #9ca3af; transition: transform 0.3s; }
-        .dropdown.open .dropdown-toggle .chevron { transform: rotate(90deg); }
-        .dropdown-children { display: none; position: relative; margin-top: 0.5rem; margin-bottom: 1rem; padding-left: 2.75rem; }
-        .dropdown.open .dropdown-children { display: block; }
-        .dropdown-children::before { content: ''; position: absolute; left: 1.25rem; top: 0; bottom: 0; width: 1px; background: #e5e7eb; }
-        .dropdown-children .child-item { display: flex; font-size: 0.875rem; font-weight: 500; color: #64748b; padding: 0.35rem 0; transition: color 0.2s; cursor: pointer; text-decoration: none; white-space: nowrap; }
-        .dropdown-children .child-item:hover { color: #0f172a; }
-        .dropdown-children .child-item.active { color: #0f172a; font-weight: 600; }
-        .dropdown-children .child-item + .child-item { margin-top: 0.875rem; }
-        .sidebar-bottom { margin-top: auto; padding: 1rem 0.5rem 1.25rem; border-top: 1px solid #f1f5f9; }
-        .sign-out-btn { display: flex; align-items: center; gap: 0.65rem; padding: 0.52rem 1.25rem; font-size: 0.84rem; font-weight: 600; color: #e03057; width: 100%; border-radius: 10px; background: none; border: none; cursor: pointer; transition: background 0.15s; }
-        .sign-out-btn:hover { background: #fff0f3; }
-        .sign-out-btn svg { width: 16px; height: 16px; }
-        .main-wrap { margin-left: 220px; min-height: 100vh; }
-        .top-header { background: #fff; border-bottom: 1px solid #e9edf5; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
-        .page-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; }
-        .content { padding: 1.75rem 2rem; }
-        .card { background: #fff; border-radius: 14px; border: 1px solid #e9edf5; padding: 1.5rem; }
-        .section-title { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem; }
-    </style>
-</head>
-<body class="font-sans antialiased">
-
-<aside class="sidebar">
-    <div class="sidebar-logo">
-        <div class="flex items-center justify-center">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
-                <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-6 h-6 object-contain brightness-0 invert">
-            </div>
-        </div>
+﻿@extends('layouts.dashboard')
+@section('page_title','Profit & Loss Report')
+@section('content')
+<div class="dash-content">
+<div class="page-card">
+  <div class="card-header">
+    <div class="card-title">Profit & Loss Report</div>
+    <div class="filters-row">
+      <input type="date" id="fromDate" class="form-control" style="width:160px;" onchange="loadReport()">
+      <input type="date" id="toDate" class="form-control" style="width:160px;" onchange="loadReport()">
+      <button class="btn btn-primary" onclick="loadReport()">Generate</button>
     </div>
-    <div class="sidebar-content">
-        <a href="{{ route('dashboard') }}" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M10 12h4v4h-4z"/></svg>
-            Home
-        </a>
-        <div class="dropdown open" id="dropdown-reports">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-reports')">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 0 1 -2 -2V5a2 2 0 0 1 2 -2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1 -2 2Z"/></svg>
-                Reports
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                <a href="#" class="child-item">Sales Report</a>
-                <a href="#" class="child-item">Purchase Report</a>
-                <a href="#" class="child-item">Inventory Report</a>
-                <a href="#" class="child-item">Expense Report</a>
-                <a href="#" class="child-item active">Profit/Loss Report</a>
-            </div>
-        </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.25rem;border-bottom:1px solid #e9edf5;">
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:1rem;">
+      <div style="font-size:0.72rem;font-weight:600;color:#16a34a;text-transform:uppercase;">Revenue</div>
+      <div style="font-size:1.6rem;font-weight:700;color:#15803d;" id="totalRevenue">-</div>
     </div>
-    <div class="sidebar-bottom">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="sign-out-btn">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                Sign Out
-            </button>
-        </form>
+    <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:1rem;">
+      <div style="font-size:0.72rem;font-weight:600;color:#e03057;text-transform:uppercase;">Purchase Cost</div>
+      <div style="font-size:1.6rem;font-weight:700;color:#be123c;" id="totalCost">-</div>
     </div>
-</aside>
-
-<div class="main-wrap">
-    <header class="top-header">
-        <h1 class="page-title">Profit/Loss Report</h1>
-        <div class="user-chip">
-            <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
-            <div>
-                <div class="user-name">{{ Auth::user()->name ?? 'Admin' }}</div>
-                <div class="user-role">{{ ucfirst(Auth::user()->role ?? 'user') }}</div>
-            </div>
-        </div>
-    </header>
-
-    <div class="content">
-        <div class="card">
-            <div class="section-title">Profit/Loss Report</div>
-            <p class="text-gray-600">Profit/Loss report will be displayed here.</p>
-        </div>
+    <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:1rem;">
+      <div style="font-size:0.72rem;font-weight:600;color:#d97706;text-transform:uppercase;">Expenses</div>
+      <div style="font-size:1.6rem;font-weight:700;color:#b45309;" id="totalExpenses">-</div>
     </div>
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:1rem;">
+      <div style="font-size:0.72rem;font-weight:600;color:#2563eb;text-transform:uppercase;">Net Profit</div>
+      <div style="font-size:1.6rem;font-weight:700;" id="netProfit" style="color:#1d4ed8;">-</div>
+    </div>
+  </div>
+  <div style="padding:1.5rem;">
+    <h3 style="font-size:0.9rem;font-weight:700;color:#1e293b;margin-bottom:1rem;">Summary Breakdown</h3>
+    <div id="breakdown" style="color:#64748b;font-size:0.9rem;">Select date range to generate report.</div>
+  </div>
 </div>
-
+</div>
+@endsection
+@section('scripts')
 <script>
-function toggleDropdown(dropdownId) {
-    const dropdown = document.getElementById(dropdownId);
-    dropdown.classList.toggle('open');
+const today=new Date().toISOString().split('T')[0];
+const firstDay=new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString().split('T')[0];
+document.getElementById('fromDate').value=firstDay;
+document.getElementById('toDate').value=today;
+async function loadReport(){
+  const from=document.getElementById('fromDate').value;const to=document.getElementById('toDate').value;
+  document.getElementById('breakdown').textContent='Loading...';
+  try{
+    const [sales,purchases,expenses]=await Promise.all([
+      apiFetch(`/api/dashboard/sales?from=${from}&to=${to}&per_page=500`),
+      apiFetch(`/api/dashboard/purchases?from=${from}&to=${to}&per_page=500`),
+      apiFetch(`/api/dashboard/expenses?from=${from}&to=${to}&per_page=500`)
+    ]);
+    const revenue=sales.filter(s=>s.status==='completed').reduce((a,s)=>a+parseFloat(s.total||0),0);
+    const cost=purchases.filter(p=>p.status==='received').reduce((a,p)=>a+parseFloat(p.total||0),0);
+    const exp=expenses.reduce((a,e)=>a+parseFloat(e.amount||0),0);
+    const profit=revenue-cost-exp;
+    document.getElementById('totalRevenue').textContent=revenue.toFixed(2);
+    document.getElementById('totalCost').textContent=cost.toFixed(2);
+    document.getElementById('totalExpenses').textContent=exp.toFixed(2);
+    const netEl=document.getElementById('netProfit');
+    netEl.textContent=profit.toFixed(2);
+    netEl.style.color=profit>=0?'#15803d':'#be123c';
+    document.getElementById('breakdown').innerHTML=`
+      <table class="tbl">
+        <tbody>
+          <tr><td class="font-semibold" style="color:#15803d;">Sales Revenue (Completed)</td><td style="text-align:right;font-weight:700;color:#15803d;">${revenue.toFixed(2)}</td></tr>
+          <tr><td style="color:#be123c;">Less: Purchase Cost (Received)</td><td style="text-align:right;color:#be123c;">- ${cost.toFixed(2)}</td></tr>
+          <tr><td style="color:#be123c;">Less: Operating Expenses</td><td style="text-align:right;color:#be123c;">- ${exp.toFixed(2)}</td></tr>
+          <tr style="border-top:2px solid #e2e8f0;"><td class="font-semibold" style="font-size:1rem;">Net Profit / Loss</td><td style="text-align:right;font-weight:700;font-size:1rem;color:${profit>=0?'#15803d':'#be123c'};">${profit.toFixed(2)}</td></tr>
+        </tbody>
+      </table>`;
+  }catch(e){document.getElementById('breakdown').textContent='Error loading report.';}
 }
+loadReport();
 </script>
-
-</body>
-</html>
+@endsection
