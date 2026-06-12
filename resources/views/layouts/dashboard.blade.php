@@ -647,10 +647,17 @@
                 <span class="hidden md:inline">POS</span>
             </a>
 
-            {{-- Today's Profit Button --}}
-            <button class="notif-btn" title="Today's Profit">
-                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M3 6m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/><path d="M18 12l.01 0"/><path d="M6 12l.01 0"/></svg>
-            </button>
+            <div class="header-dropdown" id="hdr-profit" style="position:relative;">
+                <button class="notif-btn" title="Today's Profit" onclick="toggleHeaderDropdown('hdr-profit'); loadProfit()">
+                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M3 6m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/><path d="M18 12l.01 0"/><path d="M6 12l.01 0"/></svg>
+                </button>
+                <div class="profit-popup header-dropdown-menu" id="profit-popup">
+                    <div class="header-dropdown-header"><div class="header-dropdown-title">Today's Summary</div></div>
+                    <div id="profit-content" style="padding:1rem 1.25rem;">
+                        <div style="text-align:center;color:#94a3b8;font-size:0.8rem;">Loading...</div>
+                    </div>
+                </div>
+            </div>
 
             {{-- Date Display --}}
             <span class="hidden lg:inline-block text-xs text-slate-400 font-medium px-3 py-1.5 rounded-lg bg-slate-100">{{ now()->format('m/d/Y') }}</span>
@@ -721,6 +728,41 @@
     @yield('content')
 
 </div>{{-- /main-wrap --}}
+
+{{-- ══ CALCULATOR ═══════════════════════════════════════ --}}
+<div class="calc-overlay" id="calc-overlay" onclick="if(event.target===this)closeCalc()">
+    <div class="calc-box">
+        <div class="calc-display">
+            <div class="calc-expr" id="calc-expr"></div>
+            <div class="calc-val" id="calc-val">0</div>
+        </div>
+        <div class="calc-grid">
+            <button class="cbtn clr" onclick="calcAction('AC')">AC</button>
+            <button class="cbtn clr" onclick="calcAction('±')">±</button>
+            <button class="cbtn clr" onclick="calcAction('%')">%</button>
+            <button class="cbtn op"  onclick="calcAction('÷')">÷</button>
+
+            <button class="cbtn" onclick="calcAction('7')">7</button>
+            <button class="cbtn" onclick="calcAction('8')">8</button>
+            <button class="cbtn" onclick="calcAction('9')">9</button>
+            <button class="cbtn op" onclick="calcAction('×')">×</button>
+
+            <button class="cbtn" onclick="calcAction('4')">4</button>
+            <button class="cbtn" onclick="calcAction('5')">5</button>
+            <button class="cbtn" onclick="calcAction('6')">6</button>
+            <button class="cbtn op" onclick="calcAction('−')">−</button>
+
+            <button class="cbtn" onclick="calcAction('1')">1</button>
+            <button class="cbtn" onclick="calcAction('2')">2</button>
+            <button class="cbtn" onclick="calcAction('3')">3</button>
+            <button class="cbtn op" onclick="calcAction('+')">+</button>
+
+            <button class="cbtn zero" onclick="calcAction('0')">0</button>
+            <button class="cbtn" onclick="calcAction('.')">.</button>
+            <button class="cbtn eq" onclick="calcAction('=')">＝</button>
+        </div>
+    </div>
+</div>
 
 {{-- ══ TOAST CONTAINER ══════════════════════════════════ --}}
 <div id="toast-container"></div>
