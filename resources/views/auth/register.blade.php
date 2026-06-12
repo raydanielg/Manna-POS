@@ -222,8 +222,16 @@
             @enderror
         </div>
 
-        <!-- Business Settings Section -->
-        <h3 class="section-title">Business Settings</h3>
+            <div class="wizard-buttons">
+                <button type="button" class="btn btn-primary btn-block next-btn">
+                    <span class="btn-text">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Business Settings -->
+        <div class="wizard-step" data-step="2">
+            <h3 class="section-title">Business Settings</h3>
 
         <div class="form-group">
             <label for="tax_label" class="form-label">Tax Label</label>
@@ -253,8 +261,19 @@
             @enderror
         </div>
 
-        <!-- Owner Information Section -->
-        <h3 class="section-title">Owner Information</h3>
+            <div class="wizard-buttons">
+                <button type="button" class="btn btn-secondary prev-btn">
+                    <span class="btn-text">Previous</span>
+                </button>
+                <button type="button" class="btn btn-primary next-btn">
+                    <span class="btn-text">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Owner Information -->
+        <div class="wizard-step" data-step="3">
+            <h3 class="section-title">Owner Information</h3>
 
         <div class="form-group">
             <label for="first_name" class="form-label">First Name *</label>
@@ -320,9 +339,15 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">
-            <span class="btn-text">Register Business</span>
-        </button>
+            <div class="wizard-buttons">
+                <button type="button" class="btn btn-secondary prev-btn">
+                    <span class="btn-text">Previous</span>
+                </button>
+                <button type="submit" class="btn btn-primary submit-btn">
+                    <span class="btn-text">Complete Registration</span>
+                </button>
+            </div>
+        </div>
     </form>
 
     <div class="auth-footer">
