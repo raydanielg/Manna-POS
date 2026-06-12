@@ -173,7 +173,57 @@ class _LoginPageState extends State<LoginPage> {
             ]),
           ]),
         ),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+class _FintechBackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFFE2E8F0).withOpacity(0.3)
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    final paint2 = Paint()
+      ..color = const Color(0xFFCBD5E1).withOpacity(0.2)
+      ..strokeWidth = 0.5
+      ..style = PaintingStyle.stroke;
+
+    final paint3 = Paint()
+      ..color = const Color(0xFF94A3B8).withOpacity(0.1)
+      ..strokeWidth = 0.3
+      ..style = PaintingStyle.stroke;
+
+    for (int i = 0; i < size.width; i += 40) {
+      canvas.drawLine(Offset(i.toDouble(), 0), Offset(i.toDouble(), size.height), paint);
+    }
+
+    for (int i = 0; i < size.height; i += 40) {
+      canvas.drawLine(Offset(0, i.toDouble()), Offset(size.width, i.toDouble()), paint);
+    }
+
+    for (int i = 0; i < size.width; i += 80) {
+      canvas.drawLine(Offset(i.toDouble(), 0), Offset(i.toDouble() + 40, size.height), paint2);
+    }
+
+    for (int i = 0; i < size.height; i += 80) {
+      canvas.drawLine(Offset(0, i.toDouble()), Offset(size.width, i.toDouble() + 40), paint2);
+    }
+
+    for (int i = 0; i < size.width; i += 120) {
+      canvas.drawLine(Offset(i.toDouble(), 0), Offset(i.toDouble() - 60, size.height), paint3);
+    }
+
+    for (int i = 0; i < size.height; i += 120) {
+      canvas.drawLine(Offset(0, i.toDouble()), Offset(size.width, i.toDouble() - 60), paint3);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

@@ -74,9 +74,23 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     final loading = context.watch<AuthProvider>().loading;
     return Scaffold(
-      backgroundColor: AppColors.bg,
-      body: SafeArea(
-        child: Column(children: [
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFF8FAFC), Color(0xFFF1F5F9)],
+          ),
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _FintechBackgroundPainter(),
+              ),
+            ),
+            SafeArea(
+              child: Column(children: [
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
