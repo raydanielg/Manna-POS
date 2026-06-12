@@ -191,7 +191,7 @@
         .sign-out-btn svg { width: 17px; height: 17px; flex-shrink: 0; }
 
         /* Main */
-        .main-wrap { margin-left: 220px; min-height: 100vh; display: flex; flex-direction: column; }
+        .main-wrap { margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
         .top-header { background: #fff; border-bottom: 1px solid #e9edf5; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; position: sticky; top: 0; z-index: 30; }
         .page-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
         .header-right { display: flex; align-items: center; gap: 0.75rem; }
@@ -259,6 +259,10 @@
             .main-wrap { margin-left: 0; }
             .kpi-grid   { grid-template-columns: repeat(2,1fr); }
             .kpi-grid-2 { grid-template-columns: repeat(2,1fr); }
+        }
+        @media (max-width: 1280px) {
+            .sidebar { width: 220px; min-width: 220px; }
+            .main-wrap { margin-left: 220px; }
         }
     </style>
 </head>
