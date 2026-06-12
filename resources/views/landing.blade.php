@@ -9,39 +9,70 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            "50":"#eff6ff",
+                            "100":"#dbeafe",
+                            "200":"#bfdbfe",
+                            "300":"#93c5fd",
+                            "400":"#60a5fa",
+                            "500":"#3b82f6",
+                            "600":"#2563eb",
+                            "700":"#1d4ed8",
+                            "800":"#1e40af",
+                            "900":"#1e3a8a",
+                            "950":"#172554"
+                        }
+                    },
+                    fontFamily: {
+                        'body': [
+                            'Inter',
+                            'ui-sans-serif',
+                            'system-ui',
+                            '-apple-system',
+                            'system-ui',
+                            'Segoe UI',
+                            'Roboto',
+                            'Helvetica Neue',
+                            'Arial',
+                            'Noto Sans',
+                            'sans-serif',
+                            'Apple Color Emoji',
+                            'Segoe UI Emoji',
+                            'Segoe UI Symbol',
+                            'Noto Color Emoji'
+                        ],
+                        'sans': [
+                            'Inter',
+                            'ui-sans-serif',
+                            'system-ui',
+                            '-apple-system',
+                            'system-ui',
+                            'Segoe UI',
+                            'Roboto',
+                            'Helvetica Neue',
+                            'Arial',
+                            'Noto Sans',
+                            'sans-serif',
+                            'Apple Color Emoji',
+                            'Segoe UI Emoji',
+                            'Segoe UI Symbol',
+                            'Noto Color Emoji'
+                        ]
+                    }
+                }
+            }
         }
-
+    </script>
+    <style>
         html {
             scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #ffffff;
-            color: #1e1e1e;
-            -webkit-font-smoothing: antialiased;
-            line-height: 1.6;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        button {
-            font-family: inherit;
         }
     </style>
 </head>
