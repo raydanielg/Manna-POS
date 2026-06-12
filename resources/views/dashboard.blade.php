@@ -275,9 +275,13 @@
 
     {{-- Logo --}}
     <div class="sidebar-logo">
-        <div class="flex items-center justify-center">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center flex-shrink-0">
-                <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-6 h-6 object-contain brightness-0 invert">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-200">
+                <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-5 h-5 object-contain brightness-0 invert">
+            </div>
+            <div class="min-w-0">
+                <div class="text-[0.95rem] font-extrabold text-slate-900 leading-none tracking-tight truncate">{{ config('app.name','MannaPOS') }}</div>
+                <div class="text-[0.58rem] font-bold tracking-[0.16em] uppercase text-brand-500 mt-0.5">Admin Panel</div>
             </div>
         </div>
     </div>
@@ -285,11 +289,14 @@
     {{-- Nav --}}
     <div class="sidebar-content">
 
-        {{-- Home --}}
+        <div class="nav-section-label">Main</div>
+
         <a href="{{ route('dashboard') }}" class="nav-item active">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M10 12h4v4h-4z"/></svg>
-            Home
+            Dashboard
         </a>
+
+        <div class="nav-section-label">Management</div>
 
         {{-- User Management Dropdown --}}
         <div class="dropdown" id="dropdown-user">
