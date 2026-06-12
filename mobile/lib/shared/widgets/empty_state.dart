@@ -1,0 +1,51 @@
+﻿import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
+
+class EmptyState extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+  const EmptyState({super.key, required this.icon, required this.title, this.subtitle, this.actionLabel, this.onAction});
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Padding(padding: const EdgeInsets.all(40), child: Column(mainAxisSize: MainAxisSize.min, children: [
+      Container(padding: const EdgeInsets.all(24), decoration: BoxDecoration(color: AppColors.primaryLt, shape: BoxShape.circle),
+        child: Icon(icon, size: 48, color: AppColors.primary)),
+      const SizedBox(height: 20),
+      Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPri), textAlign: TextAlign.center),
+      if (subtitle != null) ...[const SizedBox(height: 8), Text(subtitle!, style: const TextStyle(fontSize: 14, color: AppColors.textSec), textAlign: TextAlign.center)],
+      if (actionLabel != null && onAction != null) ...[const SizedBox(height: 24),
+        ElevatedButton(onPressed: onAction, child: Text(actionLabel!))],
+    ])));
+  }
+}
+
+class LoadingWidget extends StatelessWidget {
+  final String? message;
+  const LoadingWidget({super.key, this.message});
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
+      const CircularProgressIndicator(color: AppColors.primary),
+      if (message != null) ...[const SizedBox(height: 16), Text(message!, style: const TextStyle(color: AppColors.textSec))],
+    ]));
+  }
+}
+
+class ErrorWidget2 extends StatelessWidget {
+  final String message;
+  final VoidCallback? onRetry;
+  const ErrorWidget2({super.key, required this.message, this.onRetry});
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Padding(padding: const EdgeInsets.all(32), child: Column(mainAxisSize: MainAxisSize.min, children: [
+      Container(padding: const EdgeInsets.all(20), decoration: const BoxDecoration(color: AppColors.dangerLt, shape: BoxShape.circle),
+        child: const Icon(Icons.error_outline, size: 40, color: AppColors.danger)),
+      const SizedBox(height: 16),
+      Text(message, style: const TextStyle(color: AppColors.textPri, fontSize: 15), textAlign: TextAlign.center),
+      if (onRetry != null) ...[const SizedBox(height: 20), ElevatedButton.icon(onPressed: onRetry, icon: const Icon(Icons.refresh), label: const Text('Retry'))],
+    ])));
+  }
+}
