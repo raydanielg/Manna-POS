@@ -62,6 +62,9 @@ class _HomeTabState extends State<HomeTab> {
     _timer = Timer.periodic(const Duration(seconds: 60), (_) => _load());
   }
 
+  @override
+  void dispose() { _timer?.cancel(); super.dispose(); }
+
   Future<void> _load() async {
     if (_loading) {
       setState(() { _loading = true; _error = null; });
@@ -92,8 +95,19 @@ class _HomeTabState extends State<HomeTab> {
           backgroundColor: Colors.white,
           elevation: 0,
           actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                Container(
+                  width: 8, height: 8,
+                  decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
+                ),
+                const SizedBox(width: 6),
+                const Text('LIVE', style: TextStyle(color: AppColors.success, fontSize: 10, fontWeight: FontWeight.w800)),
+              ]),
+            ),
             IconButton(
-              icon: _refreshing 
+              icon: _refreshing
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2))
                 : const Icon(Icons.refresh_rounded, color: AppColors.primary),
               onPressed: _refreshing ? null : _load,
