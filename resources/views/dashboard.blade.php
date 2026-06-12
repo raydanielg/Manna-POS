@@ -29,39 +29,166 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
 
-        /* Sidebar */
-        .sidebar { width: 220px; min-width: 220px; height: 100vh; position: fixed; top: 0; left: 0; background: #fff; border-right: 1px solid #e9edf5; display: flex; flex-direction: column; z-index: 40; }
-        .sidebar-logo { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; }
-        .sidebar-content { flex: 1; padding: 0.75rem 0.5rem; overflow-y: auto; }
-        
-        /* Nav Items */
-        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
-        .nav-item:hover { background: #f8fafc; color: #0f172a; }
-        .nav-item.active { background: #e9edf5; color: #0f172a; font-weight: 600; }
-        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .nav-item.active svg { color: #0f172a; }
-        
-        /* Dropdown */
-        .dropdown { margin-bottom: 0.25rem; }
-        .dropdown-toggle { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .dropdown-toggle:hover { background: #f8fafc; color: #0f172a; }
-        .dropdown-toggle svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .dropdown-toggle .chevron { margin-left: auto; width: 16px; height: 16px; color: #9ca3af; transition: transform 0.3s; }
-        .dropdown.open .dropdown-toggle .chevron { transform: rotate(90deg); }
-        
-        /* Dropdown Children */
-        .dropdown-children { display: none; position: relative; margin-top: 0.5rem; margin-bottom: 1rem; padding-left: 2.75rem; }
+        /* ── Sidebar shell ─────────────────────────────── */
+        .sidebar {
+            width: 240px; min-width: 240px; height: 100vh;
+            position: fixed; top: 0; left: 0;
+            background: #fff;
+            border-right: 1px solid #eef0f6;
+            display: flex; flex-direction: column;
+            z-index: 40;
+            box-shadow: 2px 0 12px rgba(15,23,42,0.04);
+        }
+
+        /* ── Logo ──────────────────────────────────────── */
+        .sidebar-logo {
+            padding: 1.1rem 1.25rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            flex-shrink: 0;
+        }
+
+        /* ── Scrollable nav area ───────────────────────── */
+        .sidebar-content {
+            flex: 1;
+            padding: 0.6rem 0.75rem 0.5rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* ── Section label ─────────────────────────────── */
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #b0b8cc;
+            padding: 1rem 0.5rem 0.3rem;
+            user-select: none;
+        }
+
+        /* ── Plain nav item ────────────────────────────── */
+        .nav-item {
+            display: flex; align-items: center; gap: 0.7rem;
+            padding: 0.52rem 0.75rem;
+            font-size: 0.82rem; font-weight: 500;
+            color: #4b5675;
+            border-radius: 8px;
+            cursor: pointer; text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+            white-space: nowrap;
+            margin-bottom: 1px;
+        }
+        .nav-item:hover { background: #f6f7fb; color: #0f172a; }
+        .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; color: #94a3b8; transition: color 0.15s; }
+        .nav-item:hover svg { color: #475569; }
+
+        /* active */
+        .nav-item.active {
+            background: #fff0f3;
+            color: #e03057;
+            font-weight: 600;
+        }
+        .nav-item.active svg { color: #e03057; }
+
+        /* ── Dropdown wrapper ──────────────────────────── */
+        .dropdown { margin-bottom: 1px; }
+
+        /* ── Dropdown toggle ───────────────────────────── */
+        .dropdown-toggle {
+            display: flex; align-items: center; gap: 0.7rem;
+            padding: 0.52rem 0.75rem;
+            font-size: 0.82rem; font-weight: 500;
+            color: #4b5675;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .dropdown-toggle:hover { background: #f6f7fb; color: #0f172a; }
+        .dropdown-toggle svg:first-child { width: 17px; height: 17px; flex-shrink: 0; color: #94a3b8; transition: color 0.15s; }
+        .dropdown-toggle:hover svg:first-child { color: #475569; }
+
+        /* chevron */
+        .dropdown-toggle .chevron {
+            margin-left: auto;
+            width: 14px; height: 14px;
+            color: #c4cad8;
+            transition: transform 0.25s ease, color 0.15s;
+            flex-shrink: 0;
+        }
+        .dropdown.open .dropdown-toggle { color: #0f172a; background: #f6f7fb; }
+        .dropdown.open .dropdown-toggle svg:first-child { color: #475569; }
+        .dropdown.open .dropdown-toggle .chevron { transform: rotate(90deg); color: #94a3b8; }
+
+        /* ── Children panel ────────────────────────────── */
+        .dropdown-children {
+            display: none;
+            position: relative;
+            padding: 0.3rem 0 0.5rem 2.5rem;
+            margin-top: 2px;
+        }
         .dropdown.open .dropdown-children { display: block; }
-        .dropdown-children::before { content: ''; position: absolute; left: 1.25rem; top: 0; bottom: 0; width: 1px; background: #e5e7eb; }
-        .dropdown-children .child-item { display: flex; font-size: 0.875rem; font-weight: 500; color: #64748b; padding: 0.35rem 0; transition: color 0.2s; cursor: pointer; text-decoration: none; white-space: nowrap; }
-        .dropdown-children .child-item:hover { color: #0f172a; }
-        .dropdown-children .child-item.active { color: #0f172a; font-weight: 600; }
-        .dropdown-children .child-item + .child-item { margin-top: 0.875rem; }
-        
-        .sidebar-bottom { margin-top: auto; padding: 1rem 0.5rem 1.25rem; border-top: 1px solid #f1f5f9; }
-        .sign-out-btn { display: flex; align-items: center; gap: 0.65rem; padding: 0.52rem 1.25rem; font-size: 0.84rem; font-weight: 600; color: #e03057; width: 100%; border-radius: 10px; background: none; border: none; cursor: pointer; transition: background 0.15s; }
+
+        /* vertical guide line */
+        .dropdown-children::before {
+            content: '';
+            position: absolute;
+            left: 1.3rem; top: 0; bottom: 0;
+            width: 1.5px;
+            background: linear-gradient(to bottom, #e2e8f0, transparent);
+            border-radius: 2px;
+        }
+
+        .dropdown-children .child-item {
+            display: flex; align-items: center;
+            font-size: 0.8rem; font-weight: 500;
+            color: #64748b;
+            padding: 0.38rem 0.5rem;
+            border-radius: 6px;
+            transition: background 0.15s, color 0.15s;
+            cursor: pointer; text-decoration: none;
+            white-space: nowrap;
+        }
+        .dropdown-children .child-item::before {
+            content: '';
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: #d1d9e6;
+            margin-right: 0.6rem;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        .dropdown-children .child-item:hover {
+            background: #f6f7fb;
+            color: #0f172a;
+        }
+        .dropdown-children .child-item:hover::before { background: #e03057; }
+        .dropdown-children .child-item.active {
+            color: #e03057;
+            font-weight: 600;
+            background: #fff0f3;
+        }
+        .dropdown-children .child-item.active::before { background: #e03057; }
+
+        /* ── Sign out ──────────────────────────────────── */
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+            flex-shrink: 0;
+        }
+        .sign-out-btn {
+            display: flex; align-items: center; gap: 0.65rem;
+            padding: 0.55rem 0.75rem;
+            font-size: 0.82rem; font-weight: 600;
+            color: #e03057;
+            width: 100%; border-radius: 8px;
+            background: none; border: none; cursor: pointer;
+            transition: background 0.15s;
+        }
         .sign-out-btn:hover { background: #fff0f3; }
-        .sign-out-btn svg { width: 16px; height: 16px; }
+        .sign-out-btn svg { width: 17px; height: 17px; flex-shrink: 0; }
 
         /* Main */
         .main-wrap { margin-left: 220px; min-height: 100vh; display: flex; flex-direction: column; }
