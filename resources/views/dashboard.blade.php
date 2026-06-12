@@ -388,9 +388,9 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">Users</a>
-                <a href="#" class="child-item">Roles</a>
-                <a href="#" class="child-item">Sales Commission Agents</a>
+                <a href="{{ route('dashboard.user-management.users') }}" class="child-item">Users</a>
+                <a href="{{ route('dashboard.user-management.roles') }}" class="child-item">Roles</a>
+                <a href="{{ route('dashboard.user-management.sales-commission-agents') }}" class="child-item">Sales Commission Agents</a>
             </div>
         </div>
 
