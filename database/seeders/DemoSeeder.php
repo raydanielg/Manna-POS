@@ -49,7 +49,7 @@ class DemoSeeder extends Seeder
         ];
 
         foreach ($categories as $cat) {
-            ProductCategory::create($cat);
+            ProductCategory::firstOrCreate(['name' => $cat['name']], $cat);
         }
 
         // Create Brands
@@ -62,7 +62,7 @@ class DemoSeeder extends Seeder
         ];
 
         foreach ($brands as $brand) {
-            Brand::create($brand);
+            Brand::firstOrCreate(['name' => $brand['name']], $brand);
         }
 
         // Create Units
@@ -75,7 +75,7 @@ class DemoSeeder extends Seeder
         ];
 
         foreach ($units as $unit) {
-            Unit::create($unit);
+            Unit::firstOrCreate(['name' => $unit['name']], $unit);
         }
 
         // Create Products
@@ -223,7 +223,7 @@ class DemoSeeder extends Seeder
         ];
 
         foreach ($products as $product) {
-            Product::create($product);
+            Product::firstOrCreate(['sku' => $product['sku']], $product);
         }
 
         // Create Customers
@@ -236,7 +236,7 @@ class DemoSeeder extends Seeder
         ];
 
         foreach ($customers as $customer) {
-            Customer::create($customer);
+            Customer::firstOrCreate(['email' => $customer['email']], $customer);
         }
 
         // Create Suppliers
@@ -247,7 +247,7 @@ class DemoSeeder extends Seeder
         ];
 
         foreach ($suppliers as $supplier) {
-            Supplier::create($supplier);
+            Supplier::firstOrCreate(['email' => $supplier['email']], $supplier);
         }
 
         // Create Sales for the last 7 days
