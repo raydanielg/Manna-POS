@@ -51,15 +51,8 @@ class _LoginPageState extends State<LoginPage> {
                   scale: 0.8 + (0.2 * value),
                   child: Opacity(opacity: value, child: child),
                 ),
-                child: Container(
+                child: SizedBox(
                   width: 100, height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.line, width: 1),
-                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 15, offset: const Offset(0, 4))],
-                  ),
-                  padding: const EdgeInsets.all(16),
                   child: Image.asset('assets/icons/app_logo.png', fit: BoxFit.contain),
                 ),
               ),

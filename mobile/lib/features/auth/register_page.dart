@@ -169,15 +169,8 @@ class _RegisterPageState extends State<RegisterPage> {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Center(
-          child: Container(
+          child: SizedBox(
             width: 80, height: 80,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.line, width: 1),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 15, offset: const Offset(0, 4))],
-            ),
-            padding: const EdgeInsets.all(12),
             child: Image.asset('assets/icons/app_logo.png', fit: BoxFit.contain),
           ),
         ),
