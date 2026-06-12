@@ -18,7 +18,7 @@ use App\Models\ExpenseCategory;
 Route::prefix('auth')->group(function () {
     Route::post('login',           [AuthController::class, 'login']);
     Route::post('register',        [AuthController::class, 'register']);
-    Route::post('forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
+    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 });
 
 // ── Protected Routes ───────────────────────────────────────────────────────
