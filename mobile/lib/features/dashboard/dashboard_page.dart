@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../shared/theme/app_theme.dart';
 import '../../shared/constants/app_constants.dart';
 import '../pos/pos_page.dart';
+import '../products/products_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -328,14 +329,7 @@ class POSTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('POS'),
-      ),
-      body: const Center(
-        child: Text('POS Page'),
-      ),
-    );
+    return const POSPage();
   }
 }
 
