@@ -15,6 +15,10 @@ class CreateNotificationTemplatesTable extends Migration
     {
         Schema::create('notification_templates', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
+            $table->string('subject');
+            $table->text('body');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
