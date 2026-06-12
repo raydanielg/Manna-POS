@@ -534,14 +534,20 @@
     </style>
 
     <script>
+        // Accordion toggle function
+        function toggleAccordion(sectionNumber) {
+            const sections = document.querySelectorAll('.accordion-section');
+            sections.forEach(section => {
+                if (parseInt(section.dataset.section) === sectionNumber) {
+                    section.classList.toggle('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const registerForm = document.getElementById('registerForm');
-            const steps = document.querySelectorAll('.wizard-step');
-            const stepIndicators = document.querySelectorAll('.step');
-            const nextBtns = document.querySelectorAll('.next-btn');
-            const prevBtns = document.querySelectorAll('.prev-btn');
-            let currentStep = 1;
-            const totalSteps = 3;
 
             // Load saved form data from localStorage
             function loadFormData() {
@@ -554,12 +560,6 @@
                             input.value = data[key];
                         }
                     });
-                    
-                    // Restore current step
-                    if (data.currentStep) {
-                        currentStep = data.currentStep;
-                        updateStepUI(currentStep);
-                    }
                 }
             }
 
@@ -571,7 +571,6 @@
                         formData[input.name] = input.value;
                     }
                 });
-                formData.currentStep = currentStep;
                 localStorage.setItem('registerFormData', JSON.stringify(formData));
             }
 
@@ -586,79 +585,6 @@
             // Save data on input change
             registerForm.addEventListener('input', saveFormData);
             registerForm.addEventListener('change', saveFormData);
-
-            function updateStepUI(step) {
-                const currentStepEl = document.querySelector(`.wizard-step[data-step="${currentStep}"]`);
-                const nextStepEl = document.querySelector(`.wizard-step[data-step="${step}"]`);
-
-                // Fade out current step
-                if (currentStepEl) {
-                    currentStepEl.style.opacity = '0';
-                    currentStepEl.style.transform = 'translateX(-20px)';
-                }
-
-                setTimeout(() => {
-                    // Hide current step
-                    if (currentStepEl) {
-                        currentStepEl.classList.remove('active');
-                    }
-
-                    // Show next step with animation
-                    if (nextStepEl) {
-                        nextStepEl.classList.add('active');
-                        nextStepEl.classList.add('fade-in');
-                        setTimeout(() => {
-                            nextStepEl.classList.remove('fade-in');
-                        }, 400);
-                    }
-
-                    // Update step indicators
-                    stepIndicators.forEach(indicator => {
-                        const indicatorStep = parseInt(indicator.dataset.step);
-                        indicator.classList.remove('active', 'completed');
-                        if (indicatorStep === step) {
-                            indicator.classList.add('active');
-                        } else if (indicatorStep < step) {
-                            indicator.classList.add('completed');
-                        }
-                    });
-                }, 200);
-            }
-
-            function validateStep(step) {
-                const currentStepEl = document.querySelector(`.wizard-step[data-step="${step}"]`);
-                const requiredFields = currentStepEl.querySelectorAll('input[required], select[required]');
-                let isValid = true;
-
-                requiredFields.forEach(field => {
-                    if (!field.value.trim()) {
-                        isValid = false;
-                        field.classList.add('is-invalid');
-                    } else {
-                        field.classList.remove('is-invalid');
-                    }
-                });
-
-                return isValid;
-            }
-
-            nextBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (validateStep(currentStep) && currentStep < totalSteps) {
-                        currentStep++;
-                        updateStepUI(currentStep);
-                    }
-                });
-            });
-
-            prevBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (currentStep > 1) {
-                        currentStep--;
-                        updateStepUI(currentStep);
-                    }
-                });
-            });
 
             registerForm.addEventListener('submit', function(e) {
                 const btn = this.querySelector('.submit-btn');
