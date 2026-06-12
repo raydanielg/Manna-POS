@@ -365,9 +365,17 @@
             </div>
 
         </div>
+            </div>
+        </div>
 
-        {{-- ── Charts Row ──────────────────────────────── --}}
-        <div class="charts-row">
+        {{-- ── Charts Section ───────────────────────────── --}}
+        <div class="dash-section" id="charts-section">
+            <div class="dash-section-header" onclick="toggleSection('charts-section')">
+                <div class="dash-section-title">Sales Analytics</div>
+                <svg class="dash-section-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="dash-section-content">
+                <div class="charts-row">
 
             {{-- Activity Trend --}}
             <div class="chart-card">
@@ -392,12 +400,16 @@
             </div>
 
         </div>
+            </div>
+        </div>
 
-        {{-- ── Tables Row ──────────────────────────────── --}}
-        <div class="tables-row">
-
-            {{-- Recent Transactions --}}
-            <div class="table-card">
+        {{-- ── Transactions Section ──────────────────────── --}}
+        <div class="dash-section" id="transactions-section">
+            <div class="dash-section-header" onclick="toggleSection('transactions-section')">
+                <div class="dash-section-title">Recent Transactions</div>
+                <svg class="dash-section-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="dash-section-content">
                 <div class="table-head flex items-center justify-between">
                     <div class="table-title">Recent Transactions</div>
                     <a href="#" class="text-xs text-blue-600 font-semibold hover:underline">View all</a>
@@ -417,9 +429,17 @@
                     </tbody>
                 </table>
             </div>
+            </div>
+        </div>
 
-            {{-- Recent Customers --}}
-            <div class="table-card">
+        {{-- ── Customers Section ─────────────────────────── --}}
+        <div class="dash-section" id="customers-section">
+            <div class="dash-section-header" onclick="toggleSection('customers-section')">
+                <div class="dash-section-title">Recent Customers</div>
+                <svg class="dash-section-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="dash-section-content">
+                <div class="table-card">
                 <div class="table-head flex items-center justify-between">
                     <div class="table-title">Recent Customers</div>
                     <a href="#" class="text-xs text-blue-600 font-semibold hover:underline">View all</a>
@@ -438,11 +458,17 @@
                     </tbody>
                 </table>
             </div>
-
+            </div>
         </div>
 
-        {{-- ── Bottom Row ───────────────────────────────── --}}
-        <div class="tables-row">
+        {{-- ── Alerts Section ─────────────────────────────── --}}
+        <div class="dash-section" id="alerts-section">
+            <div class="dash-section-header" onclick="toggleSection('alerts-section')">
+                <div class="dash-section-title">Stock Alerts & Activity</div>
+                <svg class="dash-section-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="dash-section-content">
+                <div class="tables-row">
 
             {{-- Low Stock Alerts --}}
             <div class="table-card">
