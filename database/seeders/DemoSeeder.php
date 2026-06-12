@@ -377,18 +377,19 @@ class DemoSeeder extends Seeder
             $items = $saleData['items'];
             unset($saleData['items']);
             
-            $sale = Sale::create($saleData);
+            $sale = Sale::firstOrCreate(['reference' => $saleData['reference']], $saleData);
             
             foreach ($items as $item) {
-                SaleItem::create([
-                    'sale_id' => $sale->id,
-                    'product_id' => $item['product_id'],
-                    'product_name' => $item['product_name'],
-                    'quantity' => $item['quantity'],
-                    'unit_price' => $item['unit_price'],
-                    'discount' => $item['discount'],
-                    'total' => $item['total'],
-                ]);
+                SaleItem::firstOrCreate(
+                    ['sale_id' => $sale->id, 'product_id' => $item['product_id']],
+                    [
+                        'product_name' => $item['product_name'],
+                        'quantity' => $item['quantity'],
+                        'unit_price' => $item['unit_price'],
+                        'discount' => $item['discount'],
+                        'total' => $item['total'],
+                    ]
+                );
             }
         }
 
@@ -432,17 +433,18 @@ class DemoSeeder extends Seeder
             $items = $purchaseData['items'];
             unset($purchaseData['items']);
             
-            $purchase = Purchase::create($purchaseData);
+            $purchase = Purchase::firstOrCreate(['reference' => $purchaseData['reference']], $purchaseData);
             
             foreach ($items as $item) {
-                PurchaseItem::create([
-                    'purchase_id' => $purchase->id,
-                    'product_id' => $item['product_id'],
-                    'product_name' => $item['product_name'],
-                    'quantity' => $item['quantity'],
-                    'unit_cost' => $item['unit_cost'],
-                    'total' => $item['total'],
-                ]);
+                PurchaseItem::firstOrCreate(
+                    ['purchase_id' => $purchase->id, 'product_id' => $item['product_id']],
+                    [
+                        'product_name' => $item['product_name'],
+                        'quantity' => $item['quantity'],
+                        'unit_cost' => $item['unit_cost'],
+                        'total' => $item['total'],
+                    ]
+                );
             }
         }
 
