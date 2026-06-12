@@ -1,41 +1,9 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Help Center - {{ config('app.name', 'MannaPOS') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            "50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="bg-gray-50">
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
-        <nav class="max-w-screen-xl mx-auto px-4 lg:px-12">
-            <div class="flex items-center justify-between h-16">
-                <a href="/" class="flex items-center space-x-2.5">
-                    <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="MannaPOS Logo" class="h-8 w-8 object-contain">
-                    <span class="text-xl font-bold text-gray-900">{{ config('app.name', 'MannaPOS') }}</span>
-                </a>
-                <a href="/" class="text-gray-600 hover:text-gray-900 font-medium">← Back to Home</a>
-            </div>
-        </nav>
-    </header>
+@extends('layouts.page')
 
-    <main class="pt-24 pb-16">
+@section('title', 'Help Center - ' . config('app.name', 'MannaPOS'))
+
+@section('content')
+<div class="pb-16">
         <div class="max-w-4xl mx-auto px-4 lg:px-12">
             <div class="bg-white rounded-2xl shadow-sm p-8 lg:p-12">
                 <h1 class="text-4xl font-bold text-gray-900 mb-6">Help Center</h1>
@@ -94,12 +62,5 @@
                 </div>
             </div>
         </div>
-    </main>
-
-    <footer class="bg-gray-900 text-gray-400 py-8">
-        <div class="max-w-screen-xl mx-auto px-4 lg:px-12 text-center">
-            <p>© 2024 MannaPOS. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>
+</div>
+@endsection
