@@ -440,9 +440,9 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">List Purchases</a>
-                <a href="#" class="child-item">Add Purchase</a>
-                <a href="#" class="child-item">List Purchase Return</a>
+                <a href="{{ route('dashboard.purchases.list-purchases') }}" class="child-item">List Purchases</a>
+                <a href="{{ route('dashboard.purchases.add-purchase') }}" class="child-item">Add Purchase</a>
+                <a href="{{ route('dashboard.purchases.list-purchase-return') }}" class="child-item">List Purchase Return</a>
             </div>
         </div>
 
@@ -454,18 +454,18 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="#" class="child-item">All Sales</a>
-                <a href="#" class="child-item">Add Sale</a>
-                <a href="#" class="child-item">List POS</a>
-                <a href="#" class="child-item">POS</a>
-                <a href="#" class="child-item">Add Draft</a>
-                <a href="#" class="child-item">List Drafts</a>
-                <a href="#" class="child-item">Add Quotation</a>
-                <a href="#" class="child-item">List Quotations</a>
-                <a href="#" class="child-item">List Sell Return</a>
-                <a href="#" class="child-item">Shipments</a>
-                <a href="#" class="child-item">Discounts</a>
-                <a href="#" class="child-item">Import Sales</a>
+                <a href="{{ route('dashboard.sell.all-sales') }}" class="child-item">All Sales</a>
+                <a href="{{ route('dashboard.sell.add-sale') }}" class="child-item">Add Sale</a>
+                <a href="{{ route('dashboard.sell.list-pos') }}" class="child-item">List POS</a>
+                <a href="{{ route('dashboard.sell.pos') }}" class="child-item">POS</a>
+                <a href="{{ route('dashboard.sell.add-draft') }}" class="child-item">Add Draft</a>
+                <a href="{{ route('dashboard.sell.list-drafts') }}" class="child-item">List Drafts</a>
+                <a href="{{ route('dashboard.sell.add-quotation') }}" class="child-item">Add Quotation</a>
+                <a href="{{ route('dashboard.sell.list-quotations') }}" class="child-item">List Quotations</a>
+                <a href="{{ route('dashboard.sell.list-sell-return') }}" class="child-item">List Sell Return</a>
+                <a href="{{ route('dashboard.sell.shipments') }}" class="child-item">Shipments</a>
+                <a href="{{ route('dashboard.sell.discounts') }}" class="child-item">Discounts</a>
+                <a href="{{ route('dashboard.sell.import-sales') }}" class="child-item">Import Sales</a>
             </div>
         </div>
 
