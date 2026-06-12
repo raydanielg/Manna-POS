@@ -142,7 +142,7 @@ class _SaleDetailState extends State<_SaleDetail> {
             const SizedBox(height: 16),
             const Text('Items', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
             const SizedBox(height: 10),
-            ...(_detail!.items as List? ?? []).map((item) => Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(children: [
+            ...(_detail!.items ?? []).map((item) => Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(children: [
               Expanded(child: Text(item['product_name'] ?? '', style: const TextStyle(fontSize: 14))),
               Text('${item['quantity']} x ${fmt.format(double.tryParse(item['unit_price']?.toString() ?? '0') ?? 0)}', style: const TextStyle(color: AppColors.textSec, fontSize: 13)),
               const SizedBox(width: 12),
