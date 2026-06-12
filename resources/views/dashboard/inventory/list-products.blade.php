@@ -1,144 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>List Products — {{ config('app.name', 'MannaPOS') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #f1f4fb; }
-        .sidebar { width: 220px; min-width: 220px; height: 100vh; position: fixed; top: 0; left: 0; background: #fff; border-right: 1px solid #e9edf5; display: flex; flex-direction: column; z-index: 40; }
-        .sidebar-logo { padding: 1.5rem; border-bottom: 1px solid #f1f5f9; }
-        .sidebar-content { flex: 1; padding: 0.75rem 0.5rem; overflow-y: auto; }
-        .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
-        .nav-item:hover { background: #f8fafc; color: #0f172a; }
-        .nav-item.active { background: #e9edf5; color: #0f172a; font-weight: 600; }
-        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .dropdown { margin-bottom: 0.25rem; }
-        .dropdown-toggle { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 500; color: #475569; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .dropdown-toggle:hover { background: #f8fafc; color: #0f172a; }
-        .dropdown-toggle svg { width: 20px; height: 20px; flex-shrink: 0; color: #64748b; }
-        .dropdown-toggle .chevron { margin-left: auto; width: 16px; height: 16px; color: #9ca3af; transition: transform 0.3s; }
-        .dropdown.open .dropdown-toggle .chevron { transform: rotate(90deg); }
-        .dropdown-children { display: none; position: relative; margin-top: 0.5rem; margin-bottom: 1rem; padding-left: 2.75rem; }
-        .dropdown.open .dropdown-children { display: block; }
-        .dropdown-children::before { content: ''; position: absolute; left: 1.25rem; top: 0; bottom: 0; width: 1px; background: #e5e7eb; }
-        .dropdown-children .child-item { display: flex; font-size: 0.875rem; font-weight: 500; color: #64748b; padding: 0.35rem 0; transition: color 0.2s; cursor: pointer; text-decoration: none; white-space: nowrap; }
-        .dropdown-children .child-item:hover { color: #0f172a; }
-        .dropdown-children .child-item.active { color: #0f172a; font-weight: 600; }
-        .dropdown-children .child-item + .child-item { margin-top: 0.875rem; }
-        .sidebar-bottom { margin-top: auto; padding: 1rem 0.5rem 1.25rem; border-top: 1px solid #f1f5f9; }
-        .sign-out-btn { display: flex; align-items: center; gap: 0.65rem; padding: 0.52rem 1.25rem; font-size: 0.84rem; font-weight: 600; color: #e03057; width: 100%; border-radius: 10px; background: none; border: none; cursor: pointer; transition: background 0.15s; }
-        .sign-out-btn:hover { background: #fff0f3; }
-        .sign-out-btn svg { width: 16px; height: 16px; }
-        .main-wrap { margin-left: 220px; min-height: 100vh; }
-        .top-header { background: #fff; border-bottom: 1px solid #e9edf5; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
-        .page-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; }
-        .content { padding: 1.75rem 2rem; }
-        .table-card { background: #fff; border-radius: 14px; border: 1px solid #e9edf5; padding: 1.5rem; }
-        .section-title { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem; }
-        .tbl { width: 100%; border-collapse: collapse; }
-        .tbl th { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; padding: 0.6rem 1.25rem; text-align: left; }
-        .tbl td { font-size: 0.8rem; color: #374151; padding: 0.65rem 1.25rem; border-top: 1px solid #f8fafc; }
-        .btn-add { padding: 0.5rem 1rem; background: #10B981; color: white; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-        .btn-add:hover { background: #059669; }
-    </style>
-</head>
-<body class="font-sans antialiased">
-
-<aside class="sidebar">
-    <div class="sidebar-logo">
-        <div class="flex items-center justify-center">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
-                <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-6 h-6 object-contain brightness-0 invert">
-            </div>
-        </div>
+﻿@extends('layouts.dashboard')
+@section('page_title','Products')
+@section('content')
+<div class="dash-content">
+<div class="page-card">
+  <div class="card-header">
+    <div class="card-title">All Products</div>
+    <div class="filters-row">
+      <div class="search-wrap">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Search by name, SKU..." oninput="loadList()">
+      </div>
+      <select id="catFilter" class="form-control" style="width:160px;" onchange="loadList()">
+        <option value="">All Categories</option>
+        @foreach($categories as $c) <option value="{{ $c->id }}">{{ $c->name }}</option> @endforeach
+      </select>
+      <select id="brandFilter" class="form-control" style="width:140px;" onchange="loadList()">
+        <option value="">All Brands</option>
+        @foreach($brands as $b) <option value="{{ $b->id }}">{{ $b->name }}</option> @endforeach
+      </select>
+      <button class="btn btn-success" onclick="openAddModal()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Add Product
+      </button>
     </div>
-    <div class="sidebar-content">
-        <a href="{{ route('dashboard') }}" class="nav-item">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M10 12h4v4h-4z"/></svg>
-            Home
-        </a>
-        <div class="dropdown open" id="dropdown-products">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-products')">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M8.2 9.8l7.6 -4.6"/><path d="M12 12v9"/><path d="M12 12l-8 -4.5"/></svg>
-                Products
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                <a href="#" class="child-item active">List Products</a>
-                <a href="#" class="child-item">Add Product</a>
-                <a href="#" class="child-item">Update Price</a>
-                <a href="#" class="child-item">Print Labels</a>
-                <a href="#" class="child-item">Variations</a>
-                <a href="#" class="child-item">Import Products</a>
-                <a href="#" class="child-item">Import Opening Stock</a>
-                <a href="#" class="child-item">Selling Price Group</a>
-                <a href="#" class="child-item">Units</a>
-                <a href="#" class="child-item">Categories</a>
-                <a href="#" class="child-item">Brands</a>
-                <a href="#" class="child-item">Warranties</a>
-            </div>
-        </div>
-    </div>
-    <div class="sidebar-bottom">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="sign-out-btn">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                Sign Out
-            </button>
-        </form>
-    </div>
-</aside>
-
-<div class="main-wrap">
-    <header class="top-header">
-        <h1 class="page-title">List Products</h1>
-        <div class="user-chip">
-            <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
-            <div>
-                <div class="user-name">{{ Auth::user()->name ?? 'Admin' }}</div>
-                <div class="user-role">{{ ucfirst(Auth::user()->role ?? 'user') }}</div>
-            </div>
-        </div>
-    </header>
-
-    <div class="content">
-        <div class="table-card">
-            <div class="flex justify-between items-center mb-4">
-                <div class="section-title mb-0">All Products</div>
-                <button class="btn-add">+ Add Product</button>
-            </div>
-            <table class="tbl">
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>SKU</th>
-                        <th>Category</th>
-                        <th>Stock</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td colspan="5" class="text-center text-gray-400 py-8">No products yet.</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Name</th><th>SKU</th><th>Category</th><th>Brand</th><th>Buy Price</th><th>Sell Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="tableBody"><tr><td colspan="10" class="tbl-empty">Loading...</td></tr></tbody>
+    </table>
+  </div>
+</div>
 </div>
 
+<div class="modal-overlay" id="modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Add Product</div>
+      <button class="modal-close" onclick="closeModal('modal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="productForm">
+        <div class="form-group">
+          <label class="form-label">Product Name *</label>
+          <input name="name" class="form-control" required placeholder="Product name">
+          <div class="invalid-feedback"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">SKU</label>
+            <input name="sku" class="form-control" placeholder="Auto-generated if blank">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Barcode</label>
+            <input name="barcode" class="form-control" placeholder="Barcode / GTIN">
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select name="category_id" class="form-control">
+              <option value="">-- Select Category --</option>
+              @foreach($categories as $c) <option value="{{ $c->id }}">{{ $c->name }}</option> @endforeach
+            </select>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Brand</label>
+            <select name="brand_id" class="form-control">
+              <option value="">-- Select Brand --</option>
+              @foreach($brands as $b) <option value="{{ $b->id }}">{{ $b->name }}</option> @endforeach
+            </select>
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Unit</label>
+            <select name="unit_id" class="form-control">
+              <option value="">-- Select Unit --</option>
+              @foreach($units as $u) <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->short_name }})</option> @endforeach
+            </select>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tax Rate</label>
+            <select name="tax_rate_id" class="form-control">
+              <option value="">-- No Tax --</option>
+              @foreach($taxRates as $t) <option value="{{ $t->id }}">{{ $t->name }} ({{ $t->rate }}%)</option> @endforeach
+            </select>
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Purchase Price (TSh) *</label>
+            <input name="purchase_price" type="number" step="0.01" min="0" class="form-control" required placeholder="0.00">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Selling Price (TSh) *</label>
+            <input name="selling_price" type="number" step="0.01" min="0" class="form-control" required placeholder="0.00">
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Opening Stock Qty</label>
+            <input name="stock_quantity" type="number" step="0.0001" min="0" class="form-control" placeholder="0">
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reorder Level</label>
+            <input name="reorder_level" type="number" step="0.0001" min="0" class="form-control" placeholder="5">
+            <div class="invalid-feedback"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea name="description" class="form-control" placeholder="Product description..."></textarea>
+          <div class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-control">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <div class="invalid-feedback"></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal')">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+@endsection
+@section('scripts')
 <script>
-function toggleDropdown(dropdownId) {
-    const dropdown = document.getElementById(dropdownId);
-    dropdown.classList.toggle('open');
+const API = '/api/dashboard/products';
+let editId = null;
+async function loadList() {
+  const search = document.getElementById('searchInput').value;
+  const cat = document.getElementById('catFilter').value;
+  const brand = document.getElementById('brandFilter').value;
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '<tr><td colspan="10" class="tbl-empty">Loading...</td></tr>';
+  try {
+    const params = new URLSearchParams({search,category_id:cat,brand_id:brand}).toString();
+    const items = await apiFetch(`${API}?${params}`);
+    if (!items.length) { tbody.innerHTML = '<tr><td colspan="10" class="tbl-empty">No products found.</td></tr>'; return; }
+    tbody.innerHTML = items.map((p,i) => `<tr>
+      <td class="text-slate-400">${i+1}</td>
+      <td class="font-semibold">${p.name}</td>
+      <td class="text-slate-400 text-xs">${p.sku||'—'}</td>
+      <td>${p.category?.name||'—'}</td>
+      <td>${p.brand?.name||'—'}</td>
+      <td>TSh ${Number(p.purchase_price||0).toLocaleString()}</td>
+      <td class="font-semibold text-green-700">TSh ${Number(p.selling_price||0).toLocaleString()}</td>
+      <td><span class="badge ${Number(p.stock_quantity)<=Number(p.reorder_level)?'badge-danger':'badge-success'}">${Number(p.stock_quantity||0).toLocaleString()}</span></td>
+      <td><span class="badge ${p.status==='active'?'badge-success':'badge-gray'}">${p.status}</span></td>
+      <td><div style="display:flex;gap:0.4rem;">
+        <button class="btn btn-sm btn-edit btn-icon" onclick="editProduct(${p.id})" title="Edit"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+        <button class="btn btn-sm btn-delete btn-icon" onclick="deleteProduct(${p.id},'${p.name.replace(/'/g,"\\'")}'" title="Delete"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+      </div></td>
+    </tr>`).join('');
+  } catch(e) { tbody.innerHTML = '<tr><td colspan="10" class="tbl-empty">Error loading data.</td></tr>'; }
 }
+function openAddModal() { editId=null; document.getElementById('modal-title').textContent='Add Product'; document.getElementById('productForm').reset(); clearFormErrors('productForm'); openModal('modal'); }
+async function editProduct(id) {
+  try {
+    const p = await apiFetch(`${API}/${id}`);
+    editId=id; document.getElementById('modal-title').textContent='Edit Product';
+    const form = document.getElementById('productForm');
+    Object.entries(p).forEach(([k,v]) => { const el=form.querySelector(`[name="${k}"]`); if(el) el.value=v??''; });
+    clearFormErrors('productForm'); openModal('modal');
+  } catch(e) { showToast('Failed to load product','error'); }
+}
+async function saveProduct() {
+  clearFormErrors('productForm');
+  const data = Object.fromEntries(new FormData(document.getElementById('productForm')));
+  const btn = document.getElementById('saveBtn'); btn.disabled=true; btn.textContent='Saving...';
+  try {
+    if(editId) await apiFetch(`${API}/${editId}`,{method:'PUT',body:JSON.stringify(data)});
+    else await apiFetch(API,{method:'POST',body:JSON.stringify(data)});
+    closeModal('modal'); showToast(editId?'Product updated!':'Product added!'); loadList();
+  } catch(e) { if(e.errors) showFormErrors('productForm',e.errors); else showToast(e.message||'Save failed','error'); }
+  finally { btn.disabled=false; btn.textContent='Save Product'; }
+}
+function deleteProduct(id,name) {
+  showConfirm('Delete Product',`Delete "${name}"? This cannot be undone.`, async()=>{
+    try { await apiFetch(`${API}/${id}`,{method:'DELETE'}); showToast('Product deleted!'); loadList(); }
+    catch(e){ showToast('Delete failed','error'); }
+  });
+}
+loadList();
 </script>
-
-</body>
-</html>
+@endsection
