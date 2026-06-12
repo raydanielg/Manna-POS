@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _pageCtrl.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
       setState(() => _step--);
     } else {
-      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/login');
     }
   }
 
