@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +42,11 @@ Route::get('/contact', function () {
 Route::get('/careers', function () {
     return view('company.careers');
 });
-Route::get('/blog', function () {
-    return view('company.blog');
-});
+
+// Blog
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
+Route::post('/blog/{blog}/comment', [BlogController::class, 'storeComment'])->name('blog.comment');
 
 // Support pages
 Route::get('/help', function () {
