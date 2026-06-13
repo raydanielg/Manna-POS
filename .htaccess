@@ -1,20 +1,24 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Check if file exists in public folder
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-
-    # Send Requests To Public Folder...
-    RewriteCond %{REQUEST_URI} !^/public/
+    # If file exists in public folder, serve it directly
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
     RewriteRule ^(.*)$ public/$1 [L]
+
+    # If directory exists in public folder, serve it directly
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Send all other requests to Laravel index.php in public folder
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/index.php [L]
 </IfModule>
