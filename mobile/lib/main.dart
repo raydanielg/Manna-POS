@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'core/api_service.dart';
 import 'core/auth_provider.dart';
 import 'shared/theme/app_theme.dart';
@@ -8,6 +9,7 @@ import 'features/auth/login_page.dart';
 import 'features/auth/register_page.dart';
 import 'features/auth/forgot_password_page.dart';
 import 'features/dashboard/dashboard_page.dart';
+import 'features/onboarding/onboarding_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +29,7 @@ class MannaApp extends StatelessWidget {
       initialRoute: '/splash',
       routes: {
         '/splash':          (_) => const SplashScreen(),
+        '/onboarding':      (_) => const OnboardingPage(),
         '/login':           (_) => const LoginPage(),
         '/register':        (_) => const RegisterPage(),
         '/forgot-password': (_) => const ForgotPasswordPage(),
