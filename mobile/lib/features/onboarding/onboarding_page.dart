@@ -270,7 +270,7 @@ class _PhoneFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 220,
-      height: 280,
+      height: 320,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(28),
@@ -318,50 +318,50 @@ class _PhoneFrame extends StatelessWidget {
 
     // Default: icon grid
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Lock / main icon at top
           Container(
-            width: 52, height: 52,
+            width: 44, height: 44,
             decoration: BoxDecoration(
               color: slide.bgColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(slide.icon, color: slide.accentColor, size: 26),
+            child: Icon(slide.icon, color: slide.accentColor, size: 22),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           if (slide.featureIcons.isNotEmpty) ...[
             GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 1.4,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 1.3,
               children: slide.featureIcons.map((fi) => Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                   boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4)],
                 ),
-                child: Icon(fi.icon, color: fi.color, size: 22),
+                child: Icon(fi.icon, color: fi.color, size: 18),
               )).toList(),
             ),
             if (slide.badgeText.isNotEmpty) ...[
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
                   boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6)],
                 ),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(Icons.check_circle_rounded, size: 14, color: Color(0xFF10B981)),
-                  const SizedBox(width: 5),
-                  Text(slide.badgeText, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textPri)),
+                  const Icon(Icons.check_circle_rounded, size: 12, color: Color(0xFF10B981)),
+                  const SizedBox(width: 4),
+                  Text(slide.badgeText, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.textPri)),
                 ]),
               ),
             ],
@@ -383,28 +383,28 @@ class _ChartContent extends StatelessWidget {
       _BarData(0.90, Color(0xFFF59E0B)),
     ];
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(width: 80, height: 8, decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(4))),
-          const SizedBox(height: 4),
-          Container(width: 55, height: 8, decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(4))),
-          const SizedBox(height: 16),
+          Container(width: 70, height: 6, decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(4))),
+          const SizedBox(height: 3),
+          Container(width: 50, height: 6, decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(4))),
+          const SizedBox(height: 12),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: bars.map((b) => Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
                   child: FractionallySizedBox(
                     heightFactor: b.height,
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       decoration: BoxDecoration(
                         color: b.color,
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                       ),
                     ),
                   ),
@@ -412,19 +412,19 @@ class _ChartContent extends StatelessWidget {
               )).toList(),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           // Donut badge
           Align(
             alignment: Alignment.centerRight,
             child: Container(
-              width: 44, height: 44,
+              width: 36, height: 36,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,
                 boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6)],
               ),
               child: const Center(
-                child: Text('%', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Color(0xFF10B981))),
+                child: Text('%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF10B981))),
               ),
             ),
           ),
@@ -439,33 +439,33 @@ class _OfflineContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              const Icon(Icons.wifi_rounded, size: 46, color: Color(0xFF94A3B8)),
+              const Icon(Icons.wifi_rounded, size: 40, color: Color(0xFF94A3B8)),
               Positioned(
                 bottom: 0, right: 0,
                 child: Container(
-                  width: 18, height: 18,
+                  width: 16, height: 16,
                   decoration: const BoxDecoration(color: Color(0xFFEF4444), shape: BoxShape.circle),
-                  child: const Icon(Icons.warning_rounded, size: 12, color: Colors.white),
+                  child: const Icon(Icons.warning_rounded, size: 10, color: Colors.white),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
           ...List.generate(4, (i) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.symmetric(vertical: 3),
             child: Row(children: [
-              const Icon(Icons.check_rounded, size: 14, color: Color(0xFF10B981)),
-              const SizedBox(width: 8),
+              const Icon(Icons.check_rounded, size: 12, color: Color(0xFF10B981)),
+              const SizedBox(width: 6),
               Expanded(child: Container(
-                height: 8,
-                decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(4)),
+                height: 6,
+                decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(3)),
               )),
             ]),
           )),
