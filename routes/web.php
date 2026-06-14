@@ -141,6 +141,9 @@ Route::get('/dashboard/user-management/users', function () {
 Route::get('/dashboard/user-management/roles', function () {
     return view('dashboard.user-management.roles');
 })->middleware('auth')->name('dashboard.user-management.roles');
+Route::get('/dashboard/user-management/locations', function () {
+    return view('dashboard.user-management.locations');
+})->middleware('auth')->name('dashboard.user-management.locations');
 Route::get('/dashboard/user-management/sales-commission-agents', function () {
     return view('dashboard.user-management.sales-commission-agents');
 })->middleware('auth')->name('dashboard.user-management.sales-commission-agents');
@@ -363,7 +366,11 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('stock-transfers',        StockTransferController::class);
     Route::apiResource('purchases',              PurchaseController::class);
     Route::apiResource('sales',                  SaleController::class);
+    Route::get('users/stats',                    [UserManagementController::class, 'stats']);
     Route::apiResource('users',                  UserManagementController::class);
+    Route::apiResource('locations',              LocationController::class);
+    Route::post('roles/seed-defaults',           [RoleController::class, 'seedDefaults']);
+    Route::get('roles/permissions',              [RoleController::class, 'permissionList']);
 
     // Plan Management API
     Route::get('plans/stats',             [PlanManagementController::class, 'statsPlans']);
