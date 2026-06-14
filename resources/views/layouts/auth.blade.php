@@ -36,33 +36,26 @@
             padding: 0;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 240, 240, 0.75) 100%), url('{{ asset('hero-bg.jpg') }}');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
-        /* Animated mesh background */
         .auth-brand-side::before {
             content: '';
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse 80% 50% at 20% 20%, rgba(16,185,129,0.15) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 80% at 80% 80%, rgba(99,102,241,0.12) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 50% 50%, rgba(14,165,233,0.06) 0%, transparent 60%);
-            animation: meshShift 12s ease-in-out infinite alternate;
-        }
-        @keyframes meshShift {
-            0% { opacity: 0.7; transform: scale(1) rotate(0deg); }
-            100% { opacity: 1; transform: scale(1.08) rotate(2deg); }
+                radial-gradient(circle at 20% 80%, rgba(16,185,129,0.06) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(5,150,105,0.04) 0%, transparent 40%);
+            animation: breathe 8s ease-in-out infinite alternate;
         }
 
-        /* Dot grid */
-        .auth-brand-side::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-            background-size: 28px 28px;
-            pointer-events: none;
+        @keyframes breathe {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
         }
 
         .auth-brand-inner {
@@ -71,7 +64,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            padding: 2.25rem 2.5rem;
+            padding: 2rem 2.5rem;
             justify-content: space-between;
         }
 
@@ -82,100 +75,29 @@
         }
 
         .brand-icon {
-            width: 44px; height: 44px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-radius: 12px;
+            width: 64px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            box-shadow: 0 4px 16px rgba(16,185,129,0.4);
         }
-        .brand-icon svg { width: 22px; height: 22px; color: #fff; }
+
+        .brand-icon .brand-logo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
         .brand-name {
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            color: #fff;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #000;
         }
-        .brand-tagline {
-            font-size: 0.72rem;
-            color: rgba(255,255,255,0.45);
-            font-weight: 500;
-            margin-top: 1px;
-        }
-
-        /* Center hero */
-        .auth-brand-hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 2rem 0;
-        }
-        .hero-headline {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #fff;
-            line-height: 1.15;
-            letter-spacing: -0.04em;
-            margin-bottom: 0.75rem;
-        }
-        .hero-headline span { color: #10b981; }
-        .hero-subtext {
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.5);
-            line-height: 1.65;
-            max-width: 340px;
-            margin-bottom: 2rem;
-        }
-
-        /* Feature chips */
-        .feature-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.65rem;
-            margin-bottom: 2rem;
-        }
-        .feature-chip {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px;
-            padding: 0.65rem 0.85rem;
-            backdrop-filter: blur(4px);
-            transition: background 0.2s;
-        }
-        .feature-chip:hover { background: rgba(255,255,255,0.09); }
-        .feature-chip-icon {
-            width: 30px; height: 30px;
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .feature-chip-icon svg { width: 15px; height: 15px; color: #fff; }
-        .feature-chip-text { font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.8); }
-
-        /* Stat strip */
-        .stat-strip {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem 1.25rem;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 14px;
-            backdrop-filter: blur(8px);
-        }
-        .stat-item { flex: 1; text-align: center; }
-        .stat-num { font-size: 1.4rem; font-weight: 900; color: #10b981; letter-spacing: -0.03em; }
-        .stat-lbl { font-size: 0.65rem; color: rgba(255,255,255,0.4); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
-        .stat-divider { width: 1px; background: rgba(255,255,255,0.08); align-self: stretch; }
 
         .auth-brand-bottom {
-            border-top: 1px solid rgba(255,255,255,0.08);
+            border-top: 1px solid #e5e7eb;
             padding-top: 1.25rem;
             display: flex;
             flex-direction: column;
@@ -189,20 +111,30 @@
         }
 
         .auth-brand-links a {
-            color: rgba(255,255,255,0.35);
+            color: #6b7280;
             text-decoration: none;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             font-weight: 500;
             transition: color 0.2s ease;
         }
 
-        .auth-brand-links a:hover { color: rgba(255,255,255,0.7); }
+        .auth-brand-links a:hover { color: #000; }
 
         .auth-brand-copy {
-            color: rgba(255,255,255,0.25);
-            font-size: 0.7rem;
+            color: #9ca3af;
+            font-size: 0.72rem;
         }
-        .auth-brand-copy span { color: rgba(255,255,255,0.4); }
+
+        .auth-brand-copy span { color: #6b7280; }
+
+        .auth-brand-bottom {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
 
         /* ===== RIGHT FORM PANEL ===== */
         .auth-form-side {
@@ -691,80 +623,18 @@
     <div class="auth-wrapper">
         <div class="auth-brand-side">
             <div class="auth-brand-inner">
-
-                {{-- Logo --}}
                 <div class="auth-brand-top">
                     <div class="brand-icon">
-                        <svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016 2.993 2.993 0 002.25-1.016 3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z"/></svg>
+                        <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="MannaPOS Logo" class="brand-logo-image">
                     </div>
-                    <div>
-                        <div class="brand-name">{{ config('app.name', 'MannaPOS') }}</div>
-                        <div class="brand-tagline">Business Management Platform</div>
-                    </div>
-                </div>
-
-                {{-- Hero content --}}
-                <div class="auth-brand-hero">
-                    <div class="hero-headline">
-                        Run your business<br><span>smarter & faster</span>
-                    </div>
-                    <p class="hero-subtext">
-                        Complete point-of-sale, inventory tracking, customer management, and real-time reports — all in one place.
-                    </p>
-
-                    <div class="feature-grid">
-                        <div class="feature-chip">
-                            <div class="feature-chip-icon" style="background:rgba(16,185,129,0.2);">
-                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            </div>
-                            <div class="feature-chip-text">POS Terminal</div>
-                        </div>
-                        <div class="feature-chip">
-                            <div class="feature-chip-icon" style="background:rgba(99,102,241,0.25);">
-                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
-                            </div>
-                            <div class="feature-chip-text">Inventory</div>
-                        </div>
-                        <div class="feature-chip">
-                            <div class="feature-chip-icon" style="background:rgba(14,165,233,0.25);">
-                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
-                            </div>
-                            <div class="feature-chip-text">Reports</div>
-                        </div>
-                        <div class="feature-chip">
-                            <div class="feature-chip-icon" style="background:rgba(245,158,11,0.25);">
-                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
-                            </div>
-                            <div class="feature-chip-text">Customers</div>
-                        </div>
-                        <div class="feature-chip">
-                            <div class="feature-chip-icon" style="background:rgba(239,68,68,0.2);">
-                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 003 10c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
-                            </div>
-                            <div class="feature-chip-text">Role Access</div>
-                        </div>
-                        <div class="feature-chip">
-                            <div class="feature-chip-icon" style="background:rgba(16,185,129,0.15);">
-                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
-                            </div>
-                            <div class="feature-chip-text">Multi-Location</div>
-                        </div>
-                    </div>
-
-                    <div class="stat-strip">
-                        <div class="stat-item"><div class="stat-num">99%</div><div class="stat-lbl">Uptime</div></div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item"><div class="stat-num">Fast</div><div class="stat-lbl">Real-time</div></div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item"><div class="stat-num">TZS</div><div class="stat-lbl">Tanzania Ready</div></div>
-                    </div>
+                    <span class="brand-name">{{ config('app.name', 'MannaPOS') }}</span>
                 </div>
 
                 <div class="auth-brand-bottom">
                     <div class="auth-brand-links">
-                        <a href="#">Terms</a>
-                        <a href="#">Privacy</a>
-                        <a href="#">Support</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Cookie Policy</a>
                     </div>
                     <div class="auth-brand-copy">
                         &copy; {{ date('Y') }} <span>{{ config('app.name', 'MannaPOS') }}</span>. All rights reserved.
@@ -776,10 +646,8 @@
         <div class="auth-form-side">
             <div class="auth-form-header">
                 <div class="mobile-logo">
-                    <div style="width:38px;height:38px;background:linear-gradient(135deg,#10b981,#059669);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(16,185,129,0.35);">
-                        <svg width="20" height="20" fill="none" stroke="white" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016 2.993 2.993 0 002.25-1.016 3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z"/></svg>
-                    </div>
-                    <span style="font-weight:800;letter-spacing:-0.02em;">{{ config('app.name', 'MannaPOS') }}</span>
+                    <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="MannaPOS Logo" class="logo-image">
+                    <span>{{ config('app.name', 'MannaPOS') }}</span>
                 </div>
                 @yield('form-header')
             </div>
