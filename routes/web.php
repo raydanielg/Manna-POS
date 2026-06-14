@@ -332,6 +332,7 @@ use App\Http\Controllers\Dashboard\StockTransferController;
 use App\Http\Controllers\Dashboard\PurchaseController;
 use App\Http\Controllers\Dashboard\SaleController;
 use App\Http\Controllers\Dashboard\UserManagementController;
+use App\Http\Controllers\Dashboard\LocationController;
 use App\Http\Controllers\Dashboard\PlanManagementController;
 
 // ─── Plan Management View Routes ────────────────────────────────────────────
