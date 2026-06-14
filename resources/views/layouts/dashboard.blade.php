@@ -360,6 +360,7 @@
 @php
     $isHome        = request()->routeIs('dashboard');
     $isUserMgmt    = request()->routeIs('dashboard.user-management.*');
+    $isPlanMgmt    = request()->routeIs('dashboard.plan-management.*');
     $isContacts    = request()->routeIs('dashboard.contacts.*');
     $isInventory   = request()->routeIs('dashboard.inventory.*');
     $isPurchases   = request()->routeIs('dashboard.purchases.*');
@@ -415,6 +416,19 @@
                 <a href="{{ route('dashboard.user-management.users') }}" class="child-item {{ request()->routeIs('dashboard.user-management.users') ? 'active' : '' }}">Users</a>
                 <a href="{{ route('dashboard.user-management.roles') }}" class="child-item {{ request()->routeIs('dashboard.user-management.roles') ? 'active' : '' }}">Roles</a>
                 <a href="{{ route('dashboard.user-management.sales-commission-agents') }}" class="child-item {{ request()->routeIs('dashboard.user-management.sales-commission-agents') ? 'active' : '' }}">Sales Commission Agents</a>
+            </div>
+        </div>
+
+        {{-- Plan Management --}}
+        <div class="dropdown {{ $isPlanMgmt ? 'open' : '' }}" id="dropdown-plan-mgmt">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-plan-mgmt')" data-tip="Plan Management">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
+                <span class="nav-label">Plan Management</span>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="{{ route('dashboard.plan-management.plans') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.plans') ? 'active' : '' }}">Subscription Plans</a>
+                <a href="{{ route('dashboard.plan-management.subscriptions') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.subscriptions') ? 'active' : '' }}">Subscriptions</a>
             </div>
         </div>
 
@@ -766,6 +780,35 @@
 
 {{-- ══ TOAST CONTAINER ══════════════════════════════════ --}}
 <div id="toast-container"></div>
+
+{{-- Auto-fire session toasts ────────────────────────── --}}
+@if (session('toast_success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            showToast(@json(session('toast_success')), 'success');
+        }, 400);
+    });
+</script>
+@endif
+@if (session('toast_error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            showToast(@json(session('toast_error')), 'error');
+        }, 400);
+    });
+</script>
+@endif
+@if (session('toast_info'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            showToast(@json(session('toast_info')), 'info');
+        }, 400);
+    });
+</script>
+@endif
 
 {{-- ══ CONFIRM DIALOG ═══════════════════════════════════ --}}
 <div class="confirm-overlay" id="confirm-overlay">

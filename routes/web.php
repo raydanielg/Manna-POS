@@ -332,6 +332,16 @@ use App\Http\Controllers\Dashboard\StockTransferController;
 use App\Http\Controllers\Dashboard\PurchaseController;
 use App\Http\Controllers\Dashboard\SaleController;
 use App\Http\Controllers\Dashboard\UserManagementController;
+use App\Http\Controllers\Dashboard\PlanManagementController;
+
+// ─── Plan Management View Routes ────────────────────────────────────────────
+Route::get('/dashboard/plan-management/plans', function () {
+    return view('dashboard.plan-management.plans');
+})->middleware('auth')->name('dashboard.plan-management.plans');
+
+Route::get('/dashboard/plan-management/subscriptions', function () {
+    return view('dashboard.plan-management.subscriptions');
+})->middleware('auth')->name('dashboard.plan-management.subscriptions');
 
 Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('suppliers',              SupplierController::class);
@@ -353,4 +363,16 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('purchases',              PurchaseController::class);
     Route::apiResource('sales',                  SaleController::class);
     Route::apiResource('users',                  UserManagementController::class);
+
+    // Plan Management API
+    Route::get('plans/stats',             [PlanManagementController::class, 'statsPlans']);
+    Route::get('plans',                   [PlanManagementController::class, 'indexPlans']);
+    Route::post('plans',                  [PlanManagementController::class, 'storePlan']);
+    Route::put('plans/{plan}',            [PlanManagementController::class, 'updatePlan']);
+    Route::delete('plans/{plan}',         [PlanManagementController::class, 'destroyPlan']);
+
+    Route::get('subscriptions',           [PlanManagementController::class, 'indexSubscriptions']);
+    Route::post('subscriptions',          [PlanManagementController::class, 'storeSubscription']);
+    Route::put('subscriptions/{subscription}', [PlanManagementController::class, 'updateSubscription']);
+    Route::delete('subscriptions/{subscription}', [PlanManagementController::class, 'destroySubscription']);
 });
