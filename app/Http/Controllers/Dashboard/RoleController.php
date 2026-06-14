@@ -58,9 +58,6 @@ class RoleController extends Controller {
     ];
 
     public function index(Request $req) {
-        $q = Role::withCount(['users' => fn($q) => $q->where('role', \DB::raw('roles.name'))]);
-
-        // join users count via subquery workaround
         $roles = Role::query();
         if ($req->search) $roles->where('name','like',"%{$req->search}%");
         $list = $roles->latest()->get()->map(function($r) {
