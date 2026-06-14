@@ -16,29 +16,71 @@
     </button>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;" id="defaultRolesGrid">
-    @foreach([
-      ['name'=>'admin',   'label'=>'Administrator', 'icon'=>'👑', 'bg'=>'linear-gradient(135deg,#fef2f2,#fee2e2)', 'border'=>'#fca5a5', 'color'=>'#dc2626', 'desc'=>'Full system access — manages everything including users, roles and settings.', 'perms'=>'All permissions'],
-      ['name'=>'manager', 'label'=>'Manager',        'icon'=>'🏢', 'bg'=>'linear-gradient(135deg,#fffbeb,#fef3c7)', 'border'=>'#fcd34d', 'color'=>'#d97706', 'desc'=>'Day-to-day operations — sales, inventory, staff and reports.', 'perms'=>'16 permissions'],
-      ['name'=>'cashier', 'label'=>'Cashier',        'icon'=>'💰', 'bg'=>'linear-gradient(135deg,#eff6ff,#dbeafe)', 'border'=>'#93c5fd', 'color'=>'#2563eb', 'desc'=>'Operates POS terminal, processes sales and handles customers at their store.', 'perms'=>'6 permissions'],
-      ['name'=>'user',    'label'=>'Basic User',     'icon'=>'👤', 'bg'=>'linear-gradient(135deg,#f5f3ff,#ede9fe)', 'border'=>'#c4b5fd', 'color'=>'#7c3aed', 'desc'=>'Limited access — can view dashboard only. No operational permissions.', 'perms'=>'1 permission'],
-    ] as $r)
-    <div style="background:{{ $r['bg'] }};border:1.5px solid {{ $r['border'] }};border-radius:14px;padding:1.25rem 1.25rem 1rem;position:relative;">
+
+    <div style="background:linear-gradient(135deg,#fef2f2,#fee2e2);border:1.5px solid #fca5a5;border-radius:14px;padding:1.25rem 1.25rem 1rem;">
       <div style="display:flex;align-items:flex-start;gap:.85rem;">
-        <div style="width:44px;height:44px;border-radius:12px;background:white;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.08);">{{ $r['icon'] }}</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-weight:800;font-size:.95rem;color:{{ $r['color'] }};">{{ $r['label'] }}</div>
-          <div style="font-size:.72rem;color:#64748b;margin-top:.25rem;line-height:1.5;">{{ $r['desc'] }}</div>
+        <div style="width:44px;height:44px;border-radius:12px;background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.08);">
+          <svg width="22" height="22" fill="none" stroke="#dc2626" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 003 10c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
         </div>
+        <div style="flex:1;min-width:0;"><div style="font-weight:800;font-size:.95rem;color:#dc2626;">Administrator</div><div style="font-size:.72rem;color:#64748b;margin-top:.25rem;line-height:1.5;">Full system access — manages everything including users, roles and settings.</div></div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;padding-top:.75rem;border-top:1px solid {{ $r['border'] }}40;">
-        <div style="font-size:.72rem;font-weight:600;color:{{ $r['color'] }};">{{ $r['perms'] }}</div>
-        <div style="display:flex;gap:.4rem;">
-          <div id="sys-{{ $r['name'] }}-count" style="font-size:.72rem;font-weight:600;color:#94a3b8;">— users</div>
-          <button class="btn btn-sm" style="background:white;color:{{ $r['color'] }};border:1px solid {{ $r['border'] }};font-size:.72rem;padding:.2rem .6rem;" onclick="editSystemRole('{{ $r['name'] }}')">Edit Perms</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;padding-top:.75rem;border-top:1px solid #fca5a540;">
+        <div style="font-size:.72rem;font-weight:600;color:#dc2626;">All permissions</div>
+        <div style="display:flex;gap:.4rem;align-items:center;">
+          <div id="sys-admin-count" style="font-size:.72rem;font-weight:600;color:#94a3b8;">— users</div>
+          <button class="btn btn-sm" style="background:white;color:#dc2626;border:1px solid #fca5a5;font-size:.72rem;padding:.2rem .6rem;" onclick="editSystemRole('admin')">Edit Perms</button>
         </div>
       </div>
     </div>
-    @endforeach
+
+    <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fcd34d;border-radius:14px;padding:1.25rem 1.25rem 1rem;">
+      <div style="display:flex;align-items:flex-start;gap:.85rem;">
+        <div style="width:44px;height:44px;border-radius:12px;background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.08);">
+          <svg width="22" height="22" fill="none" stroke="#d97706" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;"><div style="font-weight:800;font-size:.95rem;color:#d97706;">Manager</div><div style="font-size:.72rem;color:#64748b;margin-top:.25rem;line-height:1.5;">Day-to-day operations — sales, inventory, staff and reports.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;padding-top:.75rem;border-top:1px solid #fcd34d40;">
+        <div style="font-size:.72rem;font-weight:600;color:#d97706;">16 permissions</div>
+        <div style="display:flex;gap:.4rem;align-items:center;">
+          <div id="sys-manager-count" style="font-size:.72rem;font-weight:600;color:#94a3b8;">— users</div>
+          <button class="btn btn-sm" style="background:white;color:#d97706;border:1px solid #fcd34d;font-size:.72rem;padding:.2rem .6rem;" onclick="editSystemRole('manager')">Edit Perms</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd;border-radius:14px;padding:1.25rem 1.25rem 1rem;">
+      <div style="display:flex;align-items:flex-start;gap:.85rem;">
+        <div style="width:44px;height:44px;border-radius:12px;background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.08);">
+          <svg width="22" height="22" fill="none" stroke="#2563eb" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;"><div style="font-weight:800;font-size:.95rem;color:#2563eb;">Cashier</div><div style="font-size:.72rem;color:#64748b;margin-top:.25rem;line-height:1.5;">Operates POS terminal, processes sales and handles customers at their store.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;padding-top:.75rem;border-top:1px solid #93c5fd40;">
+        <div style="font-size:.72rem;font-weight:600;color:#2563eb;">6 permissions</div>
+        <div style="display:flex;gap:.4rem;align-items:center;">
+          <div id="sys-cashier-count" style="font-size:.72rem;font-weight:600;color:#94a3b8;">— users</div>
+          <button class="btn btn-sm" style="background:white;color:#2563eb;border:1px solid #93c5fd;font-size:.72rem;padding:.2rem .6rem;" onclick="editSystemRole('cashier')">Edit Perms</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #c4b5fd;border-radius:14px;padding:1.25rem 1.25rem 1rem;">
+      <div style="display:flex;align-items:flex-start;gap:.85rem;">
+        <div style="width:44px;height:44px;border-radius:12px;background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.08);">
+          <svg width="22" height="22" fill="none" stroke="#7c3aed" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;"><div style="font-weight:800;font-size:.95rem;color:#7c3aed;">Basic User</div><div style="font-size:.72rem;color:#64748b;margin-top:.25rem;line-height:1.5;">Limited access — can view dashboard only. No operational permissions.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;padding-top:.75rem;border-top:1px solid #c4b5fd40;">
+        <div style="font-size:.72rem;font-weight:600;color:#7c3aed;">1 permission</div>
+        <div style="display:flex;gap:.4rem;align-items:center;">
+          <div id="sys-user-count" style="font-size:.72rem;font-weight:600;color:#94a3b8;">— users</div>
+          <button class="btn btn-sm" style="background:white;color:#7c3aed;border:1px solid #c4b5fd;font-size:.72rem;padding:.2rem .6rem;" onclick="editSystemRole('user')">Edit Perms</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
