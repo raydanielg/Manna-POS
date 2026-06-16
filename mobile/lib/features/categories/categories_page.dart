@@ -134,7 +134,7 @@ class _CategoryFormState extends State<_CategoryForm> {
         const SizedBox(height: 12),
         TextFormField(controller: _desc, maxLines: 2, decoration: const InputDecoration(labelText: 'Description')),
         const SizedBox(height: 12),
-        DropdownButtonFormField<int>(decoration: const InputDecoration(labelText: 'Parent Category'), items: _parents.map((p) => DropdownMenuItem(value: p['id'], child: Text(p['name'] ?? ''))).toList(), onChanged: (v) => _parentId = v),
+        DropdownButtonFormField<int>(decoration: const InputDecoration(labelText: 'Parent Category'), items: _parents.map<DropdownMenuItem<int>>((p) => DropdownMenuItem(value: p['id'] as int, child: Text(p['name'] ?? ''))).toList(), onChanged: (v) => _parentId = v),
         const SizedBox(height: 24),
         SizedBox(height: 52, child: ElevatedButton(onPressed: _saving ? null : _save, child: _saving ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5)) : Text(widget.category != null ? 'Update Category' : 'Add Category', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)))),
       ]))),

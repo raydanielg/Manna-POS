@@ -25,9 +25,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final _businessCtrl = TextEditingController();
   final _cityCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
-  String _businessType = 'retail';
+  final _taxPctCtrl = TextEditingController(text: '18');
+
   String _currency = 'TZS';
-  String _taxPct = '18';
+  String? _businessType;
   bool _obscure = true;
   bool _obscure2 = true;
 
@@ -35,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     _ctrl.dispose(); _nameCtrl.dispose(); _emailCtrl.dispose(); _phoneCtrl.dispose();
     _passCtrl.dispose(); _confirmCtrl.dispose(); _businessCtrl.dispose();
-    _cityCtrl.dispose(); _addressCtrl.dispose();
+    _cityCtrl.dispose(); _addressCtrl.dispose(); _taxPctCtrl.dispose();
     super.dispose();
   }
 
@@ -57,7 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'business_address': _addressCtrl.text.trim(),
         'business_country': 'Tanzania',
         'currency': _currency,
-        'tax_percentage': double.tryParse(_taxPct) ?? 18,
+        'tax_percentage': double.tryParse(_taxPctCtrl.text) ?? 18,
         'fiscal_year_start': 'January',
       });
       if (!mounted) return;
