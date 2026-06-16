@@ -199,92 +199,100 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard'])->group(functi
 // ─── Admin Routes ──────────────────────────────────────────────────────────
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/', fn() => view('admin.dashboard'))->name('admin.dashboard');
 
     // User Management
-    Route::get('/users', function () {
-        return view('dashboard.user-management.users');
-    })->name('admin.users');
-
-    Route::get('/roles', function () {
-        return view('dashboard.user-management.roles');
-    })->name('admin.roles');
-
-    Route::get('/sales-commission-agents', function () {
-        return view('dashboard.user-management.sales-commission-agents');
-    })->name('admin.sales-commission-agents');
+    Route::get('/users',            [\App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('admin.users');
+    Route::get('/users/create',     [\App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('admin.users.create');
+    Route::get('/roles',            fn() => view('dashboard.user-management.roles'))->name('admin.roles');
+    Route::get('/sales-commission-agents', fn() => view('dashboard.user-management.sales-commission-agents'))->name('admin.sales-commission-agents');
+    Route::get('/user-activity',    [\App\Http\Controllers\Admin\AdminSystemController::class, 'activityLogs'])->name('admin.user-activity');
+    Route::get('/blocked-users',    [\App\Http\Controllers\Admin\AdminUsersController::class, 'blocked'])->name('admin.blocked-users');
 
     // Plan Management
-    Route::get('/plans', function () {
-        return view('dashboard.plan-management.plans');
-    })->name('admin.plans');
-
-    Route::get('/subscriptions', function () {
-        return view('dashboard.plan-management.subscriptions');
-    })->name('admin.subscriptions');
+    Route::get('/plans',            fn() => view('dashboard.plan-management.plans'))->name('admin.plans');
+    Route::get('/plans/create',     fn() => view('dashboard.plan-management.plans'))->name('admin.plans.create');
+    Route::get('/subscriptions',    [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'index'])->name('admin.subscriptions');
+    Route::get('/subscriptions/active',  [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'active'])->name('admin.subscriptions.active');
+    Route::get('/subscriptions/expired', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'expired'])->name('admin.subscriptions.expired');
+    Route::get('/subscriptions/trial',   [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'trial'])->name('admin.subscriptions.trial');
 
     // Notification Templates
-    Route::get('/notification-templates', function () {
-        return view('dashboard.notification-templates.index');
-    })->name('admin.notification-templates');
+    Route::get('/notification-templates', fn() => view('dashboard.notification-templates.index'))->name('admin.notification-templates');
 
     // Settings
-    Route::get('/settings/general', function () {
-        return view('dashboard.settings.general');
-    })->name('admin.settings.general');
-
-    Route::get('/settings/business-location', function () {
-        return view('dashboard.settings.business-location');
-    })->name('admin.settings.business-location');
-
-    Route::get('/settings/invoice-settings', function () {
-        return view('dashboard.settings.invoice-settings');
-    })->name('admin.settings.invoice-settings');
-
-    Route::get('/settings/barcode-settings', function () {
-        return view('dashboard.settings.barcode-settings');
-    })->name('admin.settings.barcode-settings');
-
-    Route::get('/settings/tax-rates', function () {
-        return view('dashboard.settings.tax-rates');
-    })->name('admin.settings.tax-rates');
+    Route::get('/settings/general',          fn() => view('dashboard.settings.general'))->name('admin.settings.general');
+    Route::get('/settings/business-location', fn() => view('dashboard.settings.business-location'))->name('admin.settings.business-location');
+    Route::get('/settings/invoice-settings',  fn() => view('dashboard.settings.invoice-settings'))->name('admin.settings.invoice-settings');
+    Route::get('/settings/barcode-settings',  fn() => view('dashboard.settings.barcode-settings'))->name('admin.settings.barcode-settings');
+    Route::get('/settings/tax-rates',         fn() => view('dashboard.settings.tax-rates'))->name('admin.settings.tax-rates');
+    Route::get('/settings/currency',          [\App\Http\Controllers\Admin\AdminSystemController::class, 'currency'])->name('admin.settings.currency');
+    Route::get('/settings/receipt-printers',  [\App\Http\Controllers\Admin\AdminSystemController::class, 'receiptPrinters'])->name('admin.settings.receipt-printers');
 
     // Reports Dashboard
-    Route::get('/reports', function () {
-        return view('dashboard.reports.sales-report');
-    })->name('admin.reports');
+    Route::get('/reports', fn() => view('dashboard.reports.sales-report'))->name('admin.reports');
 
     // ── Staff ──
-    Route::get('/staff', [\App\Http\Controllers\Admin\AdminStaffController::class, 'index'])->name('admin.staff.index');
-    Route::get('/staff/attendance', [\App\Http\Controllers\Admin\AdminStaffController::class, 'attendance'])->name('admin.staff.attendance');
-    Route::get('/staff/schedules', [\App\Http\Controllers\Admin\AdminStaffController::class, 'schedules'])->name('admin.staff.schedules');
+    Route::get('/staff',             [\App\Http\Controllers\Admin\AdminStaffController::class, 'index'])->name('admin.staff.index');
+    Route::get('/staff/create',      [\App\Http\Controllers\Admin\AdminStaffController::class, 'index'])->name('admin.staff.create');
+    Route::get('/staff/roles',       [\App\Http\Controllers\Admin\AdminStaffController::class, 'roles'])->name('admin.staff.roles');
+    Route::get('/staff/attendance',  [\App\Http\Controllers\Admin\AdminStaffController::class, 'attendance'])->name('admin.staff.attendance');
+    Route::get('/staff/schedules',   [\App\Http\Controllers\Admin\AdminStaffController::class, 'schedules'])->name('admin.staff.schedules');
+    Route::get('/staff/performance', [\App\Http\Controllers\Admin\AdminStaffController::class, 'performance'])->name('admin.staff.performance');
 
     // ── Business ──
-    Route::get('/business', [\App\Http\Controllers\Admin\AdminBusinessController::class, 'index'])->name('admin.business.index');
+    Route::get('/business',           [\App\Http\Controllers\Admin\AdminBusinessController::class, 'index'])->name('admin.business.index');
     Route::get('/business/categories', [\App\Http\Controllers\Admin\AdminBusinessController::class, 'categories'])->name('admin.business.categories');
     Route::get('/business/verifications', [\App\Http\Controllers\Admin\AdminBusinessController::class, 'verifications'])->name('admin.business.verifications');
+    Route::get('/business/locations',  [\App\Http\Controllers\Admin\AdminBusinessController::class, 'locations'])->name('admin.business.locations');
+    Route::get('/business/pending',    [\App\Http\Controllers\Admin\AdminBusinessController::class, 'pending'])->name('admin.business.pending');
 
     // ── Billing ──
-    Route::get('/billing/invoices', [\App\Http\Controllers\Admin\AdminBillingController::class, 'invoices'])->name('admin.billing.invoices');
-    Route::get('/billing/payments', [\App\Http\Controllers\Admin\AdminBillingController::class, 'payments'])->name('admin.billing.payments');
-    Route::get('/billing/gateways', [\App\Http\Controllers\Admin\AdminBillingController::class, 'gateways'])->name('admin.billing.gateways');
+    Route::get('/billing/invoices',    [\App\Http\Controllers\Admin\AdminBillingController::class, 'invoices'])->name('admin.billing.invoices');
+    Route::get('/billing/payments',    [\App\Http\Controllers\Admin\AdminBillingController::class, 'payments'])->name('admin.billing.payments');
+    Route::get('/billing/payments/pending', [\App\Http\Controllers\Admin\AdminBillingController::class, 'payments'])->name('admin.billing.payments.pending');
+    Route::get('/billing/gateways',    [\App\Http\Controllers\Admin\AdminBillingController::class, 'gateways'])->name('admin.billing.gateways');
+    Route::get('/billing/transactions',[ \App\Http\Controllers\Admin\AdminBillingController::class, 'transactions'])->name('admin.billing.transactions');
+    Route::get('/billing/refunds',     [\App\Http\Controllers\Admin\AdminBillingController::class, 'refunds'])->name('admin.billing.refunds');
+
+    // ── Finance ──
+    Route::get('/finance/revenue',     [\App\Http\Controllers\Admin\AdminFinanceController::class, 'revenue'])->name('admin.finance.revenue');
+    Route::get('/finance/tax-reports', [\App\Http\Controllers\Admin\AdminFinanceController::class, 'taxReports'])->name('admin.finance.tax-reports');
+    Route::get('/finance/commissions', [\App\Http\Controllers\Admin\AdminFinanceController::class, 'commissions'])->name('admin.finance.commissions');
+    Route::get('/finance/payouts',     [\App\Http\Controllers\Admin\AdminFinanceController::class, 'payouts'])->name('admin.finance.payouts');
 
     // ── Communication ──
     Route::get('/communication/email-templates', [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'emailTemplates'])->name('admin.communication.email-templates');
-    Route::get('/communication/sms-templates', [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'smsTemplates'])->name('admin.communication.sms-templates');
-    Route::get('/communication/announcements', [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'announcements'])->name('admin.communication.announcements');
+    Route::get('/communication/sms-templates',   [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'smsTemplates'])->name('admin.communication.sms-templates');
+    Route::get('/communication/announcements',   [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'announcements'])->name('admin.communication.announcements');
+    Route::get('/communication/push',            [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'push'])->name('admin.communication.push');
+    Route::get('/communication/broadcast',       [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'broadcast'])->name('admin.communication.broadcast');
 
     // ── Support ──
-    Route::get('/support/tickets', [\App\Http\Controllers\Admin\AdminSupportController::class, 'tickets'])->name('admin.support.tickets');
+    Route::get('/support/tickets',   [\App\Http\Controllers\Admin\AdminSupportController::class, 'tickets'])->name('admin.support.tickets');
 
     // ── System ──
-    Route::get('/system/config', [\App\Http\Controllers\Admin\AdminSystemController::class, 'config'])->name('admin.system.config');
+    Route::get('/system/config',      [\App\Http\Controllers\Admin\AdminSystemController::class, 'config'])->name('admin.system.config');
     Route::get('/system/activity-logs', [\App\Http\Controllers\Admin\AdminSystemController::class, 'activityLogs'])->name('admin.system.activity-logs');
-    Route::get('/system/backups', [\App\Http\Controllers\Admin\AdminSystemController::class, 'backups'])->name('admin.system.backups');
-    Route::get('/system/health', [\App\Http\Controllers\Admin\AdminSystemController::class, 'health'])->name('admin.system.health');
+    Route::get('/system/backups',     [\App\Http\Controllers\Admin\AdminSystemController::class, 'backups'])->name('admin.system.backups');
+    Route::get('/system/health',      [\App\Http\Controllers\Admin\AdminSystemController::class, 'health'])->name('admin.system.health');
     Route::get('/system/login-history', [\App\Http\Controllers\Admin\AdminSystemController::class, 'loginHistory'])->name('admin.system.login-history');
+    Route::get('/system/email-config',  [\App\Http\Controllers\Admin\AdminSystemController::class, 'emailConfig'])->name('admin.system.email-config');
+    Route::get('/system/sms-config',    [\App\Http\Controllers\Admin\AdminSystemController::class, 'smsConfig'])->name('admin.system.sms-config');
+    Route::get('/system/api-keys',      [\App\Http\Controllers\Admin\AdminSystemController::class, 'apiKeys'])->name('admin.system.api-keys');
+    Route::get('/system/security',      [\App\Http\Controllers\Admin\AdminSystemController::class, 'security'])->name('admin.system.security');
+    Route::get('/system/maintenance',   [\App\Http\Controllers\Admin\AdminSystemController::class, 'maintenance'])->name('admin.system.maintenance');
+    Route::get('/system/error-logs',    [\App\Http\Controllers\Admin\AdminSystemController::class, 'errorLogs'])->name('admin.system.error-logs');
+    Route::get('/system/logs',          [\App\Http\Controllers\Admin\AdminSystemController::class, 'logs'])->name('admin.system.logs');
+    Route::get('/system/file-backups',  [\App\Http\Controllers\Admin\AdminSystemController::class, 'fileBackups'])->name('admin.system.file-backups');
+    Route::get('/system/backup-restore', [\App\Http\Controllers\Admin\AdminSystemController::class, 'backupRestore'])->name('admin.system.backup-restore');
+    Route::get('/system/backup-schedule', [\App\Http\Controllers\Admin\AdminSystemController::class, 'backupSchedule'])->name('admin.system.backup-schedule');
+    Route::get('/system/updates',       [\App\Http\Controllers\Admin\AdminSystemController::class, 'updates'])->name('admin.system.updates');
+
+    // ── Cache / Database / File ──
+    Route::get('/cache/manage',       [\App\Http\Controllers\Admin\AdminCacheController::class, 'manage'])->name('admin.cache.manage');
+    Route::get('/database',           [\App\Http\Controllers\Admin\AdminDatabaseController::class, 'index'])->name('admin.database.manager');
+    Route::get('/file-manager',       [\App\Http\Controllers\Admin\AdminFileManagerController::class, 'index'])->name('admin.file.manager');
 });
 
 // ─── API / AJAX Resource Routes ────────────────────────────────────────────
