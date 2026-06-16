@@ -14,7 +14,12 @@ class AddFieldsToBusinessLocationsTable extends Migration
     public function up()
     {
         Schema::table('business_locations', function (Blueprint $table) {
-            //
+            $table->string('name')->after('id');
+            $table->text('address')->nullable()->after('name');
+            $table->string('city')->nullable()->after('address');
+            $table->string('country')->nullable()->after('city');
+            $table->string('phone')->nullable()->after('country');
+            $table->enum('status', ['active','inactive'])->default('active')->after('phone');
         });
     }
 
@@ -26,7 +31,7 @@ class AddFieldsToBusinessLocationsTable extends Migration
     public function down()
     {
         Schema::table('business_locations', function (Blueprint $table) {
-            //
+            $table->dropColumn(['name','address','city','country','phone','status']);
         });
     }
 }

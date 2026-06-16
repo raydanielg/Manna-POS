@@ -320,6 +320,7 @@ use App\Http\Controllers\Dashboard\PlanManagementController;
 use App\Http\Controllers\Dashboard\ShipmentController;
 use App\Http\Controllers\Dashboard\SellingPriceGroupController;
 use App\Http\Controllers\Dashboard\ProductVariationController;
+use App\Http\Controllers\Dashboard\BusinessLocationController;
 
 Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('suppliers',              SupplierController::class);
