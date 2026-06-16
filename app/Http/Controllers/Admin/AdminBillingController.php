@@ -27,7 +27,8 @@ class AdminBillingController extends Controller
         if ($req->status) $q->where('status', $req->status);
         return response()->json($q->latest()->get()->map(fn($i) => [
             'id' => $i->id, 'invoice_number' => $i->invoice_number,
-            'user' => $i->user->name ?? 'N/A', 'total' => number_format($i->total, 2),
+            'user' => $i->user->name ?? 'N/A', 'user_id' => $i->user_id,
+            'total' => number_format($i->total, 2),
             'currency' => $i->currency, 'status' => $i->status,
             'due_date' => $i->due_date ? $i->due_date->format('Y-m-d') : null,
             'created_at' => $i->created_at->format('Y-m-d'),

@@ -92,7 +92,7 @@ const API = '/api/admin/billing/payments';
 
 async function init() {
     const invs = await apiFetch('/api/admin/billing/invoices?status=pending');
-    document.getElementById('invoice_id').innerHTML = '<option value="">Select Invoice</option>' + invs.map(i => `<option value="${i.id}">${i.invoice_number} - ${i.currency} ${i.total}</option>`).join('');
+    document.getElementById('invoice_id').innerHTML = '<option value="">Select Invoice</option>' + invs.map(i => `<option value="${i.id}" data-user-id="${i.user_id || ''}">${i.invoice_number} - ${i.currency} ${i.total}</option>`).join('');
     loadList();
 }
 
