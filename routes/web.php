@@ -218,19 +218,14 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/subscriptions/trial',   [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'trial'])->name('admin.subscriptions.trial');
 
     // Notification Templates
-    Route::get('/notification-templates', fn() => view('dashboard.notification-templates.index'))->name('admin.notification-templates');
+    Route::get('/notification-templates', fn() => view('admin.notification-templates.index'))->name('admin.notification-templates');
 
     // Settings
-    Route::get('/settings/general',          fn() => view('dashboard.settings.general'))->name('admin.settings.general');
-    Route::get('/settings/business-location', fn() => view('dashboard.settings.business-location'))->name('admin.settings.business-location');
-    Route::get('/settings/invoice-settings',  fn() => view('dashboard.settings.invoice-settings'))->name('admin.settings.invoice-settings');
-    Route::get('/settings/barcode-settings',  fn() => view('dashboard.settings.barcode-settings'))->name('admin.settings.barcode-settings');
-    Route::get('/settings/tax-rates',         fn() => view('dashboard.settings.tax-rates'))->name('admin.settings.tax-rates');
     Route::get('/settings/currency',          [\App\Http\Controllers\Admin\AdminSystemController::class, 'currency'])->name('admin.settings.currency');
     Route::get('/settings/receipt-printers',  [\App\Http\Controllers\Admin\AdminSystemController::class, 'receiptPrinters'])->name('admin.settings.receipt-printers');
 
     // Reports Dashboard
-    Route::get('/reports', fn() => view('dashboard.reports.sales-report'))->name('admin.reports');
+    Route::get('/reports', fn() => view('admin.reports.sales'))->name('admin.reports');
 
     // ── Staff ──
     Route::get('/staff',             [\App\Http\Controllers\Admin\AdminStaffController::class, 'index'])->name('admin.staff.index');
