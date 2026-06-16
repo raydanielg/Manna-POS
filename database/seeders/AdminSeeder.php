@@ -31,9 +31,11 @@ class AdminSeeder extends Seeder
         );
 
         // Truncate and re-seed system data
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         SystemConfig::truncate();
         BusinessCategory::truncate();
         PaymentGateway::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         SystemConfig::insert([
             ['key' => 'app_name', 'value' => 'mannaPOS', 'group' => 'general', 'type' => 'text'],
