@@ -13,6 +13,7 @@ use App\Models\Brand;
 use App\Models\Unit;
 use App\Models\Supplier;
 use App\Models\ExpenseCategory;
+use App\Models\Business;
 
 // ── Public Auth ────────────────────────────────────────────────────────────
 Route::prefix('auth')->group(function () {
