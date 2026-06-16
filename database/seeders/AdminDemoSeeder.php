@@ -133,7 +133,6 @@ class AdminDemoSeeder extends Seeder
         UserSubscription::create(['user_id' => 2, 'subscription_plan_id' => 3, 'billing_cycle' => 'monthly', 'amount_paid' => 95000, 'currency' => 'TZS', 'status' => 'expired', 'starts_at' => Carbon::now()->subMonths(6), 'expires_at' => Carbon::now()->subMonths(3), 'transaction_ref' => 'TXN-OLD-001', 'notes' => 'Previous plan']);
 
         // ── Invoices (admin billing) ──
-        Invoice::truncate();
         Invoice::create(['invoice_number' => 'INV-2024-001', 'user_id' => 1, 'subscription_id' => 1, 'billing_cycle' => 'monthly', 'subtotal' => 95000, 'tax' => 17100, 'discount' => 0, 'total' => 112100, 'currency' => 'TZS', 'status' => 'paid', 'due_date' => Carbon::now()->subMonth(), 'paid_at' => Carbon::now()->subMonth(), 'notes' => 'Monthly subscription fee']);
         Invoice::create(['invoice_number' => 'INV-2024-002', 'user_id' => 2, 'subscription_id' => 2, 'billing_cycle' => 'yearly', 'subtotal' => 450000, 'tax' => 81000, 'discount' => 45000, 'total' => 486000, 'currency' => 'TZS', 'status' => 'paid', 'due_date' => Carbon::now()->subMonths(3), 'paid_at' => Carbon::now()->subMonths(3), 'notes' => 'Yearly subscription with 10% discount']);
         Invoice::create(['invoice_number' => 'INV-2024-003', 'user_id' => 1, 'subscription_id' => 1, 'billing_cycle' => 'monthly', 'subtotal' => 95000, 'tax' => 17100, 'discount' => 0, 'total' => 112100, 'currency' => 'TZS', 'status' => 'pending', 'due_date' => Carbon::now()->addDay(), 'paid_at' => null, 'notes' => 'Next billing cycle']);
