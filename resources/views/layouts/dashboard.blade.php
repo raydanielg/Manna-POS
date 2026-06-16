@@ -738,6 +738,32 @@
         </div>
     </header>
 
+    {{-- Trial / Subscription warning banner --}}
+    @php
+        $__sub = auth()->user()->activeSubscription();
+        $__daysLeft = null;
+        if ($__sub && $__sub->expires_at) {
+            $__daysLeft = (int) now()->diffInDays($__sub->expires_at, false);
+        }
+    @endphp
+    @if($__sub && $__sub->status === 'trial' && $__daysLeft !== null)
+    <div style="background:linear-gradient(90deg,#0f2748,#1e3a5f);color:#fff;padding:.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.82rem;gap:1rem;flex-wrap:wrap;">
+        <span>
+            @if($__daysLeft > 3)
+                <span style="background:#10b981;padding:.15rem .5rem;border-radius:4px;font-weight:700;margin-right:.5rem;">FREE TRIAL</span> {{ $__daysLeft }} days remaining in your free trial
+            @else
+                <span style="background:#ef4444;padding:.15rem .5rem;border-radius:4px;font-weight:700;margin-right:.5rem;">⚠ TRIAL EXPIRING</span> Only <strong>{{ $__daysLeft }}</strong> day{{ $__daysLeft != 1 ? 's' : '' }} left!
+            @endif
+        </span>
+        <a href="/subscription/plans" style="background:#10b981;color:#fff;padding:.3rem .85rem;border-radius:6px;font-weight:700;font-size:.78rem;text-decoration:none;white-space:nowrap;">Upgrade Now →</a>
+    </div>
+    @elseif(!$__sub)
+    <div style="background:#ef4444;color:#fff;padding:.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.82rem;gap:1rem;">
+        <span>⚠ Your subscription has expired. Some features may be limited.</span>
+        <a href="/subscription/plans" style="background:#fff;color:#ef4444;padding:.3rem .85rem;border-radius:6px;font-weight:700;font-size:.78rem;text-decoration:none;">Renew Now →</a>
+    </div>
+    @endif
+
     {{-- Page Content --}}
     @yield('content')
 
