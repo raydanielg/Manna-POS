@@ -27,9 +27,7 @@
 
 <div class="kpi-grid">
     <div class="kpi-card gradient-purple">
-        <div class="kpi-icon-wrap icon-purple">
-            <svg width="22" height="22" fill="none" stroke="#7c3aed" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v20M2 12h20"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 22a10 10 0 0 0 10-10"/></svg>
-        </div>
+        <div class="kpi-icon-wrap icon-purple"><span class="material-icons">account_balance</span></div>
         <div class="kpi-body">
             <div class="kpi-top">
                 <span class="kpi-label">Total Revenue</span>
@@ -39,9 +37,7 @@
         </div>
     </div>
     <div class="kpi-card gradient-blue">
-        <div class="kpi-icon-wrap icon-blue">
-            <svg width="22" height="22" fill="none" stroke="#2563eb" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/></svg>
-        </div>
+        <div class="kpi-icon-wrap icon-blue"><span class="material-icons">people</span></div>
         <div class="kpi-body">
             <div class="kpi-top">
                 <span class="kpi-label">Total Users</span>
@@ -51,9 +47,7 @@
         </div>
     </div>
     <div class="kpi-card gradient-emerald">
-        <div class="kpi-icon-wrap icon-emerald">
-            <svg width="22" height="22" fill="none" stroke="#059669" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7m0 1a1 1 0 0 1 1 -h16a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z"/><path d="M5 11v7a1 1 0 0 0 1 1h3"/><path d="M19 11v7a1 1 0 0 1 -1 1h-3"/><path d="M12 3l3 4h-6z"/></svg>
-        </div>
+        <div class="kpi-icon-wrap icon-emerald"><span class="material-icons">store</span></div>
         <div class="kpi-body">
             <div class="kpi-top">
                 <span class="kpi-label">Businesses</span>
@@ -63,9 +57,7 @@
         </div>
     </div>
     <div class="kpi-card gradient-amber">
-        <div class="kpi-icon-wrap icon-amber">
-            <svg width="22" height="22" fill="none" stroke="#d97706" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M8.2 9.8l7.6 -4.6"/><path d="M12 12v9"/></svg>
-        </div>
+        <div class="kpi-icon-wrap icon-amber"><span class="material-icons">card_membership</span></div>
         <div class="kpi-body">
             <div class="kpi-top">
                 <span class="kpi-label">Subscriptions</span>
