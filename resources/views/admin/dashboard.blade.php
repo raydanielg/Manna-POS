@@ -283,72 +283,37 @@ async function refreshDashboard(extra = {}) {
     } catch (e) { console.warn('Dashboard stats fetch failed', e); }
 }
 
-function createGradient(ctx, color1, color2) {
-    const g = ctx.createLinearGradient(0, 0, 0, 220);
-    g.addColorStop(0, color1);
-    g.addColorStop(1, color2);
-    return g;
+function initCharts() {
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    const userCtx = document.getElementById('userChart').getContext('2d');
+
+    const baseData = () => Array(12).fill(0).map(() => Math.floor(Math.random() * 80000 + 20000));
+
+    revenueChart = new Chart(revenueCtx, {
+        type: 'line',
+        data: { labels: months, datasets: [{ label: 'Revenue', data: baseData(), borderColor: '#7c3aed', backgroundColor: makeGrad(revenueCtx, '#7c3aed'), fill: true, tension: 0.45, pointRadius: 3, pointHoverRadius: 6, pointBackgroundColor: '#fff', pointBorderColor: '#7c3aed', pointBorderWidth: 2, borderWidth: 2.5 }] },
+        options: chartOptions('#7c3aed')
+    });
+    userChart = new Chart(userCtx, {
+        type: 'line',
+        data: { labels: months, datasets: [{ label: 'Users', data: baseData(), borderColor: '#2563eb', backgroundColor: makeGrad(userCtx, '#2563eb'), fill: true, tension: 0.45, pointRadius: 3, pointHoverRadius: 6, pointBackgroundColor: '#fff', pointBorderColor: '#2563eb', pointBorderWidth: 2, borderWidth: 2.5 }] },
+        options: chartOptions('#2563eb')
+    });
 }
 
-function initCharts() {
-    const rCtx = document.getElementById('revenueChart').getContext('2d');
-    const uCtx = document.getElementById('userChart').getContext('2d');
-
-    const chartOpts = (color, label) => ({
-        type: 'line',
-        data: {
-            labels: months,
-            datasets: [{
-                label: label,
-                data: Array(12).fill(0).map(() => Math.floor(Math.random() * 80000 + 20000)),
-                borderColor: color,
-                backgroundColor: createGradient(rCtx, color + '33', color + '02'),
-                fill: true,
-                tension: 0.45,
-                pointRadius: 3,
-                pointHoverRadius: 6,
-                pointBackgroundColor: '#fff',
-                pointBorderColor: color,
-                pointBorderWidth: 2,
-                borderWidth: 2.5,
-            }]
+function chartOptions() {
+    return {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: { backgroundColor: '#0f172a', titleColor: '#fff', bodyColor: '#e2e8f0', padding: 10, cornerRadius: 8, displayColors: false }
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#0f172a',
-                    titleColor: '#fff',
-                    bodyColor: '#e2e8f0',
-                    padding: 10,
-                    cornerRadius: 8,
-                    displayColors: false,
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#f1f5f9', drawBorder: false },
-                    ticks: { color: '#94a3b8', font: { size: 10 }, callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }
-                },
-                x: {
-                    grid: { display: false },
-                    ticks: { color: '#94a3b8', font: { size: 10 } }
-                }
-            },
-            interaction: { intersect: false, mode: 'index' },
-        }
-    });
-
-    revenueChart = new Chart(rCtx, chartOpts('#7c3aed', 'Revenue'));
-    userChart = new Chart(uCtx, chartOpts('#2563eb', 'Users'));
-
-    revenueChart.data.datasets[0].backgroundColor = createGradient(rCtx, 'rgba(124,58,237,0.2)', 'rgba(124,58,237,0.02)');
-    revenueChart.update();
-    userChart.data.datasets[0].backgroundColor = createGradient(uCtx, 'rgba(37,99,235,0.2)', 'rgba(37,99,235,0.02)');
-    userChart.update();
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#f1f5f9', drawBorder: false }, ticks: { color: '#94a3b8', font: { size: 10 }, callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v } },
+            x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+        },
+        interaction: { intersect: false, mode: 'index' },
+    };
 }
 
 function updateRevenueChart(val) {}
