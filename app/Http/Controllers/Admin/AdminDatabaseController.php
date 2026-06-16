@@ -37,7 +37,7 @@ class AdminDatabaseController extends Controller
             if (!DB::getSchemaBuilder()->hasTable($table)) {
                 return response()->json(['message' => 'Table not found'], 404);
             }
-            $columns = DB::select("SHOW FULL COLUMNS FROM `{$table}`");
+            $columns = DB::select("PRAGMA table_info('{$table}')");
             return response()->json($columns);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -50,8 +50,8 @@ class AdminDatabaseController extends Controller
             if (!DB::getSchemaBuilder()->hasTable($table)) {
                 return response()->json(['message' => 'Table not found'], 404);
             }
-            DB::statement("OPTIMIZE TABLE `{$table}`");
-            return response()->json(['success' => true, 'message' => "Table `{$table}` optimized successfully."]);
+            DB::statement("VACUUM");
+            return response()->json(['success' => true, 'message' => "Database optimized successfully."]);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
