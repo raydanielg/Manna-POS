@@ -77,8 +77,8 @@ class _SalesReportState extends State<_SalesReport> {
   @override
   Widget build(BuildContext context) => Column(children: [
     _DateFilter(from: _from, to: _to, onFilter: _load),
-    Expanded(child: _loading ? const LoadingWidget(message: 'Loading report...')
-      : _error != null ? ErrorWidget2(message: _error!, onRetry: _load)
+    Expanded(child: _loading ? _loadingWidget(message: 'Loading report...')
+      : _error != null ? _errorWidget(_error!, _load)
       : _data == null ? const EmptyState(icon: Icons.bar_chart_outlined, title: 'No Data', subtitle: 'Select a date range and filter')
       : SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(children: [
           Row(children: [
@@ -145,8 +145,8 @@ class _ProfitLossReportState extends State<_ProfitLossReport> {
   @override
   Widget build(BuildContext context) => Column(children: [
     _DateFilter(from: _from, to: _to, onFilter: _load),
-    Expanded(child: _loading ? const LoadingWidget(message: 'Loading report...')
-      : _error != null ? ErrorWidget2(message: _error!, onRetry: _load)
+    Expanded(child: _loading ? _loadingWidget(message: 'Loading report...')
+      : _error != null ? _errorWidget(_error!, _load)
       : _data == null ? const EmptyState(icon: Icons.show_chart, title: 'No Data', subtitle: 'Select a date range')
       : SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(children: [
           _plCard('Revenue', _data!['revenue'] ?? 0, AppColors.success, AppColors.successLt, Icons.trending_up),
@@ -195,8 +195,8 @@ class _InventoryReportState extends State<_InventoryReport> {
   }
 
   @override
-  Widget build(BuildContext context) => _loading ? const LoadingWidget(message: 'Loading inventory...')
-    : _error != null ? ErrorWidget2(message: _error!, onRetry: _load)
+  Widget build(BuildContext context) => _loading ? _loadingWidget(message: 'Loading inventory...')
+    : _error != null ? _errorWidget(_error!, _load)
     : RefreshIndicator(color: AppColors.primary, onRefresh: _load, child: CustomScrollView(slivers: [
         SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.all(16), child: Column(children: [
           Row(children: [
