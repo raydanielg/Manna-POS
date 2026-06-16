@@ -6,12 +6,9 @@ use Illuminate\Http\Request;
 
 class CustomerGroupController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = CustomerGroup::withCount("customers");
-            if ($req->search) $q->where("name","like","%{$req->search}%");
-            return response()->json($q->latest()->get());
-        }
-        return view("dashboard.contacts.customer-groups");
+        $q = CustomerGroup::withCount("customers");
+        if ($req->search) $q->where("name","like","%{$req->search}%");
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","discount"=>"nullable|numeric|min:0|max:100","description"=>"nullable|string"]);

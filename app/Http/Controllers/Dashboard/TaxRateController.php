@@ -5,12 +5,10 @@ use App\Models\TaxRate;
 use Illuminate\Http\Request;
 class TaxRateController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = TaxRate::query();
-            if ($req->search) $q->where("name","like","%{$req->search}%");
-            return response()->json($q->latest()->get());
-        }
-        return view("dashboard.settings.tax-rates");
+        $q = TaxRate::query();
+        if ($req->search) $q->where("name","like","%{$req->search}%");
+        if ($req->status) $q->where("status",$req->status);
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","rate"=>"required|numeric|min:0","type"=>"in:percentage,fixed","status"=>"in:active,inactive"]);
