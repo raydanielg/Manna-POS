@@ -222,7 +222,6 @@ class AdminDemoSeeder extends Seeder
         ]);
 
         // ── Backups ──
-        Backup::truncate();
         Backup::insert([
             ['name' => 'Daily Backup - June 15', 'file_path' => 'backups/daily-2025-06-15.zip', 'type' => 'daily', 'size' => 128000000, 'status' => 'completed', 'notes' => 'Automated daily backup', 'created_by' => 2],
             ['name' => 'Weekly Backup - Week 24', 'file_path' => 'backups/weekly-2025-w24.zip', 'type' => 'weekly', 'size' => 892000000, 'status' => 'completed', 'notes' => 'Full system backup', 'created_by' => 2],
