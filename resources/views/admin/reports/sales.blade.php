@@ -46,13 +46,13 @@ async function loadReport() {
     const from = document.getElementById('fromDate').value;
     const to = document.getElementById('toDate').value;
     const data = await apiFetch(`/api/admin/reports/sales?from=${from}&to=${to}&per_page=500`);
-    const items = data.data || data || [];
+    const items = Array.isArray(data) ? data : (data.data || []);
     let totalSales = 0, totalRevenue = 0, totalPaid = 0, totalOutstanding = 0;
     items.forEach(s => {
         totalSales++;
-        totalRevenue += Number(s.total_amount || 0);
-        totalPaid += Number(s.amount_paid || 0);
-        totalOutstanding += Number(s.outstanding || 0);
+        totalRevenue += Number(s.total || 0);
+        totalPaid += Number(s.paid || 0);
+        totalOutstanding += Number(s.total || 0) - Number(s.paid || 0);
     });
     document.getElementById('totalSales').textContent = totalSales;
     document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString('en-US', {style:'currency',currency:'TZS'});
@@ -61,11 +61,11 @@ async function loadReport() {
     const tbody = document.getElementById('tableBody');
     if (!items.length) { tbody.innerHTML = '<tr><td colspan="7" class="tbl-empty">No sales found for this period.</td></tr>'; return; }
     tbody.innerHTML = items.map(s => `<tr>
-        <td><strong>${s.invoice_number || '#'+s.id}</strong></td>
-        <td>${s.customer_name || s.customer?.name || '-'}</td>
-        <td>${s.created_at ? new Date(s.created_at).toLocaleDateString() : '-'}</td>
-        <td>${Number(s.total_amount || 0).toLocaleString()}</td>
-        <td>${Number(s.amount_paid || 0).toLocaleString()}</td>
+        <td><strong>${s.reference || '#'+s.id}</strong></td>
+        <td>${s.customer?.name || '-'}</td>
+        <td>${s.sale_date ? new Date(s.sale_date).toLocaleDateString() : (s.created_at ? new Date(s.created_at).toLocaleDateString() : '-')}</td>
+        <td>${Number(s.total || 0).toLocaleString()}</td>
+        <td>${Number(s.paid || 0).toLocaleString()}</td>
         <td>${s.payment_method || '-'}</td>
         <td><span class="badge ${s.status === 'completed' ? 'badge-success' : s.status === 'draft' ? 'badge-warning' : 'badge-default'}">${s.status || 'N/A'}</span></td>
     </tr>`).join('');
