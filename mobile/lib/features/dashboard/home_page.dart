@@ -157,34 +157,89 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildStatsGrid() {
     if (_stats == null) return const SizedBox.shrink();
+    final s = _stats!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      child: Column(
-        children: [
-          Row(children: [
-            Expanded(child: StatCard(
-              icon: Icons.shopping_cart_rounded, value: fmtCurrency((_stats!['total_sales'] ?? 0).toDouble()),
-              label: 'Sales (Month)', color: AppColors.primary, bg: const Color(0xFFDFF7EE),
-            )),
-            const SizedBox(width: 10),
-            Expanded(child: StatCard(
-              icon: Icons.receipt_long_rounded, value: '${_stats!['total_orders'] ?? 0}',
-              label: 'Orders', color: AppColors.accent, bg: const Color(0xFFE8F0FE),
-            )),
-          ]),
-          const SizedBox(height: 10),
-          Row(children: [
-            Expanded(child: StatCard(
-              icon: Icons.inventory_2_rounded, value: '${_stats!['total_products'] ?? 0}',
-              label: 'Products', color: AppColors.purple, bg: const Color(0xFFEEF0FF),
-            )),
-            const SizedBox(width: 10),
-            Expanded(child: StatCard(
-              icon: Icons.people_rounded, value: '${_stats!['total_customers'] ?? 0}',
-              label: 'Customers', color: AppColors.pink, bg: const Color(0xFFFFE8ED),
-            )),
-          ]),
-        ],
+      child: Column(children: [
+        Row(children: [
+          Expanded(child: StatCard(
+            icon: Icons.shopping_cart_rounded, value: fmtCurrency((s['total_sales'] ?? 0).toDouble()),
+            label: 'Sales (Month)', color: AppColors.primary, bg: const Color(0xFFDFF7EE),
+            subtitle: s['sales_growth'] != null ? '${s['sales_growth'] > 0 ? '+' : ''}${s['sales_growth']}% vs last month' : null,
+          )),
+          const SizedBox(width: 10),
+          Expanded(child: StatCard(
+            icon: Icons.receipt_long_rounded, value: '${s['total_orders'] ?? 0}',
+            label: 'Orders', color: AppColors.accent, bg: const Color(0xFFE8F0FE),
+            subtitle: s['orders_growth'] != null ? '${s['orders_growth'] > 0 ? '+' : ''}${s['orders_growth']}% vs last month' : null,
+          )),
+        ]),
+        const SizedBox(height: 10),
+        Row(children: [
+          Expanded(child: StatCard(
+            icon: Icons.inventory_2_rounded, value: '${s['total_products'] ?? 0}',
+            label: 'Products', color: AppColors.purple, bg: const Color(0xFFEEF0FF),
+          )),
+          const SizedBox(width: 10),
+          Expanded(child: StatCard(
+            icon: Icons.people_rounded, value: '${s['total_customers'] ?? 0}',
+            label: 'Customers', color: AppColors.pink, bg: const Color(0xFFFFE8ED),
+          )),
+        ]),
+      ]),
+    );
+  }
+
+  Widget _buildTopProducts() {
+    if (_stats == null || (_stats!['top_products'] as List?)?.isEmpty == true) return const SizedBox.shrink();
+    final products = _stats!['top_products'] as List;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const Text('Top Products', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black)),
+        const SizedBox(height: 12),
+        Container(
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          child: Column(children: products.asMap().entries.map((e) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(children: [
+              Container(width: 24, height: 24, decoration: BoxDecoration(color: AppColors.primaryLt, borderRadius: BorderRadius.circular(6)),
+                child: Center(child: Text('${e.key + 1}', style: const TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w800)))),
+              const SizedBox(width: 12),
+              Expanded(child: Text(e.value['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
+              Text('${e.value['total_qty'] ?? 0} sold', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
+              const SizedBox(width: 8),
+              Text('TSh ${fmtCurrency((e.value['total_revenue'] ?? 0).toDouble())}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.primary)),
+            ]),
+          )).toList()),
+        ),
+      ]),
+    );
+  }
+
+  Widget _buildInventoryAlerts() {
+    if (_stats == null) return const SizedBox.shrink();
+    final lowStock = _stats!['low_stock'] ?? 0;
+    final outOfStock = _stats!['out_of_stock'] ?? 0;
+    if (lowStock == 0 && outOfStock == 0) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: (outOfStock as int) > 0 ? AppColors.dangerLt : AppColors.warningLt,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: (outOfStock as int) > 0 ? AppColors.danger.withValues(alpha: 0.3) : AppColors.warning.withValues(alpha: 0.3)),
+        ),
+        child: Row(children: [
+          Icon((outOfStock as int) > 0 ? Icons.error_outline : Icons.warning_amber_outlined, color: (outOfStock as int) > 0 ? AppColors.danger : AppColors.warning, size: 24),
+          const SizedBox(width: 12),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text((outOfStock as int) > 0 ? 'Inventory Alert' : 'Low Stock Warning', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: (outOfStock as int) > 0 ? AppColors.danger : AppColors.warning)),
+            Text('${outOfStock} out of stock · ${lowStock} low stock items', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
+          ])),
+          TextButton(onPressed: () => context.push('/products'), child: const Text('View', style: TextStyle(fontSize: 13))),
+        ]),
       ),
     );
   }
