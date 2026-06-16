@@ -4,8 +4,6 @@ import '../../shared/theme/app_colors.dart';
 import '../../shared/widgets/app_card.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/status_badge.dart';
-import '../../shared/constants/app_constants.dart';
-
 class StockTransfersPage extends StatefulWidget {
   const StockTransfersPage({super.key});
   @override State<StockTransfersPage> createState() => _StockTransfersPageState();

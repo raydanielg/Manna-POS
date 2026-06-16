@@ -121,7 +121,7 @@ class _AdjustmentFormState extends State<_AdjustmentForm> {
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [const Text('Stock Adjustment', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)), IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context))]),
         if (_err != null) ...[const SizedBox(height: 12), Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(10)), child: Text(_err!, style: const TextStyle(color: AppColors.danger)))],
         const SizedBox(height: 16),
-        DropdownButtonFormField<int>(decoration: const InputDecoration(labelText: 'Product *'), items: _products.map((p) => DropdownMenuItem(value: p['id'], child: Text(p['name'] ?? ''))).toList(), onChanged: (v) => _productId = v),
+        DropdownButtonFormField<int>(decoration: const InputDecoration(labelText: 'Product *'), items: _products.map<DropdownMenuItem<int>>((p) => DropdownMenuItem(value: p['id'] as int, child: Text(p['name'] ?? ''))).toList(), onChanged: (v) => _productId = v),
         const SizedBox(height: 12),
         SegmentedButton<String>(segments: const [ButtonSegment(value: 'addition', label: Text('Addition'), icon: Icon(Icons.add)), ButtonSegment(value: 'subtraction', label: Text('Subtraction'), icon: Icon(Icons.remove))], selected: {_type}, onSelectionChanged: (v) => setState(() => _type = v.first)),
         const SizedBox(height: 12),
