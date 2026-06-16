@@ -266,7 +266,6 @@ class AdminDemoSeeder extends Seeder
         ]);
 
         // ── Stock Adjustments ──
-        StockAdjustment::truncate();
         StockAdjustment::insert([
             ['reference' => 'ADJ-001', 'adjustment_date' => Carbon::now()->subDays(7), 'type' => 'addition', 'product_id' => 1, 'quantity' => 20, 'unit_cost' => 1200, 'reason' => 'Found extra stock during inventory count', 'notes' => 'Inventory discrepancy resolved'],
             ['reference' => 'ADJ-002', 'adjustment_date' => Carbon::now()->subDays(3), 'type' => 'subtraction', 'product_id' => 6, 'quantity' => 2, 'unit_cost' => 2500, 'reason' => 'Damaged goods - toothpaste boxes crushed', 'notes' => 'Written off as damaged'],
