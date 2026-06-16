@@ -22,9 +22,24 @@ class MorePage extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(child: _buildProfile(name, initials, business)),
+          SliverToBoxAdapter(child: _buildSection('Sales & Purchases', [
+            _MenuItem(Icons.receipt_long_rounded, 'Receipts', AppColors.primary, () => context.push('/receipts')),
+            _MenuItem(Icons.shopping_cart_outlined, 'Purchases', AppColors.primaryDark, () => context.push('/purchases')),
+            _MenuItem(Icons.business_outlined, 'Suppliers', AppColors.accent, () => context.push('/suppliers')),
+            _MenuItem(Icons.receipt_rounded, 'Expenses', AppColors.secondary, () => context.push('/expenses')),
+            _MenuItem(Icons.discount_outlined, 'Discounts', AppColors.warning, () => context.push('/discounts')),
+          ])),
+          SliverToBoxAdapter(child: _buildSection('Products & Stock', [
+            _MenuItem(Icons.category_rounded, 'Categories', AppColors.cyan, () => context.push('/categories')),
+            _MenuItem(Icons.trademark_rounded, 'Brands', AppColors.purple, () => context.push('/brands')),
+            _MenuItem(Icons.straighten_outlined, 'Units', AppColors.info, () => context.push('/units')),
+            _MenuItem(Icons.account_balance_outlined, 'Tax Rates', AppColors.orange, () => context.push('/tax-rates')),
+            _MenuItem(Icons.verified_outlined, 'Warranties', AppColors.pink, () => context.push('/warranties')),
+            _MenuItem(Icons.balance_rounded, 'Stock Adjustments', AppColors.warning, () => context.push('/stock-adjustments')),
+            _MenuItem(Icons.swap_horiz_outlined, 'Stock Transfers', AppColors.primary, () => context.push('/stock-transfers')),
+          ])),
           SliverToBoxAdapter(child: _buildSection('Management', [
             _MenuItem(Icons.people_rounded, 'Staff Management', AppColors.accent, () => _push(context, const StaffManagementPage())),
-            _MenuItem(Icons.receipt_rounded, 'Expenses', AppColors.secondary, () => context.push('/expenses')),
             _MenuItem(Icons.assessment_rounded, 'Reports', AppColors.primary, () => context.push('/reports')),
           ])),
           SliverToBoxAdapter(child: _buildSection('System', [
@@ -34,12 +49,6 @@ class MorePage extends StatelessWidget {
             _MenuItem(Icons.help_outline_rounded, 'Help & Support', AppColors.purple, () => _showHelp(context)),
             _MenuItem(Icons.info_outline_rounded, 'About', AppColors.textSec, () => _showAbout(context)),
           ])),
-          if (user?.role != 'admin')
-            SliverToBoxAdapter(child: _buildSection('Quick Links', [
-              _MenuItem(Icons.category_rounded, 'Categories', AppColors.primary, () {}),
-              _MenuItem(Icons.trademark_rounded, 'Brands', AppColors.accent, () {}),
-              _MenuItem(Icons.balance_rounded, 'Stock Adjustments', AppColors.warning, () {}),
-            ])),
           const SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
       ),
