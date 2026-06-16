@@ -29,6 +29,7 @@ use App\Models\UserSubscription;
 use App\Models\Warranty;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AdminDemoSeeder extends Seeder
 {
