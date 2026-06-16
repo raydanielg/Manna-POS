@@ -7,13 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class StockAdjustmentController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = StockAdjustment::with("product");
-            if ($req->search) $q->where("reference","like","%{$req->search}%");
-            return response()->json($q->latest()->get());
-        }
-        $products = Product::where("status","active")->get();
-        return view("dashboard.stock-adjustment.list-stock-adjustment", compact("products"));
+        $q = StockAdjustment::with("product");
+        if ($req->search) $q->where("reference","like","%{$req->search}%");
+        if ($req->type) $q->where("type",$req->type);
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["adjustment_date"=>"required|date","type"=>"required|in:addition,subtraction","product_id"=>"required|exists:products,id","quantity"=>"required|numeric|min:0.0001","unit_cost"=>"nullable|numeric|min:0","reason"=>"nullable|string|max:191","notes"=>"nullable|string"]);

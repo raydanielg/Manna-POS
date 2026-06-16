@@ -5,12 +5,9 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 class RoleController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = Role::query();
-            if ($req->search) $q->where("name","like","%{$req->search}%");
-            return response()->json($q->latest()->get());
-        }
-        return view("dashboard.user-management.roles");
+        $q = Role::query();
+        if ($req->search) $q->where("name","like","%{$req->search}%");
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191|unique:roles,name","description"=>"nullable|string"]);

@@ -6,12 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class StockTransferController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = StockTransfer::query();
-            if ($req->search) $q->where("reference","like","%{$req->search}%")->orWhere("from_location","like","%{$req->search}%")->orWhere("to_location","like","%{$req->search}%");
-            return response()->json($q->latest()->get());
-        }
-        return view("dashboard.stock-transfer.list-stock-transfer");
+        $q = StockTransfer::query();
+        if ($req->search) $q->where("reference","like","%{$req->search}%")->orWhere("from_location","like","%{$req->search}%")->orWhere("to_location","like","%{$req->search}%");
+        if ($req->status) $q->where("status",$req->status);
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["from_location"=>"required|string|max:191","to_location"=>"required|string|max:191","transfer_date"=>"required|date","status"=>"in:pending,completed,cancelled","notes"=>"nullable|string"]);
