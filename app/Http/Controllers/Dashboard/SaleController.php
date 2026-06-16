@@ -37,5 +37,29 @@ class SaleController extends Controller {
         return response()->json(["success"=>true,"sale"=>$sale->load(["customer","items"])], 201);
     }
     public function show(Sale $sale) { return response()->json($sale->load(["customer","items.product"])); }
+    public function update(Request $req, Sale $sale) {
+        $wasCompleted = $sale->status === "completed";
+        $data = $req->validate([
+            "customer_id"    => "nullable|exists:customers,id",
+            "sale_date"      => "sometimes|date",
+            "status"         => "sometimes|in:completed,draft,quotation,cancelled,return",
+            "payment_status" => "sometimes|in:paid,partial,unpaid",
+            "payment_method" => "sometimes|in:cash,card,mobile_money,credit",
+            "discount"       => "nullable|numeric|min:0",
+            "tax"            => "nullable|numeric|min:0",
+            "paid"           => "nullable|numeric|min:0",
+            "notes"          => "nullable|string",
+        ]);
+        $sale->update($data);
+        // Deduct stock when converting from draft/quotation to completed
+        if (!$wasCompleted && isset($data["status"]) && $data["status"] === "completed") {
+            foreach ($sale->items as $item) {
+                if ($item->product_id) {
+                    Product::find($item->product_id)?->decrement("stock_quantity", $item->quantity);
+                }
+            }
+        }
+        return response()->json(["success"=>true,"sale"=>$sale->load(["customer","items"])]);
+    }
     public function destroy(Sale $sale) { $sale->delete(); return response()->json(["success"=>true]); }
 }
