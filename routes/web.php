@@ -376,6 +376,16 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::post('users/{user}/block',  [AdminUsersController::class, 'block'])->name('users.block');
     Route::post('users/{user}/unblock',[AdminUsersController::class, 'unblock'])->name('users.unblock');
 
+    // ── Roles ──
+    Route::get('roles',                [\App\Http\Controllers\Dashboard\RoleController::class, 'index'])->name('roles.list');
+    Route::post('roles',               [\App\Http\Controllers\Dashboard\RoleController::class, 'store'])->name('roles.store');
+    Route::get('roles/{role}',         [\App\Http\Controllers\Dashboard\RoleController::class, 'show'])->name('roles.show');
+    Route::put('roles/{role}',         [\App\Http\Controllers\Dashboard\RoleController::class, 'update'])->name('roles.update');
+    Route::delete('roles/{role}',      [\App\Http\Controllers\Dashboard\RoleController::class, 'destroy'])->name('roles.destroy');
+
+    // ── Sales Agents ──
+    Route::get('sales-agents',         [AdminUsersController::class, 'list'])->name('sales-agents.list');
+
     // ── Staff ──
     Route::get('staff',                [AdminStaffController::class, 'list'])->name('staff.list');
     Route::post('staff',               [AdminStaffController::class, 'store'])->name('staff.store');
