@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\SystemConfig;
 use App\Models\BusinessCategory;
 use App\Models\PaymentGateway;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
