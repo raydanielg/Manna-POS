@@ -10,18 +10,18 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" id="profile_name" value="{{ Auth::user()->name ?? '' }}">
+                    <input type="text" class="form-control" name="name" id="profile_name" value="{{ Auth::user()->name ?? '' }}">
                     <div class="invalid-feedback"></div>
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" class="form-control" id="profile_email" value="{{ Auth::user()->email ?? '' }}">
+                    <input type="email" class="form-control" name="email" id="profile_email" value="{{ Auth::user()->email ?? '' }}">
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
             <div class="form-group">
                 <label>Phone</label>
-                <input type="text" class="form-control" id="profile_phone" value="{{ Auth::user()->phone ?? '' }}">
+                <input type="text" class="form-control" name="phone" id="profile_phone" value="{{ Auth::user()->phone ?? '' }}">
                 <div class="invalid-feedback"></div>
             </div>
             <div style="border-top:1px solid #f1f5f9;padding-top:1.25rem;margin-top:0.5rem;">
@@ -29,18 +29,18 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Current Password</label>
-                        <input type="password" class="form-control" id="current_password">
+                        <input type="password" class="form-control" name="current_password" id="current_password">
                         <div class="invalid-feedback"></div>
                     </div>
                     <div class="form-group">
                         <label>New Password</label>
-                        <input type="password" class="form-control" id="new_password">
+                        <input type="password" class="form-control" name="password" id="new_password">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Confirm New Password</label>
-                    <input type="password" class="form-control" id="new_password_confirmation">
+                    <input type="password" class="form-control" name="password_confirmation" id="new_password_confirmation">
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
