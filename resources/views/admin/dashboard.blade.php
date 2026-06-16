@@ -92,66 +92,31 @@
 @section('scripts')
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-async function loadDashboard() {
+(async function() {
     try {
-        const users = await apiFetch('/api/admin/users?per_page=1');
-        if (users.total) {
-            document.getElementById('totalUsers').textContent = users.total.toLocaleString();
-        }
-    } catch(e) {}
-    try {
-        const biz = await apiFetch('/api/admin/business');
-        if (Array.isArray(biz)) {
-            document.getElementById('totalBusinesses').textContent = biz.length.toLocaleString();
-        }
-    } catch(e) {}
-    try {
-        const subs = await apiFetch('/api/admin/subscriptions');
-        if (subs.data) {
-            const active = subs.data.filter(s => s.status === 'active').length;
-            document.getElementById('activeSubs').textContent = active.toLocaleString();
-        }
-    } catch(e) {}
-    try {
-        const tickets = await apiFetch('/api/admin/support/tickets');
-        if (Array.isArray(tickets)) {
-            document.getElementById('pendingTickets').textContent = tickets.filter(t => t.status === 'open').length;
-        }
-    } catch(e) {}
-    try {
-        const fin = await apiFetch('/api/admin/finance/revenue');
-        if (fin.year_total) document.getElementById('totalRevenue').textContent = fin.year_total;
-    } catch(e) {}
-    try {
-        const from = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
-        const today = new Date().toISOString().split('T')[0];
-        const sales = await apiFetch(`/api/dashboard/sales?from=${from}&to=${today}&per_page=1`);
-        if (sales.total) document.getElementById('newBizThisMonth').textContent = sales.total;
-    } catch(e) {}
-    try {
-        const ver = await apiFetch('/api/admin/business/verifications');
-        if (Array.isArray(ver)) document.getElementById('pendingVerifications').textContent = ver.filter(v => v.status === 'pending').length;
-    } catch(e) {}
-}
+        const d = await apiFetch('/api/admin/stats');
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val ?? '-'; };
+        set('totalRevenue', d.total_revenue);
+        set('totalUsers', d.total_users?.toLocaleString());
+        set('totalBusinesses', d.total_businesses?.toLocaleString());
+        set('activeSubs', d.active_subscriptions?.toLocaleString());
+        set('newUsersThisMonth', d.new_users_month?.toLocaleString());
+        set('newBizThisMonth', d.new_biz_month?.toLocaleString());
+        set('pendingTickets', d.pending_tickets?.toLocaleString());
+        set('pendingVerifications', d.pending_verifications?.toLocaleString());
+    } catch (e) { console.warn('Dashboard stats fetch failed', e); }
+})();
 
-// Charts with sample data
-new Chart(document.getElementById('revenueChart'), {
-    type: 'line',
-    data: {
-        labels: months,
-        datasets: [{ label: 'Revenue', data: Array(12).fill(0), borderColor: '#e03057', backgroundColor: 'rgba(224,48,87,0.1)', fill: true, tension: 0.4 }]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
-});
-
-new Chart(document.getElementById('userChart'), {
-    type: 'line',
-    data: {
-        labels: months,
-        datasets: [{ label: 'Users', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', fill: true, tension: 0.4 }]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
-});
-
-loadDashboard();
+try {
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: { labels: months, datasets: [{ label: 'Revenue', data: Array(12).fill(0), borderColor: '#e03057', backgroundColor: 'rgba(224,48,87,0.1)', fill: true, tension: 0.4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
+    });
+    new Chart(document.getElementById('userChart'), {
+        type: 'line',
+        data: { labels: months, datasets: [{ label: 'Users', data: Array(12).fill(0), borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', fill: true, tension: 0.4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
+    });
+} catch (e) { console.warn('Chart init failed', e); }
 @endsection
