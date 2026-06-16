@@ -42,7 +42,7 @@ class DashboardApiController extends Controller {
             ->join('sales','sale_items.sale_id','=','sales.id')
             ->join('products','sale_items.product_id','=','products.id')
             ->where('sales.created_by',$uid)
-            ->select('products.name',DB::raw('SUM(sale_items.quantity) as total_qty'),DB::raw('SUM(sale_items.subtotal) as total_revenue'))
+            ->select('products.name',DB::raw('SUM(sale_items.quantity) as total_qty'),DB::raw('SUM(sale_items.total) as total_revenue'))
             ->groupBy('products.id','products.name')
             ->orderByDesc('total_revenue')
             ->take(5)->get();
