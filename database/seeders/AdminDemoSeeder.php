@@ -245,7 +245,6 @@ class AdminDemoSeeder extends Seeder
         ]);
 
         // ── Expense Categories ──
-        ExpenseCategory::truncate();
         ExpenseCategory::insert([
             ['name' => 'Rent', 'description' => 'Shop and office rent payments'],
             ['name' => 'Utilities', 'description' => 'Electricity, water, internet bills'],
