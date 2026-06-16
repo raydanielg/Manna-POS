@@ -317,6 +317,9 @@ use App\Http\Controllers\Dashboard\PurchaseController;
 use App\Http\Controllers\Dashboard\SaleController;
 use App\Http\Controllers\Dashboard\UserManagementController;
 use App\Http\Controllers\Dashboard\PlanManagementController;
+use App\Http\Controllers\Dashboard\ShipmentController;
+use App\Http\Controllers\Dashboard\SellingPriceGroupController;
+use App\Http\Controllers\Dashboard\ProductVariationController;
 
 Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('suppliers',              SupplierController::class);
@@ -338,6 +341,9 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('purchases',              PurchaseController::class);
     Route::apiResource('sales',                  SaleController::class);
     Route::apiResource('users',                  UserManagementController::class);
+    Route::apiResource('shipments',              ShipmentController::class);
+    Route::apiResource('selling-price-groups',   SellingPriceGroupController::class);
+    Route::apiResource('product-variations',     ProductVariationController::class);
 
     // Plan Management API
     Route::get('plans/stats',             [PlanManagementController::class, 'statsPlans']);
