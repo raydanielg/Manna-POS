@@ -362,7 +362,8 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     // Settings API
     Route::get('settings', function(\Illuminate\Http\Request $req) {
         $u = auth()->user();
-        return response()->json([
+        $pos = $u->pos_settings ? json_decode($u->pos_settings, true) : [];
+        return response()->json(array_merge([
             'business_name'    => $u->business_name,
             'business_email'   => $u->email,
             'phone'            => $u->phone,
@@ -372,7 +373,7 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
             'currency'         => $u->currency,
             'fy_start'         => $u->fiscal_year_start,
             'tax_number'       => $u->tax_percentage,
-        ]);
+        ], $pos));
     });
     Route::put('settings', function(\Illuminate\Http\Request $req) {
         $u = auth()->user();
@@ -385,6 +386,15 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
         if ($req->has('currency'))       $fill['currency']           = $req->currency;
         if ($req->has('fy_start'))       $fill['fiscal_year_start']  = $req->fy_start;
         if ($req->has('tax_number'))     $fill['tax_percentage']     = $req->tax_number;
+        // POS-specific settings (invoice + barcode) stored as JSON
+        $posKeys = ['invoice_title','invoice_prefix','invoice_header','invoice_footer','payment_terms',
+                    'show_logo','show_tax_number','barcode_type','barcode_height','label_size',
+                    'label_width','label_height','label_show_name','label_show_price','label_show_sku','barcode_copies'];
+        $existing = $u->pos_settings ? json_decode($u->pos_settings, true) : [];
+        foreach ($posKeys as $k) {
+            if ($req->has($k)) $existing[$k] = $req->input($k);
+        }
+        $fill['pos_settings'] = json_encode($existing);
         if (!empty($fill)) $u->update($fill);
         if ($req->business_email && $req->business_email !== $u->email) {
             $u->email = $req->business_email;
