@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../shared/theme/app_theme.dart';
+import '../../shared/theme/app_colors.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -14,57 +15,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
   int _current = 0;
   bool _showDownload = false;
 
-  static const _slides = [
-    _SlideData(
-      icon: Icons.point_of_sale_rounded,
-      accentColor: Color(0xFF2563EB),
-      bgColor: Color(0xFFEFF6FF),
-      featureIcons: [
-        _FeatureIcon(Icons.label_rounded, Color(0xFF10B981)),
-        _FeatureIcon(Icons.shopping_cart_rounded, Color(0xFFEF4444)),
-        _FeatureIcon(Icons.people_alt_rounded, Color(0xFF2563EB)),
-        _FeatureIcon(Icons.receipt_long_rounded, Color(0xFF6366F1)),
-        _FeatureIcon(Icons.payments_rounded, Color(0xFF10B981)),
-        _FeatureIcon(Icons.inventory_2_rounded, Color(0xFFF59E0B)),
-      ],
-      badgeText: 'All In One Place',
-      title: 'Business on Your Mobile',
-      subtitle: 'Manage your POS, inventory & customers easily from your mobile at your fingertip.',
-    ),
-    _SlideData(
-      icon: Icons.bar_chart_rounded,
-      accentColor: Color(0xFF10B981),
-      bgColor: Color(0xFFECFDF5),
-      featureIcons: [],
-      badgeText: '',
-      title: 'Insightful Sales Reports',
-      subtitle: 'Make smarter business decisions with real-time sales and performance reports.',
-      isChart: true,
-    ),
-    _SlideData(
-      icon: Icons.wifi_off_rounded,
-      accentColor: Color(0xFF6366F1),
-      bgColor: Color(0xFFF0F0FF),
-      featureIcons: [],
-      badgeText: '',
-      title: 'Works Offline & Online',
-      subtitle: 'Run your business anytime seamlessly even without an internet connection.',
-      isOffline: true,
-    ),
-    _SlideData(
-      icon: Icons.lock_rounded,
-      accentColor: Color(0xFF10B981),
-      bgColor: Color(0xFFECFDF5),
-      featureIcons: [
-        _FeatureIcon(Icons.cloud_upload_rounded, Color(0xFF10B981)),
-        _FeatureIcon(Icons.support_agent_rounded, Color(0xFF2563EB)),
-        _FeatureIcon(Icons.card_giftcard_rounded, Color(0xFFF59E0B)),
-        _FeatureIcon(Icons.volunteer_activism_rounded, Color(0xFFEF4444)),
-      ],
-      badgeText: '',
-      title: 'Secure & Reliable',
-      subtitle: 'Your data is securely stored and backed up which you can recover anytime.',
-    ),
+  final _slides = const [
+    _SlideData('Manage Your Business', 'Track sales, inventory, and customers all in one place. Run your business from anywhere.', Icons.store_rounded, 'Point of Sale'),
+    _SlideData('Smart Reports', 'Get real-time insights into your business performance with beautiful charts and analytics.', Icons.bar_chart_rounded, 'Analytics'),
+    _SlideData('Works Offline', 'Continue working even without internet. Your data syncs automatically when you are back online.', Icons.wifi_off_rounded, 'Offline Mode'),
+    _SlideData('Secure & Reliable', 'Your business data is encrypted and backed up. Focus on growing your business with peace of mind.', Icons.shield_rounded, 'Security'),
   ];
 
   void _next() {
@@ -75,74 +30,72 @@ class _OnboardingPageState extends State<OnboardingPage> {
     }
   }
 
-  void _skip() => _startDownload();
-
-  void _startDownload() {
-    setState(() => _showDownload = true);
+  void _skip() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Skip Onboarding?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        content: const Text('You can always view this again. Are you sure?', style: TextStyle(fontSize: 14, color: AppColors.textSec)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          ElevatedButton(
+            onPressed: () { Navigator.pop(ctx); _startDownload(); },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.orange, foregroundColor: Colors.white),
+            child: const Text('Skip'),
+          ),
+        ],
+      ),
+    );
   }
+
+  void _startDownload() => setState(() => _showDownload = true);
 
   @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
+  void dispose() { _ctrl.dispose(); super.dispose(); }
 
   @override
   Widget build(BuildContext context) {
-    if (_showDownload) return _DownloadDataScreen();
-
+    if (_showDownload) return const _DownloadScreen();
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
         child: Column(
           children: [
-            // Header with logo + language
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Row(
                 children: [
                   Container(
-                    width: 36, height: 36,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryLt,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(Icons.point_of_sale_rounded, color: AppColors.primary, size: 20),
+                    width: 40, height: 40,
+                    decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12)),
+                    child: const Icon(Icons.store_rounded, color: Colors.white, size: 22),
                   ),
                   const SizedBox(width: 10),
-                  const Text('MannaPOS', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.textPri)),
+                  const Text('MannaPOS', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primary)),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: _skip,
-                    child: const Text('Skip', style: TextStyle(fontSize: 14, color: AppColors.textSec, fontWeight: FontWeight.w500)),
-                  ),
+                  GestureDetector(onTap: _skip, child: const Text('Skip', style: TextStyle(fontSize: 14, color: AppColors.textSec, fontWeight: FontWeight.w500))),
                 ],
               ),
             ),
-
-            // Slides
             Expanded(
               child: PageView.builder(
                 controller: _ctrl,
                 onPageChanged: (i) => setState(() => _current = i),
                 itemCount: _slides.length,
-                itemBuilder: (_, i) => _SlidePage(slide: _slides[i]),
+                itemBuilder: (_, i) => _SlideContent(slide: _slides[i]),
               ),
             ),
-
-            // Bottom section: dots + buttons
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
               child: Column(
                 children: [
-                  // Dot indicators
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(_slides.length, (i) => AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: _current == i ? 24 : 8,
-                      height: 8,
+                      width: _current == i ? 24 : 8, height: 8,
                       decoration: BoxDecoration(
                         color: _current == i ? AppColors.primary : AppColors.border,
                         borderRadius: BorderRadius.circular(4),
@@ -150,39 +103,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     )),
                   ),
                   const SizedBox(height: 28),
-                  // Buttons row
                   Row(
                     children: [
-                      // Skip / Back button
                       Expanded(
                         child: OutlinedButton(
                           onPressed: _skip,
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: AppColors.border),
-                            foregroundColor: AppColors.textSec,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          ),
+                          style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.border), padding: const EdgeInsets.symmetric(vertical: 16)),
                           child: const Text('Skip', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Next / Get Started button
                       Expanded(
                         flex: 2,
                         child: ElevatedButton(
                           onPressed: _next,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          ),
-                          child: Text(
-                            _current == _slides.length - 1 ? 'Get Started' : 'Next',
-                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                          ),
+                          child: Text(_current == _slides.length - 1 ? 'Get Started' : 'Next', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
                         ),
                       ),
                     ],
@@ -197,236 +132,45 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 }
 
-// ─── Slide Page ────────────────────────────────────────────────────────────────
-class _SlidePage extends StatelessWidget {
-  final _SlideData slide;
-  const _SlidePage({required this.slide});
+class _SlideData {
+  final String title, subtitle, badge;
+  final IconData icon;
+  const _SlideData(this.title, this.subtitle, this.icon, this.badge);
+}
 
+class _SlideContent extends StatelessWidget {
+  final _SlideData slide;
+  const _SlideContent({required this.slide});
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
-          const SizedBox(height: 8),
-          // Phone mockup area
+          const SizedBox(height: 20),
           Expanded(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Decorative sparkle top-right
-                Positioned(
-                  top: 10, right: 10,
-                  child: _Sparkle(color: const Color(0xFF06B6D4)),
+            child: Center(
+              child: Container(
+                width: 140, height: 140,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLt, borderRadius: BorderRadius.circular(32),
                 ),
-                // Decorative circle bottom-right
-                Positioned(
-                  bottom: 20, right: 20,
-                  child: Container(
-                    width: 14, height: 14,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF2563EB), width: 2),
-                    ),
-                  ),
-                ),
-                // Decorative triangle left
-                Positioned(
-                  left: 10, top: 100,
-                  child: _Triangle(color: const Color(0xFFF97316).withOpacity(0.7)),
-                ),
-                // Phone frame
-                _PhoneFrame(slide: slide),
-              ],
+                child: Icon(slide.icon, size: 64, color: AppColors.primary),
+              ),
             ),
           ),
           const SizedBox(height: 24),
-          // Title
-          Text(
-            slide.title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: AppColors.textPri),
-          ),
-          const SizedBox(height: 10),
-          // Subtitle
-          Text(
-            slide.subtitle,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, color: AppColors.textSec, height: 1.55),
-          ),
-          const SizedBox(height: 16),
-        ],
-      ),
-    );
-  }
-}
-
-// ─── Phone Frame ───────────────────────────────────────────────────────────────
-class _PhoneFrame extends StatelessWidget {
-  final _SlideData slide;
-  const _PhoneFrame({required this.slide});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 220,
-      height: 320,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 2),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 24, offset: const Offset(0, 8)),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(26),
-        child: Column(
-          children: [
-            // Mini status bar
-            Container(
-              height: 28,
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('9:41', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textPri)),
-                  Row(children: const [
-                    Icon(Icons.signal_cellular_alt, size: 12, color: AppColors.textPri),
-                    SizedBox(width: 3),
-                    Icon(Icons.wifi, size: 12, color: AppColors.textPri),
-                  ]),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: const Color(0xFFF8F9FA),
-                child: _buildContent(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildContent() {
-    if (slide.isChart) return _ChartContent();
-    if (slide.isOffline) return _OfflineContent();
-
-    // Default: icon grid
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Lock / main icon at top
-          Container(
-            width: 44, height: 44,
-            decoration: BoxDecoration(
-              color: slide.bgColor,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(slide.icon, color: slide.accentColor, size: 22),
-          ),
-          const SizedBox(height: 8),
-          if (slide.featureIcons.isNotEmpty) ...[
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: 1.3,
-              children: slide.featureIcons.map((fi) => Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4)],
-                ),
-                child: Icon(fi.icon, color: fi.color, size: 18),
-              )).toList(),
-            ),
-            if (slide.badgeText.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6)],
-                ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(Icons.check_circle_rounded, size: 12, color: Color(0xFF10B981)),
-                  const SizedBox(width: 4),
-                  Text(slide.badgeText, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.textPri)),
-                ]),
-              ),
-            ],
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-// ─── Chart Content (slide 2) ───────────────────────────────────────────────────
-class _ChartContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    const bars = [
-      _BarData(0.35, Color(0xFF10B981)),
-      _BarData(0.55, Color(0xFFEF4444)),
-      _BarData(0.70, Color(0xFF2563EB)),
-      _BarData(0.90, Color(0xFFF59E0B)),
-    ];
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(width: 70, height: 6, decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(4))),
-          const SizedBox(height: 3),
-          Container(width: 50, height: 6, decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(4))),
+          Text(slide.title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.textPri)),
           const SizedBox(height: 12),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: bars.map((b) => Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: FractionallySizedBox(
-                    heightFactor: b.height,
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: b.color,
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                      ),
-                    ),
-                  ),
-                ),
-              )).toList(),
+          Text(slide.subtitle, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, color: AppColors.textSec, height: 1.5)),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.primaryLt, borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.primaryLight, width: 1),
             ),
-          ),
-          const SizedBox(height: 6),
-          // Donut badge
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              width: 36, height: 36,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6)],
-              ),
-              child: const Center(
-                child: Text('%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF10B981))),
-              ),
-            ),
+            child: Text(slide.badge, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.primary)),
           ),
         ],
       ),
@@ -434,54 +178,13 @@ class _ChartContent extends StatelessWidget {
   }
 }
 
-// ─── Offline Content (slide 3) ─────────────────────────────────────────────────
-class _OfflineContent extends StatelessWidget {
+class _DownloadScreen extends StatefulWidget {
+  const _DownloadScreen();
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              const Icon(Icons.wifi_rounded, size: 40, color: Color(0xFF94A3B8)),
-              Positioned(
-                bottom: 0, right: 0,
-                child: Container(
-                  width: 16, height: 16,
-                  decoration: const BoxDecoration(color: Color(0xFFEF4444), shape: BoxShape.circle),
-                  child: const Icon(Icons.warning_rounded, size: 10, color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          ...List.generate(4, (i) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 3),
-            child: Row(children: [
-              const Icon(Icons.check_rounded, size: 12, color: Color(0xFF10B981)),
-              const SizedBox(width: 6),
-              Expanded(child: Container(
-                height: 6,
-                decoration: BoxDecoration(color: const Color(0xFFE5E7EB), borderRadius: BorderRadius.circular(3)),
-              )),
-            ]),
-          )),
-        ],
-      ),
-    );
-  }
+  State<_DownloadScreen> createState() => _DownloadScreenState();
 }
 
-// ─── Download Data Screen ──────────────────────────────────────────────────────
-class _DownloadDataScreen extends StatefulWidget {
-  @override
-  State<_DownloadDataScreen> createState() => _DownloadDataScreenState();
-}
-
-class _DownloadDataScreenState extends State<_DownloadDataScreen> with SingleTickerProviderStateMixin {
+class _DownloadScreenState extends State<_DownloadScreen> with SingleTickerProviderStateMixin {
   double _progress = 0;
   late AnimationController _spinCtrl;
   Timer? _timer;
@@ -510,15 +213,39 @@ class _DownloadDataScreenState extends State<_DownloadDataScreen> with SingleTic
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboarding_done', true);
     if (!mounted) return;
-    Navigator.pushReplacementNamed(context, '/login');
+    showModalBottomSheet(
+      context: context, isDismissible: false, backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 60, height: 60,
+              decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
+              child: const Icon(Icons.check_rounded, color: Colors.white, size: 32),
+            ),
+            const SizedBox(height: 20),
+            const Text('Setup Complete!', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.textPri)),
+            const SizedBox(height: 8),
+            const Text('Your MannaPOS is ready. Lets start selling!', textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: AppColors.textSec, height: 1.5)),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () { Navigator.pop(ctx); context.go('/login'); },
+                child: const Text('Get Started', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
-  void dispose() {
-    _spinCtrl.dispose();
-    _timer?.cancel();
-    super.dispose();
-  }
+  void dispose() { _spinCtrl.dispose(); _timer?.cancel(); super.dispose(); }
 
   @override
   Widget build(BuildContext context) {
@@ -532,99 +259,39 @@ class _DownloadDataScreenState extends State<_DownloadDataScreen> with SingleTic
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Cloud + spin illustration
-                SizedBox(
-                  width: 200, height: 200,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Cloud background
-                      Container(
-                        width: 140, height: 110,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEFF6FF),
-                          borderRadius: BorderRadius.circular(60),
-                        ),
-                      ),
-                      // Spinning arrows
-                      RotationTransition(
-                        turns: _spinCtrl,
-                        child: Icon(
-                          Icons.sync_rounded,
-                          size: 52,
-                          color: _done ? AppColors.success : const Color(0xFF94A3B8),
-                        ),
-                      ),
-                      // Cart icon below cloud
-                      Positioned(
-                        bottom: 20,
-                        child: Container(
-                          width: 36, height: 36,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 8)],
-                          ),
-                          child: const Icon(Icons.point_of_sale_rounded, color: AppColors.primary, size: 20),
-                        ),
-                      ),
-                      // Sparkle decoration
-                      const Positioned(
-                        top: 10, right: 20,
-                        child: _Sparkle(color: Color(0xFF10B981)),
-                      ),
-                      // Circle decoration
-                      Positioned(
-                        bottom: 30, right: 10,
-                        child: Container(
-                          width: 12, height: 12,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.primary, width: 2),
-                          ),
-                        ),
-                      ),
-                      // Triangle
-                      const Positioned(
-                        left: 10, top: 80,
-                        child: _Triangle(color: Color(0xFFFB923C)),
-                      ),
-                    ],
-                  ),
+                Container(
+                  width: 80, height: 80,
+                  decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(20)),
+                  child: const Icon(Icons.store_rounded, color: Colors.white, size: 44),
                 ),
-
-                const SizedBox(height: 20),
-
-                // Progress bar
+                const SizedBox(height: 24),
+                RotationTransition(
+                  turns: _spinCtrl,
+                  child: Icon(Icons.sync_rounded, size: 60,
+                    color: _done ? AppColors.success : AppColors.primary),
+                ),
+                const SizedBox(height: 32),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   child: LinearProgressIndicator(
-                    value: _progress,
-                    minHeight: 8,
-                    backgroundColor: AppColors.border,
+                    value: _progress, minHeight: 10,
+                    backgroundColor: const Color(0xFFE5E7EB),
                     valueColor: AlwaysStoppedAnimation<Color>(_done ? AppColors.success : AppColors.primary),
                   ),
                 ),
-
-                const SizedBox(height: 28),
-
-                Text(
-                  _done ? 'Download Complete! (100%)' : 'Downloading your Data ($pct%)',
+                const SizedBox(height: 24),
+                Text(_done ? 'Setup Complete!' : 'Setting up MannaPOS',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: _done ? AppColors.success : AppColors.textPri,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _done
-                    ? 'All done! Taking you to the app...'
-                    : 'We are downloading your data to your mobile phone for you to use offline. This might take some minutes to complete, please don\'t close or switch the app while downloading.',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800,
+                    color: _done ? AppColors.success : AppColors.primary)),
+                const SizedBox(height: 8),
+                Text('$pct%', textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: AppColors.textPri)),
+                const SizedBox(height: 16),
+                Text(_done ? 'All done! Taking you to the app...'
+                  : 'Setting up your experience. This will only take a moment.',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 13, color: AppColors.textSec, height: 1.6),
-                ),
+                  style: const TextStyle(fontSize: 14, color: AppColors.textSec, height: 1.5)),
               ],
             ),
           ),
@@ -632,94 +299,4 @@ class _DownloadDataScreenState extends State<_DownloadDataScreen> with SingleTic
       ),
     );
   }
-}
-
-// ─── Data Models ───────────────────────────────────────────────────────────────
-class _SlideData {
-  final IconData icon;
-  final Color accentColor;
-  final Color bgColor;
-  final List<_FeatureIcon> featureIcons;
-  final String badgeText;
-  final String title;
-  final String subtitle;
-  final bool isChart;
-  final bool isOffline;
-
-  const _SlideData({
-    required this.icon,
-    required this.accentColor,
-    required this.bgColor,
-    required this.featureIcons,
-    required this.badgeText,
-    required this.title,
-    required this.subtitle,
-    this.isChart = false,
-    this.isOffline = false,
-  });
-}
-
-class _FeatureIcon {
-  final IconData icon;
-  final Color color;
-  const _FeatureIcon(this.icon, this.color);
-}
-
-class _BarData {
-  final double height;
-  final Color color;
-  const _BarData(this.height, this.color);
-}
-
-// ─── Decorative widgets ────────────────────────────────────────────────────────
-class _Sparkle extends StatelessWidget {
-  final Color color;
-  const _Sparkle({required this.color});
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(painter: _SparklePainter(color), size: const Size(20, 20));
-  }
-}
-
-class _SparklePainter extends CustomPainter {
-  final Color color;
-  _SparklePainter(this.color);
-  @override
-  void paint(Canvas canvas, Size size) {
-    final p = Paint()..color = color..strokeWidth = 2..strokeCap = StrokeCap.round;
-    final cx = size.width / 2; final cy = size.height / 2;
-    canvas.drawLine(Offset(cx, 0), Offset(cx, size.height), p);
-    canvas.drawLine(Offset(0, cy), Offset(size.width, cy), p);
-    canvas.drawLine(Offset(cx - 5, cy - 5), Offset(cx + 5, cy + 5), p..strokeWidth = 1.5);
-    canvas.drawLine(Offset(cx + 5, cy - 5), Offset(cx - 5, cy + 5), p);
-  }
-  @override
-  bool shouldRepaint(_) => false;
-}
-
-class _Triangle extends StatelessWidget {
-  final Color color;
-  const _Triangle({required this.color});
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(painter: _TrianglePainter(color), size: const Size(14, 14));
-  }
-}
-
-class _TrianglePainter extends CustomPainter {
-  final Color color;
-  _TrianglePainter(this.color);
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawPath(
-      Path()
-        ..moveTo(0, size.height)
-        ..lineTo(size.width / 2, 0)
-        ..lineTo(size.width, size.height)
-        ..close(),
-      Paint()..color = color,
-    );
-  }
-  @override
-  bool shouldRepaint(_) => false;
 }
