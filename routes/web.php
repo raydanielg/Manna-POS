@@ -368,6 +368,9 @@ use App\Http\Controllers\Admin\AdminFileManagerController;
 
 Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->group(function () {
 
+    // ── Profile ──
+    Route::put('profile',              [AdminController::class, 'updateProfile'])->name('profile.update');
+
     // ── Users ──
     Route::get('users',                [AdminUsersController::class, 'list'])->name('users.list');
     Route::post('users',               [AdminUsersController::class, 'store'])->name('users.store');
