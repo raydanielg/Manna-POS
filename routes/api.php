@@ -8,6 +8,16 @@ use App\Http\Controllers\Api\CustomerApiController;
 use App\Http\Controllers\Api\SaleApiController;
 use App\Http\Controllers\Api\ExpenseApiController;
 use App\Http\Controllers\Api\ReportApiController;
+use App\Http\Controllers\Api\PurchaseApiController;
+use App\Http\Controllers\Api\SupplierApiController;
+use App\Http\Controllers\Api\StockAdjustmentApiController;
+use App\Http\Controllers\Api\StockTransferApiController;
+use App\Http\Controllers\Api\DiscountApiController;
+use App\Http\Controllers\Api\BrandApiController;
+use App\Http\Controllers\Api\ProductCategoryApiController;
+use App\Http\Controllers\Api\UnitApiController;
+use App\Http\Controllers\Api\TaxRateApiController;
+use App\Http\Controllers\Api\WarrantyApiController;
 use App\Models\ProductCategory;
 use App\Models\Brand;
 use App\Models\Unit;
@@ -58,6 +68,36 @@ Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
     Route::get('expense-categories',   fn() => response()->json(ExpenseCategory::select('id','name')->orderBy('name')->get()))->name('expense-categories');
     Route::get('users',                fn() => response()->json(\App\Models\User::select('id','name','email','role','business_name','business_city','business_country','currency','created_at')->orderBy('name')->get()))->name('users');
     Route::get('businesses',           fn() => response()->json(Business::with('category:id,name')->orderBy('business_name')->get()))->name('businesses');
+
+    // Purchases
+    Route::apiResource('purchases', PurchaseApiController::class)->names('purchases');
+
+    // Suppliers (full CRUD)
+    Route::apiResource('suppliers', SupplierApiController::class)->names('suppliers');
+
+    // Stock Adjustments
+    Route::apiResource('stock-adjustments', StockAdjustmentApiController::class)->names('stock-adjustments');
+
+    // Stock Transfers
+    Route::apiResource('stock-transfers', StockTransferApiController::class)->names('stock-transfers');
+
+    // Discounts
+    Route::apiResource('discounts', DiscountApiController::class)->names('discounts');
+
+    // Brands (full CRUD)
+    Route::apiResource('brands', BrandApiController::class)->names('brands');
+
+    // Categories (full CRUD)
+    Route::apiResource('product-categories', ProductCategoryApiController::class)->names('product-categories');
+
+    // Units (full CRUD)
+    Route::apiResource('units', UnitApiController::class)->names('units');
+
+    // Tax Rates
+    Route::apiResource('tax-rates', TaxRateApiController::class)->names('tax-rates');
+
+    // Warranties
+    Route::apiResource('warranties', WarrantyApiController::class)->names('warranties');
 
     // Staff management
     Route::get('staff',           [App\Http\Controllers\Api\StaffApiController::class, 'index']);
