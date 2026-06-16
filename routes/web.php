@@ -369,6 +369,9 @@ use App\Http\Controllers\Admin\AdminFileManagerController;
 
 Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->group(function () {
 
+    // ── Dashboard ──
+    Route::get('stats',                [AdminController::class, 'stats'])->name('stats');
+
     // ── Profile ──
     Route::put('profile',              [AdminController::class, 'updateProfile'])->name('profile.update');
 
