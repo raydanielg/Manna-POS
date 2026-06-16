@@ -141,7 +141,7 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     Route::get('/contacts/import-contacts', function () { return view('dashboard.contacts.import-contacts'); })->name('dashboard.contacts.import-contacts');
 
     // Products Routes
-    Route::get('/inventory/list-products', function () { return view('dashboard.inventory.list-products'); })->name('dashboard.inventory.list-products');
+    Route::get('/inventory/list-products', [App\Http\Controllers\Dashboard\ProductController::class, 'create'])->name('dashboard.inventory.list-products');
     Route::get('/inventory/add-product', function () { return view('dashboard.inventory.add-product'); })->name('dashboard.inventory.add-product');
     Route::get('/inventory/update-price', function () { return view('dashboard.inventory.update-price'); })->name('dashboard.inventory.update-price');
     Route::get('/inventory/print-labels', function () { return view('dashboard.inventory.print-labels'); })->name('dashboard.inventory.print-labels');
