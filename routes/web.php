@@ -353,6 +353,7 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
 });
 
 // ─── Admin API Routes ──────────────────────────────────────────────────────
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminStaffController;
 use App\Http\Controllers\Admin\AdminBusinessController;
 use App\Http\Controllers\Admin\AdminBillingController;

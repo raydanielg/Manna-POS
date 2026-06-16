@@ -329,7 +329,7 @@
                         <div style="font-size:0.75rem;color:#64748b;">Signed in as</div>
                         <div style="font-size:0.8rem;font-weight:700;color:#0f172a;">{{ Auth::user()->name ?? 'Admin' }}</div>
                     </div>
-                    <a href="{{ route('admin.dashboard') }}" class="header-dropdown-item" style="padding:0.6rem 1rem;">
+                    <a href="{{ route('admin.profile') }}" class="header-dropdown-item" style="padding:0.6rem 1rem;">
                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/></svg>
                         Profile
                     </a>
