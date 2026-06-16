@@ -29,6 +29,7 @@ use App\Models\UserSubscription;
 use App\Models\Warranty;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AdminDemoSeeder extends Seeder
 {
@@ -96,16 +97,12 @@ class AdminDemoSeeder extends Seeder
 
         // ── Subscription Plans ──
         SubscriptionPlan::truncate();
-        echo "Seeding SubscriptionPlans...\n";
-        $plans = [
-            ['name' => 'Starter', 'slug' => 'starter', 'description' => 'Perfect for small shops just getting started with digital POS.', 'price_monthly' => 0, 'price_yearly' => 0, 'currency' => 'TZS', 'max_users' => 1, 'max_products' => 100, 'max_locations' => 1,                 'features' => '["Basic Sales","Inventory (up to 100 products)","Cash Payments","Daily Reports"]', 'is_active' => true, 'is_featured' => false, 'sort_order' => 1, 'badge_color' => '#94a3b8'],
-            ['name' => 'Growth', 'slug' => 'growth', 'description' => 'For growing businesses that need inventory management and reports.', 'price_monthly' => 45000, 'price_yearly' => 450000, 'currency' => 'TZS', 'max_users' => 3, 'max_products' => 1000, 'max_locations' => 2, 'features' => '["Everything in Starter","Up to 3 Users","Inventory (1,000 products)","Mobile Money Payments","Customer Profiles","Sales Analytics"]', 'is_active' => true, 'is_featured' => true, 'sort_order' => 2, 'badge_color' => '#2563eb'],
-            ['name' => 'Business', 'slug' => 'business', 'description' => 'For established businesses with multiple staff and locations.', 'price_monthly' => 95000, 'price_yearly' => 950000, 'currency' => 'TZS', 'max_users' => 10, 'max_products' => 10000, 'max_locations' => 5, 'features' => '["Everything in Growth","Up to 10 Users","Multi-Location (5 branches)","Staff Management","Purchase Orders","Barcode Scanning","Advanced Reports"]', 'is_active' => true, 'is_featured' => true, 'sort_order' => 3, 'badge_color' => '#16a34a'],
-            ['name' => 'Enterprise', 'slug' => 'enterprise', 'description' => 'For large organizations with advanced needs and dedicated support.', 'price_monthly' => 250000, 'price_yearly' => 2500000, 'currency' => 'TZS', 'max_users' => 50, 'max_products' => 999999, 'max_locations' => 50, 'features' => '["Everything in Business","Unlimited Products","Up to 50 Users","50 Locations","API Access","Dedicated Account Manager","Priority Support","Custom Integrations"]', 'is_active' => true, 'is_featured' => false, 'sort_order' => 4, 'badge_color' => '#7c3aed'],
-        ];
-        foreach ($plans as $p) {
-            SubscriptionPlan::create($p);
-        }
+        DB::table('subscription_plans')->insert([
+            ['name' => 'Starter', 'slug' => 'starter', 'description' => 'Perfect for small shops just getting started with digital POS.', 'price_monthly' => 0, 'price_yearly' => 0, 'currency' => 'TZS', 'max_users' => 1, 'max_products' => 100, 'max_locations' => 1, 'features' => '["Basic Sales","Inventory (up to 100 products)","Cash Payments","Daily Reports"]', 'is_active' => 1, 'is_featured' => 0, 'sort_order' => 1, 'badge_color' => '#94a3b8', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Growth', 'slug' => 'growth', 'description' => 'For growing businesses that need inventory management and reports.', 'price_monthly' => 45000, 'price_yearly' => 450000, 'currency' => 'TZS', 'max_users' => 3, 'max_products' => 1000, 'max_locations' => 2, 'features' => '["Everything in Starter","Up to 3 Users","Inventory (1,000 products)","Mobile Money Payments","Customer Profiles","Sales Analytics"]', 'is_active' => 1, 'is_featured' => 1, 'sort_order' => 2, 'badge_color' => '#2563eb', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Business', 'slug' => 'business', 'description' => 'For established businesses with multiple staff and locations.', 'price_monthly' => 95000, 'price_yearly' => 950000, 'currency' => 'TZS', 'max_users' => 10, 'max_products' => 10000, 'max_locations' => 5, 'features' => '["Everything in Growth","Up to 10 Users","Multi-Location (5 branches)","Staff Management","Purchase Orders","Barcode Scanning","Advanced Reports"]', 'is_active' => 1, 'is_featured' => 1, 'sort_order' => 3, 'badge_color' => '#16a34a', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Enterprise', 'slug' => 'enterprise', 'description' => 'For large organizations with advanced needs and dedicated support.', 'price_monthly' => 250000, 'price_yearly' => 2500000, 'currency' => 'TZS', 'max_users' => 50, 'max_products' => 999999, 'max_locations' => 50, 'features' => '["Everything in Business","Unlimited Products","Up to 50 Users","50 Locations","API Access","Dedicated Account Manager","Priority Support","Custom Integrations"]', 'is_active' => 1, 'is_featured' => 0, 'sort_order' => 4, 'badge_color' => '#7c3aed', 'created_at' => now(), 'updated_at' => now()],
+        ]);
 
         // ── User Subscriptions ──
         UserSubscription::truncate();
