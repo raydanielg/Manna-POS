@@ -43,4 +43,31 @@ class AdminController extends Controller
     {
         return response()->json(ActivityLog::with('user')->recent()->get());
     }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
+            'phone' => 'nullable|string|max:50',
+            'current_password' => 'required_with:password',
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
+
+        $user = auth()->user();
+
+        if ($request->filled('password')) {
+            if (!\Hash::check($request->current_password, $user->password)) {
+                return response()->json(['message' => 'Current password is incorrect', 'errors' => ['current_password' => ['Current password is incorrect']]], 422);
+            }
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone ?? '';
+        $user->save();
+
+        return response()->json(['message' => 'Profile updated successfully', 'user' => $user]);
+    }
 }
