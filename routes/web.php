@@ -345,6 +345,7 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('shipments',              ShipmentController::class);
     Route::apiResource('selling-price-groups',   SellingPriceGroupController::class);
     Route::apiResource('product-variations',     ProductVariationController::class);
+    Route::apiResource('business-locations',     BusinessLocationController::class);
 
     // Plan Management API
     Route::get('plans/stats',             [PlanManagementController::class, 'statsPlans']);
