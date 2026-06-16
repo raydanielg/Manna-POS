@@ -75,6 +75,26 @@
 @section('scripts')
 const API_PLANS = '/api/dashboard/plans';
 let editPlanId = null;
+let features = [];
+
+function addFeature(val) {
+    const input = document.getElementById('featureInput');
+    const text = val || input.value.trim();
+    if (!text) return;
+    if (!features.includes(text)) features.push(text);
+    input.value = '';
+    renderFeatures();
+}
+function removeFeature(i) { features.splice(i, 1); renderFeatures(); }
+function renderFeatures() {
+    document.getElementById('featuresList').innerHTML = features.map((f, i) =>
+        `<span style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.5rem;background:#f1f5f9;border-radius:6px;font-size:0.75rem;color:#0f172a;">
+            <span class="material-icons" style="font-size:14px;color:#16a34a;">check</span>
+            ${f}
+            <span onclick="removeFeature(${i})" style="cursor:pointer;color:#94a3b8;font-size:14px;line-height:1;">&times;</span>
+        </span>`
+    ).join('');
+}
 
 async function loadPlans() {
     const s = document.getElementById('searchInput').value;
@@ -112,6 +132,8 @@ function openPlanModal() {
     document.getElementById('planForm').reset();
     document.querySelector('#planForm [name="is_active"]').checked = true;
     document.querySelector('#planForm [name="currency"]').value = 'TZS';
+    features = [];
+    renderFeatures();
     clearFormErrors('planForm');
     openModal('planModal');
 }
@@ -135,6 +157,8 @@ async function editPlan(id) {
         form.querySelector('[name="sort_order"]').value = p.sort_order || 0;
         form.querySelector('[name="is_featured"]').checked = !!p.is_featured;
         form.querySelector('[name="is_active"]').checked = p.is_active !== false;
+        features = Array.isArray(p.features) ? [...p.features] : [];
+        renderFeatures();
         clearFormErrors('planForm');
         openModal('planModal');
     } catch (e) { Swal.fire('Error', 'Failed to load plan', 'error'); }
@@ -155,6 +179,7 @@ async function savePlan() {
         sort_order: form.querySelector('[name="sort_order"]').value || 0,
         is_featured: form.querySelector('[name="is_featured"]').checked,
         is_active: form.querySelector('[name="is_active"]').checked,
+        features: features,
     };
     const btn = document.getElementById('savePlanBtn');
     btn.disabled = true; btn.textContent = 'Saving...';
