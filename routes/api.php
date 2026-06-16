@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\ProductCategoryApiController;
 use App\Http\Controllers\Api\UnitApiController;
 use App\Http\Controllers\Api\TaxRateApiController;
 use App\Http\Controllers\Api\WarrantyApiController;
+use App\Http\Controllers\Api\ExpenseCategoryApiController;
+use App\Http\Controllers\Api\CustomerGroupApiController;
 use App\Models\ProductCategory;
 use App\Models\Brand;
 use App\Models\Unit;
@@ -98,6 +100,12 @@ Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
 
     // Warranties
     Route::apiResource('warranties', WarrantyApiController::class)->names('warranties');
+
+    // Expense Categories (full CRUD)
+    Route::apiResource('expense-categories', ExpenseCategoryApiController::class)->names('expense-categories');
+
+    // Customer Groups
+    Route::apiResource('customer-groups', CustomerGroupApiController::class)->names('customer-groups');
 
     // Staff management
     Route::get('staff',           [App\Http\Controllers\Api\StaffApiController::class, 'index']);
