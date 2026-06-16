@@ -36,21 +36,25 @@
             padding: 0;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 240, 240, 0.75) 100%), url('{{ asset('hero-bg.jpg') }}');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background: linear-gradient(145deg, #064e3b 0%, #065f46 40%, #047857 70%, #0a3d25 100%);
         }
 
         .auth-brand-side::before {
             content: '';
             position: absolute;
             inset: 0;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(16,185,129,0.06) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(5,150,105,0.04) 0%, transparent 40%);
-            animation: breathe 8s ease-in-out infinite alternate;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0);
+            background-size: 28px 28px;
+        }
+
+        .auth-brand-side::after {
+            content: '';
+            position: absolute;
+            width: 420px; height: 420px;
+            border-radius: 50%;
+            background: rgba(16,185,129,0.12);
+            top: -120px; right: -120px;
+            filter: blur(60px);
         }
 
         @keyframes breathe {
@@ -93,11 +97,11 @@
             font-size: 1.15rem;
             font-weight: 700;
             letter-spacing: -0.02em;
-            color: #000;
+            color: #fff;
         }
 
         .auth-brand-bottom {
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid rgba(255,255,255,0.12);
             padding-top: 1.25rem;
             display: flex;
             flex-direction: column;
@@ -111,24 +115,24 @@
         }
 
         .auth-brand-links a {
-            color: #6b7280;
+            color: rgba(255,255,255,0.55);
             text-decoration: none;
             font-size: 0.78rem;
             font-weight: 500;
             transition: color 0.2s ease;
         }
 
-        .auth-brand-links a:hover { color: #000; }
+        .auth-brand-links a:hover { color: #fff; }
 
         .auth-brand-copy {
-            color: #9ca3af;
+            color: rgba(255,255,255,0.4);
             font-size: 0.72rem;
         }
 
-        .auth-brand-copy span { color: #6b7280; }
+        .auth-brand-copy span { color: rgba(255,255,255,0.55); }
 
         .auth-brand-bottom {
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid rgba(255,255,255,0.12);
             padding-top: 1.25rem;
             display: flex;
             flex-direction: column;
