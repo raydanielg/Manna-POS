@@ -109,8 +109,13 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard'])->group(functi
     Route::get('/reports/sales', function () { return view('dashboard.reports.sales'); })->name('dashboard.reports.sales');
     Route::get('/reports/inventory', function () { return view('dashboard.reports.inventory'); })->name('dashboard.reports.inventory');
 
-    // Settings Route
+    // Settings Routes
     Route::get('/settings', function () { return view('dashboard.settings'); })->name('dashboard.settings');
+    Route::get('/settings/general', function () { return view('dashboard.settings.general'); })->name('dashboard.settings.general');
+    Route::get('/settings/business-location', function () { return view('dashboard.settings.business-location'); })->name('dashboard.settings.business-location');
+    Route::get('/settings/invoice-settings', function () { return view('dashboard.settings.invoice-settings'); })->name('dashboard.settings.invoice-settings');
+    Route::get('/settings/barcode-settings', function () { return view('dashboard.settings.barcode-settings'); })->name('dashboard.settings.barcode-settings');
+    Route::get('/settings/tax-rates', function () { return view('dashboard.settings.tax-rates'); })->name('dashboard.settings.tax-rates');
 
     // User Management Routes
     Route::get('/user-management/users', function () { return view('dashboard.user-management.users'); })->name('dashboard.user-management.users');
