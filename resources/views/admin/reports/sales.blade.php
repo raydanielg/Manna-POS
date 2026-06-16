@@ -45,7 +45,7 @@ document.getElementById('toDate').value = today;
 async function loadReport() {
     const from = document.getElementById('fromDate').value;
     const to = document.getElementById('toDate').value;
-    const data = await apiFetch(`/api/dashboard/sales?from=${from}&to=${to}&per_page=500`);
+    const data = await apiFetch(`/api/admin/reports/sales?from=${from}&to=${to}&per_page=500`);
     const items = data.data || data || [];
     let totalSales = 0, totalRevenue = 0, totalPaid = 0, totalOutstanding = 0;
     items.forEach(s => {
