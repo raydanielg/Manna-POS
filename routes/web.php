@@ -405,17 +405,17 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     // ── Business ──
     Route::get('business',             [AdminBusinessController::class, 'list'])->name('business.list');
     Route::post('business',            [AdminBusinessController::class, 'store'])->name('business.store');
-    Route::get('business/{business}',  [AdminBusinessController::class, 'show'])->name('business.show');
-    Route::put('business/{business}',  [AdminBusinessController::class, 'update'])->name('business.update');
-    Route::delete('business/{business}',[AdminBusinessController::class, 'destroy'])->name('business.destroy');
-    Route::post('business/{business}/verify', [AdminBusinessController::class, 'verify'])->name('business.verify');
-    Route::post('business/{business}/reject', [AdminBusinessController::class, 'reject'])->name('business.reject');
     Route::get('business/categories',  [AdminBusinessController::class, 'categoriesList'])->name('business.categories');
     Route::post('business/categories', [AdminBusinessController::class, 'categoriesStore'])->name('business.categories.store');
     Route::get('business/verifications',[AdminBusinessController::class, 'verificationsList'])->name('business.verifications');
     Route::post('business/verifications/{verification}/approve', [AdminBusinessController::class, 'verificationsApprove'])->name('business.verifications.approve');
     Route::post('business/verifications/{verification}/reject', [AdminBusinessController::class, 'verificationsReject'])->name('business.verifications.reject');
     Route::get('business/locations',   [AdminBusinessController::class, 'locationsList'])->name('business.locations.list');
+    Route::get('business/{business}',  [AdminBusinessController::class, 'show'])->name('business.show');
+    Route::put('business/{business}',  [AdminBusinessController::class, 'update'])->name('business.update');
+    Route::delete('business/{business}',[AdminBusinessController::class, 'destroy'])->name('business.destroy');
+    Route::post('business/{business}/verify', [AdminBusinessController::class, 'verify'])->name('business.verify');
+    Route::post('business/{business}/reject', [AdminBusinessController::class, 'reject'])->name('business.reject');
 
     // ── Billing ──
     Route::get('billing/users',        [AdminBillingController::class, 'users'])->name('billing.users');
