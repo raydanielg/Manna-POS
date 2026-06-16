@@ -276,11 +276,11 @@ class AdminDemoSeeder extends Seeder
         // ── Tax Rates ──
         TaxRate::truncate();
         TaxRate::insert([
-            ['name' => 'VAT Standard', 'rate' => 18.00, 'type' => 'vat', 'status' => 'active'],
-            ['name' => 'VAT Reduced', 'rate' => 8.00, 'type' => 'vat', 'status' => 'active'],
-            ['name' => 'VAT Zero', 'rate' => 0.00, 'type' => 'vat', 'status' => 'active'],
-            ['name' => 'Service Charge', 'rate' => 10.00, 'type' => 'service', 'status' => 'active'],
-            ['name' => 'Withholding Tax', 'rate' => 5.00, 'type' => 'withholding', 'status' => 'active'],
+            ['name' => 'VAT Standard', 'rate' => 18.00, 'type' => 'percentage', 'status' => 'active'],
+            ['name' => 'VAT Reduced', 'rate' => 8.00, 'type' => 'percentage', 'status' => 'active'],
+            ['name' => 'VAT Zero', 'rate' => 0.00, 'type' => 'percentage', 'status' => 'active'],
+            ['name' => 'Service Charge', 'rate' => 10.00, 'type' => 'percentage', 'status' => 'active'],
+            ['name' => 'Withholding Tax', 'rate' => 5.00, 'type' => 'percentage', 'status' => 'active'],
         ]);
 
         // ── Warranties ──
