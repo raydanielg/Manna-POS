@@ -55,7 +55,7 @@
 </div>
 @endsection
 @section('scripts')
-const API = '/api/dashboard/notification-templates';
+const API = '/api/admin/notification-templates';
 let editId = null;
 async function loadList() {
     const s = document.getElementById('searchInput').value;

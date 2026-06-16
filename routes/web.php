@@ -516,6 +516,15 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     // ── Reports ──
     Route::get('reports/sales',        [\App\Http\Controllers\Dashboard\SaleController::class, 'index'])->name('reports.sales');
 
+    // ── Notification Templates ──
+    Route::apiResource('notification-templates', \App\Http\Controllers\Dashboard\NotificationTemplateController::class)->names([
+        'index'   => 'admin.notification-templates.index',
+        'store'   => 'admin.notification-templates.store',
+        'show'    => 'admin.notification-templates.show',
+        'update'  => 'admin.notification-templates.update',
+        'destroy' => 'admin.notification-templates.destroy',
+    ]);
+
     // ── Finance ──
     Route::get('finance/revenue',      [AdminFinanceController::class, 'revenueData'])->name('finance.revenue');
     Route::get('finance/tax-reports',  [AdminFinanceController::class, 'taxReportsList'])->name('finance.tax-reports.list');
