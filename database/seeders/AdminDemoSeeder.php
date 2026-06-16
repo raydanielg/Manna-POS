@@ -208,7 +208,6 @@ class AdminDemoSeeder extends Seeder
         EmailTemplate::create(['name' => 'Support Ticket Confirmation', 'subject' => 'Ticket #{{ticket_number}} Received', 'code' => 'ticket_confirmation', 'body' => '<h1>Support Ticket Received</h1><p>Dear {{name}},</p><p>Your support ticket #{{ticket_number}} has been received. We will get back to you within 24 hours.</p>', 'variables' => ['ticket_number', 'name'], 'category' => 'support', 'is_active' => true]);
 
         // ── SMS Templates ──
-        SmsTemplate::truncate();
         SmsTemplate::create(['name' => 'Welcome SMS', 'code' => 'welcome_sms', 'message' => 'Welcome {{name}} to MannaPOS! Your account is ready. Start selling today!', 'variables' => ['name'], 'category' => 'onboarding', 'is_active' => true]);
         SmsTemplate::create(['name' => 'Payment Confirmation', 'code' => 'payment_confirm', 'message' => 'Your payment of {{amount}} {{currency}} for invoice #{{invoice}} has been received. Thank you!', 'variables' => ['amount', 'currency', 'invoice'], 'category' => 'billing', 'is_active' => true]);
         SmsTemplate::create(['name' => 'Low Stock Alert', 'code' => 'low_stock', 'message' => 'ALERT: {{product}} is low on stock ({{qty}} remaining). Please restock soon.', 'variables' => ['product', 'qty'], 'category' => 'inventory', 'is_active' => true]);
