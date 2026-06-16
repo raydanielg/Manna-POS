@@ -7,14 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class ExpenseController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = Expense::with("category");
-            if ($req->search) $q->where("reference","like","%{$req->search}%")->orWhere("notes","like","%{$req->search}%");
-            if ($req->category_id) $q->where("expense_category_id",$req->category_id);
-            return response()->json($q->latest()->get());
-        }
-        $categories = ExpenseCategory::all();
-        return view("dashboard.expenses.list-expenses", compact("categories"));
+        $q = Expense::with("category");
+        if ($req->search) $q->where(function($q2) use($req){ $q2->where("reference","like","%{$req->search}%")->orWhere("notes","like","%{$req->search}%"); });
+        if ($req->category_id) $q->where("expense_category_id",$req->category_id);
+        if ($req->from) $q->whereDate("expense_date",">=",$req->from);
+        if ($req->to)   $q->whereDate("expense_date","<=",$req->to);
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["expense_category_id"=>"nullable|exists:expense_categories,id","expense_date"=>"required|date","amount"=>"required|numeric|min:0","payment_method"=>"in:cash,card,mobile_money,cheque","notes"=>"nullable|string"]);
