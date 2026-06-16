@@ -13,6 +13,9 @@ class AuthController extends Controller {
         if (!$user || !Hash::check($req->password, $user->password)) {
             return response()->json(['message'=>'Credentials do not match our records','errors'=>['email'=>['Invalid email or password.']]], 422);
         }
+        if (!in_array($user->role, ['user', 'admin'])) {
+            return response()->json(['message'=>'You do not have permission to access this system','errors'=>['email'=>['Access denied. Only users and admins can log in.']]], 403);
+        }
         $user->tokens()->where('name','mannaPOS-mobile')->delete();
         $token = $user->createToken('mannaPOS-mobile')->plainTextToken;
         return response()->json(['token'=>$token,'user'=>$this->userArr($user)]);
