@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:enableOnBackInvokedCallback="true">
     <!-- Camera for barcode scanning -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <!-- Storage for image picking -->
@@ -11,7 +12,10 @@
     <application
         android:label="MannaPOS"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/launcher_icon"
+        android:extractNativeLibs="false"
+        android:allowBackup="false"
+        android:fullBackupContent="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
