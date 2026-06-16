@@ -313,7 +313,7 @@ Route::get('/dashboard/settings/tax-rates', function () {
 })->middleware('auth')->name('dashboard.settings.tax-rates');
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/', function () {
         return view('admin.dashboard');
