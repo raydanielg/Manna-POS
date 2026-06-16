@@ -355,6 +355,8 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::put('staff/{staff}',        [AdminStaffController::class, 'update'])->name('staff.update');
     Route::delete('staff/{staff}',     [AdminStaffController::class, 'destroy'])->name('staff.destroy');
     Route::get('staff/attendance',     [AdminStaffController::class, 'attendanceList'])->name('staff.attendance');
+    Route::post('staff/attendance',    [AdminStaffController::class, 'attendanceStore'])->name('staff.attendance.store');
+    Route::delete('staff/attendance/{attendance}', [AdminStaffController::class, 'attendanceDestroy'])->name('staff.attendance.destroy');
     Route::get('staff/schedules',      [AdminStaffController::class, 'schedulesList'])->name('staff.schedules');
 
     // Business
