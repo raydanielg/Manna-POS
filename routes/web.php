@@ -368,6 +368,7 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::get('business/verifications',[AdminBusinessController::class, 'verificationsList'])->name('business.verifications');
 
     // Billing
+    Route::get('billing/users',        [AdminBillingController::class, 'users'])->name('billing.users');
     Route::get('billing/invoices',     [AdminBillingController::class, 'invoicesList'])->name('billing.invoices');
     Route::post('billing/invoices',    [AdminBillingController::class, 'invoicesStore'])->name('billing.invoices.store');
     Route::get('billing/payments',     [AdminBillingController::class, 'paymentsList'])->name('billing.payments');
