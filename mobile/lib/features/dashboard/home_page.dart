@@ -227,16 +227,16 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: (outOfStock as int) > 0 ? AppColors.dangerLt : AppColors.warningLt,
+          color: outOfStock > 0 ? AppColors.dangerLt : AppColors.warningLt,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: (outOfStock as int) > 0 ? AppColors.danger.withValues(alpha: 0.3) : AppColors.warning.withValues(alpha: 0.3)),
+          border: Border.all(color: outOfStock > 0 ? AppColors.danger.withValues(alpha: 0.3) : AppColors.warning.withValues(alpha: 0.3)),
         ),
         child: Row(children: [
-          Icon((outOfStock as int) > 0 ? Icons.error_outline : Icons.warning_amber_outlined, color: (outOfStock as int) > 0 ? AppColors.danger : AppColors.warning, size: 24),
+          Icon(outOfStock > 0 ? Icons.error_outline : Icons.warning_amber_outlined, color: outOfStock > 0 ? AppColors.danger : AppColors.warning, size: 24),
           const SizedBox(width: 12),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text((outOfStock as int) > 0 ? 'Inventory Alert' : 'Low Stock Warning', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: (outOfStock as int) > 0 ? AppColors.danger : AppColors.warning)),
-            Text('${outOfStock} out of stock · ${lowStock} low stock items', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
+            Text(outOfStock > 0 ? 'Inventory Alert' : 'Low Stock Warning', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: outOfStock > 0 ? AppColors.danger : AppColors.warning)),
+            Text('$outOfStock out of stock · $lowStock low stock items', style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
           ])),
           TextButton(onPressed: () => context.push('/products'), child: const Text('View', style: TextStyle(fontSize: 13))),
         ]),
