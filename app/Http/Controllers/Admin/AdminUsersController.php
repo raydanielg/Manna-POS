@@ -63,7 +63,18 @@ class AdminUsersController extends Controller
     public function show(User $user)
     {
         try {
-            return response()->json($user);
+            $data = $user->toArray();
+            $data['businesses_count'] = \App\Models\Business::where('owner_id', $user->id)->count();
+            $data['subscriptions_count'] = \App\Models\UserSubscription::where('user_id', $user->id)->count();
+            $data['invoices_count'] = \App\Models\Invoice::where('user_id', $user->id)->count();
+            $data['tickets_count'] = \App\Models\SupportTicket::where('user_id', $user->id)->count();
+            $data['staff_count'] = \App\Models\Staff::where('user_id', $user->id)->count();
+            $data['last_login'] = \App\Models\ActivityLog::where('user_id', $user->id)
+                ->where('type', 'login')->latest()->first()?->created_at?->diffForHumans();
+            $data['activity_count'] = \App\Models\ActivityLog::where('user_id', $user->id)->count();
+            $data['avatar_letter'] = strtoupper(substr($user->name, 0, 1));
+            $data['joined'] = $user->created_at->format('M d, Y');
+            return response()->json($data);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
