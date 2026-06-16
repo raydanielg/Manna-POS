@@ -71,52 +71,52 @@
 <div class="insight-grid">
     <div class="insight-card">
         <div class="insight-header">
-            <span class="insight-title">New Registrations</span>
+            <span class="insight-title"><span class="material-icons" style="font-size:14px;margin-right:4px;color:#2563eb;vertical-align:middle">person_add</span> New Registrations</span>
             <span class="insight-badge badge badge-info">This Month</span>
         </div>
         <div class="insight-body">
             <div class="insight-number" id="newUsersThisMonth">-</div>
             <div class="insight-foot">
-                <svg width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 7l-5 5-4-4-3 3"/><path d="M17 12v-5h-5"/></svg>
+                <span class="material-icons" style="font-size:14px;color:#16a34a;vertical-align:middle">trending_up</span>
                 <span>Users</span>
             </div>
         </div>
     </div>
     <div class="insight-card">
         <div class="insight-header">
-            <span class="insight-title">New Businesses</span>
+            <span class="insight-title"><span class="material-icons" style="font-size:14px;margin-right:4px;color:#059669;vertical-align:middle">add_business</span> New Businesses</span>
             <span class="insight-badge badge badge-info">This Month</span>
         </div>
         <div class="insight-body">
             <div class="insight-number" id="newBizThisMonth">-</div>
             <div class="insight-foot">
-                <svg width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 7l-5 5-4-4-3 3"/><path d="M17 12v-5h-5"/></svg>
+                <span class="material-icons" style="font-size:14px;color:#16a34a;vertical-align:middle">trending_up</span>
                 <span>Businesses</span>
             </div>
         </div>
     </div>
     <div class="insight-card">
         <div class="insight-header">
-            <span class="insight-title">Support Tickets</span>
+            <span class="insight-title"><span class="material-icons" style="font-size:14px;margin-right:4px;color:#dc2626;vertical-align:middle">contact_support</span> Support Tickets</span>
             <span class="insight-badge badge badge-danger">Open</span>
         </div>
         <div class="insight-body">
             <div class="insight-number" id="pendingTickets">-</div>
             <div class="insight-foot">
-                <svg width="14" height="14" fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>
+                <span class="material-icons" style="font-size:14px;color:#dc2626;vertical-align:middle">priority_high</span>
                 <span>Needs attention</span>
             </div>
         </div>
     </div>
     <div class="insight-card">
         <div class="insight-header">
-            <span class="insight-title">Verifications</span>
+            <span class="insight-title"><span class="material-icons" style="font-size:14px;margin-right:4px;color:#ca8a04;vertical-align:middle">fact_check</span> Verifications</span>
             <span class="insight-badge badge badge-pending">Pending</span>
         </div>
         <div class="insight-body">
             <div class="insight-number" id="pendingVerifications">-</div>
             <div class="insight-foot">
-                <svg width="14" height="14" fill="none" stroke="#ca8a04" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>
+                <span class="material-icons" style="font-size:14px;color:#ca8a04;vertical-align:middle">hourglass_empty</span>
                 <span>Awaiting review</span>
             </div>
         </div>
@@ -225,6 +225,7 @@
     .activity-dot.danger { background:#dc2626; }
     .activity-time { margin-left:auto;font-size:0.68rem;color:#94a3b8;white-space:nowrap; }
 
+    .kpi-icon-wrap .material-icons { font-size:24px; }
     @media (max-width:1200px) { .kpi-grid,.insight-grid { grid-template-columns:repeat(2,1fr); } .charts-row { grid-template-columns:1fr; } }
     @media (max-width:768px) { .kpi-grid,.insight-grid { grid-template-columns:1fr; } }
 </style>
