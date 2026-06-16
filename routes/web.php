@@ -250,6 +250,36 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/reports', function () {
         return view('dashboard.reports.sales-report');
     })->name('admin.reports');
+
+    // ── Staff ──
+    Route::get('/staff', [\App\Http\Controllers\Admin\AdminStaffController::class, 'index'])->name('admin.staff.index');
+    Route::get('/staff/attendance', [\App\Http\Controllers\Admin\AdminStaffController::class, 'attendance'])->name('admin.staff.attendance');
+    Route::get('/staff/schedules', [\App\Http\Controllers\Admin\AdminStaffController::class, 'schedules'])->name('admin.staff.schedules');
+
+    // ── Business ──
+    Route::get('/business', [\App\Http\Controllers\Admin\AdminBusinessController::class, 'index'])->name('admin.business.index');
+    Route::get('/business/categories', [\App\Http\Controllers\Admin\AdminBusinessController::class, 'categories'])->name('admin.business.categories');
+    Route::get('/business/verifications', [\App\Http\Controllers\Admin\AdminBusinessController::class, 'verifications'])->name('admin.business.verifications');
+
+    // ── Billing ──
+    Route::get('/billing/invoices', [\App\Http\Controllers\Admin\AdminBillingController::class, 'invoices'])->name('admin.billing.invoices');
+    Route::get('/billing/payments', [\App\Http\Controllers\Admin\AdminBillingController::class, 'payments'])->name('admin.billing.payments');
+    Route::get('/billing/gateways', [\App\Http\Controllers\Admin\AdminBillingController::class, 'gateways'])->name('admin.billing.gateways');
+
+    // ── Communication ──
+    Route::get('/communication/email-templates', [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'emailTemplates'])->name('admin.communication.email-templates');
+    Route::get('/communication/sms-templates', [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'smsTemplates'])->name('admin.communication.sms-templates');
+    Route::get('/communication/announcements', [\App\Http\Controllers\Admin\AdminCommunicationController::class, 'announcements'])->name('admin.communication.announcements');
+
+    // ── Support ──
+    Route::get('/support/tickets', [\App\Http\Controllers\Admin\AdminSupportController::class, 'tickets'])->name('admin.support.tickets');
+
+    // ── System ──
+    Route::get('/system/config', [\App\Http\Controllers\Admin\AdminSystemController::class, 'config'])->name('admin.system.config');
+    Route::get('/system/activity-logs', [\App\Http\Controllers\Admin\AdminSystemController::class, 'activityLogs'])->name('admin.system.activity-logs');
+    Route::get('/system/backups', [\App\Http\Controllers\Admin\AdminSystemController::class, 'backups'])->name('admin.system.backups');
+    Route::get('/system/health', [\App\Http\Controllers\Admin\AdminSystemController::class, 'health'])->name('admin.system.health');
+    Route::get('/system/login-history', [\App\Http\Controllers\Admin\AdminSystemController::class, 'loginHistory'])->name('admin.system.login-history');
 });
 
 // ─── API / AJAX Resource Routes ────────────────────────────────────────────
@@ -306,4 +336,82 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::post('subscriptions',          [PlanManagementController::class, 'storeSubscription']);
     Route::put('subscriptions/{subscription}', [PlanManagementController::class, 'updateSubscription']);
     Route::delete('subscriptions/{subscription}', [PlanManagementController::class, 'destroySubscription']);
+});
+
+// ─── Admin API Routes ──────────────────────────────────────────────────────
+use App\Http\Controllers\Admin\AdminStaffController;
+use App\Http\Controllers\Admin\AdminBusinessController;
+use App\Http\Controllers\Admin\AdminBillingController;
+use App\Http\Controllers\Admin\AdminCommunicationController;
+use App\Http\Controllers\Admin\AdminSupportController;
+use App\Http\Controllers\Admin\AdminSystemController;
+
+Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->group(function () {
+
+    // Staff
+    Route::get('staff',                [AdminStaffController::class, 'list'])->name('staff.list');
+    Route::post('staff',               [AdminStaffController::class, 'store'])->name('staff.store');
+    Route::get('staff/{staff}',        [AdminStaffController::class, 'show'])->name('staff.show');
+    Route::put('staff/{staff}',        [AdminStaffController::class, 'update'])->name('staff.update');
+    Route::delete('staff/{staff}',     [AdminStaffController::class, 'destroy'])->name('staff.destroy');
+    Route::get('staff/attendance',     [AdminStaffController::class, 'attendanceList'])->name('staff.attendance');
+    Route::get('staff/schedules',      [AdminStaffController::class, 'schedulesList'])->name('staff.schedules');
+
+    // Business
+    Route::get('business',             [AdminBusinessController::class, 'list'])->name('business.list');
+    Route::post('business',            [AdminBusinessController::class, 'store'])->name('business.store');
+    Route::get('business/{business}',  [AdminBusinessController::class, 'show'])->name('business.show');
+    Route::put('business/{business}',  [AdminBusinessController::class, 'update'])->name('business.update');
+    Route::delete('business/{business}',[AdminBusinessController::class, 'destroy'])->name('business.destroy');
+    Route::get('business/categories',  [AdminBusinessController::class, 'categoriesList'])->name('business.categories');
+    Route::post('business/categories', [AdminBusinessController::class, 'categoriesStore'])->name('business.categories.store');
+    Route::get('business/verifications',[AdminBusinessController::class, 'verificationsList'])->name('business.verifications');
+
+    // Billing
+    Route::get('billing/invoices',     [AdminBillingController::class, 'invoicesList'])->name('billing.invoices');
+    Route::post('billing/invoices',    [AdminBillingController::class, 'invoicesStore'])->name('billing.invoices.store');
+    Route::get('billing/payments',     [AdminBillingController::class, 'paymentsList'])->name('billing.payments');
+    Route::post('billing/payments',    [AdminBillingController::class, 'paymentsStore'])->name('billing.payments.store');
+    Route::get('billing/gateways',     [AdminBillingController::class, 'gatewaysList'])->name('billing.gateways');
+    Route::post('billing/gateways',    [AdminBillingController::class, 'gatewaysStore'])->name('billing.gateways.store');
+    Route::put('billing/gateways/{gateway}', [AdminBillingController::class, 'gatewaysUpdate'])->name('billing.gateways.update');
+    Route::delete('billing/gateways/{gateway}', [AdminBillingController::class, 'gatewaysDestroy'])->name('billing.gateways.destroy');
+
+    // Communication
+    Route::get('communication/email-templates',      [AdminCommunicationController::class, 'emailTemplatesList'])->name('communication.email-templates.list');
+    Route::post('communication/email-templates',     [AdminCommunicationController::class, 'emailTemplatesStore'])->name('communication.email-templates.store');
+    Route::get('communication/email-templates/{template}', [AdminCommunicationController::class, 'emailTemplatesShow'])->name('communication.email-templates.show');
+    Route::put('communication/email-templates/{template}', [AdminCommunicationController::class, 'emailTemplatesUpdate'])->name('communication.email-templates.update');
+    Route::delete('communication/email-templates/{template}', [AdminCommunicationController::class, 'emailTemplatesDestroy'])->name('communication.email-templates.destroy');
+    Route::get('communication/sms-templates',        [AdminCommunicationController::class, 'smsTemplatesList'])->name('communication.sms-templates.list');
+    Route::post('communication/sms-templates',       [AdminCommunicationController::class, 'smsTemplatesStore'])->name('communication.sms-templates.store');
+    Route::put('communication/sms-templates/{template}', [AdminCommunicationController::class, 'smsTemplatesUpdate'])->name('communication.sms-templates.update');
+    Route::delete('communication/sms-templates/{template}', [AdminCommunicationController::class, 'smsTemplatesDestroy'])->name('communication.sms-templates.destroy');
+    Route::get('communication/announcements',        [AdminCommunicationController::class, 'announcementsList'])->name('communication.announcements.list');
+    Route::post('communication/announcements',       [AdminCommunicationController::class, 'announcementsStore'])->name('communication.announcements.store');
+    Route::get('communication/announcements/{announcement}', [AdminCommunicationController::class, 'announcementsShow'])->name('communication.announcements.show');
+    Route::put('communication/announcements/{announcement}', [AdminCommunicationController::class, 'announcementsUpdate'])->name('communication.announcements.update');
+    Route::delete('communication/announcements/{announcement}', [AdminCommunicationController::class, 'announcementsDestroy'])->name('communication.announcements.destroy');
+
+    // Support
+    Route::get('support/tickets',        [AdminSupportController::class, 'ticketsList'])->name('support.tickets.list');
+    Route::get('support/tickets/{ticket}', [AdminSupportController::class, 'ticketsShow'])->name('support.tickets.show');
+    Route::put('support/tickets/{ticket}', [AdminSupportController::class, 'ticketsUpdate'])->name('support.tickets.update');
+    Route::delete('support/tickets/{ticket}', [AdminSupportController::class, 'ticketsDestroy'])->name('support.tickets.destroy');
+
+    // System
+    Route::get('system/config',          [AdminSystemController::class, 'configList'])->name('system.config.list');
+    Route::post('system/config',         [AdminSystemController::class, 'configStore'])->name('system.config.store');
+    Route::get('system/config/{config}', [AdminSystemController::class, 'configShow'])->name('system.config.show');
+    Route::put('system/config/{config}', [AdminSystemController::class, 'configUpdate'])->name('system.config.update');
+    Route::delete('system/config/{config}', [AdminSystemController::class, 'configDestroy'])->name('system.config.destroy');
+    Route::get('system/activity-logs',   [AdminSystemController::class, 'activityLogsList'])->name('system.activity-logs.list');
+    Route::delete('system/activity-logs',[AdminSystemController::class, 'activityLogsClear'])->name('system.activity-logs.clear');
+    Route::get('system/backups',         [AdminSystemController::class, 'backupsList'])->name('system.backups.list');
+    Route::post('system/backups',        [AdminSystemController::class, 'backupsCreate'])->name('system.backups.create');
+    Route::get('system/backups/{backup}/download', [AdminSystemController::class, 'backupsDownload'])->name('system.backups.download');
+    Route::delete('system/backups/{backup}', [AdminSystemController::class, 'backupsDestroy'])->name('system.backups.destroy');
+    Route::get('system/health',          [AdminSystemController::class, 'healthData'])->name('system.health');
+    Route::get('system/login-history',   [AdminSystemController::class, 'loginHistoryList'])->name('system.login-history.list');
+    Route::delete('system/login-history',[AdminSystemController::class, 'loginHistoryClear'])->name('system.login-history.clear');
 });
