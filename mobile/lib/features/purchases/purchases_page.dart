@@ -245,10 +245,11 @@ class _PurchaseFormState extends State<_PurchaseForm> {
   }
 
   Widget _itemRow(int idx) {
+    // ignore: unused_local_variable
     final item = _items[idx];
     return Container(margin: const EdgeInsets.only(bottom: 10), padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: AppColors.surfaceVariant, borderRadius: BorderRadius.circular(12)), child: Column(children: [
       Row(children: [
-        Expanded(child: DropdownButtonFormField<int>(decoration: const InputDecoration(labelText: 'Product', isDense: true), items: _products.map((p) => DropdownMenuItem(value: p['id'], child: Text(p['name'] ?? ''))).toList(), onChanged: (v) => setState(() { _items[idx]['product_id'] = v; }))),
+        Expanded(child: DropdownButtonFormField<int>(decoration: const InputDecoration(labelText: 'Product', isDense: true), items: _products.map<DropdownMenuItem<int>>((p) => DropdownMenuItem(value: p['id'] as int, child: Text(p['name'] ?? ''))).toList(), onChanged: (v) => setState(() { _items[idx]['product_id'] = v; }))),
         const SizedBox(width: 8),
         IconButton(icon: const Icon(Icons.close, size: 18, color: AppColors.danger), onPressed: () => setState(() => _items.removeAt(idx))),
       ]),

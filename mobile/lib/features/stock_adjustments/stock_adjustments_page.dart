@@ -4,8 +4,6 @@ import '../../shared/theme/app_colors.dart';
 import '../../shared/widgets/app_card.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/status_badge.dart';
-import '../../shared/constants/app_constants.dart';
-
 class StockAdjustmentsPage extends StatefulWidget {
   const StockAdjustmentsPage({super.key});
   @override State<StockAdjustmentsPage> createState() => _StockAdjustmentsPageState();
