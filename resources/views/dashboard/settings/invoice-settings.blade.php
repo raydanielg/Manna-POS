@@ -62,6 +62,20 @@ document.querySelector('[name="invoice_title"]').addEventListener('input',functi
 document.querySelector('[name="invoice_prefix"]').addEventListener('input',function(){document.getElementById('prevPrefix').textContent=(this.value||'INV-')+'000001';});
 document.querySelector('[name="invoice_header"]').addEventListener('input',function(){document.getElementById('prevHeader').textContent=this.value;});
 document.querySelector('[name="invoice_footer"]').addEventListener('input',function(){document.getElementById('prevFooter').textContent=this.value||'Thank you for your business!';});
+async function loadSettings(){
+  try{
+    const d=await apiFetch('/api/dashboard/settings');
+    const fields=['invoice_title','invoice_prefix','invoice_header','invoice_footer','payment_terms','show_logo','show_tax_number'];
+    fields.forEach(function(f){
+      const el=document.querySelector('[name="'+f+'"]');
+      if(el&&d[f]!=null){el.value=d[f];}
+    });
+    document.getElementById('prevTitle').textContent=d.invoice_title||'INVOICE';
+    document.getElementById('prevPrefix').textContent=(d.invoice_prefix||'INV-')+'000001';
+    document.getElementById('prevHeader').textContent=d.invoice_header||'';
+    document.getElementById('prevFooter').textContent=d.invoice_footer||'Thank you for your business!';
+  }catch(e){}
+}
 async function saveSettings(e){
   e.preventDefault();
   const btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving...';
@@ -72,5 +86,6 @@ async function saveSettings(e){
   }catch(err){showToast(err.message||'Failed to save','error');}
   finally{btn.disabled=false;btn.textContent='Save Invoice Settings';}
 }
+loadSettings();
 </script>
 @endsection

@@ -149,6 +149,23 @@ async function saveSettings(e){
   finally{btn.disabled=false;btn.textContent='Save Barcode Settings';}
 }
 
-updatePreview();
+async function loadSettings(){
+  try{
+    const d=await apiFetch('/api/dashboard/settings');
+    const fields=['barcode_type','barcode_height','label_show_name','label_show_price','label_show_sku','barcode_copies','label_width','label_height'];
+    fields.forEach(function(f){
+      const el=document.querySelector('[name="'+f+'"]');
+      if(el&&d[f]!=null){el.value=d[f];}
+    });
+    if(d.label_size){
+      document.querySelectorAll('.label-size-card').forEach(c=>c.classList.remove('selected'));
+      const card=document.querySelector('[data-size="'+d.label_size+'"]');
+      if(card){card.classList.add('selected');document.getElementById('labelSizeInput').value=d.label_size;}
+      document.getElementById('customSizeRow').style.display=d.label_size==='custom'?'grid':'none';
+    }
+    updatePreview();
+  }catch(e){}
+}
+loadSettings();
 </script>
 @endsection
