@@ -358,6 +358,8 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::post('staff/attendance',    [AdminStaffController::class, 'attendanceStore'])->name('staff.attendance.store');
     Route::delete('staff/attendance/{attendance}', [AdminStaffController::class, 'attendanceDestroy'])->name('staff.attendance.destroy');
     Route::get('staff/schedules',      [AdminStaffController::class, 'schedulesList'])->name('staff.schedules');
+    Route::post('staff/schedules',     [AdminStaffController::class, 'schedulesStore'])->name('staff.schedules.store');
+    Route::delete('staff/schedules/{schedule}', [AdminStaffController::class, 'schedulesDestroy'])->name('staff.schedules.destroy');
 
     // Business
     Route::get('business',             [AdminBusinessController::class, 'list'])->name('business.list');
@@ -368,6 +370,8 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::get('business/categories',  [AdminBusinessController::class, 'categoriesList'])->name('business.categories');
     Route::post('business/categories', [AdminBusinessController::class, 'categoriesStore'])->name('business.categories.store');
     Route::get('business/verifications',[AdminBusinessController::class, 'verificationsList'])->name('business.verifications');
+    Route::post('business/verifications/{verification}/approve', [AdminBusinessController::class, 'verificationsApprove'])->name('business.verifications.approve');
+    Route::post('business/verifications/{verification}/reject', [AdminBusinessController::class, 'verificationsReject'])->name('business.verifications.reject');
 
     // Billing
     Route::get('billing/users',        [AdminBillingController::class, 'users'])->name('billing.users');
