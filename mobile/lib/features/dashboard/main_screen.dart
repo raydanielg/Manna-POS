@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import '../../core/auth_provider.dart';
 import '../../shared/theme/app_colors.dart';
-import '../../shared/utils/formatters.dart';
-import '../../shared/widgets/empty_state.dart';
 import '../dashboard/home_page.dart';
 import '../products/products_page.dart';
 import '../customers/customers_page.dart';
