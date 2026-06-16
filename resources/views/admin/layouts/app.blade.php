@@ -154,6 +154,8 @@
             cursor: pointer; text-decoration: none;
         }
         .header-dropdown-item:hover { background: #f8fafc; color: #0f172a; }
+        .header-dropdown-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .header-dropdown-item .material-icons { font-size: 16px; }
         .header-dropdown-divider { height: 1px; background: #f1f5f9; margin: 0.25rem 0; }
 
         .dash-content { padding: 1.75rem 2rem; flex: 1; }
