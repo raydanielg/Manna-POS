@@ -200,6 +200,7 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard'])->group(functi
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/', fn() => view('admin.dashboard'))->name('admin.dashboard');
+    Route::get('/profile', fn() => view('admin.profile'))->name('admin.profile');
 
     // User Management
     Route::get('/users',            [\App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('admin.users');
