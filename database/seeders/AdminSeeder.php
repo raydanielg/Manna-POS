@@ -1,15 +1,35 @@
 <?php
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 use App\Models\SystemConfig;
 use App\Models\BusinessCategory;
 use App\Models\PaymentGateway;
+use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
     public function run()
     {
-        // Truncate to allow re-seeding
+        // Create admin user
+        User::firstOrCreate(
+            ['email' => 'admin@manna.pos'],
+            [
+                'name' => 'MannaPOS Admin',
+                'password' => Hash::make('password'),
+                'phone' => '+255700000000',
+                'role' => 'admin',
+                'business_name' => 'mannaPOS',
+                'business_type' => 'technology',
+                'business_city' => 'Dar es Salaam',
+                'business_country' => 'Tanzania',
+                'currency' => 'TZS',
+                'tax_percentage' => 18.0,
+                'fiscal_year_start' => 'January',
+            ]
+        );
+
+        // Truncate and re-seed system data
         SystemConfig::truncate();
         BusinessCategory::truncate();
         PaymentGateway::truncate();
