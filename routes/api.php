@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\TaxRateApiController;
 use App\Http\Controllers\Api\WarrantyApiController;
 use App\Http\Controllers\Api\ExpenseCategoryApiController;
 use App\Http\Controllers\Api\CustomerGroupApiController;
+use App\Http\Controllers\Api\BusinessLocationApiController;
 use App\Models\ProductCategory;
 use App\Models\Brand;
 use App\Models\Unit;
