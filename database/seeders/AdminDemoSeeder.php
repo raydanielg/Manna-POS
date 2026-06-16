@@ -214,7 +214,6 @@ class AdminDemoSeeder extends Seeder
         SmsTemplate::create(['name' => 'Subscription Renewed', 'code' => 'sub_renewed', 'message' => 'Your {{plan}} subscription has been renewed. Valid until {{expiry}}. Thank you for being a valued customer!', 'variables' => ['plan', 'expiry'], 'category' => 'billing', 'is_active' => false]);
 
         // ── Announcements ──
-        Announcement::truncate();
         Announcement::insert([
             ['title' => 'New Feature: Bulk Price Update', 'content' => 'You can now update prices for multiple products at once from the Inventory page. This feature was requested by many of our valued customers.', 'type' => 'update', 'status' => 'published', 'scheduled_at' => Carbon::now()->subDays(7), 'expires_at' => Carbon::now()->addDays(23), 'created_by' => 2],
             ['title' => 'Scheduled Maintenance - June 20', 'content' => 'MannaPOS will undergo scheduled maintenance on June 20th from 2AM to 4AM EAT. The system will be briefly unavailable during this window.', 'type' => 'maintenance', 'status' => 'draft', 'scheduled_at' => Carbon::now()->addDays(4), 'expires_at' => null, 'created_by' => 2],
