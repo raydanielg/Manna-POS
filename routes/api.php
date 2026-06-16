@@ -108,6 +108,9 @@ Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
     // Customer Groups
     Route::apiResource('customer-groups', CustomerGroupApiController::class)->names('customer-groups');
 
+    // Business Locations
+    Route::apiResource('business-locations', BusinessLocationApiController::class)->names('business-locations');
+
     // Staff management
     Route::get('staff',           [App\Http\Controllers\Api\StaffApiController::class, 'index']);
     Route::post('staff',          [App\Http\Controllers\Api\StaffApiController::class, 'store']);

@@ -59,13 +59,44 @@ class _HomePageState extends State<HomePage> {
             else if (_error != null)
               SliverFillRemaining(child: ErrorWidget2(message: _error!, onRetry: _loadStats))
             else ...[
+              SliverToBoxAdapter(child: _buildTodayStats()),
               SliverToBoxAdapter(child: _buildStatsGrid()),
               SliverToBoxAdapter(child: _buildQuickActions()),
+              SliverToBoxAdapter(child: _buildTopProducts()),
               SliverToBoxAdapter(child: _buildRecentSales()),
+              SliverToBoxAdapter(child: _buildInventoryAlerts()),
             ],
             const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTodayStats() {
+    if (_stats == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [AppColors.primary, AppColors.primaryDark], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Row(children: [
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text('Today', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500)),
+            const SizedBox(height: 4),
+            Text('TSh ${fmtCurrency((_stats!['today_sales'] ?? 0).toDouble())}', style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+            const SizedBox(height: 4),
+            Text('${_stats!['today_orders'] ?? 0} orders · ${fmtCurrency((_stats!['week_sales'] ?? 0).toDouble())} this week', style: const TextStyle(color: Colors.white70, fontSize: 11)),
+          ])),
+          Container(
+            width: 50, height: 50,
+            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(14)),
+            child: const Icon(Icons.trending_up_rounded, color: Colors.white, size: 26),
+          ),
+        ]),
       ),
     );
   }
