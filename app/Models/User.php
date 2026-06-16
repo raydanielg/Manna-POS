@@ -13,6 +13,7 @@ class User extends Authenticatable {
         'name','email','password','role','status','phone',
         'business_name','business_type','business_address','business_city','business_country',
         'currency','tax_percentage','fiscal_year_start','owner_id','block_reason','blocked_at',
+        'pos_settings',
     ];
 
     protected $hidden = ['password','remember_token'];
