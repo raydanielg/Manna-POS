@@ -140,7 +140,6 @@ class AdminDemoSeeder extends Seeder
         Invoice::create(['invoice_number' => 'INV-2024-005', 'user_id' => 2, 'subscription_id' => 5, 'billing_cycle' => 'monthly', 'subtotal' => 95000, 'tax' => 17100, 'discount' => 0, 'total' => 112100, 'currency' => 'TZS', 'status' => 'paid', 'due_date' => Carbon::now()->subMonths(4), 'paid_at' => Carbon::now()->subMonths(4), 'notes' => 'Previous plan invoice']);
 
         // ── Payments ──
-        Payment::truncate();
         Payment::create(['invoice_id' => 1, 'user_id' => 1, 'amount' => 112100, 'currency' => 'TZS', 'payment_method' => 'mpesa', 'transaction_id' => 'MP-2024-001', 'gateway' => 'mpesa', 'status' => 'completed', 'paid_at' => Carbon::now()->subMonth()]);
         Payment::create(['invoice_id' => 2, 'user_id' => 2, 'amount' => 486000, 'currency' => 'TZS', 'payment_method' => 'tigo_pesa', 'transaction_id' => 'TP-2024-001', 'gateway' => 'tigo_pesa', 'status' => 'completed', 'paid_at' => Carbon::now()->subMonths(3)]);
         Payment::create(['invoice_id' => 5, 'user_id' => 2, 'amount' => 112100, 'currency' => 'TZS', 'payment_method' => 'bank_transfer', 'transaction_id' => 'BT-2024-001', 'gateway' => 'bank_transfer', 'status' => 'completed', 'paid_at' => Carbon::now()->subMonths(4)]);
