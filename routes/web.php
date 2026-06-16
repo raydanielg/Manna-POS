@@ -84,233 +84,112 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+Route::prefix('dashboard')->middleware(['auth', 'user.dashboard'])->group(function () {
 
-// Dashboard Sales Routes
-Route::get('/dashboard/sales/pos', function () {
-    return view('dashboard.sales.pos');
-})->middleware('auth')->name('dashboard.sales.pos');
-Route::get('/dashboard/sales/transactions', function () {
-    return view('dashboard.sales.transactions');
-})->middleware('auth')->name('dashboard.sales.transactions');
-Route::get('/dashboard/sales/receipts', function () {
-    return view('dashboard.sales.receipts');
-})->middleware('auth')->name('dashboard.sales.receipts');
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-// Dashboard Inventory Routes
-Route::get('/dashboard/inventory/products', function () {
-    return view('dashboard.inventory.products');
-})->middleware('auth')->name('dashboard.inventory.products');
-Route::get('/dashboard/inventory/categories', function () {
-    return view('dashboard.inventory.categories');
-})->middleware('auth')->name('dashboard.inventory.categories');
-Route::get('/dashboard/inventory/stock', function () {
-    return view('dashboard.inventory.stock');
-})->middleware('auth')->name('dashboard.inventory.stock');
-Route::get('/dashboard/inventory/suppliers', function () {
-    return view('dashboard.inventory.suppliers');
-})->middleware('auth')->name('dashboard.inventory.suppliers');
+    // Sales Routes
+    Route::get('/sales/pos', function () { return view('dashboard.sales.pos'); })->name('dashboard.sales.pos');
+    Route::get('/sales/transactions', function () { return view('dashboard.sales.transactions'); })->name('dashboard.sales.transactions');
+    Route::get('/sales/receipts', function () { return view('dashboard.sales.receipts'); })->name('dashboard.sales.receipts');
 
-// Dashboard Customers Routes
-Route::get('/dashboard/customers/all', function () {
-    return view('dashboard.customers.all');
-})->middleware('auth')->name('dashboard.customers.all');
-Route::get('/dashboard/customers/loyalty', function () {
-    return view('dashboard.customers.loyalty');
-})->middleware('auth')->name('dashboard.customers.loyalty');
+    // Inventory Routes
+    Route::get('/inventory/products', function () { return view('dashboard.inventory.products'); })->name('dashboard.inventory.products');
+    Route::get('/inventory/categories', function () { return view('dashboard.inventory.categories'); })->name('dashboard.inventory.categories');
+    Route::get('/inventory/stock', function () { return view('dashboard.inventory.stock'); })->name('dashboard.inventory.stock');
+    Route::get('/inventory/suppliers', function () { return view('dashboard.inventory.suppliers'); })->name('dashboard.inventory.suppliers');
 
-// Dashboard Reports Routes
-Route::get('/dashboard/reports/sales', function () {
-    return view('dashboard.reports.sales');
-})->middleware('auth')->name('dashboard.reports.sales');
-Route::get('/dashboard/reports/inventory', function () {
-    return view('dashboard.reports.inventory');
-})->middleware('auth')->name('dashboard.reports.inventory');
+    // Customers Routes
+    Route::get('/customers/all', function () { return view('dashboard.customers.all'); })->name('dashboard.customers.all');
+    Route::get('/customers/loyalty', function () { return view('dashboard.customers.loyalty'); })->name('dashboard.customers.loyalty');
 
-// Dashboard Settings Route
-Route::get('/dashboard/settings', function () {
-    return view('dashboard.settings');
-})->middleware('auth')->name('dashboard.settings');
+    // Reports Routes
+    Route::get('/reports/sales', function () { return view('dashboard.reports.sales'); })->name('dashboard.reports.sales');
+    Route::get('/reports/inventory', function () { return view('dashboard.reports.inventory'); })->name('dashboard.reports.inventory');
 
-// User Management Routes
-Route::get('/dashboard/user-management/users', function () {
-    return view('dashboard.user-management.users');
-})->middleware('auth')->name('dashboard.user-management.users');
-Route::get('/dashboard/user-management/roles', function () {
-    return view('dashboard.user-management.roles');
-})->middleware('auth')->name('dashboard.user-management.roles');
-Route::get('/dashboard/user-management/sales-commission-agents', function () {
-    return view('dashboard.user-management.sales-commission-agents');
-})->middleware('auth')->name('dashboard.user-management.sales-commission-agents');
-Route::get('/dashboard/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'profile'])->middleware('auth')->name('dashboard.profile');
-Route::put('/dashboard/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'updateProfile'])->middleware('auth')->name('dashboard.profile.update');
+    // Settings Route
+    Route::get('/settings', function () { return view('dashboard.settings'); })->name('dashboard.settings');
 
-// Contacts Routes
-Route::get('/dashboard/contacts/suppliers', function () {
-    return view('dashboard.contacts.suppliers');
-})->middleware('auth')->name('dashboard.contacts.suppliers');
-Route::get('/dashboard/contacts/customers', [App\Http\Controllers\Dashboard\CustomerController::class, 'index'])->middleware('auth')->name('dashboard.contacts.customers');
-Route::get('/dashboard/contacts/customer-groups', function () {
-    return view('dashboard.contacts.customer-groups');
-})->middleware('auth')->name('dashboard.contacts.customer-groups');
-Route::get('/dashboard/contacts/import-contacts', function () {
-    return view('dashboard.contacts.import-contacts');
-})->middleware('auth')->name('dashboard.contacts.import-contacts');
+    // User Management Routes
+    Route::get('/user-management/users', function () { return view('dashboard.user-management.users'); })->name('dashboard.user-management.users');
+    Route::get('/user-management/roles', function () { return view('dashboard.user-management.roles'); })->name('dashboard.user-management.roles');
+    Route::get('/user-management/sales-commission-agents', function () { return view('dashboard.user-management.sales-commission-agents'); })->name('dashboard.user-management.sales-commission-agents');
 
-// Products Routes
-Route::get('/dashboard/inventory/list-products', function () {
-    return view('dashboard.inventory.list-products');
-})->middleware('auth')->name('dashboard.inventory.list-products');
-Route::get('/dashboard/inventory/add-product', function () {
-    return view('dashboard.inventory.add-product');
-})->middleware('auth')->name('dashboard.inventory.add-product');
-Route::get('/dashboard/inventory/update-price', function () {
-    return view('dashboard.inventory.update-price');
-})->middleware('auth')->name('dashboard.inventory.update-price');
-Route::get('/dashboard/inventory/print-labels', function () {
-    return view('dashboard.inventory.print-labels');
-})->middleware('auth')->name('dashboard.inventory.print-labels');
-Route::get('/dashboard/inventory/variations', function () {
-    return view('dashboard.inventory.variations');
-})->middleware('auth')->name('dashboard.inventory.variations');
-Route::get('/dashboard/inventory/import-products', function () {
-    return view('dashboard.inventory.import-products');
-})->middleware('auth')->name('dashboard.inventory.import-products');
-Route::get('/dashboard/inventory/import-opening-stock', function () {
-    return view('dashboard.inventory.import-opening-stock');
-})->middleware('auth')->name('dashboard.inventory.import-opening-stock');
-Route::get('/dashboard/inventory/selling-price-group', function () {
-    return view('dashboard.inventory.selling-price-group');
-})->middleware('auth')->name('dashboard.inventory.selling-price-group');
-Route::get('/dashboard/inventory/units', function () {
-    return view('dashboard.inventory.units');
-})->middleware('auth')->name('dashboard.inventory.units');
-Route::get('/dashboard/inventory/product-categories', function () {
-    return view('dashboard.inventory.product-categories');
-})->middleware('auth')->name('dashboard.inventory.product-categories');
-Route::get('/dashboard/inventory/brands', function () {
-    return view('dashboard.inventory.brands');
-})->middleware('auth')->name('dashboard.inventory.brands');
-Route::get('/dashboard/inventory/warranties', function () {
-    return view('dashboard.inventory.warranties');
-})->middleware('auth')->name('dashboard.inventory.warranties');
+    // Profile Routes (controllers)
+    Route::get('/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'profile'])->name('dashboard.profile');
+    Route::put('/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'updateProfile'])->name('dashboard.profile.update');
 
-// Purchases Routes
-Route::get('/dashboard/purchases/list-purchases', function () {
-    return view('dashboard.purchases.list-purchases');
-})->middleware('auth')->name('dashboard.purchases.list-purchases');
-Route::get('/dashboard/purchases/add-purchase', function () {
-    return view('dashboard.purchases.add-purchase');
-})->middleware('auth')->name('dashboard.purchases.add-purchase');
-Route::get('/dashboard/purchases/list-purchase-return', function () {
-    return view('dashboard.purchases.list-purchase-return');
-})->middleware('auth')->name('dashboard.purchases.list-purchase-return');
+    // Contacts Routes
+    Route::get('/contacts/suppliers', function () { return view('dashboard.contacts.suppliers'); })->name('dashboard.contacts.suppliers');
+    Route::get('/contacts/customers', [App\Http\Controllers\Dashboard\CustomerController::class, 'index'])->name('dashboard.contacts.customers');
+    Route::get('/contacts/customer-groups', function () { return view('dashboard.contacts.customer-groups'); })->name('dashboard.contacts.customer-groups');
+    Route::get('/contacts/import-contacts', function () { return view('dashboard.contacts.import-contacts'); })->name('dashboard.contacts.import-contacts');
 
-// Sell Routes
-Route::get('/dashboard/sell/all-sales', function () {
-    return view('dashboard.sell.all-sales');
-})->middleware('auth')->name('dashboard.sell.all-sales');
-Route::get('/dashboard/sell/add-sale', function () {
-    return view('dashboard.sell.add-sale');
-})->middleware('auth')->name('dashboard.sell.add-sale');
-Route::get('/dashboard/sell/list-pos', function () {
-    return view('dashboard.sell.list-pos');
-})->middleware('auth')->name('dashboard.sell.list-pos');
-Route::get('/dashboard/sell/pos', function () {
-    return view('dashboard.sell.pos');
-})->middleware('auth')->name('dashboard.sell.pos');
-Route::get('/dashboard/sell/add-draft', function () {
-    return view('dashboard.sell.add-draft');
-})->middleware('auth')->name('dashboard.sell.add-draft');
-Route::get('/dashboard/sell/list-drafts', function () {
-    return view('dashboard.sell.list-drafts');
-})->middleware('auth')->name('dashboard.sell.list-drafts');
-Route::get('/dashboard/sell/add-quotation', function () {
-    return view('dashboard.sell.add-quotation');
-})->middleware('auth')->name('dashboard.sell.add-quotation');
-Route::get('/dashboard/sell/list-quotations', function () {
-    return view('dashboard.sell.list-quotations');
-})->middleware('auth')->name('dashboard.sell.list-quotations');
-Route::get('/dashboard/sell/list-sell-return', function () {
-    return view('dashboard.sell.list-sell-return');
-})->middleware('auth')->name('dashboard.sell.list-sell-return');
-Route::get('/dashboard/sell/shipments', function () {
-    return view('dashboard.sell.shipments');
-})->middleware('auth')->name('dashboard.sell.shipments');
-Route::get('/dashboard/sell/discounts', function () {
-    return view('dashboard.sell.discounts');
-})->middleware('auth')->name('dashboard.sell.discounts');
-Route::get('/dashboard/sell/import-sales', function () {
-    return view('dashboard.sell.import-sales');
-})->middleware('auth')->name('dashboard.sell.import-sales');
+    // Products Routes
+    Route::get('/inventory/list-products', function () { return view('dashboard.inventory.list-products'); })->name('dashboard.inventory.list-products');
+    Route::get('/inventory/add-product', function () { return view('dashboard.inventory.add-product'); })->name('dashboard.inventory.add-product');
+    Route::get('/inventory/update-price', function () { return view('dashboard.inventory.update-price'); })->name('dashboard.inventory.update-price');
+    Route::get('/inventory/print-labels', function () { return view('dashboard.inventory.print-labels'); })->name('dashboard.inventory.print-labels');
+    Route::get('/inventory/variations', function () { return view('dashboard.inventory.variations'); })->name('dashboard.inventory.variations');
+    Route::get('/inventory/import-products', function () { return view('dashboard.inventory.import-products'); })->name('dashboard.inventory.import-products');
+    Route::get('/inventory/import-opening-stock', function () { return view('dashboard.inventory.import-opening-stock'); })->name('dashboard.inventory.import-opening-stock');
+    Route::get('/inventory/selling-price-group', function () { return view('dashboard.inventory.selling-price-group'); })->name('dashboard.inventory.selling-price-group');
+    Route::get('/inventory/units', function () { return view('dashboard.inventory.units'); })->name('dashboard.inventory.units');
+    Route::get('/inventory/product-categories', function () { return view('dashboard.inventory.product-categories'); })->name('dashboard.inventory.product-categories');
+    Route::get('/inventory/brands', function () { return view('dashboard.inventory.brands'); })->name('dashboard.inventory.brands');
+    Route::get('/inventory/warranties', function () { return view('dashboard.inventory.warranties'); })->name('dashboard.inventory.warranties');
 
-// Stock Transfer Routes
-Route::get('/dashboard/stock-transfer/list-stock-transfer', function () {
-    return view('dashboard.stock-transfer.list-stock-transfer');
-})->middleware('auth')->name('dashboard.stock-transfer.list-stock-transfer');
-Route::get('/dashboard/stock-transfer/add-stock-transfer', function () {
-    return view('dashboard.stock-transfer.add-stock-transfer');
-})->middleware('auth')->name('dashboard.stock-transfer.add-stock-transfer');
+    // Purchases Routes
+    Route::get('/purchases/list-purchases', function () { return view('dashboard.purchases.list-purchases'); })->name('dashboard.purchases.list-purchases');
+    Route::get('/purchases/add-purchase', function () { return view('dashboard.purchases.add-purchase'); })->name('dashboard.purchases.add-purchase');
+    Route::get('/purchases/list-purchase-return', function () { return view('dashboard.purchases.list-purchase-return'); })->name('dashboard.purchases.list-purchase-return');
 
-// Stock Adjustment Routes
-Route::get('/dashboard/stock-adjustment/list-stock-adjustment', function () {
-    return view('dashboard.stock-adjustment.list-stock-adjustment');
-})->middleware('auth')->name('dashboard.stock-adjustment.list-stock-adjustment');
-Route::get('/dashboard/stock-adjustment/add-stock-adjustment', function () {
-    return view('dashboard.stock-adjustment.add-stock-adjustment');
-})->middleware('auth')->name('dashboard.stock-adjustment.add-stock-adjustment');
+    // Sell Routes
+    Route::get('/sell/all-sales', function () { return view('dashboard.sell.all-sales'); })->name('dashboard.sell.all-sales');
+    Route::get('/sell/add-sale', function () { return view('dashboard.sell.add-sale'); })->name('dashboard.sell.add-sale');
+    Route::get('/sell/list-pos', function () { return view('dashboard.sell.list-pos'); })->name('dashboard.sell.list-pos');
+    Route::get('/sell/pos', function () { return view('dashboard.sell.pos'); })->name('dashboard.sell.pos');
+    Route::get('/sell/add-draft', function () { return view('dashboard.sell.add-draft'); })->name('dashboard.sell.add-draft');
+    Route::get('/sell/list-drafts', function () { return view('dashboard.sell.list-drafts'); })->name('dashboard.sell.list-drafts');
+    Route::get('/sell/add-quotation', function () { return view('dashboard.sell.add-quotation'); })->name('dashboard.sell.add-quotation');
+    Route::get('/sell/list-quotations', function () { return view('dashboard.sell.list-quotations'); })->name('dashboard.sell.list-quotations');
+    Route::get('/sell/list-sell-return', function () { return view('dashboard.sell.list-sell-return'); })->name('dashboard.sell.list-sell-return');
+    Route::get('/sell/shipments', function () { return view('dashboard.sell.shipments'); })->name('dashboard.sell.shipments');
+    Route::get('/sell/discounts', function () { return view('dashboard.sell.discounts'); })->name('dashboard.sell.discounts');
+    Route::get('/sell/import-sales', function () { return view('dashboard.sell.import-sales'); })->name('dashboard.sell.import-sales');
 
-// Expenses Routes
-Route::get('/dashboard/expenses/list-expenses', function () {
-    return view('dashboard.expenses.list-expenses');
-})->middleware('auth')->name('dashboard.expenses.list-expenses');
-Route::get('/dashboard/expenses/add-expense', function () {
-    return view('dashboard.expenses.add-expense');
-})->middleware('auth')->name('dashboard.expenses.add-expense');
-Route::get('/dashboard/expenses/expense-categories', function () {
-    return view('dashboard.expenses.expense-categories');
-})->middleware('auth')->name('dashboard.expenses.expense-categories');
+    // Stock Transfer Routes
+    Route::get('/stock-transfer/list-stock-transfer', function () { return view('dashboard.stock-transfer.list-stock-transfer'); })->name('dashboard.stock-transfer.list-stock-transfer');
+    Route::get('/stock-transfer/add-stock-transfer', function () { return view('dashboard.stock-transfer.add-stock-transfer'); })->name('dashboard.stock-transfer.add-stock-transfer');
 
-// Reports Routes
-Route::get('/dashboard/reports/sales-report', function () {
-    return view('dashboard.reports.sales-report');
-})->middleware('auth')->name('dashboard.reports.sales-report');
-Route::get('/dashboard/reports/purchase-report', function () {
-    return view('dashboard.reports.purchase-report');
-})->middleware('auth')->name('dashboard.reports.purchase-report');
-Route::get('/dashboard/reports/inventory-report', function () {
-    return view('dashboard.reports.inventory-report');
-})->middleware('auth')->name('dashboard.reports.inventory-report');
-Route::get('/dashboard/reports/expense-report', function () {
-    return view('dashboard.reports.expense-report');
-})->middleware('auth')->name('dashboard.reports.expense-report');
-Route::get('/dashboard/reports/profit-loss-report', function () {
-    return view('dashboard.reports.profit-loss-report');
-})->middleware('auth')->name('dashboard.reports.profit-loss-report');
+    // Stock Adjustment Routes
+    Route::get('/stock-adjustment/list-stock-adjustment', function () { return view('dashboard.stock-adjustment.list-stock-adjustment'); })->name('dashboard.stock-adjustment.list-stock-adjustment');
+    Route::get('/stock-adjustment/add-stock-adjustment', function () { return view('dashboard.stock-adjustment.add-stock-adjustment'); })->name('dashboard.stock-adjustment.add-stock-adjustment');
 
-// Notification Templates Routes
-Route::get('/dashboard/notification-templates', function () {
-    return view('dashboard.notification-templates.index');
-})->middleware('auth')->name('dashboard.notification-templates');
+    // Expenses Routes
+    Route::get('/expenses/list-expenses', function () { return view('dashboard.expenses.list-expenses'); })->name('dashboard.expenses.list-expenses');
+    Route::get('/expenses/add-expense', function () { return view('dashboard.expenses.add-expense'); })->name('dashboard.expenses.add-expense');
+    Route::get('/expenses/expense-categories', function () { return view('dashboard.expenses.expense-categories'); })->name('dashboard.expenses.expense-categories');
 
-// Settings Routes
-Route::get('/dashboard/settings/general', function () {
-    return view('dashboard.settings.general');
-})->middleware('auth')->name('dashboard.settings.general');
-Route::get('/dashboard/settings/business-location', function () {
-    return view('dashboard.settings.business-location');
-})->middleware('auth')->name('dashboard.settings.business-location');
-Route::get('/dashboard/settings/invoice-settings', function () {
-    return view('dashboard.settings.invoice-settings');
-})->middleware('auth')->name('dashboard.settings.invoice-settings');
-Route::get('/dashboard/settings/barcode-settings', function () {
-    return view('dashboard.settings.barcode-settings');
-})->middleware('auth')->name('dashboard.settings.barcode-settings');
-Route::get('/dashboard/settings/tax-rates', function () {
-    return view('dashboard.settings.tax-rates');
-})->middleware('auth')->name('dashboard.settings.tax-rates');
+    // Reports Routes
+    Route::get('/reports/sales-report', function () { return view('dashboard.reports.sales-report'); })->name('dashboard.reports.sales-report');
+    Route::get('/reports/purchase-report', function () { return view('dashboard.reports.purchase-report'); })->name('dashboard.reports.purchase-report');
+    Route::get('/reports/inventory-report', function () { return view('dashboard.reports.inventory-report'); })->name('dashboard.reports.inventory-report');
+    Route::get('/reports/expense-report', function () { return view('dashboard.reports.expense-report'); })->name('dashboard.reports.expense-report');
+    Route::get('/reports/profit-loss-report', function () { return view('dashboard.reports.profit-loss-report'); })->name('dashboard.reports.profit-loss-report');
+
+    // Notification Templates Routes
+    Route::get('/notification-templates', function () { return view('dashboard.notification-templates.index'); })->name('dashboard.notification-templates');
+
+    // Settings Routes
+    Route::get('/settings/general', function () { return view('dashboard.settings.general'); })->name('dashboard.settings.general');
+    Route::get('/settings/business-location', function () { return view('dashboard.settings.business-location'); })->name('dashboard.settings.business-location');
+    Route::get('/settings/invoice-settings', function () { return view('dashboard.settings.invoice-settings'); })->name('dashboard.settings.invoice-settings');
+    Route::get('/settings/barcode-settings', function () { return view('dashboard.settings.barcode-settings'); })->name('dashboard.settings.barcode-settings');
+    Route::get('/settings/tax-rates', function () { return view('dashboard.settings.tax-rates'); })->name('dashboard.settings.tax-rates');
+});
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
