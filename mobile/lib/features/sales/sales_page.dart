@@ -8,8 +8,6 @@ import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/search_bar_widget.dart';
 import '../../shared/widgets/status_badge.dart';
 import '../../shared/constants/app_constants.dart';
-import '../../shared/widgets/loading_widget.dart';
-import '../../shared/widgets/error_widget.dart';
 
 class SalesPage extends StatefulWidget {
   const SalesPage({super.key});
@@ -168,31 +166,10 @@ class _SalesPageState extends State<SalesPage> with SingleTickerProviderStateMix
                         fontSize: 15,
                         color: AppColors.textPri,
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    StatusBadge.fromStatus(s.status),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            const Divider(height: 1),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                _enhancedChip(Icons.calendar_today_outlined, s.saleDate, AppColors.textSec),
-                const SizedBox(width: 12),
-                _enhancedChip(Icons.payment_outlined, s.paymentMethod, AppColors.textSec),
-                const SizedBox(width: 12),
-                if (s.outstanding > 0)
-                  _enhancedChip(Icons.money_off_outlined, 'TSh ${fmt.format(s.outstanding)} due', AppColors.danger),
-                const Spacer(),
-                StatusBadge.fromStatus(s.paymentStatus),
-              ],
-            ),
-          ],
         ),
-      ),
+          : RefreshIndicator(color: AppColors.primary, onRefresh: _load,
+              child: ListView.separated(padding: const EdgeInsets.fromLTRB(16, 0, 16, 100), itemCount: _sales.length, separatorBuilder: (_, __) => const SizedBox(height: 10), itemBuilder: (_, i) => _saleTile(_sales[i]))),
+      ]),
     );
   }
 
