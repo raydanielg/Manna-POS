@@ -5,12 +5,10 @@ use App\Models\Brand;
 use Illuminate\Http\Request;
 class BrandController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = Brand::withCount("products");
-            if ($req->search) $q->where("name","like","%{$req->search}%");
-            return response()->json($q->latest()->get());
-        }
-        return view("dashboard.inventory.brands");
+        $q = Brand::withCount("products");
+        if ($req->search) $q->where("name","like","%{$req->search}%");
+        if ($req->status) $q->where("status",$req->status);
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","description"=>"nullable|string","status"=>"in:active,inactive"]);
