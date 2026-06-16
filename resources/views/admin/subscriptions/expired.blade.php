@@ -56,16 +56,16 @@ const API = '/api/admin/subscriptions?status=expired';
 let editId = null;
 
 async function loadList() {
-    const data = await apiFetch(API);
-    const tbody = document.getElementById('tableBody');
-    if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" class="tbl-empty">No expired subscriptions</td></tr>'; return; }
+    const res = await apiFetch(API);
+     param($m); if ($m -match 'const tbody') { '    const data = res.data || res;' + "`n" + $m } else { $m }  = document.getElementById('tableBody');
+     param($m); if ($m -match 'const tbody') { '    const data = res.data || res;' + "`n" + $m } else { $m } .length) { tbody.innerHTML = '<tr><td colspan="7" class="tbl-empty">No expired subscriptions</td></tr>'; return; }
     tbody.innerHTML = data.map(s => `<tr>
         <td>${s.user?.name || s.user_name || 'N/A'}</td>
         <td>${s.plan?.name || s.plan_name || 'N/A'}</td>
         <td><span class="badge ${s.status === 'active' ? 'badge-success' : s.status === 'trial' ? 'badge-info' : s.status === 'expired' ? 'badge-danger' : 'badge-default'}">${s.status}</span></td>
-        <td>${s.start_date ? new Date(s.start_date).toLocaleDateString() : '-'}</td>
-        <td>${s.end_date ? new Date(s.end_date).toLocaleDateString() : '-'}</td>
-        <td>${s.currency || 'TZS'} ${(s.amount || 0).toLocaleString()}</td>
+        <td>${s.starts_at ? new Date(s.starts_at).toLocaleDateString() : '-'}</td>
+        <td>${s.expires_at ? new Date(s.expires_at).toLocaleDateString() : '-'}</td>
+        <td>${s.currency || 'TZS'} ${(s.amount_paid || 0).toLocaleString()}</td>
         <td class="actions-cell">
             <button class="btn btn-primary btn-xs" onclick="editSub(${s.id})">Edit</button>
             <button class="btn btn-danger btn-xs" onclick="deleteSub(${s.id})">Delete</button>
@@ -75,16 +75,16 @@ async function loadList() {
 
 async function editSub(id) {
     editId = id; document.getElementById('modalTitle').textContent = 'Edit Subscription';
-    const data = await apiFetch(`/api/admin/subscriptions/${id}`);
+    const res = await apiFetch(`/api/admin/subscriptions/${id}`);
     document.getElementById('status').value = data.status || 'active';
-    document.getElementById('end_date').value = data.end_date ? data.end_date.split('T')[0] : '';
+    document.getElementById('end_date').value = data.expires_at ? data.expires_at.split('T')[0] : '';
     openModal('subModal');
 }
 
 async function saveSub() {
     const body = {
         status: document.getElementById('status').value,
-        end_date: document.getElementById('end_date').value,
+        expires_at: document.getElementById('end_date').value,
     };
     try {
         await apiFetch(`/api/admin/subscriptions/${editId}`, { method: 'PUT', body });
