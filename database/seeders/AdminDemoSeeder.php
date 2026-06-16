@@ -88,7 +88,6 @@ class AdminDemoSeeder extends Seeder
         }
 
         // ── Business Verifications ──
-        BusinessVerification::truncate();
         BusinessVerification::create(['business_id' => 1, 'document_type' => 'business_license', 'document_path' => 'uploads/docs/license_001.pdf', 'status' => 'approved', 'notes' => 'License verified', 'reviewed_by' => 2, 'reviewed_at' => Carbon::now()->subMonth()]);
         BusinessVerification::create(['business_id' => 2, 'document_type' => 'tax_certificate', 'document_path' => 'uploads/docs/tax_002.pdf', 'status' => 'approved', 'reviewed_by' => 2, 'reviewed_at' => Carbon::now()->subWeeks(2)]);
         BusinessVerification::create(['business_id' => 3, 'document_type' => 'business_license', 'document_path' => 'uploads/docs/license_003.pdf', 'status' => 'pending']);
