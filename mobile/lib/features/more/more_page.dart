@@ -37,6 +37,7 @@ class MorePage extends StatelessWidget {
             _MenuItem(Icons.verified_outlined, 'Warranties', AppColors.pink, () => context.push('/warranties')),
             _MenuItem(Icons.balance_rounded, 'Stock Adjustments', AppColors.warning, () => context.push('/stock-adjustments')),
             _MenuItem(Icons.swap_horiz_outlined, 'Stock Transfers', AppColors.primary, () => context.push('/stock-transfers')),
+            _MenuItem(Icons.store_outlined, 'Business Locations', AppColors.primaryDark, () => context.push('/business-locations')),
           ])),
           SliverToBoxAdapter(child: _buildSection('Management', [
             _MenuItem(Icons.category_outlined, 'Expense Categories', AppColors.secondary, () => context.push('/expense-categories')),
