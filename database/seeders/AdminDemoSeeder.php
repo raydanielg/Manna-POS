@@ -201,7 +201,6 @@ class AdminDemoSeeder extends Seeder
         ]);
 
         // ── Email Templates ──
-        EmailTemplate::truncate();
         EmailTemplate::create(['name' => 'Welcome Email', 'subject' => 'Welcome to MannaPOS!', 'code' => 'welcome', 'body' => '<h1>Welcome {{name}}!</h1><p>Thank you for choosing MannaPOS. We are excited to have you on board.</p><p>To get started, please verify your email address by clicking the link below:</p><p><a href="{{verification_link}}">Verify Email</a></p>', 'variables' => ['name', 'verification_link'], 'category' => 'onboarding', 'is_active' => true]);
         EmailTemplate::create(['name' => 'Password Reset', 'subject' => 'Reset Your Password', 'code' => 'password_reset', 'body' => '<h1>Password Reset Request</h1><p>Click the link below to reset your password:</p><p><a href="{{reset_link}}">Reset Password</a></p><p>This link expires in 60 minutes.</p>', 'variables' => ['reset_link'], 'category' => 'security', 'is_active' => true]);
         EmailTemplate::create(['name' => 'Invoice Notification', 'subject' => 'Your Invoice #{{invoice_number}}', 'code' => 'invoice_notification', 'body' => '<h1>Invoice Ready</h1><p>Dear {{name}},</p><p>Your invoice #{{invoice_number}} for {{amount}} {{currency}} is now available.</p><p>Due Date: {{due_date}}</p>', 'variables' => ['invoice_number', 'name', 'amount', 'currency', 'due_date'], 'category' => 'billing', 'is_active' => true]);
