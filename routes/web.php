@@ -312,6 +312,67 @@ Route::get('/dashboard/settings/tax-rates', function () {
     return view('dashboard.settings.tax-rates');
 })->middleware('auth')->name('dashboard.settings.tax-rates');
 
+// ─── Admin Routes ──────────────────────────────────────────────────────────
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    // User Management
+    Route::get('/users', function () {
+        return view('dashboard.user-management.users');
+    })->name('admin.users');
+
+    Route::get('/roles', function () {
+        return view('dashboard.user-management.roles');
+    })->name('admin.roles');
+
+    Route::get('/sales-commission-agents', function () {
+        return view('dashboard.user-management.sales-commission-agents');
+    })->name('admin.sales-commission-agents');
+
+    // Plan Management
+    Route::get('/plans', function () {
+        return view('dashboard.plan-management.plans');
+    })->name('admin.plans');
+
+    Route::get('/subscriptions', function () {
+        return view('dashboard.plan-management.subscriptions');
+    })->name('admin.subscriptions');
+
+    // Notification Templates
+    Route::get('/notification-templates', function () {
+        return view('dashboard.notification-templates.index');
+    })->name('admin.notification-templates');
+
+    // Settings
+    Route::get('/settings/general', function () {
+        return view('dashboard.settings.general');
+    })->name('admin.settings.general');
+
+    Route::get('/settings/business-location', function () {
+        return view('dashboard.settings.business-location');
+    })->name('admin.settings.business-location');
+
+    Route::get('/settings/invoice-settings', function () {
+        return view('dashboard.settings.invoice-settings');
+    })->name('admin.settings.invoice-settings');
+
+    Route::get('/settings/barcode-settings', function () {
+        return view('dashboard.settings.barcode-settings');
+    })->name('admin.settings.barcode-settings');
+
+    Route::get('/settings/tax-rates', function () {
+        return view('dashboard.settings.tax-rates');
+    })->name('admin.settings.tax-rates');
+
+    // Reports Dashboard
+    Route::get('/reports', function () {
+        return view('dashboard.reports.sales-report');
+    })->name('admin.reports');
+});
+
 // ─── API / AJAX Resource Routes ────────────────────────────────────────────
 use App\Http\Controllers\Dashboard\SupplierController;
 use App\Http\Controllers\Dashboard\CustomerGroupController;
