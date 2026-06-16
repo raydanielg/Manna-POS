@@ -31,6 +31,7 @@ import '../features/tax_rates/tax_rates_page.dart';
 import '../features/warranties/warranties_page.dart';
 import '../features/expense_categories/expense_categories_page.dart';
 import '../features/customer_groups/customer_groups_page.dart';
+import '../features/business_locations/business_locations_page.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -64,6 +65,7 @@ class AppRouter {
       GoRoute(path: '/warranties', builder: (_, __) => const WarrantiesPage()),
       GoRoute(path: '/expense-categories', builder: (_, __) => const ExpenseCategoriesPage()),
       GoRoute(path: '/customer-groups', builder: (_, __) => const CustomerGroupsPage()),
+      GoRoute(path: '/business-locations', builder: (_, __) => const BusinessLocationsPage()),
     ],
     errorBuilder: (_, __) => Scaffold(
       body: Center(
