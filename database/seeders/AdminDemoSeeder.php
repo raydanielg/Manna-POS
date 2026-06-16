@@ -256,7 +256,6 @@ class AdminDemoSeeder extends Seeder
         ]);
 
         // ── Expenses ──
-        Expense::truncate();
         Expense::insert([
             ['expense_category_id' => 1, 'reference' => 'EXP-001', 'expense_date' => Carbon::now()->startOfMonth(), 'amount' => 800000, 'payment_method' => 'bank_transfer', 'notes' => 'Monthly rent - Main store', 'created_by' => 2],
             ['expense_category_id' => 2, 'reference' => 'EXP-002', 'expense_date' => Carbon::now()->subDays(5), 'amount' => 120000, 'payment_method' => 'cash', 'notes' => 'Electricity bill - June', 'created_by' => 2],
