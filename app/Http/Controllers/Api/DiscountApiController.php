@@ -5,39 +5,40 @@ use App\Models\Discount;
 use Illuminate\Http\Request;
 
 class DiscountApiController extends Controller {
-    public function index(Request $req) {
-        $q = Discount::query();
-        if ($req->status) $q->where('status',$req->status);
-        return response()->json($q->orderBy('name')->get());
+    use UserIdTrait;
+    public function index() {
+        return response()->json(Discount::where('created_by', $this->userId())->orderByDesc('created_at')->get());
     }
     public function store(Request $req) {
         $data = $req->validate([
             'name' => 'required|string|max:191',
             'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:fixed,percentage',
+            'type' => 'required|in:percentage,fixed',
             'starts_at' => 'nullable|date',
             'ends_at' => 'nullable|date|after_or_equal:starts_at',
-            'status' => 'in:active,inactive',
+            'status' => 'nullable|in:active,inactive',
         ]);
+        $data['created_by'] = $this->userId();
         return response()->json(Discount::create($data), 201);
     }
-    public function show(Discount $discount) {
-        return response()->json($discount);
+    public function show($id) {
+        return response()->json(Discount::where('created_by', $this->userId())->findOrFail($id));
     }
-    public function update(Request $req, Discount $discount) {
+    public function update(Request $req, $id) {
+        $d = Discount::where('created_by', $this->userId())->findOrFail($id);
         $data = $req->validate([
             'name' => 'required|string|max:191',
             'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:fixed,percentage',
+            'type' => 'required|in:percentage,fixed',
             'starts_at' => 'nullable|date',
             'ends_at' => 'nullable|date|after_or_equal:starts_at',
-            'status' => 'in:active,inactive',
+            'status' => 'nullable|in:active,inactive',
         ]);
-        $discount->update($data);
-        return response()->json($discount);
+        $d->update($data);
+        return response()->json($d->fresh());
     }
-    public function destroy(Discount $discount) {
-        $discount->delete();
+    public function destroy($id) {
+        Discount::where('created_by', $this->userId())->where('id',$id)->delete();
         return response()->json(['message'=>'Discount deleted']);
     }
 }
