@@ -31,4 +31,9 @@ class AppColors {
   static const Color purple = Color(0xFF6366F1);
   static const Color pink = Color(0xFFEC4899);
   static const Color cyan = Color(0xFF06B6D4);
+
+  // Legacy aliases
+  static const Color bg = background;
+  static const Color primaryDk = primaryDark;
+  static const Color primaryLtLegacy = Color(0xFF3B82F6);
 }
