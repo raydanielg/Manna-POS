@@ -377,7 +377,9 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::post('billing/payments',    [AdminBillingController::class, 'paymentsStore'])->name('billing.payments.store');
     Route::get('billing/gateways',     [AdminBillingController::class, 'gatewaysList'])->name('billing.gateways');
     Route::post('billing/gateways',    [AdminBillingController::class, 'gatewaysStore'])->name('billing.gateways.store');
+    Route::get('billing/gateways/{gateway}', [AdminBillingController::class, 'gatewaysShow'])->name('billing.gateways.show');
     Route::put('billing/gateways/{gateway}', [AdminBillingController::class, 'gatewaysUpdate'])->name('billing.gateways.update');
+    Route::post('billing/gateways/{gateway}/toggle', [AdminBillingController::class, 'gatewaysToggle'])->name('billing.gateways.toggle');
     Route::delete('billing/gateways/{gateway}', [AdminBillingController::class, 'gatewaysDestroy'])->name('billing.gateways.destroy');
 
     // Communication

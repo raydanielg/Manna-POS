@@ -163,6 +163,11 @@ class AdminBillingController extends Controller
         return response()->json(['success'=>true,'gateway'=>$gateway]);
     }
 
+    public function gatewaysShow(PaymentGateway $gateway)
+    {
+        return response()->json($gateway);
+    }
+
     public function gatewaysToggle(PaymentGateway $gateway)
     {
         $gateway->update(['is_active' => !$gateway->is_active]);
