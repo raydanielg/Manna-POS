@@ -513,6 +513,9 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::put('plans/{plan}',         [\App\Http\Controllers\Dashboard\PlanManagementController::class, 'updatePlan'])->name('plans.update');
     Route::delete('plans/{plan}',      [\App\Http\Controllers\Dashboard\PlanManagementController::class, 'destroyPlan'])->name('plans.destroy');
 
+    // ── Reports ──
+    Route::get('reports/sales',        [\App\Http\Controllers\Dashboard\SaleController::class, 'index'])->name('reports.sales');
+
     // ── Finance ──
     Route::get('finance/revenue',      [AdminFinanceController::class, 'revenueData'])->name('finance.revenue');
     Route::get('finance/tax-reports',  [AdminFinanceController::class, 'taxReportsList'])->name('finance.tax-reports.list');
