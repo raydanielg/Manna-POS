@@ -73,7 +73,7 @@
 </div>
 @endsection
 @section('scripts')
-const API_PLANS = '/api/dashboard/plans';
+const API_PLANS = '/api/admin/plans';
 let editPlanId = null;
 let features = [];
 

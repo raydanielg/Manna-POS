@@ -507,6 +507,12 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::put('subscriptions/{subscription}', [AdminSubscriptionController::class, 'update'])->name('subscriptions.update');
     Route::delete('subscriptions/{subscription}', [AdminSubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
 
+    // ── Plans (admin manages subscription plans) ──
+    Route::get('plans',                [\App\Http\Controllers\Dashboard\PlanManagementController::class, 'indexPlans'])->name('plans.list');
+    Route::post('plans',               [\App\Http\Controllers\Dashboard\PlanManagementController::class, 'storePlan'])->name('plans.store');
+    Route::put('plans/{plan}',         [\App\Http\Controllers\Dashboard\PlanManagementController::class, 'updatePlan'])->name('plans.update');
+    Route::delete('plans/{plan}',      [\App\Http\Controllers\Dashboard\PlanManagementController::class, 'destroyPlan'])->name('plans.destroy');
+
     // ── Finance ──
     Route::get('finance/revenue',      [AdminFinanceController::class, 'revenueData'])->name('finance.revenue');
     Route::get('finance/tax-reports',  [AdminFinanceController::class, 'taxReportsList'])->name('finance.tax-reports.list');
