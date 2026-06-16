@@ -96,6 +96,7 @@ class AdminDemoSeeder extends Seeder
 
         // ── Subscription Plans ──
         SubscriptionPlan::truncate();
+        echo "Seeding SubscriptionPlans...\n";
         $plans = [
             ['name' => 'Starter', 'slug' => 'starter', 'description' => 'Perfect for small shops just getting started with digital POS.', 'price_monthly' => 0, 'price_yearly' => 0, 'currency' => 'TZS', 'max_users' => 1, 'max_products' => 100, 'max_locations' => 1,                 'features' => '["Basic Sales","Inventory (up to 100 products)","Cash Payments","Daily Reports"]', 'is_active' => true, 'is_featured' => false, 'sort_order' => 1, 'badge_color' => '#94a3b8'],
             ['name' => 'Growth', 'slug' => 'growth', 'description' => 'For growing businesses that need inventory management and reports.', 'price_monthly' => 45000, 'price_yearly' => 450000, 'currency' => 'TZS', 'max_users' => 3, 'max_products' => 1000, 'max_locations' => 2, 'features' => '["Everything in Starter","Up to 3 Users","Inventory (1,000 products)","Mobile Money Payments","Customer Profiles","Sales Analytics"]', 'is_active' => true, 'is_featured' => true, 'sort_order' => 2, 'badge_color' => '#2563eb'],
