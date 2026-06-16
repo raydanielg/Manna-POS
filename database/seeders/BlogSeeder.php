@@ -10,6 +10,9 @@ class BlogSeeder extends Seeder
 {
     public function run()
     {
+        // Truncate to avoid duplicate slug errors on re-seed
+        Blog::truncate();
+
         $posts = [
             [
                 'title'       => '5 Smart Ways to Manage Inventory and Never Run Out of Stock',
