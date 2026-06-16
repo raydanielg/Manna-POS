@@ -204,8 +204,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // User Management
     Route::get('/users',            [\App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('admin.users');
     Route::get('/users/create',     [\App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('admin.users.create');
-    Route::get('/roles',            fn() => view('dashboard.user-management.roles'))->name('admin.roles');
-    Route::get('/sales-commission-agents', fn() => view('dashboard.user-management.sales-commission-agents'))->name('admin.sales-commission-agents');
+    Route::get('/roles',            fn() => view('admin.roles.index'))->name('admin.roles');
+    Route::get('/sales-commission-agents', fn() => view('admin.roles.sales-agents'))->name('admin.sales-commission-agents');
     Route::get('/user-activity',    [\App\Http\Controllers\Admin\AdminSystemController::class, 'activityLogs'])->name('admin.user-activity');
     Route::get('/blocked-users',    [\App\Http\Controllers\Admin\AdminUsersController::class, 'blocked'])->name('admin.blocked-users');
 
