@@ -77,6 +77,7 @@ async function loadList() {
 async function editSub(id) {
     editId = id; document.getElementById('modalTitle').textContent = 'Edit Subscription';
     const res = await apiFetch(`/api/admin/subscriptions/${id}`);
+    const data = res.data || res;
     document.getElementById('status').value = data.status || 'active';
     document.getElementById('end_date').value = data.expires_at ? data.expires_at.split('T')[0] : '';
     openModal('subModal');
