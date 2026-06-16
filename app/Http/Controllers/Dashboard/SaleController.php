@@ -8,19 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class SaleController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = Sale::with("customer");
-            if ($req->search) $q->where("reference","like","%{$req->search}%");
-            if ($req->status) $q->where("status",$req->status);
-            if ($req->payment_status) $q->where("payment_status",$req->payment_status);
-            return response()->json($q->latest()->get());
-        }
-        $customers = Customer::where("status","active")->get();
-        $products  = Product::where("status","active")->get();
-        return view("dashboard.sell.all-sales", compact("customers","products"));
+        $q = Sale::with("customer");
+        if ($req->search) $q->where("reference","like","%{$req->search}%");
+        if ($req->status) $q->where("status",$req->status);
+        if ($req->payment_status) $q->where("payment_status",$req->payment_status);
+        if ($req->from) $q->whereDate("sale_date",">=",$req->from);
+        if ($req->to)   $q->whereDate("sale_date","<=",$req->to);
+        if ($req->customer_id) $q->where("customer_id",$req->customer_id);
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
-        $data = $req->validate(["customer_id"=>"nullable|exists:customers,id","sale_date"=>"required|date","subtotal"=>"required|numeric|min:0","discount"=>"nullable|numeric|min:0","tax"=>"nullable|numeric|min:0","total"=>"required|numeric|min:0","paid"=>"nullable|numeric|min:0","payment_method"=>"in:cash,card,mobile_money,credit","status"=>"in:completed,draft,quotation,cancelled","notes"=>"nullable|string","items"=>"required|array|min:1","items.*.product_id"=>"nullable|exists:products,id","items.*.product_name"=>"required|string","items.*.quantity"=>"required|numeric|min:0.0001","items.*.unit_price"=>"required|numeric|min:0","items.*.discount"=>"nullable|numeric|min:0","items.*.total"=>"required|numeric|min:0"]);
+        $data = $req->validate(["customer_id"=>"nullable|exists:customers,id","sale_date"=>"required|date","subtotal"=>"required|numeric|min:0","discount"=>"nullable|numeric|min:0","tax"=>"nullable|numeric|min:0","total"=>"required|numeric|min:0","paid"=>"nullable|numeric|min:0","payment_method"=>"in:cash,card,mobile_money,credit","status"=>"in:completed,draft,quotation,cancelled,return","notes"=>"nullable|string","items"=>"required|array|min:1","items.*.product_id"=>"nullable|exists:products,id","items.*.product_name"=>"required|string","items.*.quantity"=>"required|numeric|min:0.0001","items.*.unit_price"=>"required|numeric|min:0","items.*.discount"=>"nullable|numeric|min:0","items.*.total"=>"required|numeric|min:0"]);
         $paid = $data["paid"] ?? 0;
         $total = $data["total"];
         $data["payment_status"] = $paid >= $total ? "paid" : ($paid > 0 ? "partial" : "unpaid");
