@@ -15,6 +15,11 @@ class CreateSellingPriceGroupsTable extends Migration
     {
         Schema::create('selling_price_groups', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->decimal('percentage', 8, 2)->default(0);
+            $table->enum('type', ['markup','discount'])->default('markup');
+            $table->enum('status', ['active','inactive'])->default('active');
             $table->timestamps();
         });
     }
