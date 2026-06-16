@@ -1,0 +1,549 @@
+{
+  "demo_data": {
+    "users": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@boutique.co.tz",
+        "phone": "+255712345678",
+        "role": "admin",
+        "business_name": "Boutique Premium",
+        "business_type": "retail",
+        "business_address": "123 Main Street, Dar es Salaam",
+        "business_city": "Dar es Salaam",
+        "currency": "TZS",
+        "tax_percentage": 18.0,
+        "fiscal_year_start": "January"
+      },
+      {
+        "id": 2,
+        "name": "Mary Kimani",
+        "email": "mary@supermarket.tz",
+        "phone": "+255723456789",
+        "role": "manager",
+        "business_name": "Supermarket Express",
+        "business_type": "wholesale",
+        "business_address": "456 Julius Nyerere Road, Dar es Salaam",
+        "business_city": "Dar es Salaam",
+        "currency": "TZS",
+        "tax_percentage": 18.0,
+        "fiscal_year_start": "February"
+      },
+      {
+        "id": 3,
+        "name": "Peter Mwangi",
+        "email": "peter@techsolutions.co.tz",
+        "phone": "+255734567890",
+        "role": "user",
+        "business_name": "Tech Solutions",
+        "business_type": "service",
+        "business_address": "789 Arsenal Road, Dar es Salaam",
+        "business_city": "Dar es Salaam",
+        "currency": "TZS",
+        "tax_percentage": 18.0,
+        "fiscal_year_start": "March"
+      }
+    ],
+    "customers": [
+      {
+        "id": 1,
+        "name": "Sarah Hussein",
+        "email": "sarah@example.com",
+        "phone": "+255765432109",
+        "address": "321 Coast Road, Dar es Salaam",
+        "city": "Dar es Salaam",
+        "status": "active",
+        "balance": 5000.00,
+        "group": {"name": "Regular", "discount": 5}
+      },
+      {
+        "id": 2,
+        "name": "David Mwalimu",
+        "email": "david@business.co.tz",
+        "phone": "+255776543210",
+        "address": "654 Morogoro Road, Dar es Salaam",
+        "city": "Dar es Salaam",
+        "status": "active",
+        "balance": 12500.50,
+        "group": {"name": "VIP", "discount": 10}
+      },
+      {
+        "id": 3,
+        "name": "Grace Mkamba",
+        "email": "grace@empresa.co.tz",
+        "phone": "+255787654321",
+        "address": "987 New Bagamoyo Road, Dar es Salaam",
+        "city": "Dar es Salaam",
+        "status": "inactive",
+        "balance": 0.00,
+        "group": {"name": "Regular", "discount": 5}
+      },
+      {
+        "id": 4,
+        "name": "James Mushi",
+        "email": "james@contractor.co.tz",
+        "phone": "+255798765432",
+        "address": "159 Chamuri viwanjá Road, Dar es Salaam",
+        "city": "Dar es Salaam",
+        "status": "active",
+        "balance": 2750.75,
+        "group": {"name": "Contractors", "discount": 15}
+      },
+      {
+        "id": 5,
+        "name": "Rose Mwanza",
+        "email": "rose@retail.shop",
+        "phone": "+255709876543",
+        "address": "246 Air Port Road, Dar es Salaam",
+        "city": "Dar es Salaam",
+        "status": "active",
+        "balance": 0.00,
+        "group": {"name": "Walk-in", "discount": 0}
+      }
+    ],
+    "products": [
+      {
+        "id": 1,
+        "name": "Premium Jeans",
+        "sku": "JEANS-PREM-001",
+        "barcode": "1234567890",
+        "selling_price": 25000.00,
+        "cost_price": 15000.00,
+        "stock_quantity": 50,
+        "reorder_level": 20,
+        "description": "High quality denim jeans",
+        "status": "active",
+        "image_url": "https://example.com/jeans.jpg",
+        "product_category_id": 1,
+        "brand_id": 1,
+        "unit_id": 1,
+        "category": {"name": "Clothing"},
+        "brand": {"name": "Premium Wear"},
+        "unit": {"short_name": "pcs"}
+      },
+      {
+        "id": 2,
+        "name": "Silk Blouse",
+        "sku": "BLU-SILK-002",
+        "barcode": "2345678901",
+        "selling_price": 35000.00,
+        "cost_price": 20000.00,
+        "stock_quantity": 30,
+        "reorder_level": 15,
+        "description": "Elegant silk blouse",
+        "status": "active",
+        "image_url": "https://example.com/blouse.jpg",
+        "product_category_id": 1,
+        "brand_id": 2,
+        "unit_id": 1,
+        "category": {"name": "Clothing"},
+        "brand": {"name": "Elegant Fashion"},
+        "unit": {"short_name": "pcs"}
+      },
+      {
+        "id": 3,
+        "name": "Rice 5kg Bag",
+        "sku": "RICE-5KG-003",
+        "barcode": "3456789012",
+        "selling_price": 12000.00,
+        "cost_price": 8000.00,
+        "stock_quantity": 100,
+        "reorder_level": 50,
+        "description": "Premium quality rice, 5kg",
+        "status": "active",
+        "image_url": "https://example.com/rice.jpg",
+        "product_category_id": 2,
+        "brand_id": 3,
+        "unit_id": 2,
+        "category": {"name": "Grocery"},
+        "brand": {"name": "Golden Grain"},
+        "unit": {"short_name": "bags"}
+      },
+      {
+        "id": 4,
+        "name": "Chocolate Chip Cookies",
+        "sku": "COOKIES-CHOC-004",
+        "barcode": "4567890123",
+        "selling_price": 8000.00,
+        "cost_price": 5000.00,
+        "stock_quantity": 15,
+        "reorder_level": 8,
+        "description": "Delicious chocolate chip cookies",
+        "status": "active",
+        "image_url": "https://example.com/cookies.jpg",
+        "product_category_id": 2,
+        "brand_id": 4,
+        "unit_id": 3,
+        "category": {"name": "Snacks"},
+        "brand": {"name": "Sweet Treats"},
+        "unit": {"short_name": "packs"}
+      },
+      {
+        "id": 5,
+        "name": "Bluetooth Headphones",
+        "sku": "HEAD-BLUE-005",
+        "barcode": "5678901234",
+        "selling_price": 75000.00,
+        "cost_price": 45000.00,
+        "stock_quantity": 25,
+        "reorder_level": 10,
+        "description": "Noise cancelling Bluetooth headphones",
+        "status": "active",
+        "image_url": "https://example.com/headphones.jpg",
+        "product_category_id": 3,
+        "brand_id": 5,
+        "unit_id": 1,
+        "category": {"name": "Electronics"},
+        "brand": {"name": "SoundMax"},
+        "unit": {"short_name": "pcs"}
+      },
+      {
+        "id": 6,
+        "name": "Smartphone Screen Protector",
+        "sku": "PROT-SCREEN-006",
+        "barcode": "6789012345",
+        "selling_price": 15000.00,
+        "cost_price": 8000.00,
+        "stock_quantity": 0,
+        "reorder_level": 5,
+        "description": "Tempered glass screen protector",
+        "status": "active",
+        "image_url": "https://example.com/protector.jpg",
+        "product_category_id": 3,
+        "brand_id": 5,
+        "unit_id": 4,
+        "category": {"name": "Electronics"},
+        "brand": {"name": "SoundMax"},
+        "unit": {"short_name": "pcs"}
+      },
+      {
+        "id": 7,
+        "name": "Coffee Maker",
+        "sku": "COFFEE-MAKER-007",
+        "barcode": "7890123456",
+        "selling_price": 120000.00,
+        "cost_price": 80000.00,
+        "stock_quantity": 8,
+        "reorder_level": 4,
+        "description": "Automatic coffee maker",
+        "status": "active",
+        "image_url": "https://example.com/coffee-maker.jpg",
+        "product_category_id": 3,
+        "brand_id": 6,
+        "unit_id": 1,
+        "category": {"name": "Electronics"},
+        "brand": {"name": "BrewMasters"},
+        "unit": {"short_name": "pcs"}
+      },
+      {
+        "id": 8,
+        "name": "Notebook A5",
+        "sku": "NOTE-A5-008",
+        "barcode": "8901234567",
+        "selling_price": 3000.00,
+        "cost_price": 1500.00,
+        "stock_quantity": 200,
+        "reorder_level": 100,
+        "description": "Premium quality A5 notebook",
+        "status": "active",
+        "image_url": "https://example.com/notebook.jpg",
+        "product_category_id": 4,
+        "brand_id": 7,
+        "unit_id": 2,
+        "category": {"name": "Stationery"},
+        "brand": {"name": "WriteWell"},
+        "unit": {"short_name": "packs"}
+      },
+      {
+        "id": 9,
+        "name": "USB-C Cable",
+        "sku": "CABLE-USBC-009",
+        "barcode": "9012345678",
+        "selling_price": 15000.00,
+        "cost_price": 8000.00,
+        "stock_quantity": 50,
+        "reorder_level": 25,
+        "description": "3-meter USB-C charging cable",
+        "status": "active",
+        "image_url": "https", "description": "Tempered glass screen protector",
+        "status": "active",
+        "image_url": "https://example.com/protector.jpg",
+        "product_category_id": 3,
+        "brand_id": 5,
+        "unit_id": 4,
+        "category": {"name": "Electronics"},
+        "brand": {"name": "SoundMax"},
+        "unit": {"short_name": "pcs"}
+      }
+    ],
+    "categories": [
+      {"id": 1, "name": "Clothing", "description": "Apparel and fashion items"},
+      {"id": 2, "name": "Grocery", "description": "Food and household items"},
+      {"id": 3, "name": "Electronics", "description": "Electronic devices and accessories"},
+      {"id": 4, "name": "Stationery", "description": "Writing and office supplies"},
+      {"id": 5, "name": "Home Appliances", "description": "Home and kitchen appliances"},
+      {"id": 6, "name": "Health & Beauty", "description": "Health and beauty products"}
+    ],
+    "brands": [
+      {"id": 1, "name": "Premium Wear", "description": "High-end fashion brand"},
+      {"id": 2, "name": "Elegant Fashion", "description": "Elegant and sophisticated clothing"},
+      {"id": 3, "name": "Golden Grain", "description": "Quality food products"},
+      {"id": 4, "name": "Sweet Treats", "description": "Confectionery and snacks"},
+      {"id": 5, "name": "SoundMax", "description": "Audio and electronics brand"},
+      {"id": 6, "name": "BrewMasters", "description": "Coffee and brewing equipment"},
+      {"id": 7, "name": "WriteWell", "description": "Writing and stationery brand"}
+    ],
+    "units": [
+      {"id": 1, "name": "Pieces", "short_name": "pcs"},
+      {"id": 2, "name": "Bags", "short_name": "bags"},
+      {"id": 3, "name": "Packs", "short_name": "packs"},
+      {"id": 4, "name": "Rolls", "short_name": "rolls"},
+      {"id": 5, "name": "Meters", "short_name": "m"}
+    ],
+    "sales": [
+      {
+        "id": 1,
+        "reference": "POS-20241216-001",
+        "total": 65000.00,
+        "paid": 65000.00,
+        "payment_status": "paid",
+        "payment_method": "cash",
+        "status": "completed",
+        "sale_date": "2024-12-16",
+        "customer": {"id": 1, "name": "Sarah Hussein"},
+        "items": [
+          {"product_name": "Premium Jeans", "quantity": 2, "unit_price": 25000.00, "total": 50000.00},
+          {"product_name": "Silk Blouse", "quantity": 1, "unit_price": 35000.00, "total": 15000.00}
+        ]
+      },
+      {
+        "id": 2,
+        "reference": "POS-20241216-002",
+        "total": 12000.00,
+        "paid": 12000.00,
+        "payment_status": "paid",
+        "payment_method": "mobile_money",
+        "status": "completed",
+        "sale_date": "2024-12-16",
+        "customer": {"id": 2, "name": "David Mwalimu"},
+        "items": [
+          {"product_name": "Rice 5kg Bag", "quantity": 1, "unit_price": 12000.00, "total": 12000.00}
+        ]
+      },
+      {
+        "id": 3,
+        "reference": "POS-20241215-003",
+        "total": 75000.00,
+        "paid": 75000.00,
+        "payment_status": "paid",
+        "payment_method": "card",
+        "status": "completed",
+        "sale_date": "2024-12-15",
+        "customer": {"id": 5, "name": "Rose Mwanza"},
+        "items": [
+          {"product_name": "Bluetooth Headphones", "quantity": 1, "unit_price": 75000.00, "total": 75000.00}
+        ]
+      },
+      {
+        "id": 4,
+        "reference": "POS-20241214-004",
+        "total": 45000.00,
+        "paid": 30000.00,
+        "payment_status": "partial",
+        "payment_method": "cash",
+        "status": "completed",
+        "sale_date": "2024-12-14",
+        "customer": {"id": 3, "name": "Grace Mkamba"},
+        "items": [
+          {"product_name": "Chocolate Chip Cookies", "quantity": 3, "unit_price": 8000.00, "total": 24000.00},
+          {"product_name": "Notebook A5", "quantity": 2, "unit_price": 10500.00, "total": 21000.00}
+        ]
+      },
+      {
+        "id": 5,
+        "reference": "POS-20241213-005",
+        "total": 30000.00,
+        "paid": 30000.00,
+        "payment_status": "paid",
+        "payment_method": "cash",
+        "status": "completed",
+        "sale_date": "2024-12-13",
+        "customer": null,
+        "items": [
+          {"product_name": "USB-C Cable", "quantity": 2, "unit_price": 15000.00, "total": 30000.00}
+        ]
+      },
+      {
+        "id": 6,
+        "reference": "POS-20241212-006",
+        "total": 120000.00,
+        "paid": 120000.00,
+        "payment_status": "paid",
+        "payment_method": "cash",
+        "status": "completed",
+        "sale_date": "2024-12-12",
+        "customer": {"id": 4, "name": "James Mushi"},
+        "items": [
+          {"product_name": "Coffee Maker", "quantity": 1, "unit_price": 120000.00, "total": 120000.00}
+        ]
+      }
+    ],
+    "expenses": [
+      {
+        "id": 1,
+        "title": "Rent - December 2024",
+        "category": "rent",
+        "amount": 50000.00,
+        "date": "2024-12-01",
+        "description": "Monthly shop rent",
+        "status": "paid",
+        "payment_method": "bank_transfer"
+      },
+      {
+        "id": 2,
+        "title": "Electricity Bill - December 2024",
+        "category": "utilities",
+        "amount": 8000.00,
+        "date": "2024-12-15",
+        "description": "Monthly electricity consumption",
+        "status": "paid",
+        "payment_method": "bank_transfer"
+      },
+      {
+        "id": 3,
+        "title": "Stock Purchase - December 2024",
+        "category": "inventory",
+        "amount": 200000.00,
+        "date": "2024-12-05",
+        "description": "Purchase of additional inventory from supplier",
+        "status": "paid",
+        "payment_method": "bank_transfer"
+      },
+      {
+        "id": 4,
+        "title": "Marketing Campaign",
+        "category": "marketing",
+        "amount": 30000.00,
+        "date": "2024-12-10",
+        "description": "Social media marketing campaign",
+        "status": "pending",
+        "payment_method": "mobile_money"
+      },
+      {
+        "id": 5,
+        "title": "Security Services",
+        "category": "security",
+        "amount": 15000.00,
+        "date": "2024-12-08",
+        "description": "Monthly security service",
+        "status": "paid",
+        "payment_method": "cash"
+      }
+    ],
+    "expense_categories": [
+      {"id": 1, "name": "rent", "description": "Rent and lease payments"},
+      {"id": 2, "name": "utilities", "description": "Electricity, water, gas"},
+      {"id": 3, "name": "inventory", "description": "Stock and inventory purchases"},
+      {"id": 4, "name": "marketing", "description": "Marketing and advertising"},
+      {"id": 5, "name": "security", "description": "Security and safety services"},
+      {"id": 6, "name": "maintenance", "description": "Equipment and property maintenance"},
+      {"id": 7, "name": "transport", "description": "Transportation and logistics"},
+      {"id": 8, "name": "office_supplies", "description": "Office and administrative supplies"}
+    ],
+    "sales_dashboard_stats": {
+      "today_sales": 45000.00,
+      "today_orders": 3,
+      "month_revenue": 350000.00,
+      "month_expenses": 89000.00,
+      "month_profit": 261000.00,
+      "total_products": 9,
+      "total_customers": 5,
+      "low_stock": 3,
+      "out_of_stock": 1,
+      "sales_chart": [
+        {"label": "Mon", "total": 45000.00},
+        {"label": "Tue", "total": 65000.00},
+        {"label": "Wed", "total": 55000.00},
+        {"label": "Thu", "total": 75000.00},
+        {"label": "Fri", "total": 85000.00},
+        {"label": "Sat", "total": 95000.00},
+        {"label": "Sun", "total": 125000.00}
+      ],
+      "recent_sales": [
+        {
+          "reference": "POS-20241216-001",
+          "customer": {"name": "Sarah Hussein"},
+          "total": 65000.00,
+          "status": "completed",
+          "sale_date": "2024-12-16"
+        },
+        {
+          "reference": "POS-20241216-002",
+          "customer": {"name": "David Mwalimu"},
+          "total": 12000.00,
+          "status": "completed",
+          "sale_date": "2024-12-16"
+        },
+        {
+          "reference": "POS-20241215-003",
+          "customer": {"name": "Rose Mwanza"},
+          "total": 75000.00,
+          "status": "completed",
+          "sale_date": "2024-12-15"
+        },
+        {
+          "reference": "POS-20241214-004",
+          "customer": {"name": "Grace Mkamba"},
+          "total": 45000.00,
+          "status": "completed",
+          "sale_date": "2024-12-14"
+        },
+        {
+          "reference": "POS-20241213-005",
+          "customer": null,
+          "total": 30000.00,
+          "status": "completed",
+          "sale_date": "2024-12-13"
+        }
+      ],
+      "payment_methods": [
+        {"payment_method": "cash", "count": 3, "total": 220000.00},
+        {"payment_method": "mobile_money", "count": 1, "total": 12000.00},
+        {"payment_method": "card", "count": 1, "total": 75000.00}
+      ],
+      "monthly_sales": [
+        {"month": 12, "year": 2024, "total": 350000.00},
+        {"month": 11, "year": 2024, "total": 320000.00},
+        {"month": 10, "year": 2024, "total": 280000.00},
+        {"month": 9, "year": 2024, "total": 250000.00}
+      ],
+      "top_products": [
+        {
+          "name": "Coffee Maker",
+          "quantity": 3,
+          "revenue": 360000.00
+        },
+        {
+          "name": "Premium Jeans",
+          "quantity": 2,
+          "revenue": 50000.00
+        },
+        {
+          "name": "Silk Blouse",
+          "quantity": 1,
+          "revenue": 35000.00
+        },
+        {
+          "name": "Bluetooth Headphones",
+          "quantity": 1,
+          "revenue": 75000.00
+        },
+        {
+          "name": "Rice 5kg Bag",
+          "quantity": 1,
+          "revenue": 12000.00
+        }
+      ]
+    }
+  }
+}
