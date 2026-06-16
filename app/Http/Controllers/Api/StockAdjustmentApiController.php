@@ -2,15 +2,17 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\StockAdjustment;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class StockAdjustmentApiController extends Controller {
+    use UserIdTrait;
     public function index(Request $req) {
-        $q = StockAdjustment::with('product:id,name,sku');
+        $q = StockAdjustment::with('product')->where('created_by', $this->userId());
         if ($req->type) $q->where('type',$req->type);
-        return response()->json($q->latest()->take(100)->get());
+        if ($req->from) $q->whereDate('adjustment_date','>=',$req->from);
+        if ($req->to) $q->whereDate('adjustment_date','<=',$req->to);
+        return response()->json($q->orderByDesc('created_at')->get());
     }
     public function store(Request $req) {
         $data = $req->validate([
@@ -19,43 +21,32 @@ class StockAdjustmentApiController extends Controller {
             'type' => 'required|in:addition,subtraction',
             'quantity' => 'required|numeric|min:0.01',
             'unit_cost' => 'nullable|numeric|min:0',
-            'reason' => 'nullable|string',
+            'reason' => 'nullable|string|max:191',
             'notes' => 'nullable|string',
         ]);
-        $reference = 'ADJ-'.strtoupper(Str::random(8));
-        $adjustment = StockAdjustment::create(array_merge($data, ['reference' => $reference]));
-        $product = Product::find($data['product_id']);
-        if ($product) {
-            if ($data['type'] === 'addition') {
-                $product->increment('stock_quantity', $data['quantity']);
-            } else {
-                $product->decrement('stock_quantity', $data['quantity']);
-            }
-        }
-        return response()->json($adjustment->load('product:id,name,sku'), 201);
+        $data['reference'] = 'ADJ-'.strtoupper(Str::random(8));
+        $data['created_by'] = $this->userId();
+        return response()->json(StockAdjustment::create($data), 201);
     }
-    public function show(StockAdjustment $stockAdjustment) {
-        return response()->json($stockAdjustment->load('product:id,name,sku'));
+    public function show($id) {
+        return response()->json(StockAdjustment::with('product')->where('created_by', $this->userId())->findOrFail($id));
     }
-    public function update(Request $req, StockAdjustment $stockAdjustment) {
+    public function update(Request $req, $id) {
+        $a = StockAdjustment::where('created_by', $this->userId())->findOrFail($id);
         $data = $req->validate([
+            'product_id' => 'required|exists:products,id',
             'adjustment_date' => 'required|date',
-            'reason' => 'nullable|string',
+            'type' => 'required|in:addition,subtraction',
+            'quantity' => 'required|numeric|min:0.01',
+            'unit_cost' => 'nullable|numeric|min:0',
+            'reason' => 'nullable|string|max:191',
             'notes' => 'nullable|string',
         ]);
-        $stockAdjustment->update($data);
-        return response()->json($stockAdjustment->load('product:id,name,sku'));
+        $a->update($data);
+        return response()->json($a->fresh('product'));
     }
-    public function destroy(StockAdjustment $stockAdjustment) {
-        $product = $stockAdjustment->product;
-        if ($product) {
-            if ($stockAdjustment->type === 'addition') {
-                $product->decrement('stock_quantity', $stockAdjustment->quantity);
-            } else {
-                $product->increment('stock_quantity', $stockAdjustment->quantity);
-            }
-        }
-        $stockAdjustment->delete();
+    public function destroy($id) {
+        StockAdjustment::where('created_by', $this->userId())->where('id',$id)->delete();
         return response()->json(['message'=>'Stock adjustment deleted']);
     }
 }
