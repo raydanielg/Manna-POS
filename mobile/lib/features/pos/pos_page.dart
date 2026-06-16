@@ -98,17 +98,18 @@ class _PosPageState extends State<PosPage> with SingleTickerProviderStateMixin {
     setState(() => _processing = true);
     try {
       final user = context.read<AuthProvider>().user;
+      final today = DateTime.now().toIso8601String().split('T')[0];
       final body = {
+        'sale_date': today,
         'status': 'completed',
         'payment_method': _payMethod,
-        'paid_amount': _payMethod == 'cash' ? _paid : _total,
-        'tax_amount': _tax,
+        'paid': _payMethod == 'cash' ? _paid : _total,
+        'discount': 0,
+        'notes': null,
         'items': _cart.values.map((i) => {
           'product_id': i.product.id,
-          'product_name': i.product.name,
           'quantity': i.qty,
           'unit_price': i.product.sellingPrice,
-          'total': i.total,
         }).toList(),
       };
       final sale = await ApiService.post('/sales', body);
