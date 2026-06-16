@@ -21,6 +21,8 @@ class ProductController extends Controller {
         return view('dashboard.inventory.list-products', [
             'categories' => ProductCategory::all(),
             'brands' => Brand::all(),
+            'units' => Unit::all(),
+            'taxRates' => TaxRate::all(),
         ]);
     }
     public function store(Request $req) {
