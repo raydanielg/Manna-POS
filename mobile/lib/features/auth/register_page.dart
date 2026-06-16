@@ -196,7 +196,7 @@ class _RegisterPageState extends State<RegisterPage> {
           onChanged: (v) => setState(() => _currency = v ?? 'TZS'),
         ),
         const SizedBox(height: 14),
-        TextField(controller: _taxPct, decoration: const InputDecoration(labelText: 'Tax Percentage (%)', prefixIcon: Icon(Icons.percent))),
+        TextField(controller: _taxPctCtrl, decoration: const InputDecoration(labelText: 'Tax Percentage (%)', prefixIcon: Icon(Icons.percent))),
       ],
     );
   }
