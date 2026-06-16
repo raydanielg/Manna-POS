@@ -163,7 +163,6 @@ class AdminDemoSeeder extends Seeder
         TicketReply::create(['ticket_id' => 4, 'user_id' => 1, 'message' => 'Great suggestion! This has been added to our product roadmap for Q3 2025.', 'attachments' => null]);
 
         // ── Activity Logs ──
-        ActivityLog::truncate();
         $actions = ['created', 'updated', 'deleted', 'logged_in', 'logged_out', 'exported_report'];
         $resources = ['user', 'business', 'subscription', 'invoice', 'staff', 'product', 'sale'];
         $descriptions = [
