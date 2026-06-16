@@ -48,7 +48,11 @@ class AdminDemoSeeder extends Seeder
         }
 
         // ── Businesses ──
-        Business::truncate();
+        DB::transaction(function () {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+            Business::truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        });
         $businesses = [
             ['user_id' => 1, 'business_name' => 'Mwamba General Store', 'business_type' => 'retail', 'business_category_id' => 1, 'business_address' => 'Sinza Mori, Plot 45', 'business_city' => 'Dar es Salaam', 'business_country' => 'Tanzania', 'phone' => '+255711111111', 'email' => 'info@mwambastore.co.tz', 'website' => 'https://mwambastore.co.tz', 'registration_number' => 'REG-2024-001', 'tax_number' => 'TIN-123456789', 'currency' => 'TZS', 'status' => 'active', 'is_verified' => true, 'verified_at' => Carbon::now()->subMonth(), 'verified_by' => 2],
             ['user_id' => 2, 'business_name' => 'Kileo Wholesalers', 'business_type' => 'wholesale', 'business_category_id' => 3, 'business_address' => 'Kariakoo Market', 'business_city' => 'Dar es Salaam', 'business_country' => 'Tanzania', 'phone' => '+255722222222', 'email' => 'info@kileowholesale.co.tz', 'currency' => 'TZS', 'status' => 'active', 'is_verified' => true, 'verified_at' => Carbon::now()->subWeeks(2), 'verified_by' => 2],
