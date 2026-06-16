@@ -383,6 +383,28 @@
         return data;
     }
 
+    function clearFormErrors(formId) {
+        const form = document.getElementById(formId);
+        if (!form) return;
+        form.querySelectorAll('.is-invalid').forEach(e => e.classList.remove('is-invalid'));
+        form.querySelectorAll('.invalid-feedback').forEach(e => { e.textContent = ''; e.style.display = 'none'; });
+    }
+    function showFormErrors(formId, errors) {
+        const form = document.getElementById(formId);
+        if (!form) return;
+        for (const [field, msgs] of Object.entries(errors)) {
+            const input = form.querySelector(`[name="${field}"]`);
+            if (input) {
+                input.classList.add('is-invalid');
+                const feedback = input.closest('.form-group')?.querySelector('.invalid-feedback') || input.nextElementSibling;
+                if (feedback && feedback.classList.contains('invalid-feedback')) {
+                    feedback.textContent = Array.isArray(msgs) ? msgs[0] : msgs;
+                    feedback.style.display = 'block';
+                }
+            }
+        }
+    }
+
     @yield('scripts')
 </script>
 </body>
