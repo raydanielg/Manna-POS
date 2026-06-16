@@ -27,8 +27,6 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
     /**
      * Create a new controller instance.
      *
@@ -47,5 +45,13 @@ class LoginController extends Controller
         return $this->guard()->attempt(
             $credentials, $request->boolean('remember')
         );
+    }
+
+    public function redirectTo()
+    {
+        if (auth()->user()->role === 'admin') {
+            return '/admin';
+        }
+        return '/dashboard';
     }
 }
