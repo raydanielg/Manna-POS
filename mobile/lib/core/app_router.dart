@@ -17,6 +17,7 @@ import '../features/sales/sales_page.dart';
 import '../features/expenses/expenses_page.dart';
 import '../features/reports/reports_page.dart';
 import '../features/settings/settings_page.dart';
+import '../features/auth/forgot_password_page.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -36,6 +37,7 @@ class AppRouter {
       GoRoute(path: '/expenses', builder: (_, __) => const ExpensesPage()),
       GoRoute(path: '/reports', builder: (_, __) => const ReportsPage()),
       GoRoute(path: '/settings', builder: (_, __) => const SettingsPage()),
+      GoRoute(path: '/forgot-password', builder: (_, __) => const ForgotPasswordPage()),
     ],
     errorBuilder: (_, __) => Scaffold(
       body: Center(

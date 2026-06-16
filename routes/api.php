@@ -57,6 +57,7 @@ Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
     Route::get('suppliers',            fn() => response()->json(Supplier::select('id','name','company')->orderBy('name')->get()))->name('suppliers');
     Route::get('expense-categories',   fn() => response()->json(ExpenseCategory::select('id','name')->orderBy('name')->get()))->name('expense-categories');
     Route::get('users',                fn() => response()->json(\App\Models\User::select('id','name','email','role','business_name','business_city','business_country','currency','created_at')->orderBy('name')->get()))->name('users');
+    Route::get('businesses',           fn() => response()->json(Business::with('category:id,name')->orderBy('business_name')->get()))->name('businesses');
 
     // Staff management
     Route::get('staff',           [App\Http\Controllers\Api\StaffApiController::class, 'index']);
