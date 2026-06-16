@@ -358,10 +358,25 @@ use App\Http\Controllers\Admin\AdminBillingController;
 use App\Http\Controllers\Admin\AdminCommunicationController;
 use App\Http\Controllers\Admin\AdminSupportController;
 use App\Http\Controllers\Admin\AdminSystemController;
+use App\Http\Controllers\Admin\AdminUsersController;
+use App\Http\Controllers\Admin\AdminSubscriptionController;
+use App\Http\Controllers\Admin\AdminFinanceController;
+use App\Http\Controllers\Admin\AdminCacheController;
+use App\Http\Controllers\Admin\AdminDatabaseController;
+use App\Http\Controllers\Admin\AdminFileManagerController;
 
 Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->group(function () {
 
-    // Staff
+    // ── Users ──
+    Route::get('users',                [AdminUsersController::class, 'list'])->name('users.list');
+    Route::post('users',               [AdminUsersController::class, 'store'])->name('users.store');
+    Route::get('users/{user}',         [AdminUsersController::class, 'show'])->name('users.show');
+    Route::put('users/{user}',         [AdminUsersController::class, 'update'])->name('users.update');
+    Route::delete('users/{user}',      [AdminUsersController::class, 'destroy'])->name('users.destroy');
+    Route::post('users/{user}/block',  [AdminUsersController::class, 'block'])->name('users.block');
+    Route::post('users/{user}/unblock',[AdminUsersController::class, 'unblock'])->name('users.unblock');
+
+    // ── Staff ──
     Route::get('staff',                [AdminStaffController::class, 'list'])->name('staff.list');
     Route::post('staff',               [AdminStaffController::class, 'store'])->name('staff.store');
     Route::get('staff/{staff}',        [AdminStaffController::class, 'show'])->name('staff.show');
@@ -373,8 +388,11 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::get('staff/schedules',      [AdminStaffController::class, 'schedulesList'])->name('staff.schedules');
     Route::post('staff/schedules',     [AdminStaffController::class, 'schedulesStore'])->name('staff.schedules.store');
     Route::delete('staff/schedules/{schedule}', [AdminStaffController::class, 'schedulesDestroy'])->name('staff.schedules.destroy');
+    Route::get('staff/roles',          [AdminStaffController::class, 'rolesList'])->name('staff.roles.list');
+    Route::get('staff/performance',    [AdminStaffController::class, 'performanceList'])->name('staff.performance.list');
+    Route::get('staff/departments',    [AdminStaffController::class, 'departments'])->name('staff.departments');
 
-    // Business
+    // ── Business ──
     Route::get('business',             [AdminBusinessController::class, 'list'])->name('business.list');
     Route::post('business',            [AdminBusinessController::class, 'store'])->name('business.store');
     Route::get('business/{business}',  [AdminBusinessController::class, 'show'])->name('business.show');
@@ -387,8 +405,9 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::get('business/verifications',[AdminBusinessController::class, 'verificationsList'])->name('business.verifications');
     Route::post('business/verifications/{verification}/approve', [AdminBusinessController::class, 'verificationsApprove'])->name('business.verifications.approve');
     Route::post('business/verifications/{verification}/reject', [AdminBusinessController::class, 'verificationsReject'])->name('business.verifications.reject');
+    Route::get('business/locations',   [AdminBusinessController::class, 'locationsList'])->name('business.locations.list');
 
-    // Billing
+    // ── Billing ──
     Route::get('billing/users',        [AdminBillingController::class, 'users'])->name('billing.users');
     Route::get('billing/invoices',     [AdminBillingController::class, 'invoicesList'])->name('billing.invoices');
     Route::post('billing/invoices',    [AdminBillingController::class, 'invoicesStore'])->name('billing.invoices.store');
@@ -400,8 +419,24 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::put('billing/gateways/{gateway}', [AdminBillingController::class, 'gatewaysUpdate'])->name('billing.gateways.update');
     Route::post('billing/gateways/{gateway}/toggle', [AdminBillingController::class, 'gatewaysToggle'])->name('billing.gateways.toggle');
     Route::delete('billing/gateways/{gateway}', [AdminBillingController::class, 'gatewaysDestroy'])->name('billing.gateways.destroy');
+    Route::get('billing/refunds',      [AdminBillingController::class, 'refundsList'])->name('billing.refunds.list');
+    Route::post('billing/refunds/{payment}/process', [AdminBillingController::class, 'refundsProcess'])->name('billing.refunds.process');
+    Route::get('billing/transactions', [AdminBillingController::class, 'transactionsList'])->name('billing.transactions.list');
 
-    // Communication
+    // ── Subscriptions ──
+    Route::get('subscriptions',        [AdminSubscriptionController::class, 'list'])->name('subscriptions.list');
+    Route::get('subscriptions/{subscription}', [AdminSubscriptionController::class, 'show'])->name('subscriptions.show');
+    Route::put('subscriptions/{subscription}', [AdminSubscriptionController::class, 'update'])->name('subscriptions.update');
+    Route::delete('subscriptions/{subscription}', [AdminSubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
+
+    // ── Finance ──
+    Route::get('finance/revenue',      [AdminFinanceController::class, 'revenueData'])->name('finance.revenue');
+    Route::get('finance/tax-reports',  [AdminFinanceController::class, 'taxReportsList'])->name('finance.tax-reports.list');
+    Route::get('finance/commissions',  [AdminFinanceController::class, 'commissionsList'])->name('finance.commissions.list');
+    Route::get('finance/payouts',      [AdminFinanceController::class, 'payoutsList'])->name('finance.payouts.list');
+    Route::post('finance/payouts/{id}/process', [AdminFinanceController::class, 'payoutsProcess'])->name('finance.payouts.process');
+
+    // ── Communication ──
     Route::get('communication/email-templates',      [AdminCommunicationController::class, 'emailTemplatesList'])->name('communication.email-templates.list');
     Route::post('communication/email-templates',     [AdminCommunicationController::class, 'emailTemplatesStore'])->name('communication.email-templates.store');
     Route::get('communication/email-templates/{template}', [AdminCommunicationController::class, 'emailTemplatesShow'])->name('communication.email-templates.show');
@@ -416,14 +451,17 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::get('communication/announcements/{announcement}', [AdminCommunicationController::class, 'announcementsShow'])->name('communication.announcements.show');
     Route::put('communication/announcements/{announcement}', [AdminCommunicationController::class, 'announcementsUpdate'])->name('communication.announcements.update');
     Route::delete('communication/announcements/{announcement}', [AdminCommunicationController::class, 'announcementsDestroy'])->name('communication.announcements.destroy');
+    Route::get('communication/push',     [AdminCommunicationController::class, 'pushList'])->name('communication.push.list');
+    Route::post('communication/push',    [AdminCommunicationController::class, 'pushStore'])->name('communication.push.store');
+    Route::post('communication/broadcast', [AdminCommunicationController::class, 'broadcastSend'])->name('communication.broadcast.send');
 
-    // Support
+    // ── Support ──
     Route::get('support/tickets',        [AdminSupportController::class, 'ticketsList'])->name('support.tickets.list');
     Route::get('support/tickets/{ticket}', [AdminSupportController::class, 'ticketsShow'])->name('support.tickets.show');
     Route::put('support/tickets/{ticket}', [AdminSupportController::class, 'ticketsUpdate'])->name('support.tickets.update');
     Route::delete('support/tickets/{ticket}', [AdminSupportController::class, 'ticketsDestroy'])->name('support.tickets.destroy');
 
-    // System
+    // ── System ──
     Route::get('system/config',          [AdminSystemController::class, 'configList'])->name('system.config.list');
     Route::post('system/config',         [AdminSystemController::class, 'configStore'])->name('system.config.store');
     Route::get('system/config/{config}', [AdminSystemController::class, 'configShow'])->name('system.config.show');
@@ -438,4 +476,60 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::get('system/health',          [AdminSystemController::class, 'healthData'])->name('system.health');
     Route::get('system/login-history',   [AdminSystemController::class, 'loginHistoryList'])->name('system.login-history.list');
     Route::delete('system/login-history',[AdminSystemController::class, 'loginHistoryClear'])->name('system.login-history.clear');
+
+    // ── System Extended (Email, SMS, API Keys, Security, Maintenance, Logs, etc.) ──
+    Route::get('system/email-config',       [AdminSystemController::class, 'emailConfigData'])->name('system.email-config.data');
+    Route::post('system/email-config',      [AdminSystemController::class, 'emailConfigSave'])->name('system.email-config.save');
+    Route::post('system/test-email',        [AdminSystemController::class, 'testEmail'])->name('system.test-email');
+    Route::get('system/sms-config',         [AdminSystemController::class, 'smsConfigData'])->name('system.sms-config.data');
+    Route::post('system/sms-config',        [AdminSystemController::class, 'smsConfigSave'])->name('system.sms-config.save');
+    Route::get('system/api-keys',           [AdminSystemController::class, 'apiKeysList'])->name('system.api-keys.list');
+    Route::post('system/api-keys',          [AdminSystemController::class, 'apiKeysStore'])->name('system.api-keys.store');
+    Route::post('system/api-keys/{config}/toggle', [AdminSystemController::class, 'apiKeysToggle'])->name('system.api-keys.toggle');
+    Route::delete('system/api-keys/{config}', [AdminSystemController::class, 'apiKeysDestroy'])->name('system.api-keys.destroy');
+    Route::get('system/security',           [AdminSystemController::class, 'securityData'])->name('system.security.data');
+    Route::post('system/security',          [AdminSystemController::class, 'securitySave'])->name('system.security.save');
+    Route::get('system/maintenance',        [AdminSystemController::class, 'maintenanceData'])->name('system.maintenance.data');
+    Route::post('system/maintenance',       [AdminSystemController::class, 'maintenanceToggle'])->name('system.maintenance.toggle');
+    Route::get('system/error-logs',         [AdminSystemController::class, 'errorLogsList'])->name('system.error-logs.list');
+    Route::delete('system/error-logs',      [AdminSystemController::class, 'errorLogsClear'])->name('system.error-logs.clear');
+    Route::get('system/logs',               [AdminSystemController::class, 'logsList'])->name('system.logs.list');
+    Route::post('system/logs/view',         [AdminSystemController::class, 'logsView'])->name('system.logs.view');
+    Route::get('system/logs/download',      [AdminSystemController::class, 'logsDownload'])->name('system.logs.download');
+    Route::post('system/logs/clear',        [AdminSystemController::class, 'logsClear'])->name('system.logs.clear');
+    Route::get('system/file-backups',       [AdminSystemController::class, 'fileBackupsList'])->name('system.file-backups.list');
+    Route::post('system/file-backups',      [AdminSystemController::class, 'fileBackupsCreate'])->name('system.file-backups.create');
+    Route::post('system/backup-restore/{backup}', [AdminSystemController::class, 'backupRestoreRun'])->name('system.backup-restore.run');
+    Route::get('system/backup-schedule',    [AdminSystemController::class, 'backupScheduleData'])->name('system.backup-schedule.data');
+    Route::post('system/backup-schedule',   [AdminSystemController::class, 'backupScheduleSave'])->name('system.backup-schedule.save');
+    Route::get('system/updates',            [AdminSystemController::class, 'updatesList'])->name('system.updates.list');
+    Route::post('system/updates/check',     [AdminSystemController::class, 'updatesCheck'])->name('system.updates.check');
+    Route::post('system/updates/run',       [AdminSystemController::class, 'updatesRun'])->name('system.updates.run');
+
+    // ── Settings (Currency, Receipt Printers) ──
+    Route::get('settings/currency',         [AdminSystemController::class, 'currencyList'])->name('settings.currency.list');
+    Route::post('settings/currency',        [AdminSystemController::class, 'currencyStore'])->name('settings.currency.store');
+    Route::delete('settings/currency/{code}', [AdminSystemController::class, 'currencyDestroy'])->name('settings.currency.destroy');
+    Route::get('settings/receipt-printers', [AdminSystemController::class, 'receiptPrintersList'])->name('settings.receipt-printers.list');
+    Route::post('settings/receipt-printers',[AdminSystemController::class, 'receiptPrintersStore'])->name('settings.receipt-printers.store');
+    Route::delete('settings/receipt-printers/{key}', [AdminSystemController::class, 'receiptPrintersDestroy'])->name('settings.receipt-printers.destroy');
+    Route::post('settings/receipt-printers/test', [AdminSystemController::class, 'receiptPrintersTest'])->name('settings.receipt-printers.test');
+
+    // ── Cache ──
+    Route::get('cache',                    [AdminCacheController::class, 'list'])->name('cache.list');
+    Route::post('cache/clear',             [AdminCacheController::class, 'clear'])->name('cache.clear');
+    Route::post('cache/optimize',          [AdminCacheController::class, 'optimize'])->name('cache.optimize');
+
+    // ── Database ──
+    Route::get('database/tables',          [AdminDatabaseController::class, 'tables'])->name('database.tables');
+    Route::get('database/structure/{table}', [AdminDatabaseController::class, 'structure'])->name('database.structure');
+    Route::post('database/optimize/{table}', [AdminDatabaseController::class, 'optimize'])->name('database.optimize');
+    Route::post('database/query',          [AdminDatabaseController::class, 'query'])->name('database.query');
+
+    // ── File Manager ──
+    Route::get('file-manager',             [AdminFileManagerController::class, 'list'])->name('file-manager.list');
+    Route::post('file-manager/upload',     [AdminFileManagerController::class, 'upload'])->name('file-manager.upload');
+    Route::post('file-manager/folder',     [AdminFileManagerController::class, 'createFolder'])->name('file-manager.folder');
+    Route::post('file-manager/delete',     [AdminFileManagerController::class, 'delete'])->name('file-manager.delete');
+    Route::get('file-manager/download',    [AdminFileManagerController::class, 'download'])->name('file-manager.download');
 });
