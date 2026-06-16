@@ -269,7 +269,7 @@ class AdminDemoSeeder extends Seeder
         StockTransfer::truncate();
         StockTransfer::insert([
             ['reference' => 'TRF-001', 'from_location' => 'Main Warehouse', 'to_location' => 'Mwamba Store', 'transfer_date' => Carbon::now()->subDays(10), 'status' => 'completed', 'notes' => 'Replenishment for weekend sales'],
-            ['reference' => 'TRF-002', 'from_location' => 'Mwamba Store', 'to_location' => 'Kileo Wholesalers', 'transfer_date' => Carbon::now()->subDays(5), 'status' => 'in_transit', 'notes' => 'Bulk transfer - rice and cooking oil'],
+            ['reference' => 'TRF-002', 'from_location' => 'Mwamba Store', 'to_location' => 'Kileo Wholesalers', 'transfer_date' => Carbon::now()->subDays(5), 'status' => 'pending', 'notes' => 'Bulk transfer - rice and cooking oil'],
             ['reference' => 'TRF-003', 'from_location' => 'Main Warehouse', 'to_location' => 'Mama Pita Cafe', 'transfer_date' => Carbon::now()->subDays(2), 'status' => 'pending', 'notes' => 'Weekly supply delivery'],
         ]);
 
