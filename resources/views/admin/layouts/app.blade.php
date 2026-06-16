@@ -27,6 +27,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #f1f4fb; font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+        body.overflow-hidden { overflow: hidden; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
