@@ -13,6 +13,21 @@ class AdminSubscriptionController extends Controller
         return view('admin.subscriptions.index');
     }
 
+    public function active()
+    {
+        return view('admin.subscriptions.active');
+    }
+
+    public function expired()
+    {
+        return view('admin.subscriptions.expired');
+    }
+
+    public function trial()
+    {
+        return view('admin.subscriptions.trial');
+    }
+
     public function list(Request $req)
     {
         try {

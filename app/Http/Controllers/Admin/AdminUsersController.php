@@ -98,6 +98,11 @@ class AdminUsersController extends Controller
         }
     }
 
+    public function blocked()
+    {
+        return view('admin.users.blocked');
+    }
+
     public function block(User $user)
     {
         try {
