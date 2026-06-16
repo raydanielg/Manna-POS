@@ -49,7 +49,7 @@ class _BrandsPageState extends State<BrandsPage> {
       appBar: AppBar(title: const Text('Brands'), actions: [IconButton(icon: const Icon(Icons.refresh, color: Colors.white), onPressed: _load)]),
       body: _loading ? const LoadingWidget(message: 'Loading...')
         : _error != null ? ErrorWidget2(message: _error!, onRetry: _load)
-        : _brands.isEmpty ? const EmptyState(icon: Icons.trademark_outlined, title: 'No Brands', subtitle: 'Add your first brand')
+        : _brands.isEmpty ? const EmptyState(icon: Icons.bookmark_outline, title: 'No Brands', subtitle: 'Add your first brand')
         : RefreshIndicator(color: AppColors.primary, onRefresh: _load,
             child: ListView.separated(padding: const EdgeInsets.fromLTRB(16, 0, 16, 100), itemCount: _brands.length, separatorBuilder: (_, __) => const SizedBox(height: 10), itemBuilder: (_, i) => _tile(_brands[i]))),
       floatingActionButton: FloatingActionButton.extended(onPressed: () => _showForm(), icon: const Icon(Icons.add), label: const Text('Add Brand')),
