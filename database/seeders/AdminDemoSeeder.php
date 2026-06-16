@@ -95,6 +95,7 @@ class AdminDemoSeeder extends Seeder
         }
 
         // ── Subscription Plans ──
+        UserSubscription::truncate();  // must truncate before plans (FK)
         SubscriptionPlan::truncate();
         SubscriptionPlan::create(['name' => 'Starter', 'slug' => 'starter', 'description' => 'Perfect for small shops just getting started with digital POS.', 'price_monthly' => 0, 'price_yearly' => 0, 'currency' => 'TZS', 'max_users' => 1, 'max_products' => 100, 'max_locations' => 1, 'features' => ['Basic Sales', 'Inventory (up to 100 products)', 'Cash Payments', 'Daily Reports'], 'is_active' => true, 'is_featured' => false, 'sort_order' => 1, 'badge_color' => '#94a3b8']);
         SubscriptionPlan::create(['name' => 'Growth', 'slug' => 'growth', 'description' => 'For growing businesses that need inventory management and reports.', 'price_monthly' => 45000, 'price_yearly' => 450000, 'currency' => 'TZS', 'max_users' => 3, 'max_products' => 1000, 'max_locations' => 2, 'features' => ['Everything in Starter', 'Up to 3 Users', 'Inventory (1,000 products)', 'Mobile Money Payments', 'Customer Profiles', 'Sales Analytics'], 'is_active' => true, 'is_featured' => true, 'sort_order' => 2, 'badge_color' => '#2563eb']);
@@ -102,7 +103,6 @@ class AdminDemoSeeder extends Seeder
         SubscriptionPlan::create(['name' => 'Enterprise', 'slug' => 'enterprise', 'description' => 'For large organizations with advanced needs and dedicated support.', 'price_monthly' => 250000, 'price_yearly' => 2500000, 'currency' => 'TZS', 'max_users' => 50, 'max_products' => 999999, 'max_locations' => 50, 'features' => ['Everything in Business', 'Unlimited Products', 'Up to 50 Users', '50 Locations', 'API Access', 'Dedicated Account Manager', 'Priority Support', 'Custom Integrations'], 'is_active' => true, 'is_featured' => false, 'sort_order' => 4, 'badge_color' => '#7c3aed']);
 
         // ── User Subscriptions ──
-        UserSubscription::truncate();
         UserSubscription::create(['user_id' => 1, 'subscription_plan_id' => 3, 'billing_cycle' => 'monthly', 'amount_paid' => 95000, 'currency' => 'TZS', 'status' => 'active', 'starts_at' => Carbon::now()->subMonths(2), 'expires_at' => Carbon::now()->addMonth(), 'transaction_ref' => 'TXN-001', 'notes' => 'Primary subscription']);
         UserSubscription::create(['user_id' => 2, 'subscription_plan_id' => 2, 'billing_cycle' => 'yearly', 'amount_paid' => 450000, 'currency' => 'TZS', 'status' => 'active', 'starts_at' => Carbon::now()->subMonths(3), 'expires_at' => Carbon::now()->addMonths(9), 'transaction_ref' => 'TXN-002']);
         UserSubscription::create(['user_id' => 3, 'subscription_plan_id' => 2, 'billing_cycle' => 'monthly', 'amount_paid' => 45000, 'currency' => 'TZS', 'status' => 'trial', 'starts_at' => Carbon::now()->subDays(5), 'expires_at' => Carbon::now()->addDays(25), 'transaction_ref' => null, 'notes' => 'Trial period']);
