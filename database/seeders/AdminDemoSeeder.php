@@ -238,7 +238,6 @@ class AdminDemoSeeder extends Seeder
         ]);
 
         // ── Discounts ──
-        Discount::truncate();
         Discount::insert([
             ['name' => 'Independence Day Sale', 'amount' => 15, 'type' => 'percentage', 'starts_at' => '2025-12-07', 'ends_at' => '2025-12-10', 'status' => 'active'],
             ['name' => 'Clearance Sale', 'amount' => 30, 'type' => 'percentage', 'starts_at' => '2025-06-15', 'ends_at' => '2025-07-15', 'status' => 'active'],
