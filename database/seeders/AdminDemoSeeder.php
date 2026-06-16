@@ -106,7 +106,6 @@ class AdminDemoSeeder extends Seeder
         }
 
         // ── Staff Attendance ──
-        StaffAttendance::truncate();
         StaffAttendance::create(['staff_id' => 1, 'date' => Carbon::today(), 'clock_in' => '08:00', 'clock_out' => '17:00', 'status' => 'present', 'notes' => 'On time']);
         StaffAttendance::create(['staff_id' => 1, 'date' => Carbon::yesterday(), 'clock_in' => '08:15', 'clock_out' => '16:30', 'status' => 'present', 'notes' => '']);
         StaffAttendance::create(['staff_id' => 2, 'date' => Carbon::today(), 'clock_in' => '09:00', 'clock_out' => '17:30', 'status' => 'late', 'notes' => 'Arrived 30 min late']);
