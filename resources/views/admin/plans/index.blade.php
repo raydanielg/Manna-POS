@@ -118,6 +118,7 @@ async function loadPlans() {
                 <span>Locations: <strong>${p.max_locations ?? '∞'}</strong></span>
                 <span>Subscribers: <strong>${p.active_subscriptions_count || 0}</strong></span>
             </div>
+            ${Array.isArray(p.features) && p.features.length ? `<div style="padding:0.5rem 1.25rem 0.75rem;display:flex;flex-wrap:wrap;gap:0.3rem;border-top:1px solid #f8fafc;">${p.features.slice(0,4).map(f => `<span style="display:inline-flex;align-items:center;gap:0.2rem;font-size:0.68rem;color:#16a34a;background:#f0fdf4;padding:0.15rem 0.45rem;border-radius:999px;"><span class="material-icons" style="font-size:12px;">check</span>${f}</span>`).join('')}${p.features.length > 4 ? `<span style="font-size:0.68rem;color:#94a3b8;">+${p.features.length-4} more</span>` : ''}</div>` : ''}
             <div style="padding:0.75rem 1.25rem;border-top:1px solid #f1f5f9;display:flex;gap:0.5rem;">
                 <button class="btn btn-primary btn-xs" onclick="editPlan(${p.id})">Edit</button>
                 <button class="btn btn-danger btn-xs" onclick="deletePlan(${p.id},'${p.name}')">Delete</button>
