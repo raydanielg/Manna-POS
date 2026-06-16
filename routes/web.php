@@ -210,8 +210,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/blocked-users',    [\App\Http\Controllers\Admin\AdminUsersController::class, 'blocked'])->name('admin.blocked-users');
 
     // Plan Management
-    Route::get('/plans',            fn() => view('dashboard.plan-management.plans'))->name('admin.plans');
-    Route::get('/plans/create',     fn() => view('dashboard.plan-management.plans'))->name('admin.plans.create');
+    Route::get('/plans',            fn() => view('admin.plans.index'))->name('admin.plans');
+    Route::get('/plans/create',     fn() => view('admin.plans.index'))->name('admin.plans.create');
     Route::get('/subscriptions',    [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'index'])->name('admin.subscriptions');
     Route::get('/subscriptions/active',  [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'active'])->name('admin.subscriptions.active');
     Route::get('/subscriptions/expired', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'expired'])->name('admin.subscriptions.expired');
