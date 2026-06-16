@@ -33,7 +33,7 @@ class AdminSubscriptionController extends Controller
         try {
             $q = UserSubscription::with(['user:id,name,email', 'plan:id,name,slug']);
             if ($req->status) $q->where('status', $req->status);
-            if ($req->is_trial !== null) $q->where('is_trial', $req->is_trial);
+            if ($req->is_trial) $q->where('status', 'trial');
             if ($req->search) {
                 $q->whereHas('user', fn($u) => $u->where('name', 'like', "%{$req->search}%"));
             }
