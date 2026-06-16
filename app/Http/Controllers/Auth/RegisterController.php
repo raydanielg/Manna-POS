@@ -3,75 +3,88 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\SubscriptionPlan;
+use App\Models\UserSubscription;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/setup';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'first_name'       => ['required', 'string', 'max:100'],
+            'last_name'        => ['required', 'string', 'max:100'],
+            'phone'            => ['required', 'string', 'max:30'],
+            'email'            => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'         => ['required', 'string', 'min:8', 'confirmed'],
+            'business_name'    => ['required', 'string', 'max:191'],
+            'business_type'    => ['nullable', 'string', 'max:100'],
+            'business_country' => ['required', 'string', 'max:100'],
+            'currency'         => ['required', 'string', 'max:10'],
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
     protected function create(array $data)
     {
-        $fullName = $data['first_name'] . ' ' . $data['last_name'];
-        
-        return User::create([
-            'name' => $fullName,
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role' => 'user',
+        $user = User::create([
+            'name'             => $data['first_name'] . ' ' . $data['last_name'],
+            'email'            => $data['email'],
+            'password'         => Hash::make($data['password']),
+            'phone'            => $data['phone'],
+            'role'             => 'user',
+            'status'           => 'active',
+            'business_name'    => $data['business_name'],
+            'business_type'    => $data['business_type'] ?? null,
+            'business_country' => $data['business_country'],
+            'business_city'    => $data['business_city'] ?? null,
+            'currency'         => $data['currency'],
+            'setup_completed'  => false,
         ]);
+
+        // Find or create a free trial plan
+        $freePlan = SubscriptionPlan::where('price_monthly', 0)->orderBy('id')->first();
+        if (!$freePlan) {
+            $freePlan = SubscriptionPlan::create([
+                'name'          => 'Free Trial',
+                'slug'          => 'free-trial',
+                'description'   => '14-day free trial with full access',
+                'price_monthly' => 0,
+                'price_yearly'  => 0,
+                'currency'      => 'TZS',
+                'max_users'     => 2,
+                'max_products'  => 50,
+                'max_locations' => 1,
+                'features'      => ['POS Sales', 'Inventory', 'Basic Reports', 'Customers'],
+                'is_active'     => true,
+                'badge_color'   => 'green',
+                'sort_order'    => 0,
+            ]);
+        }
+
+        UserSubscription::create([
+            'user_id'              => $user->id,
+            'subscription_plan_id' => $freePlan->id,
+            'billing_cycle'        => 'monthly',
+            'amount_paid'          => 0,
+            'currency'             => $user->currency ?? 'TZS',
+            'status'               => 'trial',
+            'starts_at'            => now(),
+            'expires_at'           => now()->addDays(14),
+            'notes'                => '14-day free trial on registration',
+        ]);
+
+        return $user;
     }
 }
