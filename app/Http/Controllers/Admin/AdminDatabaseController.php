@@ -14,18 +14,26 @@ class AdminDatabaseController extends Controller
     public function tables()
     {
         try {
+            $dbPath = config('database.connections.sqlite.database');
+            $dbSize = 0;
+            if ($dbPath && file_exists($dbPath)) {
+                $dbSize = filesize($dbPath);
+            }
+            $totalRows = 0;
             $tables = [];
             $rows = DB::select("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
             foreach ($rows as $r) {
+                $cnt = DB::table($r->name)->count();
+                $totalRows += $cnt;
                 $tables[] = [
                     'name' => $r->name,
                     'engine' => 'SQLite',
-                    'rows' => DB::table($r->name)->count(),
-                    'size' => $this->formatBytes(0),
+                    'rows' => $cnt,
+                    'size' => $this->formatBytes($dbSize > 0 ? intval($dbSize / count($rows)) : 0),
                     'collation' => 'N/A',
                 ];
             }
-            return response()->json($tables);
+            return response()->json(['tables' => $tables, 'total_size' => $this->formatBytes($dbSize), 'total_rows' => $totalRows]);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
