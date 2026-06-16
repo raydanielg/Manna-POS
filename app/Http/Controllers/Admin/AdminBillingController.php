@@ -79,6 +79,11 @@ class AdminBillingController extends Controller
         return response()->json(['success'=>true]);
     }
 
+    public function users()
+    {
+        return response()->json(User::select('id','name','email')->orderBy('name')->get());
+    }
+
     // Payments
     public function payments()
     {
