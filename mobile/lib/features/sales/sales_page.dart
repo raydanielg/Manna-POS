@@ -101,11 +101,11 @@ class _SalesPageState extends State<SalesPage> with SingleTickerProviderStateMix
             if (_loading) const Text('Updating...', style: TextStyle(fontSize: 12, color: AppColors.primary))
           ]),
         ),
-        Expanded(child: _loading ? const LoadingWidget(message: 'Loading sales...')
-          : _error != null ? ErrorWidget2(message: _error!, onRetry: _load)
+        Expanded(child: _loading ? _loadingWidget(message: 'Loading sales...')
+          : _error != null ? _errorWidget(_error!, _load)
           : _sales.isEmpty ? const EmptyState(icon: Icons.receipt_long_outlined, title: 'No Sales Found', subtitle: 'Completed sales will appear here')
           : RefreshIndicator(color: AppColors.primary, onRefresh: _load,
-              child: ListView.separated(padding: const EdgeInsets.fromLTRB(16, 0, 16, 100), itemCount: _sales.length, separatorBuilder: (_, __) => const SizedBox(height: `${_sales.length}`), itemBuilder: (_, i) => _saleTile(_sales[i])))),
+              child: ListView.separated(padding: const EdgeInsets.fromLTRB(16, 0, 16, 100), itemCount: _sales.length, separatorBuilder: (_, __) => const SizedBox(height: 10), itemBuilder: (_, i) => _saleTile(_sales[i]))),
       ]),
     );
   }
@@ -180,13 +180,83 @@ class _SalesPageState extends State<SalesPage> with SingleTickerProviderStateMix
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxis.min,
       children: [
         Icon(icon, size: 12, color: color),
         const SizedBox(width: 4),
         Text(
           label,
           style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600),
+        ),
+      ],
+    ),
+  );
+
+  // Loading Widget
+  Widget _loadingWidget({String message = 'Loading...'}) => Container(
+    padding: const EdgeInsets.all(60),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const CircularProgressIndicator(color: AppColors.primary),
+        const SizedBox(height: 16),
+        Text(
+          message,
+          style: const TextStyle(color: AppColors.textSec, fontSize: 14),
+        ),
+      ],
+    ),
+  );
+
+  // Error Widget
+  Widget _errorWidget(String message, VoidCallback onRetry) => Container(
+    padding: const EdgeInsets.all(24),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.dangerLt,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.danger.withValues(alpha: 0.3)),
+          ),
+          child: Column(
+            children: [
+              const Icon(Icons.error_outline, color: AppColors.danger, size: 48),
+              const SizedBox(height: 12),
+              Text(
+                'Error',
+                style: const TextStyle(
+                  color: AppColors.danger,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                message,
+                style: const TextStyle(
+                  color: AppColors.danger,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: onRetry,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.danger,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
         ),
       ],
     ),
