@@ -63,7 +63,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
       : _error != null ? ErrorWidget2(message: _error!, onRetry: _load)
       : Column(children: [
           if (_expenses.isNotEmpty) Container(margin: const EdgeInsets.all(16), padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(14), border: Border.all(color: AppColors.danger.withOpacity(0.3))),
+            decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(14), border: Border.all(color: AppColors.danger.withValues(alpha: 0.3))),
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               const Text('Total Expenses', style: TextStyle(color: AppColors.danger, fontWeight: FontWeight.w600)),
               Text('TSh ${_fmt.format(_total)}', style: const TextStyle(color: AppColors.danger, fontWeight: FontWeight.w800, fontSize: 18)),
