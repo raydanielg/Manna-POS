@@ -145,7 +145,6 @@ class AdminDemoSeeder extends Seeder
         Payment::create(['invoice_id' => 5, 'user_id' => 2, 'amount' => 112100, 'currency' => 'TZS', 'payment_method' => 'bank_transfer', 'transaction_id' => 'BT-2024-001', 'gateway' => 'bank_transfer', 'status' => 'completed', 'paid_at' => Carbon::now()->subMonths(4)]);
 
         // ── Support Tickets ──
-        SupportTicket::truncate();
         $tickets = [
             ['ticket_number' => 'TKT-001', 'user_id' => 1, 'subject' => 'Unable to process refund', 'description' => 'I keep getting an error when trying to refund a customer order. The system says "Transaction cannot be refunded after 30 days."', 'priority' => 'high', 'category' => 'technical', 'status' => 'open', 'assigned_to' => 2, 'resolved_at' => null],
             ['ticket_number' => 'TKT-002', 'user_id' => 2, 'subject' => 'How to add multiple users', 'description' => 'I recently upgraded to the Growth plan and want to add 2 more cashiers. How do I create their accounts?', 'priority' => 'medium', 'category' => 'billing', 'status' => 'in_progress', 'assigned_to' => 2, 'resolved_at' => null],
