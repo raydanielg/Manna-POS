@@ -17,6 +17,12 @@ class ProductController extends Controller {
         if ($req->status) $q->where("status",$req->status);
         return response()->json($q->latest()->get());
     }
+    public function create() {
+        return view('dashboard.inventory.list-products', [
+            'categories' => ProductCategory::all(),
+            'brands' => Brand::all(),
+        ]);
+    }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","sku"=>"nullable|string|max:100|unique:products,sku","barcode"=>"nullable|string|max:100","brand_id"=>"nullable|exists:brands,id","category_id"=>"nullable|exists:product_categories,id","unit_id"=>"nullable|exists:units,id","tax_rate_id"=>"nullable|exists:tax_rates,id","description"=>"nullable|string","purchase_price"=>"required|numeric|min:0","selling_price"=>"required|numeric|min:0","stock_quantity"=>"nullable|numeric|min:0","reorder_level"=>"nullable|numeric|min:0","status"=>"in:active,inactive"]);
         if (empty($data["sku"])) $data["sku"] = "SKU-".strtoupper(Str::random(8));
