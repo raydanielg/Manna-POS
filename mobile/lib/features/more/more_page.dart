@@ -153,7 +153,7 @@ class MorePage extends StatelessWidget {
   void _showAbout(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         content: const Column(
           mainAxisSize: MainAxisSize.min,
@@ -165,7 +165,7 @@ class MorePage extends StatelessWidget {
             Text('Point of Sale System', textAlign: TextAlign.center, style: TextStyle(color: AppColors.textSec)),
           ],
         ),
-        actions: [TextButton(onPressed: () => Navigator.pop(_), child: const Text('Close'))],
+        actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close'))],
       ),
     );
   }
