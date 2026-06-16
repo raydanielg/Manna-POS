@@ -82,9 +82,17 @@ Route::get('/gdpr', function () {
 
 Auth::routes();
 
+// Setup wizard
+Route::get('/setup', [App\Http\Controllers\SetupController::class, 'index'])->middleware('auth');
+Route::post('/setup', [App\Http\Controllers\SetupController::class, 'complete'])->middleware('auth');
+
+// Subscription plans (user-facing)
+Route::get('/subscription/plans', [App\Http\Controllers\UserSubscriptionController::class, 'plans'])->middleware('auth');
+Route::post('/subscription/choose', [App\Http\Controllers\UserSubscriptionController::class, 'choosePlan'])->middleware('auth');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware(['auth', 'user.dashboard'])->name('home');
 
-Route::prefix('dashboard')->middleware(['auth', 'user.dashboard'])->group(function () {
+Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'])->group(function () {
 
     Route::get('/', function () {
         return view('dashboard');
