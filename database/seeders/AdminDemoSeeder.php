@@ -280,7 +280,6 @@ class AdminDemoSeeder extends Seeder
         ]);
 
         // ── Tax Rates ──
-        TaxRate::truncate();
         TaxRate::insert([
             ['name' => 'VAT Standard', 'rate' => 18.00, 'type' => 'percentage', 'status' => 'active'],
             ['name' => 'VAT Reduced', 'rate' => 8.00, 'type' => 'percentage', 'status' => 'active'],
