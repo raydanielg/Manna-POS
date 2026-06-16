@@ -49,8 +49,9 @@ let editId = null;
 
 async function loadList() {
     const res = await apiFetch(API);
-     param($m); if ($m -match 'const tbody') { '    const data = res.data || res;' + "`n" + $m } else { $m }  = document.getElementById('tableBody');
-     param($m); if ($m -match 'const tbody') { '    const data = res.data || res;' + "`n" + $m } else { $m } .length) { tbody.innerHTML = '<tr><td colspan="7" class="tbl-empty">No trial subscriptions</td></tr>'; return; }
+    const data = res.data || res;
+    const tbody = document.getElementById('tableBody');
+    if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" class="tbl-empty">No trial subscriptions</td></tr>'; return; }
     tbody.innerHTML = data.map(s => `<tr>
         <td>${s.user?.name || s.user_name || 'N/A'}</td>
         <td>${s.plan?.name || s.plan_name || 'N/A'}</td>
@@ -68,6 +69,7 @@ async function loadList() {
 async function editSub(id) {
     editId = id; document.getElementById('modalTitle').textContent = 'Edit Subscription';
     const res = await apiFetch(`/api/admin/subscriptions/${id}`);
+    const data = res.data || res;
     document.getElementById('status').value = data.status || 'active';
     document.getElementById('end_date').value = data.expires_at ? data.expires_at.split('T')[0] : '';
     openModal('subModal');
