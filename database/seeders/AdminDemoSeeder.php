@@ -230,7 +230,6 @@ class AdminDemoSeeder extends Seeder
         ]);
 
         // ── Customer Groups ──
-        CustomerGroup::truncate();
         CustomerGroup::insert([
             ['name' => 'Regular', 'discount' => 0, 'description' => 'Standard customers'],
             ['name' => 'Silver', 'discount' => 5, 'description' => 'Customers with 5+ purchases'],
