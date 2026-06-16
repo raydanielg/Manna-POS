@@ -94,7 +94,6 @@ class AdminDemoSeeder extends Seeder
         BusinessVerification::create(['business_id' => 4, 'document_type' => 'tax_certificate', 'document_path' => 'uploads/docs/tax_004.pdf', 'status' => 'approved', 'reviewed_by' => 2, 'reviewed_at' => Carbon::now()->subMonth()]);
 
         // ── Staff ──
-        Staff::truncate();
         $staff = [
             ['first_name' => 'Salim', 'last_name' => 'Juma', 'email' => 'salim@mwambastore.co.tz', 'phone' => '+255741111111', 'user_id' => 1, 'role' => 'cashier', 'department' => 'Sales', 'position' => 'Senior Cashier', 'salary' => 350000, 'pay_type' => 'monthly', 'hire_date' => '2024-01-15', 'status' => 'active', 'address' => 'Sinza', 'emergency_contact' => 'Mariam Juma', 'emergency_phone' => '+255742222222'],
             ['first_name' => 'Asha', 'last_name' => 'Moshi', 'email' => 'asha@mwambastore.co.tz', 'phone' => '+255743333333', 'user_id' => 1, 'role' => 'cashier', 'department' => 'Sales', 'position' => 'Cashier', 'salary' => 280000, 'pay_type' => 'monthly', 'hire_date' => '2024-03-01', 'status' => 'active', 'address' => 'Mabibo'],
