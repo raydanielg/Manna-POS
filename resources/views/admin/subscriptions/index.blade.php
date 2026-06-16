@@ -82,14 +82,14 @@ async function editSub(id) {
     editId = id; document.getElementById('modalTitle').textContent = 'Edit Subscription';
     const data = await apiFetch(`${API}/${id}`);
     document.getElementById('status').value = data.status || 'active';
-    document.getElementById('end_date').value = data.end_date ? data.end_date.split('T')[0] : '';
+    document.getElementById('end_date').value = data.expires_at ? data.expires_at.split('T')[0] : '';
     openModal('subModal');
 }
 
 async function saveSub() {
     const body = {
         status: document.getElementById('status').value,
-        end_date: document.getElementById('end_date').value,
+        expires_at: document.getElementById('end_date').value,
     };
     try {
         await apiFetch(`${API}/${editId}`, { method: 'PUT', body });
