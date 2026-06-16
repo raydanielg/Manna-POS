@@ -39,6 +39,9 @@ class MorePage extends StatelessWidget {
             _MenuItem(Icons.swap_horiz_outlined, 'Stock Transfers', AppColors.primary, () => context.push('/stock-transfers')),
           ])),
           SliverToBoxAdapter(child: _buildSection('Management', [
+            _MenuItem(Icons.category_outlined, 'Expense Categories', AppColors.secondary, () => context.push('/expense-categories')),
+            _MenuItem(Icons.group_outlined, 'Customer Groups', AppColors.info, () => context.push('/customer-groups')),
+            _MenuItem(Icons.people_rounded, 'Staff Management', AppColors.accent, () => _push(context, const StaffManagementPage())),
             _MenuItem(Icons.people_rounded, 'Staff Management', AppColors.accent, () => _push(context, const StaffManagementPage())),
             _MenuItem(Icons.assessment_rounded, 'Reports', AppColors.primary, () => context.push('/reports')),
           ])),

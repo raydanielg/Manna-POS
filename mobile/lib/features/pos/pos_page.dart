@@ -453,8 +453,8 @@ class _ReceiptSheet extends StatelessWidget {
     final items = (sale['items'] as List? ?? []);
     final ref = sale['reference'] ?? 'N/A';
     final date = sale['sale_date'] ?? DateTime.now().toString().substring(0, 10);
-    final total = double.tryParse(sale['grand_total']?.toString() ?? '0') ?? 0;
-    final paid = double.tryParse(sale['paid_amount']?.toString() ?? '0') ?? 0;
+    final total = double.tryParse(sale['total']?.toString() ?? '0') ?? 0;
+    final paid = double.tryParse(sale['paid']?.toString() ?? '0') ?? 0;
     final payMethod = (sale['payment_method'] ?? 'cash').toString().toUpperCase();
 
     return Container(
