@@ -24,7 +24,8 @@ const API = '/api/admin/users';
 
 async function loadList() {
     const search = document.getElementById('searchInput').value;
-    const data = await apiFetch(`${API}?status=blocked&search=${search}`);
+    const res = await apiFetch(`${API}?status=blocked&search=${search}`);
+    const data = res.data || res;
     const tbody = document.getElementById('tableBody');
     if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" class="tbl-empty">No blocked users</td></tr>'; return; }
     tbody.innerHTML = data.map(u => `<tr>

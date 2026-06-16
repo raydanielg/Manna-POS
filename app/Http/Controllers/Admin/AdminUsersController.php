@@ -108,10 +108,14 @@ class AdminUsersController extends Controller
         return view('admin.users.blocked');
     }
 
-    public function block(User $user)
+    public function block(Request $req, User $user)
     {
         try {
-            $user->update(['status' => 'blocked']);
+            $user->update([
+                'status' => 'blocked',
+                'block_reason' => $req->reason ?? 'No reason provided',
+                'blocked_at' => now(),
+            ]);
             return response()->json(['success' => true, 'user' => $user]);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -121,7 +125,11 @@ class AdminUsersController extends Controller
     public function unblock(User $user)
     {
         try {
-            $user->update(['status' => 'active']);
+            $user->update([
+                'status' => 'active',
+                'block_reason' => null,
+                'blocked_at' => null,
+            ]);
             return response()->json(['success' => true, 'user' => $user]);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
