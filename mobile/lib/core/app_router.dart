@@ -18,6 +18,17 @@ import '../features/expenses/expenses_page.dart';
 import '../features/reports/reports_page.dart';
 import '../features/settings/settings_page.dart';
 import '../features/auth/forgot_password_page.dart';
+import '../features/purchases/purchases_page.dart';
+import '../features/suppliers/suppliers_page.dart';
+import '../features/stock_adjustments/stock_adjustments_page.dart';
+import '../features/stock_transfers/stock_transfers_page.dart';
+import '../features/discounts/discounts_page.dart';
+import '../features/receipts/receipts_page.dart';
+import '../features/categories/categories_page.dart';
+import '../features/brands/brands_page.dart';
+import '../features/units/units_page.dart';
+import '../features/tax_rates/tax_rates_page.dart';
+import '../features/warranties/warranties_page.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -38,6 +49,17 @@ class AppRouter {
       GoRoute(path: '/reports', builder: (_, __) => const ReportsPage()),
       GoRoute(path: '/settings', builder: (_, __) => const SettingsPage()),
       GoRoute(path: '/forgot-password', builder: (_, __) => const ForgotPasswordPage()),
+      GoRoute(path: '/purchases', builder: (_, __) => const PurchasesPage()),
+      GoRoute(path: '/suppliers', builder: (_, __) => const SuppliersPage()),
+      GoRoute(path: '/stock-adjustments', builder: (_, __) => const StockAdjustmentsPage()),
+      GoRoute(path: '/stock-transfers', builder: (_, __) => const StockTransfersPage()),
+      GoRoute(path: '/discounts', builder: (_, __) => const DiscountsPage()),
+      GoRoute(path: '/receipts', builder: (_, __) => const ReceiptsPage()),
+      GoRoute(path: '/categories', builder: (_, __) => const CategoriesPage()),
+      GoRoute(path: '/brands', builder: (_, __) => const BrandsPage()),
+      GoRoute(path: '/units', builder: (_, __) => const UnitsPage()),
+      GoRoute(path: '/tax-rates', builder: (_, __) => const TaxRatesPage()),
+      GoRoute(path: '/warranties', builder: (_, __) => const WarrantiesPage()),
     ],
     errorBuilder: (_, __) => Scaffold(
       body: Center(
