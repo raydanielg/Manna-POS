@@ -265,7 +265,7 @@
             .main-wrap { margin-left: 220px; }
         }
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
             .sidebar.open { transform: translateX(0); }
             .main-wrap { margin-left: 0; }
             .form-row { grid-template-columns: 1fr; }
@@ -273,12 +273,32 @@
             .filters-row { flex-direction: column; }
             .search-wrap input { width: 100%; }
         }
+        .sidebar-backdrop {
+            display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.4);
+            z-index: 35; backdrop-filter: blur(2px);
+        }
+        .sidebar-backdrop.open { display: block; }
+        .sidebar-close {
+            display: none; position: absolute; top: 0.75rem; right: 0.75rem;
+            width: 28px; height: 28px; border-radius: 8px; border: none;
+            background: #f1f5f9; color: #64748b; font-size: 1rem;
+            cursor: pointer; align-items: center; justify-content: center;
+            transition: background 0.15s; z-index: 1;
+        }
+        .sidebar-close:hover { background: #e2e8f0; color: #0f172a; }
+        @media (max-width: 768px) {
+            .sidebar-close { display: flex; }
+        }
     </style>
 </head>
 <body>
 
+{{-- ═══ SIDEBAR BACKDROP ═══ --}}
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
 {{-- ═══ SIDEBAR ═══ --}}
 <aside class="sidebar" id="sidebar">
+    <button class="sidebar-close" onclick="closeSidebar()">&times;</button>
     <div class="sidebar-logo">
         <div class="flex items-center gap-2.5">
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-200">
