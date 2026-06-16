@@ -180,4 +180,62 @@ class AdminBillingController extends Controller
         $gateway->delete();
         return response()->json(['success'=>true]);
     }
+
+    // Refunds
+    public function refunds()
+    {
+        return view('admin.billing.refunds');
+    }
+
+    public function refundsList(Request $req)
+    {
+        $q = Payment::whereIn('status', ['refunded', 'refund_requested'])->with(['user:id,name,email','invoice:id,invoice_number']);
+        if ($req->status) $q->where('status', $req->status);
+        return response()->json($q->latest()->get()->map(fn($p) => [
+            'id' => $p->id,
+            'transaction_id' => $p->transaction_id ?? 'N/A',
+            'invoice_number' => $p->invoice->invoice_number ?? 'N/A',
+            'user_name' => $p->user->name ?? 'N/A',
+            'amount' => number_format($p->amount, 2),
+            'currency' => $p->currency ?? 'TZS',
+            'reason' => $p->notes ?? 'No reason provided',
+            'status' => $p->status,
+            'date' => $p->paid_at ? $p->paid_at->format('Y-m-d') : $p->created_at->format('Y-m-d'),
+        ]));
+    }
+
+    public function refundsProcess(Request $req, Payment $payment)
+    {
+        $data = $req->validate(['status' => 'required|in:approved,rejected', 'notes' => 'nullable|string']);
+        $payment->update(['status' => $data['status'] === 'approved' ? 'refunded' : 'completed', 'notes' => $data['notes'] ?? $payment->notes]);
+        return response()->json(['success'=>true]);
+    }
+
+    // Transactions
+    public function transactions()
+    {
+        return view('admin.billing.transactions');
+    }
+
+    public function transactionsList(Request $req)
+    {
+        $q = Payment::with(['user:id,name,email','invoice:id,invoice_number']);
+        if ($req->search) {
+            $q->where(function($q) use ($req) {
+                $q->where('transaction_id','like',"%{$req->search}%")
+                  ->orWhereHas('user', fn($u) => $u->where('name','like',"%{$req->search}%"));
+            });
+        }
+        return response()->json($q->latest()->paginate(50)->through(fn($p) => [
+            'id' => $p->id,
+            'transaction_id' => $p->transaction_id ?? 'N/A',
+            'invoice_number' => $p->invoice->invoice_number ?? 'N/A',
+            'user_name' => $p->user->name ?? 'N/A',
+            'gateway' => $p->gateway ?? '-',
+            'amount' => number_format($p->amount, 2),
+            'currency' => $p->currency ?? 'TZS',
+            'status' => $p->status,
+            'date' => $p->paid_at ? $p->paid_at->format('Y-m-d H:i') : $p->created_at->format('Y-m-d H:i'),
+        ]));
+    }
 }

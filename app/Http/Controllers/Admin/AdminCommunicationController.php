@@ -163,4 +163,62 @@ class AdminCommunicationController extends Controller
         $announcement->delete();
         return response()->json(['success'=>true]);
     }
+
+    // Push Notifications
+    public function push()
+    {
+        return view('admin.communication.push');
+    }
+
+    public function pushList()
+    {
+        return response()->json(Announcement::where('type', 'push')->latest()->get()->map(fn($a) => [
+            'id' => $a->id,
+            'title' => $a->title,
+            'message' => $a->content,
+            'target' => $a->status === 'published' ? 'all' : 'draft',
+            'sent_date' => $a->published_at ?? $a->created_at,
+            'status' => $a->status,
+        ]));
+    }
+
+    public function pushStore(Request $req)
+    {
+        $data = $req->validate([
+            'title' => 'required|string|max:191',
+            'message' => 'required|string',
+            'target' => 'nullable|string|max:50',
+        ]);
+        $data['content'] = $data['message'];
+        $data['type'] = 'push';
+        $data['status'] = 'published';
+        $data['created_by'] = auth()->id();
+        Announcement::create($data);
+        return response()->json(['success'=>true,'message'=>'Push notification sent!']);
+    }
+
+    // Broadcast
+    public function broadcast()
+    {
+        return view('admin.communication.broadcast');
+    }
+
+    public function broadcastSend(Request $req)
+    {
+        $data = $req->validate([
+            'channel' => 'required|string|max:20',
+            'subject' => 'required|string|max:191',
+            'message' => 'required|string',
+            'target' => 'nullable|string|max:50',
+            'scheduled_at' => 'nullable|date',
+        ]);
+        $data['type'] = $data['channel'];
+        $data['content'] = $data['message'];
+        $data['title'] = $data['subject'];
+        $data['status'] = $data['scheduled_at'] ? 'scheduled' : 'published';
+        $data['created_by'] = auth()->id();
+        $data['scheduled_at'] = $data['scheduled_at'] ?? null;
+        Announcement::create($data);
+        return response()->json(['success'=>true,'message'=>'Broadcast ' . ($data['scheduled_at'] ? 'scheduled' : 'sent') . ' successfully!']);
+    }
 }
