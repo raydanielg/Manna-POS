@@ -182,10 +182,10 @@ class AdminDemoSeeder extends Seeder
         NotificationTemplate::truncate();
         NotificationTemplate::insert([
             ['type' => 'email', 'subject' => 'Welcome to MannaPOS', 'body' => 'Hi {{name}}, welcome to MannaPOS! Get started by setting up your store.', 'is_active' => true],
-            ['type' => 'sms', 'subject' => null, 'body' => 'Your MannaPOS subscription is expiring in 3 days. Renew now to avoid interruption.', 'is_active' => true],
+            ['type' => 'sms', 'subject' => 'Subscription Expiry Warning', 'body' => 'Your MannaPOS subscription is expiring in 3 days. Renew now to avoid interruption.', 'is_active' => true],
             ['type' => 'in_app', 'subject' => 'Invoice Paid', 'body' => 'Invoice #{{invoice_number}} has been paid successfully.', 'is_active' => true],
             ['type' => 'email', 'subject' => 'Subscription Renewed', 'body' => 'Hi {{name}}, your {{plan}} subscription has been renewed. New expiry: {{expiry_date}}.', 'is_active' => true],
-            ['type' => 'sms', 'subject' => null, 'body' => 'Low stock alert: {{product}} only has {{quantity}} units remaining. Reorder now!', 'is_active' => true],
+            ['type' => 'sms', 'subject' => 'Low Stock Alert', 'body' => 'Low stock alert: {{product}} only has {{quantity}} units remaining. Reorder now!', 'is_active' => true],
         ]);
 
         // ── Email Templates ──
