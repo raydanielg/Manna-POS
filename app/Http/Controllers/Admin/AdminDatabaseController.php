@@ -14,25 +14,18 @@ class AdminDatabaseController extends Controller
     public function tables()
     {
         try {
-            $db = config('database.connections.mysql.database');
-            $tables = DB::select("
-                SELECT
-                    TABLE_NAME AS name,
-                    ENGINE AS engine,
-                    TABLE_ROWS AS rows,
-                    ROUND((data_length + index_length) / 1024, 2) AS size_kb,
-                    TABLE_COLLATION AS collation
-                FROM information_schema.tables
-                WHERE table_schema = ?
-                ORDER BY TABLE_NAME
-            ", [$db]);
-            return response()->json(array_map(fn($t) => [
-                'name' => $t->name,
-                'engine' => $t->engine,
-                'rows' => $t->rows ?? 0,
-                'size' => $this->formatBytes(($t->size_kb ?? 0) * 1024),
-                'collation' => $t->collation,
-            ], $tables));
+            $tables = [];
+            $rows = DB::select("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+            foreach ($rows as $r) {
+                $tables[] = [
+                    'name' => $r->name,
+                    'engine' => 'SQLite',
+                    'rows' => DB::table($r->name)->count(),
+                    'size' => $this->formatBytes(0),
+                    'collation' => 'N/A',
+                ];
+            }
+            return response()->json($tables);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

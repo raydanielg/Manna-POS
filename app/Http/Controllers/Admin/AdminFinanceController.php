@@ -41,10 +41,9 @@ class AdminFinanceController extends Controller
 
             $chartData = Invoice::where('status', 'paid')
                 ->whereYear('paid_at', now()->year)
-                ->selectRaw("strftime('%Y-%m', paid_at) as month, SUM(total) as total")
-                ->groupBy('month')
-                ->orderBy('month')
-                ->pluck('total', 'month')
+                ->get()
+                ->groupBy(fn($i) => $i->paid_at?->format('Y-m'))
+                ->map(fn($items) => $items->sum('total'))
                 ->toArray();
 
             return response()->json([
