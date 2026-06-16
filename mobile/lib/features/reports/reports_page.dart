@@ -234,3 +234,73 @@ class _InventoryReportState extends State<_InventoryReport> {
     Text(label, style: const TextStyle(color: AppColors.textSec, fontSize: 12)),
   ])));
 }
+
+// Loading Widget
+Widget _loadingWidget({String message = 'Loading...'}) => Container(
+  padding: const EdgeInsets.all(60),
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      const CircularProgressIndicator(color: AppColors.primary),
+      const SizedBox(height: 16),
+      Text(
+        message,
+        style: const TextStyle(color: AppColors.textSec, fontSize: 14),
+      ),
+    ],
+  ),
+);
+
+// Error Widget
+Widget _errorWidget(String message, VoidCallback onRetry) => Container(
+  padding: const EdgeInsets.all(24),
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.dangerLt,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.danger.withValues(alpha: 0.3)),
+        ),
+        child: Column(
+          children: [
+            const Icon(Icons.error_outline, color: AppColors.danger, size: 48),
+            const SizedBox(height: 12),
+            Text(
+              'Error',
+              style: const TextStyle(
+                color: AppColors.danger,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: const TextStyle(
+                color: AppColors.danger,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: onRetry,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.danger,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+);
