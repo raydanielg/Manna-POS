@@ -5,8 +5,9 @@ use App\Models\NotificationTemplate;
 use Illuminate\Http\Request;
 class NotificationTemplateController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) return response()->json(NotificationTemplate::all());
-        return view("dashboard.notification-templates.index");
+        $q = NotificationTemplate::query();
+        if ($req->search) $q->where("subject","like","%{$req->search}%")->orWhere("type","like","%{$req->search}%");
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["type"=>"required|string|max:100","subject"=>"required|string|max:191","body"=>"required|string","is_active"=>"boolean"]);

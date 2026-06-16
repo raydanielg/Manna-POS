@@ -5,12 +5,9 @@ use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
 class ExpenseCategoryController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = ExpenseCategory::withCount("expenses");
-            if ($req->search) $q->where("name","like","%{$req->search}%");
-            return response()->json($q->latest()->get());
-        }
-        return view("dashboard.expenses.expense-categories");
+        $q = ExpenseCategory::withCount("expenses");
+        if ($req->search) $q->where("name","like","%{$req->search}%");
+        return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","description"=>"nullable|string"]);
