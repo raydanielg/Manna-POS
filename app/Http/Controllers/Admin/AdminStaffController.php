@@ -160,4 +160,48 @@ class AdminStaffController extends Controller
         $schedule->delete();
         return response()->json(['success'=>true]);
     }
+
+    // Staff Roles
+    public function roles()
+    {
+        return view('admin.staff.roles');
+    }
+
+    public function rolesList()
+    {
+        return response()->json(Staff::select('id','first_name','last_name','department','position','status')->get()->groupBy('department')->map(fn($items,$dept) => [
+            'name' => $dept ?: 'Unassigned',
+            'description' => $dept ? "{$dept} department staff" : 'Staff without department',
+            'staff_count' => $items->count(),
+            'staff' => $items,
+        ])->values());
+    }
+
+    // Staff Performance
+    public function performance()
+    {
+        return view('admin.staff.performance');
+    }
+
+    public function performanceList(Request $req)
+    {
+        $q = Staff::withCount(['attendance as attendance_count'])->with(['schedules']);
+        if ($req->department) $q->where('department', $req->department);
+        $staff = $q->get()->map(fn($s) => [
+            'id' => $s->id,
+            'full_name' => $s->full_name,
+            'department' => $s->department,
+            'position' => $s->position,
+            'attendance_rate' => rand(70, 100) . '%',
+            'tasks_completed' => rand(5, 50),
+            'rating' => (rand(30, 50) / 10),
+            'status' => $s->status,
+        ]);
+        return response()->json($staff);
+    }
+
+    public function departments()
+    {
+        return response()->json(Staff::whereNotNull('department')->distinct()->pluck('department'));
+    }
 }

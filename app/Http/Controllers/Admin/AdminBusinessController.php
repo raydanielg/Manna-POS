@@ -182,4 +182,31 @@ class AdminBusinessController extends Controller
         $verification->update(['status'=>'rejected','notes'=>$req->notes,'reviewed_by'=>auth()->id(),'reviewed_at'=>now()]);
         return response()->json(['success'=>true]);
     }
+
+    // Business Locations
+    public function locations()
+    {
+        return view('admin.business.locations');
+    }
+
+    public function locationsList(Request $req)
+    {
+        $q = Business::select('id','business_name','business_address','business_city','business_country','status')->whereNotNull('business_address');
+        if ($req->status) $q->where('status', $req->status);
+        return response()->json($q->get()->map(fn($b) => [
+            'id' => $b->id,
+            'business_name' => $b->business_name,
+            'location_name' => $b->business_city ? "{$b->business_city} Office" : 'Main Office',
+            'address' => $b->business_address ?? '-',
+            'city' => $b->business_city ?? '-',
+            'country' => $b->business_country ?? '-',
+            'status' => $b->status,
+        ]));
+    }
+
+    // Pending Approvals
+    public function pending()
+    {
+        return view('admin.business.pending');
+    }
 }
