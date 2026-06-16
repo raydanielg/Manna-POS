@@ -9,6 +9,11 @@ class AdminSeeder extends Seeder
 {
     public function run()
     {
+        // Truncate to allow re-seeding
+        SystemConfig::truncate();
+        BusinessCategory::truncate();
+        PaymentGateway::truncate();
+
         SystemConfig::insert([
             ['key' => 'app_name', 'value' => 'mannaPOS', 'group' => 'general', 'type' => 'text'],
             ['key' => 'app_description', 'value' => 'Point of Sale System', 'group' => 'general', 'type' => 'text'],
