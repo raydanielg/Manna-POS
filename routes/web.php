@@ -184,11 +184,11 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard'])->group(functi
     Route::get('/notification-templates', function () { return view('dashboard.notification-templates.index'); })->name('dashboard.notification-templates');
 
     // Settings Routes
-    Route::get('/settings/general', function () { return view('dashboard.settings.general'); })->name('dashboard.settings.general');
-    Route::get('/settings/business-location', function () { return view('dashboard.settings.business-location'); })->name('dashboard.settings.business-location');
-    Route::get('/settings/invoice-settings', function () { return view('dashboard.settings.invoice-settings'); })->name('dashboard.settings.invoice-settings');
-    Route::get('/settings/barcode-settings', function () { return view('dashboard.settings.barcode-settings'); })->name('dashboard.settings.barcode-settings');
     Route::get('/settings/tax-rates', function () { return view('dashboard.settings.tax-rates'); })->name('dashboard.settings.tax-rates');
+
+    // Plan Management Routes
+    Route::get('/plan-management/plans', function () { return view('dashboard.plan-management.plans'); })->name('dashboard.plan-management.plans');
+    Route::get('/plan-management/subscriptions', function () { return view('dashboard.plan-management.subscriptions'); })->name('dashboard.plan-management.subscriptions');
 });
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────
@@ -273,15 +273,6 @@ use App\Http\Controllers\Dashboard\PurchaseController;
 use App\Http\Controllers\Dashboard\SaleController;
 use App\Http\Controllers\Dashboard\UserManagementController;
 use App\Http\Controllers\Dashboard\PlanManagementController;
-
-// ─── Plan Management View Routes ────────────────────────────────────────────
-Route::get('/dashboard/plan-management/plans', function () {
-    return view('dashboard.plan-management.plans');
-})->middleware('auth')->name('dashboard.plan-management.plans');
-
-Route::get('/dashboard/plan-management/subscriptions', function () {
-    return view('dashboard.plan-management.subscriptions');
-})->middleware('auth')->name('dashboard.plan-management.subscriptions');
 
 Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('suppliers',              SupplierController::class);
