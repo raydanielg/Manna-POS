@@ -22,10 +22,15 @@ class AppColors {
 
   static const Color border = Color(0xFFE8E8E8);
   static const Color borderLight = Color(0xFFF0F0F0);
+  static const Color line = border;
 
   static const Color success = Color(0xFF3DBE8C);
   static const Color warning = Color(0xFFF59E0B);
   static const Color error = Color(0xFFEF4444);
+  static const Color danger = error;
+  static const Color dangerLt = Color(0xFFFFE8ED);
+  static const Color successLt = Color(0xFFDFF7EE);
+  static const Color warningLt = Color(0xFFFFFBEB);
   static const Color info = Color(0xFF3B82F6);
 
   static const Color purple = Color(0xFF6366F1);

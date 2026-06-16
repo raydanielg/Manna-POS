@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\SubscriptionPlan;
+use App\Models\UserSubscription;
+use Illuminate\Http\Request;
+
+class UserSubscriptionController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function plans()
+    {
+        $user        = auth()->user();
+        $plans       = SubscriptionPlan::where('is_active', true)->orderBy('sort_order')->orderBy('price_monthly')->get();
+        $current     = $user->activeSubscription();
+        $trialUsed   = UserSubscription::where('user_id', $user->id)->where('status', 'trial')->exists();
+        $daysLeft    = null;
+        if ($current && $current->expires_at) {
+            $daysLeft = max(0, now()->diffInDays($current->expires_at, false));
+        }
+        return view('subscription.plans', compact('plans', 'current', 'trialUsed', 'daysLeft', 'user'));
+    }
+
+    public function choosePlan(Request $req)
+    {
+        $req->validate([
+            'plan_id'       => 'required|exists:subscription_plans,id',
+            'billing_cycle' => 'in:monthly,yearly',
+        ]);
+
+        $user   = auth()->user();
+        $plan   = SubscriptionPlan::findOrFail($req->plan_id);
+        $cycle  = $req->billing_cycle ?? 'monthly';
+        $amount = $cycle === 'yearly' ? $plan->price_yearly : $plan->price_monthly;
+
+        // Cancel existing active subscriptions
+        UserSubscription::where('user_id', $user->id)
+            ->whereIn('status', ['active', 'trial'])
+            ->update(['status' => 'cancelled']);
+
+        $status = $amount == 0 ? 'trial' : 'active';
+        $days   = $cycle === 'yearly' ? 365 : 30;
+
+        UserSubscription::create([
+            'user_id'              => $user->id,
+            'subscription_plan_id' => $plan->id,
+            'billing_cycle'        => $cycle,
+            'amount_paid'          => $amount,
+            'currency'             => $user->currency ?? 'TZS',
+            'status'               => $status,
+            'starts_at'            => now(),
+            'expires_at'           => $amount == 0 ? now()->addDays(14) : now()->addDays($days),
+        ]);
+
+        return redirect('/dashboard')->with('subscribed', 'Welcome to ' . $plan->name . '!');
+    }
+}
