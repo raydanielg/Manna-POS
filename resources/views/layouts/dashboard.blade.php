@@ -890,7 +890,7 @@ const CSRF = document.querySelector('meta[name="csrf-token"]').content;
 async function apiFetch(url, opts = {}) {
     const res = await fetch(url, {
         ...opts,
-        headers: { 'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN': CSRF, ...(opts.headers||{}) }
+        headers: { 'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN': CSRF, 'X-Requested-With':'XMLHttpRequest', ...(opts.headers||{}) }
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw data;
