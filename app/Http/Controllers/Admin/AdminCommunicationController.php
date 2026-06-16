@@ -123,6 +123,11 @@ class AdminCommunicationController extends Controller
         return response()->json($q->latest()->get());
     }
 
+    public function announcementsShow(Announcement $announcement)
+    {
+        return response()->json($announcement);
+    }
+
     public function announcementsStore(Request $req)
     {
         $data = $req->validate([
