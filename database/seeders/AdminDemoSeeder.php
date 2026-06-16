@@ -113,7 +113,6 @@ class AdminDemoSeeder extends Seeder
         StaffAttendance::create(['staff_id' => 4, 'date' => Carbon::today(), 'clock_in' => '08:30', 'clock_out' => '16:45', 'status' => 'present']);
 
         // ── Staff Schedules ──
-        StaffSchedule::truncate();
         foreach ([1, 2, 3, 4, 5] as $sid) {
             for ($d = 0; $d < 5; $d++) {
                 StaffSchedule::create(['staff_id' => $sid, 'day_of_week' => $d, 'start_time' => '08:00', 'end_time' => '17:00', 'is_working_day' => ($d < 5)]);
