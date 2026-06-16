@@ -157,7 +157,6 @@ class AdminDemoSeeder extends Seeder
         }
 
         // ── Ticket Replies ──
-        TicketReply::truncate();
         TicketReply::create(['ticket_id' => 1, 'user_id' => 2, 'message' => 'Thank you for reporting this. Could you please provide the transaction ID for the sale you are trying to refund?', 'attachments' => null]);
         TicketReply::create(['ticket_id' => 1, 'user_id' => 1, 'message' => 'The transaction ID is SALE-004, processed on June 13th.', 'attachments' => null]);
         TicketReply::create(['ticket_id' => 2, 'user_id' => 2, 'message' => 'You can add users in Settings > Users. Click "Add User" and assign them the "Cashier" role.', 'attachments' => null]);
