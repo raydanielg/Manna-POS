@@ -76,7 +76,7 @@ class _SplashScreenState extends State<_SplashScreen> with SingleTickerProviderS
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
     final auth = context.read<AuthProvider>();
-    final prefs = await SharedPreferencesHelper.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     final onboarded = prefs.getBool('onboarding_done') ?? false;
     if (!onboarded) {
       context.go('/onboarding');
@@ -113,3 +113,10 @@ class _SplashScreenState extends State<_SplashScreen> with SingleTickerProviderS
               const SizedBox(height: 8),
               Text('Point of Sale',
                 style: TextStyle(fontSize: 15, color: Colors.white.withValues(alpha: 0.8))),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
