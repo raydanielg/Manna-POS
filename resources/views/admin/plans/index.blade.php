@@ -42,6 +42,14 @@
                     <div class="form-group"><label>Max Locations</label><input type="number" name="max_locations" class="form-control" value="1"><div class="invalid-feedback"></div></div>
                     <div class="form-group"><label>Sort Order</label><input type="number" name="sort_order" class="form-control" value="0"><div class="invalid-feedback"></div></div>
                 </div>
+                <div class="form-group">
+                    <label>Features <span style="font-weight:400;color:#94a3b8;">(click + to add)</span></label>
+                    <div id="featuresList" style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.5rem;"></div>
+                    <div style="display:flex;gap:0.4rem;">
+                        <input type="text" id="featureInput" class="form-control" placeholder="Add a feature..." style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault();addFeature();}">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addFeature()" style="padding:0.45rem 0.7rem;">+</button>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
