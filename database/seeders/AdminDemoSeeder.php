@@ -37,6 +37,37 @@ class AdminDemoSeeder extends Seeder
     {
         $this->command->info('Seeding admin demo data...');
 
+        // Disable FK checks for all truncates
+        DB::transaction(function () {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+            Business::truncate();
+            BusinessVerification::truncate();
+            Staff::truncate();
+            StaffAttendance::truncate();
+            StaffSchedule::truncate();
+            UserSubscription::truncate();
+            SubscriptionPlan::truncate();
+            Invoice::truncate();
+            Payment::truncate();
+            SupportTicket::truncate();
+            TicketReply::truncate();
+            ActivityLog::truncate();
+            NotificationTemplate::truncate();
+            EmailTemplate::truncate();
+            SmsTemplate::truncate();
+            Announcement::truncate();
+            Backup::truncate();
+            CustomerGroup::truncate();
+            Discount::truncate();
+            ExpenseCategory::truncate();
+            Expense::truncate();
+            StockAdjustment::truncate();
+            StockTransfer::truncate();
+            TaxRate::truncate();
+            Warranty::truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        });
+
         // ── Ensure extra users exist ──
         $extraUsers = [
             ['name' => 'John Mwamba', 'email' => 'john@example.com', 'password' => bcrypt('password'), 'phone' => '+255711111111', 'role' => 'user', 'business_name' => 'Mwamba General Store'],
