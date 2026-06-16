@@ -36,6 +36,27 @@ class AdminBusinessController extends Controller
         ]));
     }
 
+    public function store(Request $req)
+    {
+        $data = $req->validate([
+            'business_name'    => 'required|string|max:191',
+            'business_type'    => 'nullable|string|max:50',
+            'business_category_id' => 'nullable|exists:business_categories,id',
+            'business_address' => 'nullable|string|max:255',
+            'business_city'    => 'nullable|string|max:100',
+            'business_country' => 'nullable|string|max:100',
+            'phone'            => 'nullable|string|max:20',
+            'email'            => 'nullable|email',
+            'website'          => 'nullable|string|max:191',
+            'registration_number' => 'nullable|string|max:100',
+            'tax_number'       => 'nullable|string|max:100',
+            'status'           => 'nullable|string|max:20',
+            'notes'            => 'nullable|string',
+        ]);
+        $data['user_id'] = auth()->id();
+        return response()->json(['success'=>true,'business'=>Business::create($data)], 201);
+    }
+
     public function show(Business $business)
     {
         return response()->json($business->load(['user:id,name,email,phone', 'category', 'verifications']));

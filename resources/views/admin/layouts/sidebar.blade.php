@@ -15,7 +15,7 @@
         <a href="{{ route('admin.users') }}" class="child-item">All Users</a>
         <a href="{{ route('admin.roles') }}" class="child-item">Roles & Permissions</a>
         <a href="{{ route('admin.sales-commission-agents') }}" class="child-item">Sales Agents</a>
-        <a href="{{ route('admin.login-history') }}" class="child-item">Login History</a>
+        <a href="{{ route('admin.system.login-history') }}" class="child-item">Login History</a>
     </div>
 </div>
 
