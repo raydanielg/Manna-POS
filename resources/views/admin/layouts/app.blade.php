@@ -330,7 +330,7 @@
 <div class="main-wrap">
     <header class="top-header">
         <div class="flex items-center gap-3">
-            <button class="md:hidden p-1.5 rounded-lg hover:bg-slate-100" onclick="document.getElementById('sidebar').classList.toggle('open')">
+            <button class="md:hidden p-1.5 rounded-lg hover:bg-slate-100" onclick="toggleSidebar()">
                 <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
             <h1 class="page-title">@yield('page_title', 'Admin Dashboard')</h1>
@@ -375,7 +375,24 @@
 </div>
 
 <script>
-    function toggleDropdown(id) { document.getElementById(id).classList.toggle('open'); }
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        sidebar.classList.toggle('open');
+        backdrop.classList.toggle('open');
+        document.body.classList.toggle('overflow-hidden');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebar-backdrop').classList.remove('open');
+        document.body.classList.remove('overflow-hidden');
+    }
+    function toggleDropdown(id) {
+        const dd = document.getElementById(id);
+        const isOpen = dd.classList.contains('open');
+        document.querySelectorAll('.sidebar .dropdown.open').forEach(function(d) { d.classList.remove('open'); });
+        if (!isOpen) dd.classList.add('open');
+    }
     function toggleHeaderDropdown(id) { document.getElementById(id).classList.toggle('open'); }
     document.addEventListener('click', function(e) {
         document.querySelectorAll('.header-dropdown.open').forEach(function(dd) {
