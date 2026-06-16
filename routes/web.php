@@ -367,6 +367,8 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::get('business/{business}',  [AdminBusinessController::class, 'show'])->name('business.show');
     Route::put('business/{business}',  [AdminBusinessController::class, 'update'])->name('business.update');
     Route::delete('business/{business}',[AdminBusinessController::class, 'destroy'])->name('business.destroy');
+    Route::post('business/{business}/verify', [AdminBusinessController::class, 'verify'])->name('business.verify');
+    Route::post('business/{business}/reject', [AdminBusinessController::class, 'reject'])->name('business.reject');
     Route::get('business/categories',  [AdminBusinessController::class, 'categoriesList'])->name('business.categories');
     Route::post('business/categories', [AdminBusinessController::class, 'categoriesStore'])->name('business.categories.store');
     Route::get('business/verifications',[AdminBusinessController::class, 'verificationsList'])->name('business.verifications');
