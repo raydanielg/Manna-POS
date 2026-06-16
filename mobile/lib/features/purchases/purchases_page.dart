@@ -226,7 +226,7 @@ class _PurchaseFormState extends State<_PurchaseForm> {
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [const Text('New Purchase', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)), IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context))]),
         if (_err != null) ...[const SizedBox(height: 12), Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(10)), child: Text(_err!, style: const TextStyle(color: AppColors.danger)))],
         const SizedBox(height: 16),
-        DropdownButtonFormField<int>(decoration: const InputDecoration(labelText: 'Supplier'), items: _suppliers.map((s) => DropdownMenuItem(value: s['id'], child: Text(s['name'] ?? ''))).toList(), onChanged: (v) => _supplierId = v),
+        DropdownButtonFormField<int>(decoration: const InputDecoration(labelText: 'Supplier'), items: _suppliers.map<DropdownMenuItem<int>>((s) => DropdownMenuItem(value: s['id'] as int, child: Text(s['name'] ?? ''))).toList(), onChanged: (v) => _supplierId = v),
         const SizedBox(height: 12),
         TextFormField(controller: _dateCtrl, decoration: const InputDecoration(labelText: 'Date *', prefixIcon: Icon(Icons.calendar_today_outlined, size: 18)), validator: (v) => v!.isNotEmpty ? null : 'Required'),
         const SizedBox(height: 12),
