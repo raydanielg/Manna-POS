@@ -1,485 +1,233 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../core/auth_provider.dart';
 import '../../core/api_service.dart';
-import '../../shared/theme/app_theme.dart';
+import '../../shared/theme/app_colors.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
-  @override State<RegisterPage> createState() => _RegisterPageState();
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _pageCtrl = PageController();
+  final PageController _ctrl = PageController();
   int _step = 0;
-
-  // Step 1: Business Details
-  final _bizName   = TextEditingController();
-  String _bizType  = 'retail';
-  final _bizCity   = TextEditingController();
-  final _bizCountry = TextEditingController(text: 'Tanzania');
-  final _bizAddr   = TextEditingController();
-
-  // Step 2: Business Settings
-  String _currency    = 'TZS';
-  final _taxPct       = TextEditingController(text: '18');
-  String _fiscalStart = 'January';
-
-  // Step 3: Owner Info
-  final _name        = TextEditingController();
-  final _phone       = TextEditingController();
-  final _email       = TextEditingController();
-  final _pass        = TextEditingController();
-  final _confirmPass = TextEditingController();
-  bool _showPass     = false;
-  bool _showConfirm  = false;
   String? _error;
+  bool _loading = false;
 
-  static const _bizTypes = [
-    ('retail', Icons.store, 'Retail'),
-    ('wholesale', Icons.warehouse, 'Wholesale'),
-    ('restaurant', Icons.restaurant, 'Restaurant'),
-    ('service', Icons.build, 'Service'),
-    ('other', Icons.category, 'Other'),
-  ];
-
-  static const _currencies = [
-    ('TZS', 'Tanzanian Shilling'),
-    ('USD', 'US Dollar'),
-    ('EUR', 'Euro'),
-    ('KES', 'Kenyan Shilling'),
-    ('UGX', 'Ugandan Shilling'),
-    ('GBP', 'British Pound'),
-    ('ZAR', 'South African Rand'),
-  ];
-
-  static const _months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  final _nameCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
+  final _phoneCtrl = TextEditingController();
+  final _passCtrl = TextEditingController();
+  final _confirmCtrl = TextEditingController();
+  final _businessCtrl = TextEditingController();
+  final _cityCtrl = TextEditingController();
+  final _addressCtrl = TextEditingController();
+  String _businessType = 'retail';
+  String _currency = 'TZS';
+  String _taxPct = '18';
+  bool _obscure = true;
+  bool _obscure2 = true;
 
   @override
   void dispose() {
-    _pageCtrl.dispose();
-    for (final c in [_bizName, _bizCity, _bizCountry, _bizAddr, _taxPct, _name, _phone, _email, _pass, _confirmPass]) c.dispose();
+    _ctrl.dispose(); _nameCtrl.dispose(); _emailCtrl.dispose(); _phoneCtrl.dispose();
+    _passCtrl.dispose(); _confirmCtrl.dispose(); _businessCtrl.dispose();
+    _cityCtrl.dispose(); _addressCtrl.dispose();
     super.dispose();
   }
 
-  bool _canNext() {
-    switch (_step) {
-      case 0: return _bizName.text.trim().length >= 2 && _bizCity.text.trim().length >= 2;
-      case 1: return true;
-      case 2: return _name.text.trim().length >= 2 &&
-                     _phone.text.trim().length == 9 &&
-                     _email.text.contains('@') &&
-                     _pass.text.length >= 8 &&
-                     _pass.text == _confirmPass.text;
-      default: return false;
-    }
-  }
-
-  void _next() {
-    if (!_canNext()) return;
-    if (_step < 2) {
-      _pageCtrl.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
-      setState(() { _step++; _error = null; });
-    } else {
-      _register();
-    }
-  }
-
-  void _prev() {
-    if (_step > 0) {
-      _pageCtrl.previousPage(duration: const Duration(milliseconds: 350), curve: Curves.easeInOut);
-      setState(() { _step--; _error = null; });
-    } else {
-      Navigator.pushReplacementNamed(context, '/login');
-    }
-  }
-
-  String _normalizePhone(String p) {
-    p = p.trim();
-    if (p.startsWith('0')) p = p.substring(1);
-    return '+255$p';
-  }
-
   Future<void> _register() async {
-    setState(() => _error = null);
+    if (_passCtrl.text != _confirmCtrl.text) {
+      setState(() => _error = 'Passwords do not match');
+      return;
+    }
+    setState(() { _loading = true; _error = null; });
     try {
       await context.read<AuthProvider>().register({
-        'name'             : _name.text.trim(),
-        'email'            : _email.text.trim(),
-        'password'         : _pass.text,
-        'phone'            : _normalizePhone(_phone.text),
-        'business_name'    : _bizName.text.trim(),
-        'business_type'    : _bizType,
-        'business_city'    : _bizCity.text.trim(),
-        'business_country' : _bizCountry.text.trim().isEmpty ? 'Tanzania' : _bizCountry.text.trim(),
-        'business_address' : _bizAddr.text.trim(),
-        'currency'         : _currency,
-        'tax_percentage'   : double.tryParse(_taxPct.text) ?? 18.0,
-        'fiscal_year_start': _fiscalStart,
+        'name': _nameCtrl.text.trim(),
+        'email': _emailCtrl.text.trim(),
+        'password': _passCtrl.text,
+        'phone': _phoneCtrl.text.trim(),
+        'business_name': _businessCtrl.text.trim(),
+        'business_type': _businessType,
+        'business_city': _cityCtrl.text.trim(),
+        'business_address': _addressCtrl.text.trim(),
+        'business_country': 'Tanzania',
+        'currency': _currency,
+        'tax_percentage': double.tryParse(_taxPct) ?? 18,
+        'fiscal_year_start': 'January',
       });
-      if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
+      if (!mounted) return;
+      context.go('/home');
     } on ApiException catch (e) {
       setState(() => _error = e.message);
-    } catch (_) {
+    } catch (e) {
       setState(() => _error = 'Connection error. Check your network.');
-    }
+    } finally { setState(() => _loading = false); }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bg,
-      body: SafeArea(
-        child: Column(children: [
-          _header(),
-          Expanded(
-            child: PageView(
-              controller: _pageCtrl,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [_step1(), _step2(), _step3()],
-            ),
-          ),
-          _bottomNav(),
-        ]),
-      ),
-    );
-  }
-
-  Widget _header() {
-    const titles = ['Business Details', 'Business Settings', 'Owner Information'];
-    const subs   = ['Basic information about your business', 'Tax and financial settings', 'Your personal details'];
-    const icons  = [Icons.store_outlined, Icons.tune_outlined, Icons.person_outlined];
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(20),
-      child: Column(children: [
-        Row(children: [
-          IconButton(icon: const Icon(Icons.arrow_back_ios, size: 20), onPressed: _prev),
-          const Spacer(),
-          TextButton(
-            onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-            child: const Text('Sign In', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-          ),
-        ]),
-        const SizedBox(height: 16),
-        _stepIndicator(),
-        const SizedBox(height: 20),
-        Row(children: [
-          Container(
-            width: 48, height: 48,
-            decoration: BoxDecoration(color: AppColors.primaryLt, borderRadius: BorderRadius.circular(14)),
-            child: Icon(icons[_step], color: AppColors.primary, size: 24),
-          ),
-          const SizedBox(width: 14),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(titles[_step], style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3)),
-            Text(subs[_step], style: const TextStyle(color: AppColors.textSec, fontSize: 13)),
-          ]),
-        ]),
-      ]),
-    );
-  }
-
-  Widget _stepIndicator() {
-    const labels = ['Business', 'Settings', 'Owner'];
-    return Row(children: [
-      for (int i = 0; i < 3; i++) ...[
-        if (i > 0) Expanded(child: AnimatedContainer(duration: const Duration(milliseconds: 300), height: 2, margin: const EdgeInsets.only(bottom: 22), color: _step > i - 1 ? AppColors.primary : AppColors.border)),
-        Column(children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            width: 34, height: 34,
-            decoration: BoxDecoration(
-              color: _step >= i ? AppColors.primary : Colors.transparent,
-              border: Border.all(color: _step >= i ? AppColors.primary : AppColors.border, width: 2),
-              shape: BoxShape.circle,
-            ),
-            child: Center(child: _step > i
-              ? Icon(Icons.check_rounded, color: Colors.white, size: 18)
-              : Text('${i+1}', style: TextStyle(color: _step == i ? Colors.white : AppColors.textSec, fontWeight: FontWeight.w800, fontSize: 13)),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(labels[i], style: TextStyle(color: _step >= i ? AppColors.primary : AppColors.textSec, fontSize: 11, fontWeight: FontWeight.w600)),
-        ]),
-      ],
-    ]);
-  }
-
-  Widget _step1() => SingleChildScrollView(
-    padding: const EdgeInsets.all(20),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      _label('Business Name', required: true),
-      TextFormField(
-        controller: _bizName,
-        decoration: const InputDecoration(labelText: 'e.g. Duka la Mama Pita', prefixIcon: Icon(Icons.storefront_outlined, size: 20)),
-        onChanged: (_) => setState(() {}),
-      ),
-      const SizedBox(height: 20),
-      _label('Business Type', required: true),
-      const SizedBox(height: 10),
-      Wrap(spacing: 10, runSpacing: 10, children: _bizTypes.map((t) {
-        final (val, icon, lab) = t;
-        final sel = _bizType == val;
-        return GestureDetector(
-          onTap: () => setState(() => _bizType = val),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-            decoration: BoxDecoration(
-              color: sel ? AppColors.primaryLt : Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: sel ? AppColors.primary : AppColors.border, width: sel ? 2 : 1),
-              boxShadow: sel ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.15), blurRadius: 8)] : [],
-            ),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Icon(icon, size: 18, color: sel ? AppColors.primary : AppColors.textSec),
-              const SizedBox(width: 8),
-              Text(lab, style: TextStyle(color: sel ? AppColors.primary : AppColors.textPri, fontWeight: sel ? FontWeight.w700 : FontWeight.w500, fontSize: 14)),
-            ]),
-          ),
-        );
-      }).toList()),
-      const SizedBox(height: 20),
-      _label('City', required: true),
-      TextFormField(controller: _bizCity, decoration: const InputDecoration(labelText: 'e.g. Dar es Salaam', prefixIcon: Icon(Icons.location_city_outlined, size: 20)), onChanged: (_) => setState(() {})),
-      const SizedBox(height: 20),
-      _label('Country'),
-      TextFormField(controller: _bizCountry, decoration: const InputDecoration(prefixIcon: Icon(Icons.public, size: 20))),
-      const SizedBox(height: 20),
-      _label('Business Address (optional)'),
-      TextFormField(controller: _bizAddr, decoration: const InputDecoration(labelText: 'Street, building...', prefixIcon: Icon(Icons.place_outlined, size: 20))),
-    ]),
-  );
-
-  Widget _step2() => SingleChildScrollView(
-    padding: const EdgeInsets.all(20),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      _label('Currency'),
-      DropdownButtonFormField<String>(
-        value: _currency,
-        decoration: const InputDecoration(prefixIcon: Icon(Icons.payments_outlined, size: 20)),
-        isExpanded: true,
-        items: _currencies.map((c) {
-          final (code, name) = c;
-          return DropdownMenuItem(value: code, child: Text('$code — $name', overflow: TextOverflow.ellipsis));
-        }).toList(),
-        onChanged: (v) => setState(() => _currency = v!),
-      ),
-      const SizedBox(height: 20),
-      _label('VAT / Tax Rate'),
-      TextFormField(
-        controller: _taxPct,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        decoration: const InputDecoration(
-          labelText: 'Percentage (%)',
-          hintText: '18',
-          prefixIcon: Icon(Icons.percent_outlined, size: 20),
-          helperText: 'Tanzania standard VAT is 18%',
-        ),
-      ),
-      const SizedBox(height: 20),
-      _label('Fiscal Year Starts'),
-      DropdownButtonFormField<String>(
-        value: _fiscalStart,
-        decoration: const InputDecoration(prefixIcon: Icon(Icons.calendar_month_outlined, size: 20)),
-        items: _months.map((m) => DropdownMenuItem(value: m, child: Text(m))).toList(),
-        onChanged: (v) => setState(() => _fiscalStart = v!),
-      ),
-    ]),
-  );
-
-  Widget _step3() => SingleChildScrollView(
-    padding: const EdgeInsets.all(20),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      if (_error != null) ...[
-        Container(
-          padding: const EdgeInsets.all(14),
-          margin: const EdgeInsets.only(bottom: 14),
-          decoration: BoxDecoration(color: AppColors.dangerLt, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.danger.withValues(alpha: 0.3))),
-          child: Row(children: [
-            const Icon(Icons.error_outline, color: AppColors.danger, size: 20),
-            const SizedBox(width: 10),
-            Expanded(child: Text(_error!, style: const TextStyle(color: AppColors.danger, fontSize: 13))),
-          ]),
-        ),
-      ],
-      _label('Full Name', required: true),
-      TextFormField(
-        controller: _name,
-        decoration: const InputDecoration(labelText: 'Your full name', prefixIcon: Icon(Icons.person_outline, size: 20)),
-        onChanged: (_) => setState(() {}),
-      ),
-      const SizedBox(height: 20),
-      _label('Phone Number', required: true),
-      _tanzaniaPhone(),
-      const SizedBox(height: 4),
-      const Text('9 digits after +255  •  e.g. 712 345 678', style: TextStyle(color: AppColors.textSec, fontSize: 11)),
-      const SizedBox(height: 20),
-      _label('Email Address', required: true),
-      TextFormField(
-        controller: _email,
-        keyboardType: TextInputType.emailAddress,
-        decoration: const InputDecoration(labelText: 'you@example.com', prefixIcon: Icon(Icons.email_outlined, size: 20)),
-        onChanged: (_) => setState(() {}),
-      ),
-      const SizedBox(height: 20),
-      _label('Password', required: true),
-      TextFormField(
-        controller: _pass,
-        obscureText: !_showPass,
-        decoration: InputDecoration(
-          labelText: 'Min. 8 characters',
-          prefixIcon: const Icon(Icons.lock_outline, size: 20),
-          suffixIcon: IconButton(
-            icon: Icon(_showPass ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec, size: 20),
-            onPressed: () => setState(() => _showPass = !_showPass),
-          ),
-        ),
-        onChanged: (_) => setState(() {}),
-      ),
-      if (_pass.text.isNotEmpty) ...[
-        const SizedBox(height: 8),
-        _strengthBar(_pass.text),
-      ],
-      const SizedBox(height: 20),
-      _label('Confirm Password', required: true),
-      TextFormField(
-        controller: _confirmPass,
-        obscureText: !_showConfirm,
-        decoration: InputDecoration(
-          labelText: 'Re-enter your password',
-          prefixIcon: const Icon(Icons.lock_outline, size: 20),
-          suffixIcon: IconButton(
-            icon: Icon(_showConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textSec, size: 20),
-            onPressed: () => setState(() => _showConfirm = !_showConfirm),
-          ),
-          errorText: _confirmPass.text.isNotEmpty && _pass.text != _confirmPass.text ? 'Passwords do not match' : null,
-          suffixIconConstraints: const BoxConstraints(minWidth: 48),
-        ),
-        onChanged: (_) => setState(() {}),
-      ),
-      const SizedBox(height: 20),
-      Center(child: Wrap(children: [
-        const Text('Already have an account? ', style: TextStyle(color: AppColors.textSec, fontSize: 13)),
-        GestureDetector(
-          onTap: () => Navigator.pushReplacementNamed(context, '/login'),
-          child: const Text('Sign In', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 13)),
-        ),
-      ])),
-    ]),
-  );
-
-  Widget _tanzaniaPhone() => Container(
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: _phone.text.length == 9 ? AppColors.primary : AppColors.border, width: _phone.text.length == 9 ? 2 : 1),
-    ),
-    child: Row(children: [
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        decoration: const BoxDecoration(
-          color: AppColors.primaryLt,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(11), bottomLeft: Radius.circular(11)),
-        ),
-        child: Row(mainAxisSize: MainAxisSize.min, children: const [
-          Icon(Icons.phone_android, size: 20, color: AppColors.primary),
-          SizedBox(width: 8),
-          Text('+255', style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.primary, fontSize: 15)),
-        ]),
-      ),
-      Container(width: 1, height: 30, color: AppColors.border),
-      Expanded(
-        child: TextField(
-          controller: _phone,
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(9)],
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: 2),
-          decoration: const InputDecoration(
-            hintText: '7XX XXX XXX',
-            hintStyle: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w400, color: AppColors.textSec),
-            border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          ),
-          onChanged: (_) => setState(() {}),
-        ),
-      ),
-      if (_phone.text.length == 9)
-        const Padding(padding: EdgeInsets.only(right: 12), child: Icon(Icons.check_circle, color: AppColors.success, size: 22)),
-    ]),
-  );
-
-  Widget _strengthBar(String p) {
-    int score = 0;
-    if (p.length >= 8) score++;
-    if (p.contains(RegExp(r'[A-Z]'))) score++;
-    if (p.contains(RegExp(r'[0-9]'))) score++;
-    if (p.contains(RegExp(r'[^A-Za-z0-9]'))) score++;
-    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
-    const colors = [Colors.transparent, AppColors.danger, AppColors.warning, AppColors.success, AppColors.success];
-    return Row(children: [
-      ...List.generate(4, (i) => Expanded(child: Container(
-        height: 4, margin: const EdgeInsets.only(right: 4),
-        decoration: BoxDecoration(
-          color: i < score ? colors[score] : AppColors.border,
-          borderRadius: BorderRadius.circular(4),
-        ),
-      ))),
-      const SizedBox(width: 8),
-      Text(labels[score], style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: colors[score])),
-    ]);
-  }
-
-  Widget _bottomNav() {
-    final loading = context.watch<AuthProvider>().loading;
-    final canProceed = _canNext() && !loading;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: AppColors.border, width: 1)),
-      ),
-      child: Row(children: [
-        if (_step > 0) ...[
-          Expanded(
-            flex: 2,
-            child: OutlinedButton(
-              onPressed: loading ? null : _prev,
-              child: const Text('← Back'),
-            ),
-          ),
-          const SizedBox(width: 12),
-        ],
-        Expanded(
-          flex: 3,
-          child: SizedBox(
-            height: 52,
-            child: ElevatedButton(
-              onPressed: canProceed ? _next : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: canProceed ? AppColors.primary : AppColors.border,
-                foregroundColor: Colors.white,
+      backgroundColor: AppColors.background,
+      appBar: AppBar(title: const Text('Create Account')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+            _buildStepIndicator(),
+            const SizedBox(height: 24),
+            if (_error != null)
+              Container(
+                width: double.infinity, margin: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(color: AppColors.error.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
+                child: Text(_error!, style: const TextStyle(color: AppColors.error, fontSize: 13)),
               ),
-              child: loading
-                ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))
-                : Text(_step == 2 ? 'Create Account' : 'Continue →', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            if (_step == 0) _buildStep1(),
+            if (_step == 1) _buildStep2(),
+            if (_step == 2) _buildStep3(),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                if (_step > 0)
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => _ctrl.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut),
+                      child: const Text('Back'),
+                    ),
+                  ),
+                if (_step > 0) const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    onPressed: _step == 2 ? _register : () {
+                      if (_step < 2) {
+                        _ctrl.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                      }
+                    },
+                    child: _loading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                      : Text(_step == 2 ? 'Create Account' : 'Continue', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                  ),
+                ),
+              ],
             ),
-          ),
+          ],
         ),
-      ]),
+      ),
     );
   }
 
-  Widget _label(String text, {bool required = false}) => Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-    child: RichText(text: TextSpan(
-      text: text,
-      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textPri),
-      children: required ? const [TextSpan(text: '  *', style: TextStyle(color: AppColors.danger))] : [],
-    )),
-  );
+  Widget _buildStepIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(3, (i) {
+        final isActive = i <= _step;
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 32, height: 32,
+              decoration: BoxDecoration(
+                color: isActive ? AppColors.primary : AppColors.border,
+                shape: BoxShape.circle,
+              ),
+              child: Center(child: Text('${i + 1}', style: TextStyle(
+                fontSize: 13, fontWeight: FontWeight.w700,
+                color: isActive ? Colors.white : AppColors.textSec,
+              ))),
+            ),
+            if (i < 2) Container(width: 40, height: 2, color: i < _step ? AppColors.primary : AppColors.border),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _buildStep1() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Business Details', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.textPri)),
+        const SizedBox(height: 6),
+        const Text('Tell us about your business', style: TextStyle(fontSize: 14, color: AppColors.textSec)),
+        const SizedBox(height: 20),
+        TextField(controller: _businessCtrl, decoration: const InputDecoration(labelText: 'Business Name', prefixIcon: Icon(Icons.store_outlined))),
+        const SizedBox(height: 14),
+        const Text('Business Type', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPri)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8, runSpacing: 8,
+          children: ['retail', 'wholesale', 'restaurant', 'service', 'other'].map((t) => ChoiceChip(
+            label: Text(t[0].toUpperCase() + t.substring(1), style: TextStyle(fontSize: 13,
+              color: _businessType == t ? Colors.white : AppColors.textSec)),
+            selected: _businessType == t,
+            selectedColor: AppColors.primary,
+            backgroundColor: Colors.white,
+            side: BorderSide(color: _businessType == t ? AppColors.primary : AppColors.border),
+            onSelected: (v) => setState(() => _businessType = t),
+          )).toList(),
+        ),
+        const SizedBox(height: 14),
+        TextField(controller: _cityCtrl, decoration: const InputDecoration(labelText: 'City', prefixIcon: Icon(Icons.location_city_outlined))),
+        const SizedBox(height: 14),
+        TextField(controller: _addressCtrl, decoration: const InputDecoration(labelText: 'Address (optional)', prefixIcon: Icon(Icons.map_outlined))),
+      ],
+    );
+  }
+
+  Widget _buildStep2() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Business Settings', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.textPri)),
+        const SizedBox(height: 6),
+        const Text('Configure your preferences', style: TextStyle(fontSize: 14, color: AppColors.textSec)),
+        const SizedBox(height: 20),
+        DropdownButtonFormField<String>(
+          value: _currency,
+          decoration: const InputDecoration(labelText: 'Currency', prefixIcon: Icon(Icons.monetization_on_outlined)),
+          items: ['TZS', 'USD', 'EUR', 'GBP', 'KES', 'UGX', 'RWF'].map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+          onChanged: (v) => setState(() => _currency = v ?? 'TZS'),
+        ),
+        const SizedBox(height: 14),
+        TextField(controller: _taxPct, decoration: const InputDecoration(labelText: 'Tax Percentage (%)', prefixIcon: Icon(Icons.percent))),
+      ],
+    );
+  }
+
+  Widget _buildStep3() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Owner Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.textPri)),
+        const SizedBox(height: 6),
+        const Text('Your personal details', style: TextStyle(fontSize: 14, color: AppColors.textSec)),
+        const SizedBox(height: 20),
+        TextField(controller: _nameCtrl, decoration: const InputDecoration(labelText: 'Full Name', prefixIcon: Icon(Icons.person_outline))),
+        const SizedBox(height: 14),
+        TextField(controller: _phoneCtrl, decoration: const InputDecoration(labelText: 'Phone (+255...)', prefixIcon: Icon(Icons.phone_outlined))),
+        const SizedBox(height: 14),
+        TextField(controller: _emailCtrl, decoration: const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.email_outlined)), keyboardType: TextInputType.emailAddress),
+        const SizedBox(height: 14),
+        TextField(controller: _passCtrl, obscureText: _obscure,
+          decoration: InputDecoration(
+            labelText: 'Password', prefixIcon: const Icon(Icons.lock_outlined),
+            suffixIcon: IconButton(icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+              onPressed: () => setState(() => _obscure = !_obscure)),
+          )),
+        const SizedBox(height: 14),
+        TextField(controller: _confirmCtrl, obscureText: _obscure2,
+          decoration: InputDecoration(
+            labelText: 'Confirm Password', prefixIcon: const Icon(Icons.lock_outlined),
+            suffixIcon: IconButton(icon: Icon(_obscure2 ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+              onPressed: () => setState(() => _obscure2 = !_obscure2)),
+          )),
+      ],
+    );
+  }
 }
