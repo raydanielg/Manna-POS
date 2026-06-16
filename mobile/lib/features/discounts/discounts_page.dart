@@ -130,7 +130,7 @@ class _DiscountFormState extends State<_DiscountForm> {
         const SizedBox(height: 16),
         TextFormField(controller: _name, decoration: const InputDecoration(labelText: 'Discount Name *'), validator: (v) => v!.isNotEmpty ? null : 'Required'),
         const SizedBox(height: 12),
-        TextFormField(controller: _amount, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Amount *', prefixText: _type == 'percentage' ? '% ' : '$AppConstants.currency '), validator: (v) => v!.isNotEmpty ? null : 'Required'),
+        TextFormField(controller: _amount, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: 'Amount *', prefixText: _type == 'percentage' ? '% ' : '${AppConstants.currency} '), validator: (v) => v!.isNotEmpty ? null : 'Required'),
         const SizedBox(height: 12),
         SegmentedButton<String>(segments: const [ButtonSegment(value: 'percentage', label: Text('Percentage'), icon: Icon(Icons.percent)), ButtonSegment(value: 'fixed', label: Text('Fixed'), icon: Icon(Icons.monetization_on_outlined))], selected: {_type}, onSelectionChanged: (v) => setState(() => _type = v.first)),
         const SizedBox(height: 12),

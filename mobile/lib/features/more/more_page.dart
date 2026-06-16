@@ -31,7 +31,7 @@ class MorePage extends StatelessWidget {
           ])),
           SliverToBoxAdapter(child: _buildSection('Products & Stock', [
             _MenuItem(Icons.category_rounded, 'Categories', AppColors.cyan, () => context.push('/categories')),
-            _MenuItem(Icons.trademark_rounded, 'Brands', AppColors.purple, () => context.push('/brands')),
+            _MenuItem(Icons.bookmark_rounded, 'Brands', AppColors.purple, () => context.push('/brands')),
             _MenuItem(Icons.straighten_outlined, 'Units', AppColors.info, () => context.push('/units')),
             _MenuItem(Icons.account_balance_outlined, 'Tax Rates', AppColors.orange, () => context.push('/tax-rates')),
             _MenuItem(Icons.verified_outlined, 'Warranties', AppColors.pink, () => context.push('/warranties')),

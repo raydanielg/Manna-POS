@@ -58,7 +58,7 @@ class _BrandsPageState extends State<BrandsPage> {
 
   Widget _tile(dynamic b) => AppCard(child: Padding(padding: const EdgeInsets.all(16), child: Row(children: [
     Container(width: 46, height: 46, decoration: BoxDecoration(color: AppColors.accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
-      child: const Icon(Icons.trademark_outlined, color: AppColors.accent, size: 22)),
+      child: Icon(Icons.bookmark_outline, color: AppColors.accent, size: 22)),
     const SizedBox(width: 14),
     Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(b['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
