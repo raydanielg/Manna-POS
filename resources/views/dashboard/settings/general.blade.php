@@ -79,14 +79,23 @@
 @endsection
 @section('scripts')
 <script>
+async function loadSettings(){
+  try{
+    const d=await apiFetch('/api/dashboard/settings');
+    const form=document.getElementById('settingsForm');
+    Object.entries(d).forEach(([k,v])=>{const el=form.querySelector(`[name="${k}"]`);if(el&&v!=null)el.value=v;});
+  }catch(e){}
+}
 async function saveSettings(e){
   e.preventDefault();
   const btn=document.getElementById('saveSettingsBtn');btn.disabled=true;btn.textContent='Saving...';
   try{
     const data=Object.fromEntries(new FormData(document.getElementById('settingsForm')));
+    await apiFetch('/api/dashboard/settings',{method:'PUT',body:JSON.stringify(data)});
     showToast('Settings saved successfully!');
-  }catch(err){showToast('Failed to save settings','error');}
+  }catch(err){showToast(err.message||'Failed to save settings','error');}
   finally{btn.disabled=false;btn.textContent='Save Settings';}
 }
+loadSettings();
 </script>
 @endsection

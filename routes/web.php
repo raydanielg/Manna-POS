@@ -350,6 +350,40 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::post('subscriptions',          [PlanManagementController::class, 'storeSubscription']);
     Route::put('subscriptions/{subscription}', [PlanManagementController::class, 'updateSubscription']);
     Route::delete('subscriptions/{subscription}', [PlanManagementController::class, 'destroySubscription']);
+
+    // Settings API
+    Route::get('settings', function(\Illuminate\Http\Request $req) {
+        $u = auth()->user();
+        return response()->json([
+            'business_name'    => $u->business_name,
+            'business_email'   => $u->email,
+            'phone'            => $u->phone,
+            'address'          => $u->business_address,
+            'city'             => $u->business_city,
+            'country'          => $u->business_country,
+            'currency'         => $u->currency,
+            'fy_start'         => $u->fiscal_year_start,
+            'tax_number'       => $u->tax_percentage,
+        ]);
+    });
+    Route::put('settings', function(\Illuminate\Http\Request $req) {
+        $u = auth()->user();
+        $fill = [];
+        if ($req->has('business_name'))  $fill['business_name']     = $req->business_name;
+        if ($req->has('phone'))          $fill['phone']              = $req->phone;
+        if ($req->has('address'))        $fill['business_address']   = $req->address;
+        if ($req->has('city'))           $fill['business_city']      = $req->city;
+        if ($req->has('country'))        $fill['business_country']   = $req->country;
+        if ($req->has('currency'))       $fill['currency']           = $req->currency;
+        if ($req->has('fy_start'))       $fill['fiscal_year_start']  = $req->fy_start;
+        if ($req->has('tax_number'))     $fill['tax_percentage']     = $req->tax_number;
+        if (!empty($fill)) $u->update($fill);
+        if ($req->business_email && $req->business_email !== $u->email) {
+            $u->email = $req->business_email;
+            $u->save();
+        }
+        return response()->json(['success' => true, 'message' => 'Settings saved successfully']);
+    });
 });
 
 // ─── Admin API Routes ──────────────────────────────────────────────────────
