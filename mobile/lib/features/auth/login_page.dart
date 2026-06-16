@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Text('Remember me', style: TextStyle(fontSize: 13, color: AppColors.textSec)),
                   const Spacer(),
                   TextButton(
-                    onPressed: () => context.push('/login'), // forgot password placeholder
+                    onPressed: () => context.push('/forgot-password'),
                     child: const Text('Forgot Password?', style: TextStyle(fontSize: 13, color: AppColors.primary)),
                   ),
                 ],
