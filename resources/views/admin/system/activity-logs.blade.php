@@ -26,7 +26,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/activity-logs';
 let debounceTimer;
 
@@ -55,5 +54,4 @@ function clearLogs() {
 }
 
 loadList();
-</script>
 @endsection

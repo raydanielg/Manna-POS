@@ -35,7 +35,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/config';
 
 async function loadConfig() {
@@ -82,5 +81,4 @@ async function testSms() {
 }
 
 loadConfig();
-</script>
 @endsection

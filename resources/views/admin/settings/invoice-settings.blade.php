@@ -13,7 +13,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 async function loadSettings() {
     try {
         const configs = await apiFetch('/api/admin/system/config');
@@ -29,5 +28,4 @@ document.getElementById('settingsForm').addEventListener('submit', async functio
     } catch (e) { Swal.fire('Error', 'Failed to save', 'error'); }
 });
 loadSettings();
-</script>
 @endsection

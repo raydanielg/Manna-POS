@@ -64,7 +64,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/users';
 
 document.getElementById('createUserForm').addEventListener('submit', async function(e) {
@@ -96,5 +95,4 @@ document.getElementById('createUserForm').addEventListener('submit', async funct
         document.getElementById('submitBtn').disabled = false;
     }
 });
-</script>
 @endsection

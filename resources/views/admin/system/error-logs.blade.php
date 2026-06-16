@@ -42,7 +42,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/error-logs';
 
 async function loadList() {
@@ -78,5 +77,4 @@ function clearLogs() {
 }
 
 loadList();
-</script>
 @endsection

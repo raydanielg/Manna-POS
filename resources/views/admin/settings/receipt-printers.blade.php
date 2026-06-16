@@ -68,7 +68,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/settings/receipt-printers';
 let editId = null;
 
@@ -151,5 +150,4 @@ function deletePrinter(id, name) {
 }
 
 loadList();
-</script>
 @endsection

@@ -55,7 +55,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/dashboard/notification-templates';
 let editId = null;
 async function loadList() {
@@ -127,5 +126,4 @@ function deleteItem(id) {
 }
 
 loadList();
-</script>
 @endsection

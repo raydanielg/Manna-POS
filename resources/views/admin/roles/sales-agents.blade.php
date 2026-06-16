@@ -21,7 +21,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/sales-agents';
 async function loadList() {
     try {
@@ -42,5 +41,4 @@ async function loadList() {
     } catch (e) { document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" class="tbl-empty">Error loading data</td></tr>'; }
 }
 loadList();
-</script>
 @endsection

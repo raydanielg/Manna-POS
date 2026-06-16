@@ -37,7 +37,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const today = new Date().toISOString().split('T')[0];
 const firstDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
 document.getElementById('fromDate').value = firstDay;
@@ -72,5 +71,4 @@ async function loadReport() {
     </tr>`).join('');
 }
 loadReport();
-</script>
 @endsection

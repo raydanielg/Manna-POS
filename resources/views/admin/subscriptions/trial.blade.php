@@ -44,7 +44,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/subscriptions?is_trial=true';
 let editId = null;
 
@@ -93,5 +92,4 @@ function deleteSub(id) {
 }
 
 loadList();
-</script>
 @endsection

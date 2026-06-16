@@ -47,7 +47,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/finance/payouts';
 let payoutId = null;
 
@@ -119,5 +118,4 @@ function cancelPayout(id) {
 }
 
 loadList();
-</script>
 @endsection

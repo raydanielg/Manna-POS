@@ -20,7 +20,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/users';
 
 async function loadList() {
@@ -53,5 +52,4 @@ function unblockUser(id, name) {
 }
 
 loadList();
-</script>
 @endsection

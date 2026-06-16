@@ -75,7 +75,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/support/tickets';
 
 async function loadList() {
@@ -124,5 +123,4 @@ function deleteTicket(id) {
 }
 
 loadList();
-</script>
 @endsection

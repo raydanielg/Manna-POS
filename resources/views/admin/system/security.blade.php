@@ -56,7 +56,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/config';
 
 async function loadConfig() {
@@ -93,5 +92,4 @@ async function saveConfig() {
 }
 
 loadConfig();
-</script>
 @endsection

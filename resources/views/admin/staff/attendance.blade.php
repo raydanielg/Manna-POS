@@ -75,7 +75,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/staff';
 let editId = null, attId = null;
 
@@ -135,5 +134,4 @@ function deleteAtt(id) {
 
 document.getElementById('dateFilter').value = new Date().toISOString().split('T')[0];
 loadList();
-</script>
 @endsection

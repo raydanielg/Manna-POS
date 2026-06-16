@@ -93,7 +93,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/users';
 
 async function loadList(page = 1) {
@@ -179,5 +178,4 @@ async function deleteUser(id, name) {
 
 function escapeHtml(str) { if (!str) return ''; const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 loadList();
-</script>
 @endsection

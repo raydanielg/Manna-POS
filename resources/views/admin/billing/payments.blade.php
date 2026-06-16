@@ -87,7 +87,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/billing/payments';
 
 async function init() {
@@ -139,5 +138,4 @@ async function savePayment() {
 }
 
 init();
-</script>
 @endsection

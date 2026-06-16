@@ -54,7 +54,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/finance/revenue';
 let revenueChart = null;
 
@@ -122,5 +121,4 @@ async function updateChart() {
     await loadTransactions();
     await updateChart();
 })();
-</script>
 @endsection

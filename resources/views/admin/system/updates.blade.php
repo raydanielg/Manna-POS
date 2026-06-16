@@ -30,7 +30,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/updates';
 
 async function loadInfo() {
@@ -94,5 +93,4 @@ function runUpdate() {
 }
 
 loadInfo();
-</script>
 @endsection

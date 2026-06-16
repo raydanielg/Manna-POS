@@ -62,7 +62,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/backup-schedule';
 
 async function loadSchedule() {
@@ -98,5 +97,4 @@ async function saveSchedule() {
 }
 
 loadSchedule();
-</script>
 @endsection

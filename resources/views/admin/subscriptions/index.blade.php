@@ -53,7 +53,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/subscriptions';
 let editId = null;
 
@@ -105,5 +104,4 @@ function deleteSub(id) {
 }
 
 loadList();
-</script>
 @endsection

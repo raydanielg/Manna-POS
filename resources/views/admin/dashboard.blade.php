@@ -90,7 +90,6 @@
 </style>
 @endsection
 @section('scripts')
-<script>
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 async function loadDashboard() {
@@ -155,5 +154,4 @@ new Chart(document.getElementById('userChart'), {
 });
 
 loadDashboard();
-</script>
 @endsection

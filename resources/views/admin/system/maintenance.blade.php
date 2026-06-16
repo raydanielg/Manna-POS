@@ -33,7 +33,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/maintenance';
 const CONFIG_API = '/api/admin/system/config';
 
@@ -89,5 +88,4 @@ async function saveSettings() {
 }
 
 loadStatus();
-</script>
 @endsection

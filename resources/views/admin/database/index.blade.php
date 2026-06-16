@@ -49,7 +49,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/database';
 
 async function loadTables() {
@@ -128,5 +127,4 @@ async function runQuery() {
 }
 
 loadTables();
-</script>
 @endsection

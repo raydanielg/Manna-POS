@@ -53,7 +53,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/config';
 let editId = null;
 
@@ -100,5 +99,4 @@ function deleteConfig(id, key) {
 }
 
 loadList();
-</script>
 @endsection

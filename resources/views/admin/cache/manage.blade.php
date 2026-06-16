@@ -45,7 +45,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/cache';
 const types = ['app','view','config','route','event'];
 
@@ -112,5 +111,4 @@ function optimize() {
 }
 
 loadStatus();
-</script>
 @endsection

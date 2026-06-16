@@ -77,7 +77,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/communication/announcements';
 let editId = null;
 
@@ -128,5 +127,4 @@ function deleteAnn(id, title) {
 }
 
 loadList();
-</script>
 @endsection

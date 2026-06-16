@@ -50,7 +50,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 document.getElementById('profileForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     clearFormErrors('profileForm');
@@ -82,5 +81,4 @@ document.getElementById('profileForm').addEventListener('submit', async function
         btn.textContent = 'Save Changes';
     }
 });
-</script>
 @endsection

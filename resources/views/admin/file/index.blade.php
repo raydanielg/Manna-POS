@@ -38,7 +38,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/file-manager';
 let currentPath = '';
 
@@ -141,5 +140,4 @@ function deleteItem(name, isDir) {
 }
 
 loadList();
-</script>
 @endsection

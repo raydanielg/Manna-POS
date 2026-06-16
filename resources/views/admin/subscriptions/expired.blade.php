@@ -52,7 +52,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/subscriptions?status=expired';
 let editId = null;
 
@@ -101,5 +100,4 @@ function deleteSub(id) {
 }
 
 loadList();
-</script>
 @endsection

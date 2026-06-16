@@ -123,7 +123,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/staff';
 let editId = null;
 
@@ -223,5 +222,4 @@ function deleteStaff(id, name) {
 }
 
 loadList();
-</script>
 @endsection

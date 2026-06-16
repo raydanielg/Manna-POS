@@ -20,7 +20,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/business/verifications';
 
 async function loadList() {
@@ -54,5 +53,4 @@ function reject(id) {
 }
 
 loadList();
-</script>
 @endsection

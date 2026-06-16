@@ -62,7 +62,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/communication/sms-templates';
 let smsEditId = null;
 
@@ -110,5 +109,4 @@ function deleteSms(id, name) {
 }
 
 loadSmsList();
-</script>
 @endsection

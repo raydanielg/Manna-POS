@@ -20,7 +20,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/finance/tax-reports';
 
 async function loadList() {
@@ -50,5 +49,4 @@ function exportReport() {
 }
 
 loadList();
-</script>
 @endsection

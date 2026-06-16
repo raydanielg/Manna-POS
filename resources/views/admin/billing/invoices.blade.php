@@ -86,7 +86,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/billing/invoices';
 let editId = null;
 
@@ -171,5 +170,4 @@ function deleteInv(id) {
 }
 
 init();
-</script>
 @endsection

@@ -18,7 +18,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/login-history';
 let debounceTimer;
 
@@ -47,5 +46,4 @@ function clearHistory() {
 }
 
 loadList();
-</script>
 @endsection

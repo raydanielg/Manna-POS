@@ -15,7 +15,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/file-backups';
 
 async function loadList() {
@@ -64,5 +63,4 @@ function deleteBackup(id, filename) {
 }
 
 loadList();
-</script>
 @endsection

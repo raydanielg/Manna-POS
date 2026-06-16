@@ -48,7 +48,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/api-keys';
 
 async function loadList() {
@@ -112,5 +111,4 @@ function deleteKey(id, name) {
 }
 
 loadList();
-</script>
 @endsection

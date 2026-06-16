@@ -67,7 +67,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/communication/email-templates';
 let editId = null;
 
@@ -121,5 +120,4 @@ function deleteTemplate(id, name) {
 }
 
 loadList();
-</script>
 @endsection

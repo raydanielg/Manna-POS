@@ -107,7 +107,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/business';
 let editId = null;
 
@@ -189,5 +188,4 @@ function deleteBiz(id, name) {
 }
 
 loadList();
-</script>
 @endsection

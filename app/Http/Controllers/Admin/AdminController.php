@@ -31,11 +31,15 @@ class AdminController extends Controller
     public function stats()
     {
         return response()->json([
-            'users'      => User::count(),
-            'businesses' => Business::count(),
-            'revenue'    => Invoice::where('status', 'paid')->sum('total'),
-            'tickets'    => SupportTicket::count(),
-            'plans'      => SubscriptionPlan::count(),
+            'total_users'           => User::count(),
+            'total_businesses'      => Business::count(),
+            'total_revenue'         => number_format(Invoice::where('status', 'paid')->sum('total'), 0),
+            'active_subscriptions'  => UserSubscription::where('status', 'active')->count(),
+            'pending_tickets'       => SupportTicket::whereIn('status', ['open', 'in_progress'])->count(),
+            'new_users_month'       => User::whereMonth('created_at', now()->month)->count(),
+            'new_biz_month'         => Business::whereMonth('created_at', now()->month)->count(),
+            'pending_verifications' => \App\Models\BusinessVerification::where('status', 'pending')->count(),
+            'total_staff'           => \App\Models\Staff::count(),
         ]);
     }
 

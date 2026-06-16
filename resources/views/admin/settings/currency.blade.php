@@ -55,7 +55,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/settings/currency';
 let editId = null;
 
@@ -125,5 +124,4 @@ function deleteCurrency(id, code) {
 }
 
 loadList();
-</script>
 @endsection

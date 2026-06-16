@@ -54,7 +54,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/roles';
 let editId = null;
 
@@ -150,5 +149,4 @@ function deleteItem(id, name) {
 }
 
 loadList();
-</script>
 @endsection

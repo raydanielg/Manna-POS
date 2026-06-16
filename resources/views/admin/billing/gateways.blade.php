@@ -66,7 +66,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/billing/gateways';
 let editId = null;
 
@@ -130,5 +129,4 @@ function deleteGw(id, name) {
 }
 
 loadList();
-</script>
 @endsection

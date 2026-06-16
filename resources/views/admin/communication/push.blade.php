@@ -50,7 +50,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/communication/push';
 
 async function loadList() {
@@ -95,5 +94,4 @@ async function sendPush() {
 }
 
 loadList();
-</script>
 @endsection

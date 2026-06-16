@@ -56,7 +56,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/business/categories';
 let editId = null;
 
@@ -110,5 +109,4 @@ function deleteCat(id, name) {
 }
 
 loadList();
-</script>
 @endsection

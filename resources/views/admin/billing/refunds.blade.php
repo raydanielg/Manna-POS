@@ -50,7 +50,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/billing/refunds';
 let editId = null;
 
@@ -100,5 +99,4 @@ function deleteRefund(id) {
 }
 
 loadList();
-</script>
 @endsection

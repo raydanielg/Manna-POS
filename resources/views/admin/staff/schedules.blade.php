@@ -69,7 +69,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/staff';
 let editSchedId = null;
 
@@ -125,5 +124,4 @@ function deleteSched(id) {
 }
 
 init();
-</script>
 @endsection

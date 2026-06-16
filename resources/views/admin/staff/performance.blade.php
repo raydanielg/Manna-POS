@@ -19,7 +19,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/staff/performance';
 
 async function loadList() {
@@ -66,5 +65,4 @@ function viewDetails(id) {
 }
 
 loadList();
-</script>
 @endsection

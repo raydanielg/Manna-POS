@@ -14,7 +14,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/business';
 
 async function loadList() {
@@ -61,5 +60,4 @@ function rejectBiz(id, name) {
 }
 
 loadList();
-</script>
 @endsection

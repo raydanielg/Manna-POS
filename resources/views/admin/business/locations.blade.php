@@ -22,7 +22,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/business/locations';
 
 async function loadList() {
@@ -41,5 +40,4 @@ async function loadList() {
 }
 
 loadList();
-</script>
 @endsection

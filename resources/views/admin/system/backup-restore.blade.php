@@ -28,7 +28,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/backups';
 let selectedId = null;
 
@@ -91,5 +90,4 @@ async function uploadBackup() {
 }
 
 loadList();
-</script>
 @endsection

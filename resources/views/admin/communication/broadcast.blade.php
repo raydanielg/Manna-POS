@@ -54,7 +54,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/communication/broadcast';
 
 function updatePreview() {
@@ -97,5 +96,4 @@ function confirmBroadcast() {
 }
 
 updatePreview();
-</script>
 @endsection

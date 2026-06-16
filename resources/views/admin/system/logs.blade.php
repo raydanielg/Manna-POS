@@ -29,7 +29,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/logs';
 
 async function loadList() {
@@ -72,5 +71,4 @@ function clearLog(filename) {
 }
 
 loadList();
-</script>
 @endsection

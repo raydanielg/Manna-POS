@@ -12,7 +12,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/system/health';
 
 async function loadHealth() {

@@ -27,7 +27,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/billing/transactions';
 
 async function loadList() {
@@ -49,5 +48,4 @@ async function loadList() {
 }
 
 loadList();
-</script>
 @endsection

@@ -65,7 +65,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API_PLANS = '/api/dashboard/plans';
 let editPlanId = null;
 
@@ -175,5 +174,4 @@ function deletePlan(id, name) {
 }
 
 loadPlans();
-</script>
 @endsection

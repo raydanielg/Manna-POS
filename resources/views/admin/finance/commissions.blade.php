@@ -20,7 +20,6 @@
 </div>
 @endsection
 @section('scripts')
-<script>
 const API = '/api/admin/finance/commissions';
 
 async function loadList() {
@@ -48,5 +47,4 @@ function viewCommission(id) {
 }
 
 loadList();
-</script>
 @endsection
