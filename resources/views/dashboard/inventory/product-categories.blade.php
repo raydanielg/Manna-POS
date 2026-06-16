@@ -54,7 +54,7 @@
 @endsection
 @section('scripts')
 <script>
-const API='/api/dashboard/product-categories'; let editId=null;
+const API='/api/dashboard/categories'; let editId=null;
 async function loadList(){
   const s=document.getElementById('searchInput').value; const tbody=document.getElementById('tableBody');
   tbody.innerHTML='<tr><td colspan="6" class="tbl-empty">Loading...</td></tr>';

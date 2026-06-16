@@ -6,12 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 class UserManagementController extends Controller {
     public function index(Request $req) {
-        if ($req->ajax()) {
-            $q = User::query();
-            if ($req->search) $q->where("name","like","%{$req->search}%")->orWhere("email","like","%{$req->search}%");
-            return response()->json($q->latest()->get()->map(fn($u) => ["id"=>$u->id,"name"=>$u->name,"email"=>$u->email,"role"=>$u->role,"created_at"=>$u->created_at]));
-        }
-        return view("dashboard.user-management.users");
+        $q = User::query();
+        if ($req->search) $q->where("name","like","%{$req->search}%")->orWhere("email","like","%{$req->search}%");
+        if ($req->role) $q->where("role",$req->role);
+        if ($req->status) $q->where("status",$req->status);
+        return response()->json($q->latest()->get()->map(fn($u) => ["id"=>$u->id,"name"=>$u->name,"email"=>$u->email,"role"=>$u->role,"status"=>$u->status,"created_at"=>$u->created_at]));
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","email"=>"required|email|unique:users,email","password"=>"required|string|min:8","role"=>"in:admin,manager,cashier,user"]);
