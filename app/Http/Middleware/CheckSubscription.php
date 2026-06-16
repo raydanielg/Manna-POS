@@ -11,17 +11,19 @@ class CheckSubscription
     {
         $user = $request->user();
 
-        // Grace: if user has any subscription history, they are "pre-existing" — mark setup complete
+        // Auto-mark setup_completed for pre-existing users who already have subscription history
         if (!$user->setup_completed && $user->subscriptions()->exists()) {
             $user->update(['setup_completed' => true]);
         }
 
+        // Redirect new users (registered fresh) to setup if not completed
         if (!$user->setup_completed) {
             return redirect('/setup');
         }
 
-        // Check for active subscription (allow through if they have no subscription system yet)
-        if (!$user->hasActiveSubscription()) {
+        // Only enforce subscription gate when there is at least one plan in the system
+        $planCount = \App\Models\SubscriptionPlan::count();
+        if ($planCount > 0 && !$user->hasActiveSubscription()) {
             return redirect('/subscription/plans');
         }
 
