@@ -41,11 +41,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadStats() async {
-    if (_loading) {
-      setState(() { _loading = true; _error = null; });
-    } else {
-      setState(() { _refreshing = true; _error = null; });
-    }
+    setState(() { _loading = true; _error = null; });
     try {
       final data = await ApiService.get('/dashboard/stats');
       final sales = await ApiService.get('/sales?status=completed&take=5');
@@ -53,13 +49,12 @@ class _HomePageState extends State<HomePage> {
         _stats = data;
         _recentSales = sales is List ? sales : [];
         _loading = false;
-        _refreshing = false;
         _error = null;
       });
     } on ApiException catch (e) {
-      setState(() { _error = e.message; _loading = false; _refreshing = false; });
+      setState(() { _error = e.message; _loading = false; });
     } catch (_) {
-      setState(() { _error = 'Connection error'; _loading = false; _refreshing = false; });
+      setState(() { _error = 'Connection error'; _loading = false; });
     }
   }
 
