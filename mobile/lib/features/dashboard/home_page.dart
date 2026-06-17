@@ -810,7 +810,8 @@ class _ChartPainter extends CustomPainter {
         fillPath.cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, points[i].dx, points[i].dy);
       }
 
-      fillPath.lineTo(points.last.dx, chartH)..close();
+      fillPath.lineTo(points.last.dx, chartH);
+      fillPath.close();
       canvas.drawPath(fillPath, fillPaint);
       canvas.drawPath(path, linePaint);
     }
