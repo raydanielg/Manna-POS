@@ -530,7 +530,14 @@ class _RegisterPageState extends State<RegisterPage> {
           controller: _phoneCtrl,
           keyboardType: TextInputType.phone,
           style: _ts(textColor),
-          decoration: _inputDeco('+255 7XX XXX XXX', Icons.phone_outlined, cardBg, borderColor),
+          decoration: _inputDeco('123-456-7890', Icons.phone, cardBg, borderColor),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          _isSwahili
+              ? 'Chagua namba ya simu inayolingana na muundo.'
+              : 'Select a phone number that matches the format.',
+          style: TextStyle(fontSize: 12, color: textSecondaryColor),
         ),
         const SizedBox(height: 16),
 
