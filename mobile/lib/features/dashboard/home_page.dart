@@ -4,7 +4,6 @@ import 'dart:ui' as ui show TextDirection;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import '../../core/auth_provider.dart';
 import '../../core/api_service.dart';
 import '../../shared/theme/app_colors.dart';
