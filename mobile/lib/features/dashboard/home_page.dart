@@ -537,16 +537,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCashflowSection(Color cardBg, Color borderColor, Color textPrimary, Color textSecondary) {
+  Widget _cashflowChart() {
     if (_stats == null) return const SizedBox.shrink();
     final chartData = _stats!['sales_chart'] as List?;
     if (chartData == null || chartData.isEmpty) return const SizedBox.shrink();
 
-    // Map chartData into coordinate points tuple list
-    final List<(String, double)> dataList = chartData.map((e) {
-      final String label = e['label']?.toString() ?? '';
-      final double total = (e['total'] as num?)?.toDouble() ?? 0.0;
-      return (label, total);
+    final data = chartData.map((e) {
+      return (e['label']?.toString() ?? '', (e['total'] as num?)?.toDouble() ?? 0.0);
     }).toList();
 
     return Column(
@@ -554,38 +551,44 @@ class _HomePageState extends State<HomePage> {
       children: [
         Row(
           children: [
-            Text('Cashflow ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: textPrimary)),
-            Text('(Last 7 Days)', style: TextStyle(fontSize: 14, color: textSecondary)),
+            Text('Cashflow ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: _txt)),
+            Text('(Last 7 Days)', style: TextStyle(fontSize: 14, color: _txt2)),
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(color: _isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                children: [
+                  const Icon(Icons.calendar_today_rounded, size: 12, color: Color(0xFF64748B)),
+                  const SizedBox(width: 4),
+                  Text('Daily', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: _txt2)),
+                  const Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: Color(0xFF64748B)),
+                ],
+              ),
+            ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
         Container(
-          decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(12), border: Border.all(color: borderColor)),
+          decoration: BoxDecoration(color: _card, borderRadius: BorderRadius.circular(14), border: Border.all(color: _border)),
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  _legendDot(color: AppColors.primary),
+                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle)),
                   const SizedBox(width: 6),
-                  Text('Revenue', style: TextStyle(fontSize: 12, color: textSecondary, fontWeight: FontWeight.w500)),
+                  Text('Revenue', style: TextStyle(fontSize: 12, color: _txt2, fontWeight: FontWeight.w500)),
                 ],
               ),
-              const SizedBox(height: 18),
-              SizedBox(
-                height: 160,
-                child: _CashflowChart(data: dataList, isDark: _isDark),
-              ),
+              const SizedBox(height: 16),
+              SizedBox(height: 160, child: _CashflowChart(data: data, isDark: _isDark)),
             ],
           ),
         ),
       ],
     );
-  }
-
-  Widget _legendDot({required Color color}) {
-    return Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle));
   }
 
   Widget _buildRecentSales(Color cardBg, Color borderColor, Color textPrimary, Color textSecondary) {
