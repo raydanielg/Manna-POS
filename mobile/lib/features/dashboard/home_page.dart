@@ -70,35 +70,24 @@ class _HomePageState extends State<HomePage> {
     final user = context.watch<AuthProvider>().user;
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isTablet = screenWidth > 600;
-
-    // Theme values
-    final Color bgColor = _isDark ? const Color(0xFF111827) : const Color(0xFFF4F5F7);
-    final Color cardBg = _isDark ? const Color(0xFF1F2937) : Colors.white;
-    final Color borderColor = _isDark ? const Color(0xFF374151) : const Color(0xFFE4E4E7);
-    final Color textPrimary = _isDark ? Colors.white : const Color(0xFF111827);
-    final Color textSecondary = _isDark ? const Color(0xFF9CA3AF) : const Color(0xFF6B7280);
-    final Color iconThemeColor = _isDark ? Colors.white70 : Colors.black87;
-
-    // Responsive horizontal padding to keep dashboard content beautifully centered on wide tablet screens
-    final double horizontalPadding = isTablet ? (screenWidth - 720) / 2 : 14.0;
+    final double horizontalPadding = isTablet ? (screenWidth - 720) / 2 : 16.0;
 
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: _bg,
       body: Stack(
         children: [
           RefreshIndicator(
             onRefresh: _loadStats,
-            color: AppColors.primary,
+            color: const Color(0xFF10B981),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                // Header section spans fully
-                SliverToBoxAdapter(child: _buildHeader(user, cardBg, borderColor, textPrimary, textSecondary, iconThemeColor)),
+                SliverToBoxAdapter(child: _header(user)),
 
                 if (_loading)
                   const SliverFillRemaining(
                     child: Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                      child: CircularProgressIndicator(color: Color(0xFF10B981)),
                     ),
                   )
                 else if (_error != null)
@@ -109,13 +98,13 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.error_outline_rounded, color: AppColors.error, size: 48),
+                            const Icon(Icons.error_outline_rounded, color: Color(0xFFEF4444), size: 48),
                             const SizedBox(height: 12),
-                            Text(_error!, style: const TextStyle(fontSize: 14, color: AppColors.textSec)),
+                            Text(_error!, style: TextStyle(fontSize: 14, color: _txt2)),
                             const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: _loadStats,
-                              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF10B981)),
                               child: const Text('Retry', style: TextStyle(color: Colors.white)),
                             ),
                           ],
@@ -123,10 +112,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   )
-                else ...[
-                  // Constrained/Responsive layout components
+                else
                   SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 12),
+                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 16),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
                         _summaryCards(),
