@@ -292,7 +292,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 12),
           Text(
-            '${_currencySymbol} ${fmtCurrency(amount)}',
+            '$_currencySymbol ${fmtCurrency(amount)}',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _txt, letterSpacing: -0.5),
           ),
           const SizedBox(height: 4),
