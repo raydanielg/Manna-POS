@@ -55,12 +55,33 @@ class DashboardApiController extends Controller {
             ->select(DB::raw('MONTH(sale_date) as month'),DB::raw('YEAR(sale_date) as year'),DB::raw('SUM(total) as total'))
             ->groupBy('year','month')->orderBy('year')->orderBy('month')->get();
 
+        // ── 7-Day Sales Chart ───────────────────────────────────────────────
+        $salesChart = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $d = now()->subDays($i)->toDateString();
+            $label = now()->subDays($i)->format('D');
+            $total = (float) Sale::where('created_by',$uid)->where('sale_date',$d)->where('status','completed')->sum('total');
+            $salesChart[] = ['label' => $label, 'total' => $total];
+        }
+
+        // ── Monthly Purchases & Expenses ────────────────────────────────────
+        $totalPurchases = (float) Purchase::where('created_by',$uid)->whereBetween('purchase_date',[$monthStart,$today])->sum('total');
+        $totalExpenses = (float) Expense::where('created_by',$uid)->whereBetween('expense_date',[$monthStart,$today])->sum('amount');
+
+        // ── To Receive / To Give (outstanding) ────────────────────────────────
+        $toReceive = (float) Sale::where('created_by',$uid)->where('status','pending')->sum('total');
+        $toGive = (float) Purchase::where('created_by',$uid)->where('status','pending')->sum('total');
+        $totalBalance = $totalSales - ($totalPurchases + $totalExpenses);
+
         return response()->json([
             'total_sales' => $totalSales, 'total_orders' => $totalOrders, 'total_products' => $totalProducts, 'total_customers' => $totalCustomers,
             'sales_growth' => $salesGrowth, 'orders_growth' => $ordersGrowth,
             'today_sales' => $todaySales, 'today_orders' => $todayOrders, 'today_purchases' => $todayPurchases,
             'week_sales' => $weekSales, 'low_stock' => $lowStock, 'out_of_stock' => $outOfStock,
             'top_products' => $topProducts, 'payment_methods' => $paymentMethods, 'monthly_sales' => $monthlySales,
+            'sales_chart' => $salesChart,
+            'total_purchases' => $totalPurchases, 'total_expenses' => $totalExpenses,
+            'to_receive' => $toReceive, 'to_give' => $toGive, 'total_balance' => $totalBalance,
         ]);
     }
 }
