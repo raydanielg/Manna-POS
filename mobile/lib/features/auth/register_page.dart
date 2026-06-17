@@ -152,217 +152,298 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return Scaffold(
       backgroundColor: bgColor,
-      body: SafeArea(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Top buttons Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 420),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Language Selector Capsule Toggle
-                      GestureDetector(
-                        onTap: () => setState(() => _isSwahili = !_isSwahili),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: cardBg,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: borderColor),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(flagText, style: const TextStyle(fontSize: 14)),
-                              const SizedBox(width: 8),
-                              Text(
-                                langText,
-                                style: TextStyle(color: textPrimary, fontSize: 13, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // Theme Toggle Square
-                      GestureDetector(
-                        onTap: () => setState(() => _isDark = !_isDark),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: cardBg,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: borderColor),
-                          ),
-                          child: Icon(themeIcon, color: textPrimary, size: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Step indicator Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _stepCircle(1, _isSwahili ? 'Akaunti' : 'Account', _step >= 0, textPrimary, textSecondary),
-                      Container(
-                        width: 40,
-                        height: 2,
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        color: _step >= 1 ? AppColors.primary : borderColor,
-                      ),
-                      _stepCircle(2, _isSwahili ? 'Biashara' : 'Business', _step >= 1, textPrimary, textSecondary),
-                    ],
-                  ),
-                  const SizedBox(height: 28),
-
-                  // Header Texts
-                  Text(
-                    welcomeTitle,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      color: textPrimary,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    welcomeSubtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Error Banner
-                  if (_error != null) ...[
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.error.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
-                      ),
-                      child: Row(
+                      // Top buttons Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Icon(Icons.error_outline, color: AppColors.error, size: 18),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              _error!,
-                              style: const TextStyle(color: AppColors.error, fontSize: 13, fontWeight: FontWeight.w500),
+                          // Language Selector Capsule Toggle
+                          GestureDetector(
+                            onTap: () => setState(() => _isSwahili = !_isSwahili),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: cardBg,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: borderColor),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(flagText, style: const TextStyle(fontSize: 14)),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    langText,
+                                    style: TextStyle(color: textPrimary, fontSize: 13, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // Theme Toggle Square
+                          GestureDetector(
+                            onTap: () => setState(() => _isDark = !_isDark),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: cardBg,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: borderColor),
+                              ),
+                              child: Icon(themeIcon, color: textPrimary, size: 20),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+                      const SizedBox(height: 24),
 
-                  // Form content wrapped in AnimatedSwitcher
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    child: _step == 0
-                        ? _buildStep1(key: const ValueKey(0), labelColor: labelColor, textColor: inputTextColor, cardBg: cardBg, borderColor: borderColor)
-                        : _buildStep2(key: const ValueKey(1), labelColor: labelColor, textColor: inputTextColor, cardBg: cardBg, borderColor: borderColor),
-                  ),
-                  const SizedBox(height: 28),
-
-                  // Buttons Row
-                  Row(
-                    children: [
-                      if (_step > 0) ...[
-                        Expanded(
-                          child: SizedBox(
-                            height: 52,
-                            child: OutlinedButton(
-                              onPressed: _goBack,
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: borderColor, width: 1.5),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                              ),
-                              child: Text(
-                                _isSwahili ? '← Nyuma' : '← Back',
-                                style: TextStyle(color: textPrimary, fontWeight: FontWeight.w600, fontSize: 14),
-                              ),
-                            ),
+                      // Step indicator Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _stepCircle(1, _isSwahili ? 'Akaunti' : 'Account', _step >= 0, textPrimary, textSecondary),
+                          Container(
+                            width: 40,
+                            height: 2,
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            color: _step >= 1 ? AppColors.primary : borderColor,
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                      ],
-                      Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          height: 52,
-                          child: ElevatedButton(
-                            onPressed: _loading ? null : (_step == 0 ? _goNext : _register),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                              elevation: 0,
-                            ),
-                            child: _loading
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white),
-                                  )
-                                : Text(
-                                    _step == 0
-                                        ? (_isSwahili ? 'Endelea →' : 'Continue →')
-                                        : (_isSwahili ? 'Fungua Akaunti' : 'Create Account'),
-                                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-                                  ),
-                          ),
-                        ),
+                          _stepCircle(2, _isSwahili ? 'Biashara' : 'Business', _step >= 1, textPrimary, textSecondary),
+                        ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
+                      const SizedBox(height: 28),
 
-                  // Footer already have account?
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                      // Header Texts
                       Text(
-                        alreadyHaveAccountText,
-                        style: TextStyle(fontSize: 14, color: textSecondary),
-                      ),
-                      const SizedBox(width: 6),
-                      TextButton(
-                        onPressed: () => context.go('/login'),
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(0, 0),
+                        welcomeTitle,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: textPrimary,
+                          letterSpacing: -0.5,
                         ),
-                        child: Text(
-                          signInText,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primary,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        welcomeSubtitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Error Banner
+                      if (_error != null) ...[
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.error.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.error_outline, color: AppColors.error, size: 18),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  _error!,
+                                  style: const TextStyle(color: AppColors.error, fontSize: 13, fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                        const SizedBox(height: 16),
+                      ],
+
+                      // Form content wrapped in AnimatedSwitcher
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: _step == 0
+                            ? _buildStep1(key: const ValueKey(0), labelColor: labelColor, textColor: inputTextColor, cardBg: cardBg, borderColor: borderColor)
+                            : _buildStep2(key: const ValueKey(1), labelColor: labelColor, textColor: inputTextColor, cardBg: cardBg, borderColor: borderColor),
+                      ),
+                      const SizedBox(height: 28),
+
+                      // Buttons Row
+                      Row(
+                        children: [
+                          if (_step > 0) ...[
+                            Expanded(
+                              child: SizedBox(
+                                height: 52,
+                                child: OutlinedButton(
+                                  onPressed: _goBack,
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(color: borderColor, width: 1.5),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  ),
+                                  child: Text(
+                                    _isSwahili ? '← Nyuma' : '← Back',
+                                    style: TextStyle(color: textPrimary, fontWeight: FontWeight.w600, fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                          ],
+                          Expanded(
+                            flex: 2,
+                            child: SizedBox(
+                              height: 52,
+                              child: ElevatedButton(
+                                onPressed: _loading ? null : (_step == 0 ? _goNext : _register),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: Colors.white,
+                                  disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  elevation: 0,
+                                ),
+                                child: Text(
+                                  _step == 0
+                                      ? (_isSwahili ? 'Endelea →' : 'Continue →')
+                                      : (_isSwahili ? 'Fungua Akaunti' : 'Create Account'),
+                                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+
+                      // Footer already have account?
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            alreadyHaveAccountText,
+                            style: TextStyle(fontSize: 14, color: textSecondary),
+                          ),
+                          const SizedBox(width: 6),
+                          TextButton(
+                            onPressed: () => context.go('/login'),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(0, 0),
+                            ),
+                            child: Text(
+                              signInText,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+          // Full-Page loading overlay
+          if (_loading && !_success)
+            Container(
+              color: Colors.black.withValues(alpha: 0.75),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 3.5),
+                    const SizedBox(height: 20),
+                    Text(
+                      _isSwahili ? 'Inasajili...' : 'Registering...',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          // SweetAlert style Success alert popup overlay
+          if (_success)
+            Container(
+              color: Colors.black.withValues(alpha: 0.8),
+              child: Center(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOutBack,
+                  padding: const EdgeInsets.all(32),
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  decoration: BoxDecoration(
+                    color: _isDark ? const Color(0xFF262626) : Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        blurRadius: 30,
+                        offset: const Offset(0, 15),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 72,
+                        height: 72,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF10B981),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.check_rounded,
+                          color: Colors.white,
+                          size: 44,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        _isSwahili ? 'Umefanikiwa Kusajili!' : 'Success!',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        _isSwahili ? 'Biashara yako imewekwa tayari...' : 'Your business has been set up...',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -645,17 +726,18 @@ class _RegisterPageState extends State<RegisterPage> {
         filled: true,
         fillColor: fill,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       );
+}
 }
