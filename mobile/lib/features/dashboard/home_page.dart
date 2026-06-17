@@ -424,54 +424,115 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildInventoryAlerts() {
-    if (_stats == null) return const SizedBox.shrink();
-    final lowStock = _stats!['low_stock'] ?? 0;
-    final outOfStock = _stats!['out_of_stock'] ?? 0;
-    if (lowStock == 0 && outOfStock == 0) return const SizedBox.shrink();
-
-    final bool isSevere = outOfStock > 0;
-
+  Widget _tutorialBanner() {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isSevere ? const Color(0xFFFEF2F2) : const Color(0xFFFFFBEB),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isSevere ? const Color(0xFFFCA5A5) : const Color(0xFFFDE68A),
-        ),
+        color: _card,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: _border),
       ),
       child: Row(
         children: [
-          Icon(
-            isSevere ? Icons.error_outline_rounded : Icons.warning_amber_rounded,
-            color: isSevere ? AppColors.danger : AppColors.warning,
-            size: 24,
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFEE2E2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.play_circle_fill_rounded, color: Color(0xFFEF4444), size: 22),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  isSevere ? 'Inventory Alert' : 'Low Stock Warning',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: isSevere ? AppColors.danger : AppColors.warning),
-                ),
-                Text(
-                  '$outOfStock out of stock · $lowStock low stock items',
-                  style: const TextStyle(color: Color(0xFF71717A), fontSize: 12),
-                ),
+                Text('How to use the app?', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: _txt)),
+                const SizedBox(height: 2),
+                Text('To manage & grow your business', style: TextStyle(fontSize: 12, color: _txt2)),
               ],
             ),
           ),
-          TextButton(
-            onPressed: () => context.push('/products'),
-            child: Text(
-              'View',
-              style: TextStyle(color: isSevere ? AppColors.danger : AppColors.warning, fontWeight: FontWeight.bold),
-            ),
+          GestureDetector(
+            onTap: () => setState(() => _showBanner = false),
+            child: Icon(Icons.close_rounded, size: 20, color: _txt2),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _shortcuts() {
+    final shortcuts = [
+      (Icons.person_add_alt_1_outlined, 'Add Party', '/customers'),
+      (Icons.receipt_outlined, 'Sales Invoice', '/sales'),
+      (Icons.payments_outlined, 'Payment In', '/sales'),
+      (Icons.payment_outlined, 'Payment Out', '/expenses'),
+      (Icons.shopping_bag_outlined, 'Purchase', '/purchases'),
+      (Icons.add_box_outlined, 'Add Item', '/products'),
+      (Icons.receipt_long_outlined, 'Expense', '/expenses'),
+      (Icons.note_add_outlined, 'Add Note', '/settings'),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('Shortcuts', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: _txt)),
+            const Spacer(),
+            GestureDetector(
+              onTap: () => context.push('/settings'),
+              child: Row(
+                children: [
+                  Icon(Icons.edit_outlined, size: 16, color: const Color(0xFF10B981)),
+                  const SizedBox(width: 4),
+                  Text('Edit Menu', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: const Color(0xFF10B981))),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 4,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 0.85,
+          children: shortcuts.map((s) => _shortcutTile(s.$1, s.$2, s.$3)).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _shortcutTile(IconData icon, String label, String route) {
+    return GestureDetector(
+      onTap: () => context.push(route),
+      child: Container(
+        decoration: BoxDecoration(
+          color: _card,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: _border),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: const Color(0xFF10B981).withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, size: 20, color: const Color(0xFF10B981)),
+            ),
+            const SizedBox(height: 8),
+            Text(label, textAlign: TextAlign.center, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: _txt)),
+          ],
+        ),
       ),
     );
   }
