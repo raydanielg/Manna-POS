@@ -288,9 +288,9 @@ class _LoginPageState extends State<LoginPage> {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             elevation: 0,
                           ),
-                          child: const Text(
-                            'Sign In',
-                            style: TextStyle(
+                          child: Text(
+                            signInButtonText,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
