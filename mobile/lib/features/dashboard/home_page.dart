@@ -23,16 +23,17 @@ class _HomePageState extends State<HomePage> {
   String? _error;
   List<dynamic> _recentSales = [];
   bool _isDark = false;
+  bool _showBanner = true;
 
-  // Interactive Tour States
+  // ── Tour states ────────────────────────────────────────────────
   bool _showTour = true;
   int _tourStep = 0;
   final _tourSteps = const [
-    ('Live Sales Stats 👋', 'Welcome to Manna! View your real-time today revenue, weekly summaries, and total order counts at a single glance.'),
-    ('Performance Grid 📊', 'Track monthly sales revenues, purchases, products, and customer counts. Everything scales beautifully.'),
-    ('Quick Actions ⚡', 'Easily register a new completed sale, add products, or add new customers instantly from any screen.'),
-    ('Live Cashflow Curve 📈', 'Monitor income trends dynamically with our beautiful smooth curve chart tracking the last 7 days.'),
-    ('All Set! 🚀', "You're all set! Start managing and scaling your business with Manna today."),
+    ('Dashboard Overview', 'Track your business in real-time. View receivables, payables, sales, purchases, and cashflow at a glance.'),
+    ('Financial Cards', 'Monitor To Receive and To Give amounts. Keep your cash position healthy.'),
+    ('Quick Actions', 'Use shortcuts for Sales Invoice, Purchase, Expense, and more — all in one tap.'),
+    ('Cashflow Analytics', 'Visualize your last 7 days revenue trends with an interactive chart.'),
+    ('All Set!', 'You are ready to run your business like a pro with Manna POS.'),
   ];
 
   @override
