@@ -778,20 +778,20 @@ class _ChartPainter extends CustomPainter {
     }
 
     final linePaint = Paint()
-      ..color = AppColors.primary
+      ..color = const Color(0xFF10B981)
       ..strokeWidth = 2.5
       ..style = PaintingStyle.stroke
       ..strokeJoin = StrokeJoin.round;
 
     final fillPaint = Paint()
       ..shader = LinearGradient(
-        colors: [AppColors.primary.withValues(alpha: 0.25), AppColors.primary.withValues(alpha: 0.0)],
+        colors: [const Color(0xFF10B981).withValues(alpha: 0.25), const Color(0xFF10B981).withValues(alpha: 0.0)],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ).createShader(Rect.fromLTWH(yAxisWidth, 0, chartW, chartH))
       ..style = PaintingStyle.fill;
 
-    final dotPaint = Paint()..color = AppColors.primary..style = PaintingStyle.fill;
+    final dotPaint = Paint()..color = const Color(0xFF10B981)..style = PaintingStyle.fill;
     final points = <Offset>[];
 
     for (int i = 0; i < data.length; i++) {
