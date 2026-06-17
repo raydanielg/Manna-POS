@@ -665,47 +665,38 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildTourOverlay() {
+  Widget _tourOverlay() {
     final step = _tourSteps[_tourStep];
     final isLast = _tourStep == _tourSteps.length - 1;
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withValues(alpha: 0.65),
+        color: Colors.black.withValues(alpha: 0.6),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28),
             child: Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: _isDark ? const Color(0xFF1E293B) : Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 32,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 32, offset: const Offset(0, 10))],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(step.$1, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.black)),
+                  Text(step.$1, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _txt)),
                   const SizedBox(height: 10),
-                  Text(step.$2, style: const TextStyle(fontSize: 14, color: Color(0xFF4B5563), height: 1.55)),
+                  Text(step.$2, style: TextStyle(fontSize: 14, color: _txt2, height: 1.55)),
                   const SizedBox(height: 24),
                   Row(
                     children: [
-                      Text(
-                        '${_tourStep + 1}/${_tourSteps.length}',
-                        style: const TextStyle(fontSize: 13, color: Color(0xFF9CA3AF), fontWeight: FontWeight.bold),
-                      ),
+                      Text('${_tourStep + 1}/${_tourSteps.length}', style: TextStyle(fontSize: 13, color: _txt2, fontWeight: FontWeight.bold)),
                       const Spacer(),
                       if (!isLast)
                         TextButton(
                           onPressed: () => setState(() => _showTour = false),
-                          child: const Text('Skip', style: TextStyle(color: Color(0xFF9CA3AF), fontSize: 15)),
+                          child: Text('Skip', style: TextStyle(color: _txt2, fontSize: 15)),
                         ),
                       const SizedBox(width: 4),
                       ElevatedButton(
@@ -717,7 +708,7 @@ class _HomePageState extends State<HomePage> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
+                          backgroundColor: const Color(0xFF10B981),
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -734,6 +725,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  String get _currencySymbol {
+    final user = context.read<AuthProvider>().user;
+    final map = {'TZS': 'TSh', 'USD': '\$', 'EUR': '€', 'KES': 'KSh', 'UGX': 'USh', 'GBP': '£'};
+    return map[user?.currency] ?? user?.currency ?? 'TSh';
   }
 }
 
