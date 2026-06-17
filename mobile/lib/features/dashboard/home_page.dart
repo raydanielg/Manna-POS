@@ -159,8 +159,8 @@ class _HomePageState extends State<HomePage> {
     final business = user?.businessName ?? 'Manna';
 
     return Container(
-      color: cardBg,
       decoration: BoxDecoration(
+        color: cardBg,
         border: Border(bottom: BorderSide(color: borderColor)),
       ),
       child: SafeArea(
