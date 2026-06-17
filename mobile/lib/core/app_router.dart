@@ -43,6 +43,7 @@ class AppRouter {
       GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
       GoRoute(path: '/register', builder: (_, __) => const RegisterPage()),
       GoRoute(path: '/home', builder: (_, __) => const MainScreen()),
+      GoRoute(path: '/my-business', builder: (_, __) => const MyBusinessPage()),
       GoRoute(path: '/admin', builder: (_, __) => const AdminHomePage()),
       GoRoute(path: '/admin/users', builder: (_, __) => const UsersPage()),
       GoRoute(path: '/admin/businesses', builder: (_, __) => const BusinessesPage()),
