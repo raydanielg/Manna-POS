@@ -753,7 +753,7 @@ class _ChartPainter extends CustomPainter {
     final chartW = size.width - yAxisWidth;
     final spacing = chartW / data.length;
 
-    final yLabelPaint = TextPainter(textDirection: TextDirection.ltr);
+    final yLabelPaint = TextPainter(textDirection: ui.TextDirection.ltr);
     final yLines = [1.0, 0.75, 0.5, 0.25];
     final gridPaint = Paint()..color = const Color(0xFFF1F5F9)..strokeWidth = 1;
 
@@ -793,7 +793,7 @@ class _ChartPainter extends CustomPainter {
 
       final xLabel = TextPainter(
         text: TextSpan(text: data[i].$1, style: const TextStyle(fontSize: 9, color: Color(0xFF94A3B8), fontWeight: FontWeight.w500)),
-        textDirection: TextDirection.ltr,
+        textDirection: ui.TextDirection.ltr,
       )..layout();
       xLabel.paint(canvas, Offset(x - xLabel.width / 2, chartH + 4));
     }
