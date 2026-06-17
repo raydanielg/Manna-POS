@@ -591,45 +591,45 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRecentSales(Color cardBg, Color borderColor, Color textPrimary, Color textSecondary) {
+  Widget _recentTransactions() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Text('Recent Sales', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: textPrimary)),
+            Text('Recent Transactions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: _txt)),
             const Spacer(),
             GestureDetector(
               onTap: () => context.push('/sales'),
-              child: const Row(
+              child: Row(
                 children: [
-                  Text('See All', style: TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
-                  SizedBox(width: 2),
-                  Icon(Icons.chevron_right_rounded, size: 16, color: AppColors.primary),
+                  Text('See All', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: const Color(0xFF10B981))),
+                  const SizedBox(width: 2),
+                  const Icon(Icons.chevron_right_rounded, size: 16, color: Color(0xFF10B981)),
                 ],
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
         if (_recentSales.isEmpty)
           Container(
             padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(12), border: Border.all(color: borderColor)),
-            child: const Center(child: Text('No sales yet', style: TextStyle(color: AppColors.textSec))),
+            decoration: BoxDecoration(color: _card, borderRadius: BorderRadius.circular(14), border: Border.all(color: _border)),
+            child: Center(child: Text('No transactions yet', style: TextStyle(color: _txt2, fontSize: 14))),
           )
         else
           Container(
-            decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(12), border: Border.all(color: borderColor)),
+            decoration: BoxDecoration(color: _card, borderRadius: BorderRadius.circular(14), border: Border.all(color: _border)),
             child: Column(
-              children: _recentSales.take(5).map((s) => _buildSaleRow(s, textPrimary, textSecondary)).toList(),
+              children: _recentSales.take(5).map((s) => _txRow(s)).toList(),
             ),
           ),
       ],
     );
   }
 
-  Widget _buildSaleRow(dynamic s, Color textPrimary, Color textSecondary) {
+  Widget _txRow(dynamic s) {
     final ref = s['reference'] ?? '';
     final total = (s['total'] ?? 0).toDouble();
     final status = s['status'] ?? 'completed';
@@ -641,29 +641,23 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         children: [
           Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: AppColors.primaryLt,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(Icons.receipt_long_rounded, size: 18, color: AppColors.primary),
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(10)),
+            child: const Icon(Icons.receipt_long_rounded, size: 18, color: Color(0xFF10B981)),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(ref, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: textPrimary)),
+                Text(ref, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _txt)),
                 const SizedBox(height: 2),
-                Text('$customer · $date', style: TextStyle(fontSize: 11, color: textSecondary, fontWeight: FontWeight.w500)),
+                Text('$customer · $date', style: TextStyle(fontSize: 11, color: _txt2)),
               ],
             ),
           ),
-          Text(
-            'TSh ${fmtCurrency(total)}',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: textPrimary),
-          ),
+          Text('${_currencySymbol} ${fmtCurrency(total)}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: _txt)),
           const SizedBox(width: 8),
           StatusBadge.fromStatus(status),
         ],
