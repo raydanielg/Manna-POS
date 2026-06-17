@@ -76,7 +76,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 separatorBuilder: (_, __) => const SizedBox(height: 10),
                 itemBuilder: (_, i) => _productTile(_products[i])))),
       ]),
-      floatingActionButton: FloatingActionButton.extended(onPressed: () => _showForm(), icon: const Icon(Icons.add), label: const Text('Add Product')),
+      floatingActionButton: FloatingActionButton.extended(heroTag: null, onPressed: () => _showForm(), icon: const Icon(Icons.add), label: const Text('Add Product')),
     );
   }
 
