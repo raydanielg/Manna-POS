@@ -17,6 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _loading = false;
   bool _isSwahili = false;
   bool _isDark = true;
+  bool _success = false;
 
   // Step 1 — Account Info
   final _firstCtrl = TextEditingController();
@@ -91,6 +92,9 @@ class _RegisterPageState extends State<RegisterPage> {
         'tax_percentage': 18,
         'fiscal_year_start': 'January',
       });
+      if (!mounted) return;
+      setState(() { _success = true; });
+      await Future.delayed(const Duration(milliseconds: 1600));
       if (!mounted) return;
       final user = context.read<AuthProvider>().user;
       context.go(user?.role == 'admin' ? '/admin' : '/home');
