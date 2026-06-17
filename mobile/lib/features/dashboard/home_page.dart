@@ -170,18 +170,21 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             children: [
               // Business Storefront Avatar Box
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryDark],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+              GestureDetector(
+                onTap: () => context.push('/my-business'),
+                child: Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [AppColors.primary, AppColors.primaryDark],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  child: const Icon(Icons.storefront_rounded, color: Colors.white, size: 22),
                 ),
-                child: const Icon(Icons.storefront_rounded, color: Colors.white, size: 22),
               ),
               const SizedBox(width: 12),
               Expanded(
