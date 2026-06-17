@@ -65,6 +65,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Color get _bg => _isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
+  Color get _card => _isDark ? const Color(0xFF1E293B) : Colors.white;
+  Color get _border => _isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
+  Color get _txt => _isDark ? const Color(0xFFF1F5F9) : const Color(0xFF0F172A);
+  Color get _txt2 => _isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+  Color get _icon => _isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569);
+
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthProvider>().user;
