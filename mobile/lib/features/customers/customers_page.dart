@@ -58,7 +58,7 @@ class _CustomersPageState extends State<CustomersPage> {
           : RefreshIndicator(color: AppColors.primary, onRefresh: _load,
               child: ListView.separated(padding: const EdgeInsets.fromLTRB(16, 0, 16, 100), itemCount: _customers.length, separatorBuilder: (_, __) => const SizedBox(height: 10), itemBuilder: (_, i) => _tile(_customers[i])))),
       ]),
-      floatingActionButton: FloatingActionButton.extended(onPressed: () => _showForm(), icon: const Icon(Icons.add), label: const Text('Add Customer')),
+      floatingActionButton: FloatingActionButton.extended(heroTag: null, onPressed: () => _showForm(), icon: const Icon(Icons.add), label: const Text('Add Customer')),
     );
   }
 
