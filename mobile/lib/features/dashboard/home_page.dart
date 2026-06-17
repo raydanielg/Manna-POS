@@ -379,46 +379,48 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildQuickActions(bool isTablet, Color cardBg, Color borderColor, Color textPrimary) {
-    final actions = [
-      _ActionTile(
-        icon: Icons.add_shopping_cart_rounded,
-        label: 'New Sale',
-        color: const Color(0xFF0D9488),
-        onTap: () => context.push('/sales'),
-        cardBg: cardBg,
-        borderColor: borderColor,
-        textPrimary: textPrimary,
-      ),
-      _ActionTile(
-        icon: Icons.add_box_outlined,
-        label: 'Add Product',
-        color: const Color(0xFF2563EB),
-        onTap: () => context.push('/products'),
-        cardBg: cardBg,
-        borderColor: borderColor,
-        textPrimary: textPrimary,
-      ),
-      _ActionTile(
-        icon: Icons.person_add_alt_1_outlined,
-        label: 'Add Customer',
-        color: const Color(0xFF7C3AED),
-        onTap: () => context.push('/customers'),
-        cardBg: cardBg,
-        borderColor: borderColor,
-        textPrimary: textPrimary,
-      ),
-    ];
-
+  Widget _exploreApp() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Quick Actions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black)),
-        const SizedBox(height: 12),
+        Text('Explore App', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: _txt)),
+        const SizedBox(height: 14),
         Row(
-          children: actions.map((action) => Expanded(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: action))).toList(),
+          children: [
+            _exploreTile(Icons.grid_view_rounded, 'Quick Entry', const Color(0xFF10B981)),
+            const SizedBox(width: 12),
+            _exploreTile(Icons.point_of_sale_rounded, 'Quick POS', const Color(0xFF3B82F6)),
+            const SizedBox(width: 12),
+            _exploreTile(Icons.bar_chart_rounded, 'View Reports', const Color(0xFFF59E0B)),
+          ],
         ),
       ],
+    );
+  }
+
+  Widget _exploreTile(IconData icon, String label, Color color) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          if (label == 'Quick POS') context.push('/sales');
+          if (label == 'View Reports') context.push('/reports');
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          decoration: BoxDecoration(
+            color: _card,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: _border),
+          ),
+          child: Column(
+            children: [
+              Icon(icon, size: 24, color: color),
+              const SizedBox(height: 8),
+              Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: _txt)),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
