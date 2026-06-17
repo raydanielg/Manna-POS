@@ -244,58 +244,78 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildTodayStats() {
+  Widget _summaryCards() {
     if (_stats == null) return const SizedBox.shrink();
-    final todaySales = (_stats!['today_sales'] ?? 0).toDouble();
-    final todayOrders = _stats!['today_orders'] ?? 0;
-    final weekSales = (_stats!['week_sales'] ?? 0).toDouble();
+    final receive = (_stats!['to_receive'] ?? 0).toDouble();
+    final give = (_stats!['to_give'] ?? 0).toDouble();
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primary, AppColors.primaryDark],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Row(
+      children: [
+        Expanded(
+          child: _summaryCard(
+            label: 'To Receive',
+            amount: receive,
+            icon: Icons.arrow_downward_rounded,
+            iconColor: const Color(0xFF10B981),
+            bgColor: _isDark ? _card : const Color(0xFFECFDF5),
+            borderColor: _isDark ? _border : const Color(0xFFA7F3D0),
+          ),
         ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.15),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _summaryCard(
+            label: 'To Give',
+            amount: give,
+            icon: Icons.arrow_upward_rounded,
+            iconColor: const Color(0xFFEF4444),
+            bgColor: _isDark ? _card : const Color(0xFFFEF2F2),
+            borderColor: _isDark ? _border : const Color(0xFFFECACA),
           ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  Widget _summaryCard({
+    required String label,
+    required double amount,
+    required IconData icon,
+    required Color iconColor,
+    required Color bgColor,
+    required Color borderColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: borderColor),
       ),
-      padding: const EdgeInsets.all(20),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('TODAY\'S REVENUE', style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 0.5)),
-                const SizedBox(height: 6),
-                Text(
-                  'TSh ${fmtCurrency(todaySales)}',
-                  style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: -0.5),
+          Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  '$todayOrders completed orders · TSh ${fmtCurrency(weekSales)} this week',
-                  style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
+                child: Icon(icon, size: 16, color: iconColor),
+              ),
+              const Spacer(),
+              const Icon(Icons.chevron_right_rounded, size: 18, color: Color(0xFF94A3B8)),
+            ],
           ),
-          Container(
-            width: 48,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.18),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(Icons.trending_up_rounded, color: Colors.white, size: 24),
+          const SizedBox(height: 12),
+          Text(
+            '${_currencySymbol} ${fmtCurrency(amount)}',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _txt, letterSpacing: -0.5),
           ),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(fontSize: 12, color: _txt2, fontWeight: FontWeight.w500)),
         ],
       ),
     );
