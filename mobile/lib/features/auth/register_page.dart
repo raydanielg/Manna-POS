@@ -740,4 +740,3 @@ class _RegisterPageState extends State<RegisterPage> {
         contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       );
 }
-}
