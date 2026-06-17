@@ -12,14 +12,12 @@ class _MyBusinessPageState extends State<MyBusinessPage> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthProvider>().user;
-    const bool isDark = true; // Set dark styling as in user screenshot
-
     // Theme Colors
-    final Color bgColor = isDark ? const Color(0xFF111827) : const Color(0xFFF4F5F7);
-    final Color cardBg = isDark ? const Color(0xFF1F2937) : Colors.white;
-    final Color borderColor = isDark ? const Color(0xFF374151) : const Color(0xFFE4E4E7);
-    final Color textPrimary = isDark ? Colors.white : const Color(0xFF111827);
-    final Color textSecondary = isDark ? const Color(0xFF9CA3AF) : const Color(0xFF6B7280);
+    const Color bgColor = Color(0xFF111827);
+    const Color cardBg = Color(0xFF1F2937);
+    const Color borderColor = Color(0xFF374151);
+    const Color textPrimary = Colors.white;
+    const Color textSecondary = Color(0xFF9CA3AF);
 
     final String name = user?.businessName ?? 'My Business';
     final String type = user?.businessType ?? 'Sole Proprietor';
