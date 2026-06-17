@@ -130,18 +130,20 @@ class _SplashScreenState extends State<_SplashScreen> with SingleTickerProviderS
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 80, height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(20),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  'assets/icons/app_logo.png',
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
                 ),
-                child: const Icon(Icons.store_rounded, size: 44, color: AppColors.primary),
               ),
               const SizedBox(height: 20),
-              const Text('MannaPOS',
+              const Text('Manna',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: Colors.white)),
               const SizedBox(height: 8),
-              Text('Point of Sale',
+              Text('Smart Business Companion',
                 style: TextStyle(fontSize: 15, color: Colors.white.withValues(alpha: 0.8))),
             ],
           ),

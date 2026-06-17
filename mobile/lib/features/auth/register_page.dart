@@ -158,12 +158,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.asset('assets/images/logo.png', fit: BoxFit.cover),
+                      child: Image.asset('assets/icons/app_logo.png', fit: BoxFit.cover),
                     ),
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'MannaPOS',
+                    'Manna',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.white),
                   ),
                   const SizedBox(height: 2),

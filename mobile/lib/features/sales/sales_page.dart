@@ -105,7 +105,7 @@ class _SalesPageState extends State<SalesPage> with SingleTickerProviderStateMix
           : _error != null ? _errorWidget(_error!, _load)
           : _sales.isEmpty ? const EmptyState(icon: Icons.receipt_long_outlined, title: 'No Sales Found', subtitle: 'Completed sales will appear here')
           : RefreshIndicator(color: AppColors.primary, onRefresh: _load,
-              child: ListView.separated(padding: const EdgeInsets.fromLTRB(16, 0, 16, 100), itemCount: _sales.length, separatorBuilder: (_, __) => const SizedBox(height: 10), itemBuilder: (_, i) => _saleTile(_sales[i]))),
+              child: ListView.separated(padding: const EdgeInsets.fromLTRB(16, 0, 16, 100), itemCount: _sales.length, separatorBuilder: (_, __) => const SizedBox(height: 10), itemBuilder: (_, i) => _saleTile(_sales[i])))),
       ]),
     );
   }
@@ -166,10 +166,26 @@ class _SalesPageState extends State<SalesPage> with SingleTickerProviderStateMix
                         fontSize: 15,
                         color: AppColors.textPri,
                       ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            const Divider(height: 1),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _enhancedChip(Icons.calendar_today_outlined, s.saleDate, AppColors.textSec),
+                const SizedBox(width: 8),
+                _enhancedChip(Icons.payment_outlined, s.paymentMethod, AppColors.textSec),
+                const Spacer(),
+                StatusBadge.fromStatus(s.paymentStatus),
+              ],
+            ),
+          ],
         ),
-          : RefreshIndicator(color: AppColors.primary, onRefresh: _load,
-              child: ListView.separated(padding: const EdgeInsets.fromLTRB(16, 0, 16, 100), itemCount: _sales.length, separatorBuilder: (_, __) => const SizedBox(height: 10), itemBuilder: (_, i) => _saleTile(_sales[i]))),
-      ]),
+      ),
     );
   }
 
@@ -180,7 +196,7 @@ class _SalesPageState extends State<SalesPage> with SingleTickerProviderStateMix
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
-      mainAxisSize: MainAxis.min,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 12, color: color),
         const SizedBox(width: 4),
