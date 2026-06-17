@@ -18,7 +18,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic>? _stats;
   bool _loading = true;
-  bool _refreshing = false;
   String? _error;
   List<dynamic> _recentSales = [];
   bool _isDark = false;
