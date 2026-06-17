@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           // Interactive Guided Tour Walkthrough
-          if (_showTour) _buildTourOverlay(),
+          if (_showTour) _tourOverlay(),
         ],
       ),
     );
