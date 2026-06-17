@@ -8,6 +8,7 @@ import '../features/onboarding/onboarding_page.dart';
 import '../features/auth/login_page.dart';
 import '../features/auth/register_page.dart';
 import '../features/dashboard/main_screen.dart';
+import '../features/dashboard/my_business_page.dart';
 import '../features/admin/admin_home_page.dart';
 import '../features/admin/users_page.dart';
 import '../features/admin/businesses_page.dart';
