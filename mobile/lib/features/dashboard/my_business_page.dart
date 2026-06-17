@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/auth_provider.dart';
-import '../../shared/theme/app_colors.dart';
 
 class MyBusinessPage extends StatefulWidget {
   const MyBusinessPage({super.key});
@@ -13,7 +12,7 @@ class _MyBusinessPageState extends State<MyBusinessPage> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthProvider>().user;
-    final bool isDark = Theme.of(context).brightness == Brightness.dark || true; // Set default dark styling as in user screenshot
+    const bool isDark = true; // Set dark styling as in user screenshot
 
     // Theme Colors
     final Color bgColor = isDark ? const Color(0xFF111827) : const Color(0xFFF4F5F7);
