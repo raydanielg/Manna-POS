@@ -321,91 +321,62 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildStatsGrid(bool isTablet, Color cardBg, Color borderColor, Color textPrimary, Color textSecondary) {
+  Widget _financialGrid(bool isTablet) {
     if (_stats == null) return const SizedBox.shrink();
     final s = _stats!;
 
-    final salesGrowth = s['sales_growth'] != null ? (s['sales_growth'] as num).toInt() : 0;
-    final ordersGrowth = s['orders_growth'] != null ? (s['orders_growth'] as num).toInt() : 0;
-
-    final cards = [
-      _StatCard(
-        icon: Icons.auto_graph_rounded,
-        value: 'TSh ${fmtCurrency((s['total_sales'] ?? 0).toDouble())}',
-        label: 'Sales (Month)',
-        color: const Color(0xFF0D9488),
-        bg: const Color(0xFFF0FDFA),
-        subtitle: salesGrowth != 0 ? '${salesGrowth > 0 ? '+' : ''}$salesGrowth% vs last month' : 'No prior sales',
-        cardBg: cardBg,
-        borderColor: borderColor,
-        textPrimary: textPrimary,
-        textSecondary: textSecondary,
-      ),
-      _StatCard(
-        icon: Icons.shopping_bag_outlined,
-        value: '${s['total_orders'] ?? 0}',
-        label: 'Orders Count',
-        color: const Color(0xFF2563EB),
-        bg: const Color(0xFFEFF6FF),
-        subtitle: ordersGrowth != 0 ? '${ordersGrowth > 0 ? '+' : ''}$ordersGrowth% vs last month' : 'No prior orders',
-        cardBg: cardBg,
-        borderColor: borderColor,
-        textPrimary: textPrimary,
-        textSecondary: textSecondary,
-      ),
-      _StatCard(
-        icon: Icons.layers_outlined,
-        value: '${s['total_products'] ?? 0}',
-        label: 'Products',
-        color: const Color(0xFF7C3AED),
-        bg: const Color(0xFFF5F3FF),
-        subtitle: 'In active inventory',
-        cardBg: cardBg,
-        borderColor: borderColor,
-        textPrimary: textPrimary,
-        textSecondary: textSecondary,
-      ),
-      _StatCard(
-        icon: Icons.people_alt_outlined,
-        value: '${s['total_customers'] ?? 0}',
-        label: 'Customers',
-        color: const Color(0xFFEA580C),
-        bg: const Color(0xFFFFF7ED),
-        subtitle: 'Registered buyers',
-        cardBg: cardBg,
-        borderColor: borderColor,
-        textPrimary: textPrimary,
-        textSecondary: textSecondary,
-      ),
+    final items = [
+      _finItem('Sales', (s['total_sales'] ?? 0).toDouble(), Icons.show_chart_rounded, const Color(0xFF10B981)),
+      _finItem('Purchase', (s['total_purchases'] ?? 0).toDouble(), Icons.shopping_cart_outlined, const Color(0xFF3B82F6)),
+      _finItem('Expense', (s['total_expenses'] ?? 0).toDouble(), Icons.receipt_long_outlined, const Color(0xFFF59E0B)),
+      _finItem('Total Balance', (s['total_balance'] ?? 0).toDouble(), Icons.account_balance_wallet_outlined, const Color(0xFF8B5CF6)),
     ];
 
     if (isTablet) {
-      // 4 columns in 1 row on tablet
       return Row(
-        children: cards.map((card) => Expanded(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 4), child: card))).toList(),
+        children: items.map((i) => Expanded(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 6), child: i))).toList(),
       );
-    } else {
-      // 2x2 grid on mobile
-      return Column(
+    }
+
+    return Column(
+      children: [
+        Row(children: [Expanded(child: items[0]), const SizedBox(width: 12), Expanded(child: items[1])]),
+        const SizedBox(height: 12),
+        Row(children: [Expanded(child: items[2]), const SizedBox(width: 12), Expanded(child: items[3])]),
+      ],
+    );
+  }
+
+  Widget _finItem(String label, double val, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: _card,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: _border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Expanded(child: cards[0]),
-              const SizedBox(width: 10),
-              Expanded(child: cards[1]),
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(10)),
+                child: Icon(icon, size: 18, color: color),
+              ),
+              const Spacer(),
+              const Icon(Icons.chevron_right_rounded, size: 16, color: Color(0xFF94A3B8)),
             ],
           ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(child: cards[2]),
-              const SizedBox(width: 10),
-              Expanded(child: cards[3]),
-            ],
-          ),
+          const SizedBox(height: 14),
+          Text('${_currencySymbol} ${fmtCurrency(val)}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: _txt)),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(fontSize: 12, color: _txt2, fontWeight: FontWeight.w500)),
         ],
-      );
-    }
+      ),
+    );
   }
 
   Widget _buildQuickActions(bool isTablet, Color cardBg, Color borderColor, Color textPrimary) {
