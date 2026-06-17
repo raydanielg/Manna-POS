@@ -146,30 +146,28 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildHeader(dynamic user, Color cardBg, Color borderColor, Color textPrimary, Color textSecondary, Color iconThemeColor) {
+  Widget _header(dynamic user) {
     final name = user?.name ?? 'User';
-    final business = user?.businessName ?? 'Manna';
-
+    final business = user?.businessName ?? 'My Business';
     return Container(
       decoration: BoxDecoration(
-        color: cardBg,
-        border: Border(bottom: BorderSide(color: borderColor)),
+        color: _card,
+        border: Border(bottom: BorderSide(color: _border)),
       ),
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           child: Row(
             children: [
-              // Business Storefront Avatar Box
               GestureDetector(
                 onTap: () => context.push('/my-business'),
                 child: Container(
-                  width: 42,
-                  height: 42,
+                  width: 44,
+                  height: 44,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [AppColors.primary, AppColors.primaryDark],
+                      colors: [Color(0xFF10B981), Color(0xFF059669)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -183,51 +181,47 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: textPrimary)),
-                    const SizedBox(height: 1),
-                    Text(business, style: TextStyle(fontSize: 11, color: textSecondary, fontWeight: FontWeight.w500)),
+                    Text(name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: _txt)),
+                    const SizedBox(height: 2),
+                    Text(business, style: TextStyle(fontSize: 12, color: _txt2, fontWeight: FontWeight.w500)),
                   ],
                 ),
               ),
-              // Live active indicator
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 7,
-                    height: 7,
-                    decoration: const BoxDecoration(color: Color(0xFF10B981), shape: BoxShape.circle),
-                  ),
-                  const SizedBox(width: 5),
-                  const Text('LIVE', style: TextStyle(color: Color(0xFF10B981), fontSize: 10, fontWeight: FontWeight.w800)),
-                ],
-              ),
-              const SizedBox(width: 16),
-              // Dark Mode Toggle Icon Button
-              GestureDetector(
+              _iconBtn(
+                icon: _isDark ? Icons.wb_sunny_rounded : Icons.dark_mode_rounded,
+                color: _isDark ? const Color(0xFFF59E0B) : const Color(0xFF475569),
                 onTap: () => setState(() => _isDark = !_isDark),
-                child: Icon(
-                  _isDark ? Icons.wb_sunny_rounded : Icons.dark_mode_rounded,
-                  size: 22,
-                  color: _isDark ? Colors.amber : const Color(0xFF4B5563),
-                ),
               ),
-              const SizedBox(width: 16),
-              // Refresh Icon
-              GestureDetector(
-                onTap: _refreshing ? null : _loadStats,
-                child: _refreshing
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: AppColors.primary, strokeWidth: 2))
-                    : const Icon(Icons.refresh_rounded, size: 22, color: AppColors.primary),
+              const SizedBox(width: 10),
+              _iconBtn(
+                icon: Icons.notifications_none_rounded,
+                color: _icon,
+                onTap: () {},
               ),
-              const SizedBox(width: 16),
-              GestureDetector(
+              const SizedBox(width: 10),
+              _iconBtn(
+                icon: Icons.settings_outlined,
+                color: _icon,
                 onTap: () => context.push('/settings'),
-                child: Icon(Icons.settings_outlined, size: 22, color: iconThemeColor),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _iconBtn({required IconData icon, required Color color, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: _isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, size: 20, color: color),
       ),
     );
   }
