@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' show TextDirection;
+import 'dart:ui' as ui show TextDirection;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,6 @@ import '../../core/auth_provider.dart';
 import '../../core/api_service.dart';
 import '../../shared/theme/app_colors.dart';
 import '../../shared/utils/formatters.dart';
-import '../../shared/widgets/app_card.dart';
 import '../../shared/widgets/status_badge.dart';
 
 class HomePage extends StatefulWidget {
