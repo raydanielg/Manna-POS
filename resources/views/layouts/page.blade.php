@@ -26,13 +26,13 @@
     </script>
     @stack('styles')
 </head>
-<body class="bg-gray-50">
+<body style="font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background: linear-gradient(180deg, #f0f4fa 0%, #eef2f9 50%, #e8edf8 100%); min-height:100vh; color:#1e293b;">
     @include('partials.header')
-    
-    <main class="pt-16">
+
+    <main style="padding-top:84px;">
         @yield('content')
     </main>
-    
+
     @include('partials.footer')
 </body>
 </html>
