@@ -16,7 +16,7 @@
                 extend: {
                     fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','sans-serif'] },
                     colors: {
-                        brand: { 50:'#fff0f3', 100:'#ffe0e7', 500:'#e03057', 600:'#c41f44', 700:'#a01637' }
+                        brand: { 50:'#eff6ff', 100:'#dbeafe', 500:'#2563eb', 600:'#1d4ed8', 700:'#1e40af' }
                     }
                 }
             }
@@ -72,8 +72,8 @@
         .nav-item:hover { background: #f6f7fb; color: #0f172a; }
         .nav-item svg { width: 17px; height: 17px; flex-shrink: 0; color: #94a3b8; transition: color 0.15s; }
         .nav-item:hover svg { color: #475569; }
-        .nav-item.active { background: #fff0f3; color: #e03057; font-weight: 600; }
-        .nav-item.active svg { color: #e03057; }
+        .nav-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
+        .nav-item.active svg { color: #2563eb; }
 
         /* Dropdown wrapper */
         .dropdown { margin-bottom: 1px; }
@@ -128,9 +128,9 @@
             transition: background 0.15s;
         }
         .dropdown-children .child-item:hover { background: #f6f7fb; color: #0f172a; }
-        .dropdown-children .child-item:hover::before { background: #e03057; }
-        .dropdown-children .child-item.active { color: #e03057; font-weight: 600; background: #fff0f3; }
-        .dropdown-children .child-item.active::before { background: #e03057; }
+        .dropdown-children .child-item:hover::before { background: #2563eb; }
+        .dropdown-children .child-item.active { color: #2563eb; font-weight: 600; background: #eff6ff; }
+        .dropdown-children .child-item.active::before { background: #2563eb; }
 
         /* Sign out */
         .sidebar-bottom {
@@ -140,12 +140,12 @@
         .sign-out-btn {
             display: flex; align-items: center; gap: 0.65rem;
             padding: 0.55rem 0.75rem;
-            font-size: 0.82rem; font-weight: 600; color: #e03057;
+            font-size: 0.82rem; font-weight: 600; color: #2563eb;
             width: 100%; border-radius: 8px;
             background: none; border: none; cursor: pointer;
             transition: background 0.15s;
         }
-        .sign-out-btn:hover { background: #fff0f3; }
+        .sign-out-btn:hover { background: #eff6ff; }
         .sign-out-btn svg { width: 17px; height: 17px; flex-shrink: 0; }
 
         /* ── Main ─────────────────────────────────────── */
@@ -165,7 +165,7 @@
             cursor: pointer; transition: background 0.15s;
         }
         .notif-btn:hover { background: #f1f5f9; }
-        .notif-dot { position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; border-radius: 50%; background: #e03057; border: 1.5px solid #fff; }
+        .notif-dot { position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; border-radius: 50%; background: #2563eb; border: 1.5px solid #fff; }
         .user-chip {
             display: flex; align-items: center; gap: 0.6rem;
             padding: 0.35rem 0.75rem 0.35rem 0.4rem;
@@ -248,7 +248,7 @@
         .btn-sm { padding:0.3rem 0.65rem; font-size:0.75rem; }
         .btn-icon { width:32px; height:32px; padding:0; border-radius:8px; justify-content:center; }
         .btn-edit   { background:#eff6ff; color:#2563eb; } .btn-edit:hover   { background:#dbeafe; }
-        .btn-delete { background:#fff1f2; color:#e03057; } .btn-delete:hover { background:#ffe4e6; }
+        .btn-delete { background:#eff6ff; color:#2563eb; } .btn-delete:hover { background:#dbeafe; }
         .btn-view   { background:#f0fdf4; color:#16a34a; } .btn-view:hover   { background:#dcfce7; }
 
         /* ── Search bar ─────────────────────────────── */
@@ -739,7 +739,7 @@
                     <div class="header-dropdown-divider"></div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="header-dropdown-item" style="width:100%; border:none; background:none; color:#e03057; cursor:pointer; padding:0.6rem 1rem;">
+                        <button type="submit" class="header-dropdown-item" style="width:100%; border:none; background:none; color:#2563eb; cursor:pointer; padding:0.6rem 1rem;">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M9 12h12l-3 -3"/><path d="M18 15l3 -3"/></svg>
                             Sign Out
                         </button>
@@ -822,7 +822,7 @@
 <div class="confirm-overlay" id="confirm-overlay">
     <div class="confirm-box">
         <div class="confirm-icon">
-            <svg width="28" height="28" fill="none" stroke="#e03057" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            <svg width="28" height="28" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
         </div>
         <div class="confirm-title" id="confirm-title">Delete Record?</div>
         <div class="confirm-desc"  id="confirm-desc">This action cannot be undone. Are you sure?</div>
