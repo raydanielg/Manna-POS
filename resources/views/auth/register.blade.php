@@ -132,8 +132,40 @@
 
                         <div class="mb-4">
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Phone Number <span class="text-rose-500">*</span></label>
-                            <input type="tel" name="phone" id="ph" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" value="{{ old('phone') }}" placeholder="+255 712 345 678" autocomplete="tel">
-                            <p class="text-[10px] text-slate-400 font-semibold mt-1">Include country code — e.g. +255 for Tanzania</p>
+                            <div class="flex -space-x-px shadow-sm rounded-xl" id="phone-wrapper">
+                                {{-- Country Code Dropdown Toggle --}}
+                                <button type="button" id="dropdown-phone-button" onclick="togglePhoneDropdown()" class="inline-flex items-center gap-1.5 shrink-0 z-10 text-slate-700 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-slate-900 font-semibold text-xs rounded-l-xl px-3 py-2.5 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 transition-all">
+                                    <img id="current-flag" src="https://flagcdn.com/w40/tz.png" alt="flag" class="w-5 h-3.5 object-cover rounded-sm shadow-sm">
+                                    <span id="current-code">+255</span>
+                                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+
+                                {{-- Country Dropdown Menu --}}
+                                <div id="dropdown-phone" class="hidden absolute z-20 bg-white border border-slate-200 rounded-xl shadow-xl w-64 mt-[42px] overflow-hidden">
+                                    <ul class="p-1.5 text-sm text-slate-700 font-medium max-h-60 overflow-y-auto" id="phone-country-list">
+                                        <li><button type="button" onclick="selectCountry('tz', '+255', 'https://flagcdn.com/w40/tz.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/tz.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>Tanzania</span><span class="ml-auto text-xs text-slate-400">+255</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('ke', '+254', 'https://flagcdn.com/w40/ke.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/ke.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>Kenya</span><span class="ml-auto text-xs text-slate-400">+254</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('ug', '+256', 'https://flagcdn.com/w40/ug.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/ug.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>Uganda</span><span class="ml-auto text-xs text-slate-400">+256</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('rw', '+250', 'https://flagcdn.com/w40/rw.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/rw.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>Rwanda</span><span class="ml-auto text-xs text-slate-400">+250</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('et', '+251', 'https://flagcdn.com/w40/et.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/et.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>Ethiopia</span><span class="ml-auto text-xs text-slate-400">+251</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('za', '+27', 'https://flagcdn.com/w40/za.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/za.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>South Africa</span><span class="ml-auto text-xs text-slate-400">+27</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('ng', '+234', 'https://flagcdn.com/w40/ng.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/ng.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>Nigeria</span><span class="ml-auto text-xs text-slate-400">+234</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('gh', '+233', 'https://flagcdn.com/w40/gh.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/gh.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>Ghana</span><span class="ml-auto text-xs text-slate-400">+233</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('us', '+1', 'https://flagcdn.com/w40/us.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/us.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>United States</span><span class="ml-auto text-xs text-slate-400">+1</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('gb', '+44', 'https://flagcdn.com/w40/gb.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/gb.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>United Kingdom</span><span class="ml-auto text-xs text-slate-400">+44</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('fr', '+33', 'https://flagcdn.com/w40/fr.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/fr.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>France</span><span class="ml-auto text-xs text-slate-400">+33</span></button></li>
+                                        <li><button type="button" onclick="selectCountry('ca', '+1', 'https://flagcdn.com/w40/ca.png')" class="flex items-center w-full gap-2.5 px-3 py-2 hover:bg-slate-50 rounded-lg transition-colors"><img src="https://flagcdn.com/w40/ca.png" class="w-5 h-3.5 rounded-sm object-cover shadow-sm"><span>Canada</span><span class="ml-auto text-xs text-slate-400">+1</span></button></li>
+                                    </ul>
+                                </div>
+
+                                {{-- Actual Phone Input --}}
+                                <div class="relative w-full">
+                                    <input type="tel" name="phone" id="ph" class="w-full pl-4 pr-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-r-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" value="{{ old('phone') }}" placeholder="712 345 678" autocomplete="tel">
+                                </div>
+                            </div>
+                            <p class="text-[10px] text-slate-400 font-semibold mt-1">Select your country code, then enter your phone number.</p>
                         </div>
 
                         <div class="mb-4">
