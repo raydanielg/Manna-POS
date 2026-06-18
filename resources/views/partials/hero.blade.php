@@ -88,19 +88,144 @@
         </p>
 
         {{-- CTA Buttons --}}
-        <div class="hero-cta flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+        <div class="hero-cta flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <a href="{{ route('register') }}" class="group w-full sm:w-auto inline-flex justify-center items-center py-3.5 px-8 text-base font-semibold text-white bg-primary-500 hover:bg-primary-400 rounded-xl shadow-lg shadow-primary-900/50 hover:shadow-primary-800/60 hover:-translate-y-0.5 transition-all duration-200">
                 Get Started Free
                 <svg class="ml-2 w-5 h-5 group-hover:translate-x-0.5 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
                 </svg>
             </a>
-            <a href="#features" class="group w-full sm:w-auto inline-flex justify-center items-center py-3.5 px-8 text-base font-semibold text-white rounded-xl border border-white/20 hover:border-white/40 hover:-translate-y-0.5 transition-all duration-200" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);">
-                <svg class="mr-2 w-5 h-5 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+            <a href="https://play.google.com" target="_blank" class="group w-full sm:w-auto inline-flex justify-center items-center py-3.5 px-8 text-base font-semibold text-white rounded-xl border border-white/20 hover:border-white/40 hover:-translate-y-0.5 transition-all duration-200" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);">
+                <svg class="mr-2 w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3,20.5V3.5C3,2.91 3.4,2.38 4,2.22L13.05,12L4,21.78C3.4,21.62 3,21.09 3,20.5M16.29,15.45L6.05,21.34L14.53,12.86L16.29,15.45M20.05,10.36C20.45,10.66 20.71,11.13 20.71,11.66C20.71,12.22 20.41,12.71 19.96,13C19.56,13.26 19.09,13.35 18.63,13.22L16.94,12.42L15.23,16.32L20.05,10.36M11.43,7.59L4.74,3.22C5.23,3.08 5.75,3 6.25,3C7.21,3 8.14,3.28 8.93,3.81L13.03,6.37L11.43,7.59M16.88,5.69L18.57,6.5C18.89,6.63 19.19,6.83 19.43,7.09C19.77,7.47 19.95,7.97 19.92,8.5L14.13,14.72L16.88,5.69Z"/>
                 </svg>
-                See How It Works
+                Download Android App
             </a>
+        </div>
+
+        {{-- Android Phone Mockup --}}
+        <div class="hero-phone relative mx-auto mb-12" style="perspective: 1000px;">
+            <div class="phone-device relative mx-auto" style="width: 260px; height: 520px;">
+                {{-- Phone Frame --}}
+                <div class="absolute inset-0 rounded-[2.5rem] border-[6px] border-slate-800/90 shadow-2xl shadow-black/60 phone-frame" style="background: #0f172a;">
+                    {{-- Notch --}}
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-800/90 rounded-b-2xl z-20"></div>
+                    {{-- Side Buttons --}}
+                    <div class="absolute -right-[7px] top-20 w-[3px] h-10 bg-slate-700 rounded-r-md"></div>
+                    <div class="absolute -right-[7px] top-32 w-[3px] h-16 bg-slate-700 rounded-r-md"></div>
+                    {{-- Screen --}}
+                    <div class="absolute inset-[6px] rounded-[2rem] overflow-hidden bg-slate-950">
+                        {{-- Status Bar --}}
+                        <div class="flex items-center justify-between px-5 pt-2.5 pb-1 text-[9px] font-medium text-white/80">
+                            <span>9:41</span>
+                            <div class="flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.778 8.232c-2.403-2.3-6.365-2.3-8.768 0l-.63.6-.63-.6c-2.403-2.3-6.365-2.3-8.768 0-2.964 2.838-2.964 7.44 0 10.278L8.38 19.9a2.25 2.25 0 003.24 0l6.4-6.39c2.964-2.838 2.964-7.44 0-10.278z"/></svg>
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M17 6a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3h8a3 3 0 003-3V6zM5 6a1 1 0 011-1h8a1 1 0 011 1v8a1 1 0 01-1 1H6a1 1 0 01-1-1V6z"/></svg>
+                            </div>
+                        </div>
+                        {{-- App Content --}}
+                        <div class="px-3 pt-1">
+                            {{-- Greeting --}}
+                            <div class="text-white/90 text-[10px] font-medium">Good Morning, James</div>
+                            <div class="text-white/50 text-[8px] mb-2">Monday, Jun 16</div>
+                            {{-- Sales Card --}}
+                            <div class="rounded-xl p-3 mb-2" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                <div class="text-white/80 text-[8px] font-medium uppercase tracking-wider mb-0.5">Today's Sales</div>
+                                <div class="text-white text-base font-bold leading-tight">TZS 1,245,000</div>
+                                <div class="flex items-center gap-1 mt-0.5">
+                                    <svg class="w-2.5 h-2.5 text-emerald-200" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                                    <span class="text-[8px] text-emerald-100 font-semibold">+18.5%</span>
+                                    <span class="text-[7px] text-emerald-200/70">vs yesterday</span>
+                                </div>
+                            </div>
+                            {{-- Mini Stats Row --}}
+                            <div class="grid grid-cols-3 gap-1.5 mb-2">
+                                <div class="rounded-lg p-1.5 text-center" style="background: rgba(255,255,255,0.06);">
+                                    <div class="text-[7px] text-white/50 uppercase tracking-wider">Orders</div>
+                                    <div class="text-white text-[10px] font-bold">48</div>
+                                </div>
+                                <div class="rounded-lg p-1.5 text-center" style="background: rgba(255,255,255,0.06);">
+                                    <div class="text-[7px] text-white/50 uppercase tracking-wider">Items</div>
+                                    <div class="text-white text-[10px] font-bold">156</div>
+                                </div>
+                                <div class="rounded-lg p-1.5 text-center" style="background: rgba(255,255,255,0.06);">
+                                    <div class="text-[7px] text-white/50 uppercase tracking-wider">Avg</div>
+                                    <div class="text-white text-[10px] font-bold">25.9k</div>
+                                </div>
+                            </div>
+                            {{-- Recent Transactions List --}}
+                            <div class="rounded-xl p-2.5" style="background: rgba(255,255,255,0.04);">
+                                <div class="text-[8px] text-white/60 font-semibold mb-1.5 uppercase tracking-wider">Recent Sales</div>
+                                <div class="space-y-1.5">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <div class="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                                                <svg class="w-2.5 h-2.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                            </div>
+                                            <div>
+                                                <div class="text-white/90 text-[8px] font-medium">Invoice #2041</div>
+                                                <div class="text-white/40 text-[6px]">2 min ago</div>
+                                            </div>
+                                        </div>
+                                        <span class="text-emerald-400 text-[8px] font-bold">+85,000</span>
+                                    </div>
+                                    <div class="w-full h-px bg-white/5"></div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <div class="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                                <svg class="w-2.5 h-2.5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                            </div>
+                                            <div>
+                                                <div class="text-white/90 text-[8px] font-medium">Invoice #2040</div>
+                                                <div class="text-white/40 text-[6px]">15 min ago</div>
+                                            </div>
+                                        </div>
+                                        <span class="text-emerald-400 text-[8px] font-bold">+120,000</span>
+                                    </div>
+                                    <div class="w-full h-px bg-white/5"></div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5">
+                                            <div class="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center">
+                                                <svg class="w-2.5 h-2.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                            </div>
+                                            <div>
+                                                <div class="text-white/90 text-[8px] font-medium">Invoice #2039</div>
+                                                <div class="text-white/40 text-[6px]">1 hr ago</div>
+                                            </div>
+                                        </div>
+                                        <span class="text-emerald-400 text-[8px] font-bold">+45,000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- Bottom Nav --}}
+                        <div class="absolute bottom-0 left-0 right-0 flex items-center justify-around py-2 px-4 border-t border-white/5" style="background: rgba(15,23,42,0.9); backdrop-filter: blur(8px);">
+                            <div class="flex flex-col items-center gap-0.5">
+                                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                                <span class="text-[6px] text-emerald-400 font-medium">Home</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-0.5">
+                                <svg class="w-4 h-4 text-white/30" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                <span class="text-[6px] text-white/30 font-medium">Sales</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-0.5">
+                                <svg class="w-4 h-4 text-white/30" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z"/></svg>
+                                <span class="text-[6px] text-white/30 font-medium">Stock</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-0.5">
+                                <svg class="w-4 h-4 text-white/30" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                                <span class="text-[6px] text-white/30 font-medium">More</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Reflection / Glow --}}
+                <div class="absolute -inset-4 rounded-[3rem] opacity-40 blur-2xl -z-10 phone-glow" style="background: linear-gradient(135deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%);"></div>
+                {{-- Floating Orbs around phone --}}
+                <div class="absolute -top-4 -right-6 w-16 h-16 rounded-full opacity-30 blur-xl floating-orb" style="background: #10b981;"></div>
+                <div class="absolute -bottom-6 -left-8 w-20 h-20 rounded-full opacity-20 blur-xl floating-orb-delay" style="background: #3b82f6;"></div>
+            </div>
         </div>
 
         {{-- Stats bar --}}
