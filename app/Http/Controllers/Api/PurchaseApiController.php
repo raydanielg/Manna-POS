@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Purchase;
 use App\Models\PurchaseItem;
+use App\Models\ProductBatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -33,11 +34,29 @@ class PurchaseApiController extends Controller {
             'items.*.quantity' => 'required|numeric|min:0.01',
             'items.*.unit_cost' => 'required|numeric|min:0',
             'items.*.subtotal' => 'required|numeric|min:0',
+            'items.*.expiry_date' => 'nullable|date',
+            'items.*.batch_number' => 'nullable|string|max:100',
         ]);
         $data['reference'] = 'PO-'.strtoupper(Str::random(8));
         $data['created_by'] = $this->userId();
         $purchase = Purchase::create($data);
-        foreach ($data['items'] as $item) { $item['purchase_id'] = $purchase->id; PurchaseItem::create($item); }
+        foreach ($data['items'] as $item) {
+            $item['purchase_id'] = $purchase->id;
+            $createdItem = PurchaseItem::create($item);
+            // Create batch record if expiry or batch provided
+            if (!empty($item['expiry_date']) || !empty($item['batch_number'])) {
+                ProductBatch::create([
+                    'product_id' => $item['product_id'],
+                    'purchase_id' => $purchase->id,
+                    'supplier_id' => $data['supplier_id'] ?? null,
+                    'batch_number' => $item['batch_number'] ?? null,
+                    'quantity' => $item['quantity'],
+                    'unit_cost' => $item['unit_cost'],
+                    'expiry_date' => $item['expiry_date'] ?? null,
+                    'status' => 'active',
+                ]);
+            }
+        }
         return response()->json(Purchase::with('supplier','items.product')->find($purchase->id), 201);
     }
     public function show($id) {
