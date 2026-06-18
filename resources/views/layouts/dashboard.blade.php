@@ -368,6 +368,7 @@
     $isStockTrans  = request()->routeIs('dashboard.stock-transfer.*');
     $isStockAdj    = request()->routeIs('dashboard.stock-adjustment.*');
     $isExpenses    = request()->routeIs('dashboard.expenses.*');
+    $isBanking     = request()->routeIs('dashboard.banking.*');
     $isReports     = request()->routeIs('dashboard.reports.*');
     $isNotifTpl    = request()->routeIs('dashboard.notification-templates');
     $isSettings    = request()->routeIs('dashboard.settings.*');
