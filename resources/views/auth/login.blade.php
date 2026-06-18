@@ -39,7 +39,7 @@ const Toast = Swal.mixin({
                 <span class="form-check-label">Remember me</span>
             </label>
             @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" style="font-size:.82rem;color:#16a34a;font-weight:600;text-decoration:none;">Forgot password?</a>
+                <a href="{{ route('password.request') }}" style="font-size:.82rem;color:#2563eb;font-weight:600;text-decoration:none;">Forgot password?</a>
             @endif
         </div>
 

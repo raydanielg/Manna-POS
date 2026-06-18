@@ -37,7 +37,7 @@
             padding: 0;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(145deg, #064e3b 0%, #065f46 40%, #047857 70%, #0a3d25 100%);
+            background: linear-gradient(145deg, #0a192f 0%, #0d2d6b 30%, #0a3d8f 60%, #1565c0 100%);
         }
 
         .auth-brand-side::before {
@@ -53,7 +53,7 @@
             position: absolute;
             width: 420px; height: 420px;
             border-radius: 50%;
-            background: rgba(16,185,129,0.12);
+            background: rgba(37,99,235,0.12);
             top: -120px; right: -120px;
             filter: blur(60px);
         }
@@ -287,9 +287,9 @@
         .form-control::placeholder { color: #6b7280; }
 
         .form-control:focus {
-            border-color: #10B981;
+            border-color: #2563eb;
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(16,185,129,0.1), 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1), 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .form-control.is-invalid {
@@ -355,15 +355,15 @@
 
         .form-check-input {
             width: 18px; height: 18px;
-            accent-color: #10B981;
+            accent-color: #2563eb;
             cursor: pointer;
             border: 2px solid #e5e7eb;
             border-radius: 4px;
         }
 
         .form-check-input:checked {
-            background-color: #10B981;
-            border-color: #10B981;
+            background-color: #2563eb;
+            border-color: #2563eb;
         }
 
         .form-check-label {
@@ -394,15 +394,15 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.35);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.45);
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 8px 25px rgba(29, 78, 216, 0.45);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
         }
 
         .btn-primary:active { transform: translateY(0); }
@@ -448,7 +448,7 @@
             padding: 0.5rem;
         }
 
-        .btn-link:hover { color: #10B981; }
+        .btn-link:hover { color: #2563eb; }
 
         .auth-footer {
             text-align: center;
@@ -464,7 +464,7 @@
         }
 
         .auth-footer-link a {
-            color: #10B981;
+            color: #2563eb;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 600;
@@ -472,7 +472,7 @@
             margin-left: 0.5rem;
         }
 
-        .auth-footer-link a:hover { color: #059669; text-decoration: underline; }
+        .auth-footer-link a:hover { color: #1d4ed8; text-decoration: underline; }
 
         .divider {
             display: flex;
@@ -500,9 +500,9 @@
         }
 
         .alert-success {
-            background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0.05) 100%);
-            border: 1.5px solid rgba(16,185,129,0.25);
-            color: #059669;
+            background: linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(37,99,235,0.05) 100%);
+            border: 1.5px solid rgba(37,99,235,0.25);
+            color: #2563eb;
             animation: slideIn 0.3s ease-out;
         }
 
@@ -585,7 +585,7 @@
             flex-shrink: 0;
         }
 
-        .toast-icon.success { background: #ecfdf5; color: #10B981; }
+        .toast-icon.success { background: #eff6ff; color: #2563eb; }
         .toast-icon.error { background: #fef2f2; color: #ef4444; }
         .toast-icon.info { background: #eff6ff; color: #3b82f6; }
 
@@ -650,13 +650,13 @@
                     ] as [$label, $path])
                     <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.75rem;">
                         <div style="width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $path }}"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $path }}"/></svg>
                         </div>
                         <span style="font-size:.82rem;color:rgba(255,255,255,.75);font-weight:500;">{{ $label }}</span>
                     </div>
                     @endforeach
 
-                    <div style="display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:#34d399;padding:.45rem .9rem;border-radius:50px;font-size:.72rem;font-weight:600;width:fit-content;">
+                    <div style="display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#60a5fa;padding:.45rem .9rem;border-radius:50px;font-size:.72rem;font-weight:600;width:fit-content;">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         Free 14-day trial — no credit card needed
                     </div>
