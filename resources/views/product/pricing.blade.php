@@ -3,6 +3,9 @@
 @section('title', 'Pricing Plans - ' . config('app.name', 'MannaPOS'))
 
 @section('content')
+@php
+    $plans = $plans ?? \App\Models\SubscriptionPlan::where('is_active', true)->orderBy('sort_order')->get();
+@endphp
 <div class="py-12 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Header --}}
