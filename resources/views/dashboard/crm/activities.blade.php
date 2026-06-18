@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 @section('page_title','CRM Activities')
 @section('content')
-<div class="dash-content">
 <div class="page-card">
   <div class="card-header">
     <div class="card-title">CRM Activities</div>
@@ -35,7 +34,6 @@
       <tbody id="tableBody"><tr><td colspan="8" class="tbl-empty">Loading...</td></tr></tbody>
     </table>
   </div>
-</div>
 </div>
 
 {{-- Modal --}}
