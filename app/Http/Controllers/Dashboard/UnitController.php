@@ -5,18 +5,20 @@ use App\Models\Unit;
 use Illuminate\Http\Request;
 class UnitController extends Controller {
     public function index(Request $req) {
-        $q = Unit::withCount("products");
-        if ($req->search) $q->where("name","like","%{$req->search}%")->orWhere("short_name","like","%{$req->search}%");
+        $q = Unit::withCount("products")->forCurrentUser($this->currentBusinessId());
+        if ($req->search) $q->where(function($sq) use($req){ $sq->where("name","like","%{$req->search}%")->orWhere("short_name","like","%{$req->search}%"); });
         return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","short_name"=>"required|string|max:20","allow_decimal"=>"boolean"]);
+        $data["created_by"] = $this->currentBusinessId();
         return response()->json(["success"=>true,"unit"=>Unit::create($data)], 201);
     }
-    public function show(Unit $unit) { return response()->json($unit); }
+    public function show(Unit $unit) { $this->ensureOwns($unit); return response()->json($unit); }
     public function update(Request $req, Unit $unit) {
+        $this->ensureOwns($unit);
         $unit->update($req->validate(["name"=>"required|string|max:191","short_name"=>"required|string|max:20","allow_decimal"=>"boolean"]));
         return response()->json(["success"=>true,"unit"=>$unit]);
     }
-    public function destroy(Unit $unit) { $unit->delete(); return response()->json(["success"=>true]); }
+    public function destroy(Unit $unit) { $this->ensureOwns($unit); $unit->delete(); return response()->json(["success"=>true]); }
 }

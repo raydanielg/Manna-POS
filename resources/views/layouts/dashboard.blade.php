@@ -625,6 +625,12 @@
 
         <div class="nav-section-label">System</div>
 
+        {{-- My Subscription --}}
+        <a href="/subscription/plans" class="nav-item {{ request()->is('subscription/plans') ? 'active' : '' }}" data-tip="My Plan">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
+            <span class="nav-label">My Subscription</span>
+        </a>
+
         {{-- Profile --}}
         <a href="{{ route('dashboard.profile') }}" class="nav-item {{ $isProfile ? 'active' : '' }}" data-tip="Profile">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/><path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4"/></svg>
