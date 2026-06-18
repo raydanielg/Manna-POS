@@ -1123,6 +1123,91 @@ document.addEventListener('click', function(event) {
         });
     }
 })();
+
+// ── Fetch Dashboard Stats ────────────────────────────────
+(async function(){
+    try {
+        const res = await fetch('/api/dashboard/stats', { headers: { 'Accept': 'application/json' } });
+        const d = await res.json();
+        if (!d || !d.kpis) return;
+
+        const k = d.kpis;
+        const fmt = n => 'TSh ' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        const fmtN = n => Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+        document.getElementById('kpi-sales-today').textContent = fmt(k.sales_today || 0);
+        document.getElementById('kpi-orders-today').textContent = fmtN(k.orders_today || 0);
+        document.getElementById('kpi-total-customers').textContent = fmtN(k.total_customers || 0);
+        document.getElementById('kpi-new-customers').textContent = fmtN(k.new_customers || 0);
+        document.getElementById('kpi-total-products').textContent = fmtN(k.total_products || 0);
+        document.getElementById('kpi-low-stock').textContent = fmtN(k.low_stock || 0);
+        document.getElementById('kpi-monthly-revenue').textContent = fmt(k.monthly_revenue || 0);
+        document.getElementById('kpi-payments-mtd').textContent = fmt(k.payments_mtd || 0);
+        document.getElementById('kpi-active-users').textContent = fmtN(k.active_users || 0);
+        document.getElementById('kpi-avg-transaction').textContent = fmt(k.avg_transaction || 0);
+
+        // Trend chart
+        if (window.trendChart && d.trend && d.trend.length) {
+            window.trendChart.data.labels = d.trend.map(t => t.date);
+            window.trendChart.data.datasets[0].data = d.trend.map(t => t.sales);
+            window.trendChart.data.datasets[1].data = d.trend.map(t => t.orders);
+            window.trendChart.data.datasets[2].data = d.trend.map(t => t.customers);
+            window.trendChart.update();
+        }
+
+        // Donut chart
+        if (window.donutChart && d.payment_distribution && d.payment_distribution.length) {
+            const labels = d.payment_distribution.map(p => p.label);
+            const data = d.payment_distribution.map(p => p.value);
+            const colors = ['#3b82f6','#22c55e','#a78bfa','#f59e0b','#ef4444','#8b5cf6'];
+            window.donutChart.data.labels = labels;
+            window.donutChart.data.datasets[0].data = data;
+            window.donutChart.data.datasets[0].backgroundColor = labels.map((_, i) => colors[i % colors.length]);
+            window.donutChart.data.datasets[0].hoverBackgroundColor = labels.map((_, i) => colors[i % colors.length]);
+            window.donutChart.options.plugins.legend.display = true;
+            window.donutChart.options.plugins.tooltip.enabled = true;
+            document.getElementById('donut-no-data').style.display = 'none';
+            window.donutChart.update();
+        }
+
+        // Recent transactions
+        const txBody = document.getElementById('recent-transactions-body');
+        if (txBody && d.recent_sales && d.recent_sales.length) {
+            txBody.innerHTML = d.recent_sales.map(s => `<tr>
+                <td>${new Date(s.sale_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}</td>
+                <td>${s.reference || '-'}</td>
+                <td>${s.customer ? s.customer.name : 'Walk-in'}</td>
+                <td>TSh ${Number(s.total).toLocaleString()}</td>
+                <td><span class="badge badge-success">Completed</span></td>
+            </tr>`).join('');
+        }
+
+        // Recent customers
+        const custBody = document.getElementById('recent-customers-body');
+        if (custBody && d.recent_customers && d.recent_customers.length) {
+            custBody.innerHTML = d.recent_customers.map(c => `<tr>
+                <td class="font-medium">${c.name || '-'}</td>
+                <td class="text-slate-400">${c.phone || '-'}</td>
+                <td class="text-slate-400">${new Date(c.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</td>
+                <td>-</td>
+            </tr>`).join('');
+        }
+
+        // Low stock
+        const lsBody = document.getElementById('low-stock-body');
+        if (lsBody && d.low_stock_products && d.low_stock_products.length) {
+            lsBody.innerHTML = d.low_stock_products.map(p => `<tr>
+                <td class="font-medium">${p.name}</td>
+                <td class="text-slate-400">${p.sku || '-'}</td>
+                <td><span class="text-red-600 font-bold">${p.stock_quantity}</span></td>
+                <td class="text-slate-400">${p.reorder_level || 0}</td>
+            </tr>`).join('');
+            document.getElementById('low-stock-count').textContent = (d.kpis.low_stock || 0) + ' items';
+        }
+    } catch (e) {
+        console.error('Dashboard stats failed', e);
+    }
+})();
 </script>
 
 </body>
