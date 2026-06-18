@@ -392,6 +392,7 @@
     $isReports     = request()->routeIs('dashboard.reports.*');
     $isNotifTpl    = request()->routeIs('dashboard.notification-templates');
     $isSettings    = request()->routeIs('dashboard.settings.*');
+    $isProfile     = request()->routeIs('dashboard.profile');
 
     function sidebarChildActive($route) {
         return request()->routeIs($route) ? 'active' : '';
@@ -625,6 +626,12 @@
         </div>
 
         <div class="nav-section-label">System</div>
+
+        {{-- Profile --}}
+        <a href="{{ route('dashboard.profile') }}" class="nav-item {{ $isProfile ? 'active' : '' }}" data-tip="Profile">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/><path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4"/></svg>
+            <span class="nav-label">My Profile</span>
+        </a>
 
         {{-- Notification Templates --}}
         <a href="{{ route('dashboard.notification-templates') }}" class="nav-item {{ $isNotifTpl ? 'active' : '' }}" data-tip="Notifications">
