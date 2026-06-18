@@ -4,17 +4,91 @@
 
 @section('page_styles')
 <style>
-.sub-header-section{text-align:center;margin-bottom:2.5rem;}
-.sub-header-section h1{font-size:1.75rem;font-weight:800;color:#0f172a;letter-spacing:-0.02em;}
-.sub-header-section p{color:#64748b;font-size:0.92rem;margin-top:0.35rem;}
-.billing-toggle{display:flex;align-items:center;justify-content:center;gap:0.85rem;margin-bottom:2rem;}
-.toggle-track{position:relative;width:52px;height:26px;background:#e2e8f0;border-radius:50px;cursor:pointer;transition:background .3s;}
-.toggle-track.on{background:#2563eb;}
-.toggle-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .3s;box-shadow:0 2px 6px rgba(0,0,0,.18);}
-.toggle-track.on .toggle-knob{left:29px;}
-.toggle-label{font-size:.85rem;font-weight:600;color:#94a3b8;transition:color .2s;}
-.toggle-label.active{color:#0f172a;}
-.save-badge{background:#dcfce7;color:#16a34a;font-size:.65rem;font-weight:700;padding:.18rem .45rem;border-radius:50px;margin-left:.3rem;}
+/* ── Page ─────────────────────────────────────── */
+.sub-page{max-width:1200px;margin:0 auto;}
+.sub-head{text-align:center;margin-bottom:2.5rem;}
+.sub-head h1{font-size:1.85rem;font-weight:800;color:#0f172a;letter-spacing:-.03em;background:linear-gradient(135deg,#0f172a,#2563eb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sub-head p{color:#64748b;font-size:.92rem;margin-top:.35rem;}
+
+/* ── Current Plan Banner ─────────────────────── */
+.current-banner{background:linear-gradient(135deg,#0f2748,#1e3a5f);border-radius:18px;padding:1.5rem 2rem;color:#fff;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;position:relative;overflow:hidden;}
+.current-banner::before{content:'';position:absolute;top:-60%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(16,185,129,.15) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+.current-banner::after{content:'';position:absolute;bottom:-40%;left:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(37,99,235,.1) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+.no-plan-banner{background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:18px;padding:1.15rem 2rem;color:#fff;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+
+/* ── Billing Toggle ──────────────────────────── */
+.bill-wrap{display:flex;align-items:center;justify-content:center;gap:.85rem;margin-bottom:2.25rem;}
+.bill-lbl{font-size:.85rem;font-weight:600;color:#94a3b8;transition:color .25s;cursor:pointer;user-select:none;}
+.bill-lbl.active{color:#0f172a;}
+.bill-track{position:relative;width:54px;height:28px;background:#e2e8f0;border-radius:50px;cursor:pointer;transition:all .35s;flex-shrink:0;}
+.bill-track.on{background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 2px 12px rgba(37,99,235,.35);}
+.bill-knob{position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:all .35s cubic-bezier(.68,-.55,.27,1.55);box-shadow:0 2px 8px rgba(0,0,0,.18);}
+.bill-track.on .bill-knob{left:29px;}
+.save-badge{display:inline-block;background:linear-gradient(135deg,#dcfce7,#bbf7d0);color:#16a34a;font-size:.6rem;font-weight:800;padding:.15rem .5rem;border-radius:50px;margin-left:.3rem;letter-spacing:.02em;}
+
+/* ── Plan Cards Grid ─────────────────────────── */
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.5rem;margin-bottom:2rem;}
+.plan-card{background:#fff;border-radius:22px;border:2px solid #e9edf5;padding:2rem 1.75rem;position:relative;display:flex;flex-direction:column;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:default;}
+.plan-card:hover{transform:translateY(-6px);box-shadow:0 24px 48px -12px rgba(0,0,0,.18);border-color:#d1d9e6;}
+.plan-card.featured{border-color:#2563eb;box-shadow:0 8px 32px -8px rgba(37,99,235,.2);}
+.plan-card.featured:hover{box-shadow:0 24px 48px -12px rgba(37,99,235,.25);}
+.plan-card.current{border-color:#10b981;box-shadow:0 8px 32px -8px rgba(16,185,129,.18);}
+.plan-card.current:hover{box-shadow:0 24px 48px -12px rgba(16,185,129,.22);}
+.plan-badge-top{position:absolute;top:-1px;left:50%;transform:translateX(-50%);font-size:.64rem;font-weight:800;padding:.28rem 1rem;border-radius:0 0 12px 12px;letter-spacing:.04em;text-transform:uppercase;z-index:2;}
+.plan-badge-top.green{background:linear-gradient(135deg,#10b981,#059669);color:#fff;}
+.plan-badge-top.blue{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;}
+
+/* Plan header */
+.plan-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem;}
+.plan-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.plan-name{font-size:1.1rem;font-weight:800;color:#0f172a;letter-spacing:-.01em;}
+.plan-desc{font-size:.78rem;color:#64748b;margin-bottom:1.25rem;line-height:1.5;min-height:2.4rem;}
+
+/* Plan price */
+.plan-price{margin-bottom:1.25rem;}
+.plan-price .cur{font-size:.85rem;font-weight:700;color:#94a3b8;vertical-align:top;margin-top:.4rem;display:inline-block;}
+.plan-price .amt{font-size:2.2rem;font-weight:900;color:#0f172a;line-height:1;letter-spacing:-.04em;}
+.plan-price .per{font-size:.78rem;color:#94a3b8;}
+.plan-price .note{font-size:.72rem;color:#16a34a;font-weight:600;margin-top:.2rem;}
+.plan-price .note span{color:#64748b;font-weight:500;}
+
+/* Limits row */
+.limits-row{display:flex;gap:.6rem;margin-bottom:1rem;}
+.limit-box{flex:1;background:#f8fafc;border-radius:12px;padding:.45rem .5rem;text-align:center;border:1px solid #f1f5f9;}
+.limit-box .lbl{font-size:.65rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+.limit-box .val{font-size:.9rem;font-weight:800;color:#0f172a;margin-top:.1rem;}
+
+/* Features */
+.plan-feats{flex:1;margin-bottom:1.25rem;}
+.plan-feat{display:flex;align-items:center;gap:.45rem;font-size:.8rem;color:#374151;margin-bottom:.45rem;}
+.plan-feat svg{width:15px;height:15px;flex-shrink:0;}
+
+/* Buttons */
+.btn-plan{width:100%;padding:.75rem;border-radius:12px;font-size:.85rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .25s;text-align:center;display:block;}
+.btn-plan:disabled{cursor:default;opacity:1;}
+.btn-plan:active{transform:scale(.97);}
+.btn-plan.primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.3);}
+.btn-plan.primary:hover{box-shadow:0 6px 20px rgba(37,99,235,.4);transform:translateY(-2px);}
+.btn-plan.green{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 4px 14px rgba(16,185,129,.3);}
+.btn-plan.green:hover{box-shadow:0 6px 20px rgba(16,185,129,.4);transform:translateY(-2px);}
+.btn-plan.outline{background:#fff;color:#2563eb;border:2px solid #2563eb;}
+.btn-plan.outline:hover{background:#eff6ff;transform:translateY(-2px);}
+.btn-plan.current-btn{background:#f1f5f9;color:#94a3b8;cursor:default;}
+.btn-plan.current-btn:hover{transform:none;}
+
+/* No plans */
+.no-plans{text-align:center;padding:3rem 1rem;color:#94a3b8;}
+
+/* Alert */
+.alert-custom{padding:.85rem 1.25rem;border-radius:12px;font-size:.875rem;font-weight:500;margin-bottom:1.5rem;display:flex;align-items:center;gap:.6rem;}
+
+/* Responsive */
+@media(max-width:640px){
+  .sub-head h1{font-size:1.4rem;}
+  .plans-grid{grid-template-columns:1fr;}
+  .current-banner{padding:1.2rem 1.25rem;flex-direction:column;text-align:center;}
+  .current-banner .right{width:100%;justify-content:center;}
+}
 </style>
 @endsection
 
@@ -27,191 +101,214 @@ $__daysLeft = null;
 if ($__current && $__current->expires_at) {
     $__daysLeft = max(0, now()->diffInDays($__current->expires_at, false));
 }
+$__badgeColors = [
+  'blue'=>['bg'=>'#eff6ff','text'=>'#2563eb','light'=>'#dbeafe'],
+  'green'=>['bg'=>'#f0fdf4','text'=>'#16a34a','light'=>'#dcfce7'],
+  'purple'=>['bg'=>'#faf5ff','text'=>'#7c3aed','light'=>'#ede9fe'],
+  'orange'=>['bg'=>'#fff7ed','text'=>'#ea580c','light'=>'#fed7aa'],
+  'red'=>['bg'=>'#fff1f2','text'=>'#e03057','light'=>'#ffe4e6'],
+  'gray'=>['bg'=>'#f1f5f9','text'=>'#475569','light'=>'#e2e8f0'],
+];
 @endphp
 
 <div class="dash-content">
 
+<div class="sub-page">
+
   {{-- Header --}}
-  <div class="sub-header-section">
-    <h1>Choose Your Plan</h1>
-    <p>Power your business with the right plan. Upgrade, downgrade or switch anytime.</p>
+  <div class="sub-head">
+    <h1>Choose Your Subscription Plan</h1>
+    <p>Pick the plan that fits your business. Upgrade or switch anytime — no lock-in.</p>
   </div>
 
   @if(session('subscribed'))
-  <div class="alert" style="background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:.85rem 1.25rem;border-radius:12px;font-size:.875rem;font-weight:500;margin-bottom:1.5rem;">
+  <div class="alert-custom" style="background:#dcfce7;color:#166534;border:1px solid #bbf7d0;">
+    <svg width="18" height="18" fill="none" stroke="#16a34a" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
     {{ session('subscribed') }}
   </div>
   @endif
 
   {{-- Current Plan Banner --}}
   @if($__current)
-  <div style="background:linear-gradient(135deg,#0f2748,#1e3a5f);border-radius:16px;padding:1.25rem 2rem;color:#fff;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-    <div>
-      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem;">
-        <span style="background:rgba(16,185,129,.2);color:#34d399;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:50px;text-transform:uppercase;letter-spacing:.05em;">
-          @if($__current->status === 'trial') Free Trial @else Active @endif
+  <div class="current-banner">
+    <div style="position:relative;z-index:1;">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem;flex-wrap:wrap;">
+        <span style="background:rgba(16,185,129,.2);color:#34d399;font-size:.62rem;font-weight:800;padding:.18rem .55rem;border-radius:50px;text-transform:uppercase;letter-spacing:.06em;">
+          {{ $__current->status === 'trial' ? 'FREE TRIAL' : 'ACTIVE' }}
         </span>
         <span style="font-weight:700;font-size:1.05rem;">{{ $__current->plan->name ?? 'Current Plan' }}</span>
+        @if($__current->billing_cycle)
+        <span style="background:rgba(255,255,255,.1);color:#94b3d4;font-size:.65rem;padding:.12rem .5rem;border-radius:50px;">
+          {{ $__current->billing_cycle }}
+        </span>
+        @endif
       </div>
       <div style="font-size:.82rem;color:#94b3d4;">
-        @if($__current->status === 'trial')
-          Trial plan — 
-        @endif
         @if($__current->expires_at)
           @if($__daysLeft !== null && $__daysLeft > 0)
-            {{ $__daysLeft }} day{{ $__daysLeft != 1 ? 's' : '' }} remaining
+            <strong style="color:#fff;">{{ $__daysLeft }}</strong> day{{ $__daysLeft != 1 ? 's' : '' }} remaining
           @else
-            Expired
+            This plan has expired
           @endif
         @else
-          Never expires
+          Unlimited access &middot; No expiry
         @endif
-        &middot; {{ $__current->billing_cycle ?? 'monthly' }} billing
+        &middot; Started {{ $__current->starts_at ? $__current->starts_at->format('M d, Y') : '—' }}
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:.75rem;">
-      @if($__daysLeft !== null && $__daysLeft > 0 && $__daysLeft <= 7)
-      <span style="background:rgba(239,68,68,.2);color:#fca5a5;font-size:.75rem;font-weight:700;padding:.25rem .65rem;border-radius:50px;">
-        ⚠ {{ $__daysLeft }} day{{ $__daysLeft != 1 ? 's' : '' }} left
+    <div class="right" style="display:flex;align-items:center;gap:.75rem;position:relative;z-index:1;">
+      @if($__daysLeft !== null && $__daysLeft > 0 && $__daysLeft <= 3)
+      <span style="background:rgba(239,68,68,.25);color:#fca5a5;font-size:.72rem;font-weight:700;padding:.25rem .7rem;border-radius:50px;display:flex;align-items:center;gap:.3rem;white-space:nowrap;">
+        <svg width="14" height="14" fill="none" stroke="#fca5a5" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Only {{ $__daysLeft }} day{{ $__daysLeft != 1 ? 's' : '' }} left
       </span>
       @endif
       @if($__daysLeft !== null)
-      <div style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:.35rem 1rem;text-align:center;">
-        <div style="font-size:1.5rem;font-weight:800;color:#34d399;line-height:1;">{{ $__daysLeft }}</div>
-        <div style="font-size:.65rem;color:#94b3d4;font-weight:600;">days left</div>
+      <div style="background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);border-radius:12px;padding:.3rem 1rem;text-align:center;min-width:64px;">
+        <div style="font-size:1.6rem;font-weight:800;color:#34d399;line-height:1.2;">{{ $__daysLeft }}</div>
+        <div style="font-size:.6rem;color:#94b3d4;font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Days</div>
       </div>
       @endif
     </div>
   </div>
-  @elseif(\App\Models\SubscriptionPlan::where('is_active', true)->count() > 0)
-  <div style="background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:16px;padding:1rem 2rem;color:#fff;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-    <span style="font-size:.9rem;font-weight:600;">You don't have an active subscription yet. Choose a plan below to get started!</span>
+  @elseif($__plans->count() > 0)
+  <div class="no-plan-banner">
+    <div style="display:flex;align-items:center;gap:.6rem;">
+      <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      <span style="font-weight:600;font-size:.9rem;">You don't have an active subscription. Pick a plan below to get started!</span>
+    </div>
   </div>
   @endif
 
-  {{-- Billing toggle --}}
-  <div class="billing-toggle">
-    <span class="toggle-label active" id="lbl-monthly">Monthly</span>
-    <div class="toggle-track" id="billingToggle" onclick="toggleBilling()">
-      <div class="toggle-knob"></div>
+  {{-- Billing Toggle --}}
+  <div class="bill-wrap">
+    <span class="bill-lbl active" id="lbl-m">Monthly</span>
+    <div class="bill-track" id="billTrack" onclick="toggleBilling()" role="switch" aria-checked="false" tabindex="0">
+      <div class="bill-knob" id="billKnob"></div>
     </div>
-    <span class="toggle-label" id="lbl-yearly">Yearly <span class="save-badge">Save ~17%</span></span>
+    <span class="bill-lbl" id="lbl-y">
+      Yearly
+      <span class="save-badge">Save ~17%</span>
+    </span>
   </div>
 
+  {{-- Plans Grid --}}
   @if($__plans->isEmpty())
-  <div style="text-align:center;padding:3rem;color:#94a3b8;">
-    <svg width="48" height="48" fill="none" stroke="#cbd5e1" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 1rem;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/></svg>
-    <p style="font-weight:600;">No subscription plans available yet.</p>
-    <p style="font-size:.82rem;margin-top:.25rem;">Please check back soon or contact support.</p>
-    <a href="/dashboard" style="display:inline-block;margin-top:1rem;color:#2563eb;font-weight:600;font-size:.875rem;text-decoration:none;">&larr; Go to Dashboard</a>
+  <div class="no-plans">
+    <svg width="52" height="52" fill="none" stroke="#cbd5e1" stroke-width="1.2" viewBox="0 0 24 24" style="margin:0 auto 1rem;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/></svg>
+    <p style="font-weight:600;color:#64748b;">No subscription plans available</p>
+    <p style="font-size:.82rem;margin-top:.15rem;">Please check back soon or contact support.</p>
+    <a href="/dashboard" style="display:inline-flex;align-items:center;gap:.35rem;margin-top:1rem;color:#2563eb;font-weight:600;font-size:.875rem;text-decoration:none;">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      Go to Dashboard
+    </a>
   </div>
   @else
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-bottom:2rem;">
+  <div class="plans-grid">
     @foreach($__plans as $plan)
     @php
       $isCurrent = $__current && $__current->subscription_plan_id == $plan->id && in_array($__current->status, ['active','trial']);
       $isFree    = $plan->price_monthly == 0;
       $features  = is_array($plan->features) ? $plan->features : [];
-      $badgeColors = ['blue'=>['bg'=>'#eff6ff','text'=>'#2563eb','light'=>'#dbeafe'],'green'=>['bg'=>'#f0fdf4','text'=>'#16a34a','light'=>'#dcfce7'],'purple'=>['bg'=>'#faf5ff','text'=>'#7c3aed','light'=>'#ede9fe'],'orange'=>['bg'=>'#fff7ed','text'=>'#ea580c','light'=>'#fed7aa']];
-      $bc = $badgeColors[$plan->badge_color] ?? $badgeColors['blue'];
+      $bc = $__badgeColors[$plan->badge_color] ?? $__badgeColors['blue'];
     @endphp
-    <div style="background:#fff;border-radius:20px;border:2px solid {{ $isCurrent ? '#10b981' : ($plan->is_featured ? '#2563eb' : '#e9edf5') }};padding:1.75rem;position:relative;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;{{ $plan->is_featured && !$isCurrent ? 'box-shadow:0 8px 30px rgba(37,99,235,.15);' : '' }}"
-         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 20px 40px rgba(0,0,0,.1)'"
-         onmouseout="this.style.transform='';this.style.boxShadow='{{ $plan->is_featured && !$isCurrent ? '0 8px 30px rgba(37,99,235,.15)' : '' }}'">
+    <div class="plan-card {{ $plan->is_featured && !$isCurrent ? 'featured' : '' }} {{ $isCurrent ? 'current' : '' }}">
+
       {{-- Badges --}}
       @if($isCurrent)
-      <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;font-size:.65rem;font-weight:700;padding:.25rem .9rem;border-radius:0 0 10px 10px;">Current Plan</div>
+      <div class="plan-badge-top green">✓ Current Plan</div>
       @elseif($plan->is_featured)
-      <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:#2563eb;color:#fff;font-size:.65rem;font-weight:700;padding:.25rem .9rem;border-radius:0 0 10px 10px;">Most Popular</div>
+      <div class="plan-badge-top blue">Most Popular</div>
       @endif
 
-      {{-- Plan Name & Desc --}}
-      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;">
-        <div style="width:10px;height:10px;border-radius:50%;background:{{ $bc['text'] }};"></div>
-        <div style="font-size:1.05rem;font-weight:800;color:#0f172a;">{{ $plan->name }}</div>
+      {{-- Header --}}
+      <div class="plan-head">
+        <span class="plan-dot" style="background:{{ $bc['text'] }};box-shadow:0 0 0 3px {{ $bc['light'] }};"></span>
+        <span class="plan-name">{{ $plan->name }}</span>
       </div>
       @if($plan->description)
-      <div style="font-size:.78rem;color:#64748b;margin-bottom:1.25rem;min-height:2.2rem;">{{ $plan->description }}</div>
+      <div class="plan-desc">{{ $plan->description }}</div>
+      @else
+      <div class="plan-desc">&nbsp;</div>
       @endif
 
       {{-- Price --}}
-      <div style="margin-bottom:1.25rem;">
+      <div class="plan-price">
         <div>
-          <span style="font-size:.82rem;font-weight:600;color:#64748b;vertical-align:top;margin-top:.35rem;display:inline-block;">{{ $plan->currency }}</span>
-          <span class="monthly-amount" style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1;letter-spacing:-.03em;">{{ number_format($plan->price_monthly, 0) }}</span>
-          <span class="yearly-amount" style="font-size:2rem;font-weight:900;color:#0f172a;line-height:1;letter-spacing:-.03em;display:none;">{{ number_format($plan->price_yearly / 12, 0) }}</span>
-          <span style="font-size:.78rem;color:#94a3b8;"> / month</span>
+          <span class="cur">{{ $plan->currency }}</span>
+          <span class="amt m-amt">{{ number_format($plan->price_monthly, 0) }}</span>
+          <span class="amt y-amt" style="display:none;">{{ number_format($plan->price_yearly / 12, 0) }}</span>
+          <span class="per">/mo</span>
         </div>
         @if($plan->price_yearly > 0)
-        <div class="yearly-note" style="font-size:.72rem;color:#16a34a;font-weight:600;margin-top:.2rem;display:none;">
-          {{ $plan->currency }} {{ number_format($plan->price_yearly, 0) }} billed yearly
+        <div class="note y-note" style="display:none;">
+          {{ $plan->currency }} {{ number_format($plan->price_yearly, 0) }}/yr
           @php $savings = ($plan->price_monthly * 12) - $plan->price_yearly; @endphp
-          @if($savings > 0)
-            <span style="color:#64748b;">(Save {{ $plan->currency }} {{ number_format($savings, 0) }})</span>
-          @endif
+          @if($savings > 0)<span>(save {{ $plan->currency }} {{ number_format($savings, 0) }}/yr)</span>@endif
         </div>
         @endif
       </div>
 
       {{-- Limits --}}
-      <div style="display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;">
+      <div class="limits-row">
         @if($plan->max_users)
-        <div style="flex:1;background:#f8fafc;border-radius:10px;padding:.4rem .6rem;text-align:center;">
-          <div style="font-size:.7rem;color:#94a3b8;font-weight:500;">Users</div>
-          <div style="font-size:.9rem;font-weight:800;color:#0f172a;">{{ $plan->max_users >= 999999 ? '∞' : $plan->max_users }}</div>
+        <div class="limit-box">
+          <div class="lbl">Users</div>
+          <div class="val">{{ $plan->max_users >= 999999 ? '∞' : $plan->max_users }}</div>
         </div>
         @endif
         @if($plan->max_products)
-        <div style="flex:1;background:#f8fafc;border-radius:10px;padding:.4rem .6rem;text-align:center;">
-          <div style="font-size:.7rem;color:#94a3b8;font-weight:500;">Products</div>
-          <div style="font-size:.9rem;font-weight:800;color:#0f172a;">{{ $plan->max_products >= 999999 ? '∞' : number_format($plan->max_products) }}</div>
+        <div class="limit-box">
+          <div class="lbl">Products</div>
+          <div class="val">{{ $plan->max_products >= 999999 ? '∞' : number_format($plan->max_products) }}</div>
         </div>
         @endif
         @if($plan->max_locations)
-        <div style="flex:1;background:#f8fafc;border-radius:10px;padding:.4rem .6rem;text-align:center;">
-          <div style="font-size:.7rem;color:#94a3b8;font-weight:500;">Locations</div>
-          <div style="font-size:.9rem;font-weight:800;color:#0f172a;">{{ $plan->max_locations >= 999999 ? '∞' : $plan->max_locations }}</div>
+        <div class="limit-box">
+          <div class="lbl">Locations</div>
+          <div class="val">{{ $plan->max_locations >= 999999 ? '∞' : $plan->max_locations }}</div>
         </div>
         @endif
       </div>
 
       {{-- Features --}}
       @if(count($features) > 0)
-      <div style="flex:1;margin-bottom:1.25rem;">
+      <div class="plan-feats">
         @foreach($features as $feat)
-        <div style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:#374151;margin-bottom:.4rem;">
-          <svg width="14" height="14" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        <div class="plan-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
           {{ $feat }}
         </div>
         @endforeach
       </div>
+      @else
+      <div class="plan-feats">
+        <div style="font-size:.75rem;color:#cbd5e1;font-style:italic;">No additional features listed</div>
+      </div>
       @endif
 
-      {{-- Button --}}
+      {{-- Action --}}
       @if($isCurrent)
-      <button style="width:100%;padding:.7rem;border-radius:11px;font-size:.85rem;font-weight:700;border:none;cursor:default;font-family:inherit;background:#f1f5f9;color:#94a3b8;">
-        ✓ Current Plan
+      <button class="btn-plan current-btn" disabled>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:.3rem;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Current Plan
       </button>
       @elseif($isFree)
       <form method="POST" action="/subscription/choose">
         @csrf
         <input type="hidden" name="plan_id" value="{{ $plan->id }}">
         <input type="hidden" name="billing_cycle" value="monthly">
-        <button type="submit" style="width:100%;padding:.7rem;border-radius:11px;font-size:.85rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 4px 12px rgba(16,185,129,.3);transition:all .2s;"
-                onmouseover="this.style.background='linear-gradient(135deg,#059669,#047857)';this.style.transform='translateY(-1px)'"
-                onmouseout="this.style.background='linear-gradient(135deg,#10b981,#059669)';this.style.transform=''">
-          Start 14-Day Free Trial
-        </button>
+        <button type="submit" class="btn-plan green">Start 14-Day Free Trial</button>
       </form>
       @else
-      <form method="POST" action="/subscription/choose" class="choose-form" data-plan="{{ $plan->id }}">
+      <form method="POST" action="/subscription/choose" class="choose-form">
         @csrf
         <input type="hidden" name="plan_id" value="{{ $plan->id }}">
-        <input type="hidden" name="billing_cycle" value="monthly" class="billing-input">
-        <button type="submit" style="width:100%;padding:.7rem;border-radius:11px;font-size:.85rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .2s;{{ $plan->is_featured ? 'background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.3);' : 'background:#fff;color:#2563eb;border:2px solid #2563eb;' }}"
-                onmouseover="this.style.transform='translateY(-1px)'"
-                onmouseout="this.style.transform=''">
-          Get {{ $plan->name }}
+        <input type="hidden" name="billing_cycle" value="monthly" class="bill-input">
+        <button type="submit" class="btn-plan {{ $plan->is_featured ? 'primary' : 'outline' }}">
+          @if($plan->price_monthly == 0) Get Started Free
+          @else Subscribe to {{ $plan->name }}
+          @endif
         </button>
       </form>
       @endif
@@ -220,22 +317,36 @@ if ($__current && $__current->expires_at) {
   </div>
   @endif
 
-</div>
+</div>{{-- /sub-page --}}
+
+</div>{{-- /dash-content --}}
 @endsection
 
 @section('scripts')
 <script>
-let yearly=false;
-function toggleBilling(){
-  yearly=!yearly;
-  const t=document.getElementById('billingToggle');
-  t.classList.toggle('on',yearly);
-  document.getElementById('lbl-monthly').classList.toggle('active',!yearly);
-  document.getElementById('lbl-yearly').classList.toggle('active',yearly);
-  document.querySelectorAll('.monthly-amount').forEach(e=>e.style.display=yearly?'none':'');
-  document.querySelectorAll('.yearly-amount').forEach(e=>e.style.display=yearly?'':'none');
-  document.querySelectorAll('.yearly-note').forEach(e=>e.style.display=yearly?'':'none');
-  document.querySelectorAll('.billing-input').forEach(e=>e.value=yearly?'yearly':'monthly');
-}
+(function(){
+  const track = document.getElementById('billTrack');
+  const knob  = document.getElementById('billKnob');
+  const lblM  = document.getElementById('lbl-m');
+  const lblY  = document.getElementById('lbl-y');
+  let yearly  = false;
+
+  window.toggleBilling = function(){
+    yearly = !yearly;
+    track.classList.toggle('on', yearly);
+    track.setAttribute('aria-checked', yearly);
+    lblM.classList.toggle('active', !yearly);
+    lblY.classList.toggle('active', yearly);
+
+    document.querySelectorAll('.m-amt').forEach(el => el.style.display = yearly ? 'none' : '');
+    document.querySelectorAll('.y-amt').forEach(el => el.style.display = yearly ? '' : 'none');
+    document.querySelectorAll('.y-note').forEach(el => el.style.display = yearly ? '' : 'none');
+    document.querySelectorAll('.bill-input').forEach(el => el.value = yearly ? 'yearly' : 'monthly');
+  };
+
+  track.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBilling(); }
+  });
+})();
 </script>
 @endsection
