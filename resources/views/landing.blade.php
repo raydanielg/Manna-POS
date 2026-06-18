@@ -81,6 +81,7 @@
     @include('partials.hero')
     @include('partials.features')
     @include('partials.why-choose-us')
+    @include('partials.pricing')
     @include('partials.testimonials')
     @include('partials.blog')
     @include('partials.footer')
