@@ -587,6 +587,8 @@
     @if($errors->has('business_name') || $errors->has('business_country') || $errors->has('currency'))
         setStep(2);
     @endif
+
+    syncTracker();
 </script>
 </body>
 </html>
