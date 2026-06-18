@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('mannapos:expiry-reminders --days=7')->dailyAt('08:00');
+        $schedule->command('mannapos:expiry-reminders --days=30')->weeklyOn(1, '08:30');
     }
 
     /**

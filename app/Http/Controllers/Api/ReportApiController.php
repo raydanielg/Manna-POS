@@ -67,7 +67,7 @@ class ReportApiController extends Controller {
     public function inventory() {
         $uid = $this->userId();
         $products = Product::with('category:id,name')->where('created_by',$uid)->orderBy('name')->get();
-        $stockValue = $products->sum(fn($p)=>$p->stock_quantity * $p->cost_price);
+        $stockValue = $products->sum(fn($p)=>$p->stock_quantity * $p->purchase_price);
         $lowStock = $products->filter(fn($p)=>$p->stock_quantity <= $p->reorder_level && $p->stock_quantity > 0);
         $outOfStock = $products->filter(fn($p)=>$p->stock_quantity <= 0);
         return response()->json(['total_products'=>$products->count(),'stock_value'=>(float)$stockValue,'low_stock_count'=>$lowStock->count(),'out_of_stock_count'=>$outOfStock->count(),'products'=>$products]);
