@@ -379,8 +379,10 @@
         const pc = document.getElementById('pc').value;
 
         if (!fn || !ln) { toast('warning', 'Please enter your first and last name.'); document.getElementById('fn').focus(); return; }
-        if (!ph) { toast('warning', 'Phone number is required — include country code.'); document.getElementById('ph').focus(); return; }
-        if (!ph.startsWith('+')) { toast('info', 'Phone should include country code, e.g. +255…'); document.getElementById('ph').focus(); return; }
+        const dialCode = document.getElementById('current-code').textContent.trim();
+        const fullPhone = dialCode + ' ' + ph;
+        const digitsOnly = fullPhone.replace(/\D/g, '');
+        if (!ph || digitsOnly.length < dialCode.replace(/\D/g, '').length + 6) { toast('warning', 'Please enter a valid phone number.'); document.getElementById('ph').focus(); return; }
         if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { toast('warning', 'Please enter a valid email address.'); document.getElementById('em').focus(); return; }
         if (pw.length < 8) { toast('warning', 'Password must be at least 8 characters.'); document.getElementById('pw').focus(); return; }
         if (pw !== pc) { toast('error', 'Passwords do not match — please re-enter.'); document.getElementById('pc').focus(); return; }
