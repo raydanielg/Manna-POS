@@ -866,7 +866,7 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="recent-transactions-body">
                         <tr><td colspan="5" class="tbl-empty">No transactions yet.</td></tr>
                     </tbody>
                 </table>
@@ -895,7 +895,7 @@
                             <th>Orders</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="recent-customers-body">
                         <tr><td colspan="4" class="tbl-empty">No customers yet.</td></tr>
                     </tbody>
                 </table>
