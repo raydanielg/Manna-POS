@@ -601,19 +601,26 @@
         {{-- Reports --}}
         <div class="dropdown {{ $isReports ? 'open' : '' }}" id="dropdown-reports">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-reports')" data-tip="Reports">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5h-2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5.697"/><path d="M18 14v4h4"/><path d="M18 11v-4a2 2 0 0 0-2-2h-2"/><path d="M8 3m0 2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0"/><path d="M8 11h4"/><path d="M8 15h3"/></svg>
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M5 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M13 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 17v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 3v4"/></svg>
                 <span class="nav-label">Reports</span>
+                <span style="margin-left:auto;margin-right:0.4rem;font-size:0.6rem;font-weight:700;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:0.15rem 0.5rem;border-radius:9999px;">8</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
+                <div style="font-size:0.6rem;font-weight:700;color:rgba(148,163,184,0.35);text-transform:uppercase;letter-spacing:0.12em;padding:0.5rem 0.6rem 0.2rem;">Financial</div>
                 <a href="{{ route('dashboard.reports.profit-loss-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.profit-loss-report') ? 'active' : '' }}">Profit / Loss Report</a>
-                <a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.purchase-report') ? 'active' : '' }}">Purchase &amp; Sale</a>
-                <a href="{{ route('dashboard.reports.suppliers-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.suppliers-report') ? 'active' : '' }}">Suppliers Report</a>
-                <a href="{{ route('dashboard.reports.supplier-price-comparison') }}" class="child-item {{ request()->routeIs('dashboard.reports.supplier-price-comparison') ? 'active' : '' }}">Supplier Price Comparison</a>
+                <a href="{{ route('dashboard.reports.sales-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.sales-report') ? 'active' : '' }}">Sales Report</a>
+                <a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.purchase-report') ? 'active' : '' }}">Purchase Report</a>
+                <a href="{{ route('dashboard.reports.expense-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expense-report') ? 'active' : '' }}">Expense Report</a>
+
+                <div style="font-size:0.6rem;font-weight:700;color:rgba(148,163,184,0.35);text-transform:uppercase;letter-spacing:0.12em;padding:0.6rem 0.6rem 0.2rem;">Inventory</div>
+                <a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">Stock Report</a>
                 <a href="{{ route('dashboard.reports.expiry-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expiry-report') ? 'active' : '' }}">Expiry Date Report</a>
                 <a href="{{ route('dashboard.reports.product-trends-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.product-trends-report') ? 'active' : '' }}">Product Trends</a>
-                <a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">Stock Report</a>
-                <a href="{{ route('dashboard.reports.expense-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expense-report') ? 'active' : '' }}">Expense Report</a>
+
+                <div style="font-size:0.6rem;font-weight:700;color:rgba(148,163,184,0.35);text-transform:uppercase;letter-spacing:0.12em;padding:0.6rem 0.6rem 0.2rem;">Suppliers</div>
+                <a href="{{ route('dashboard.reports.suppliers-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.suppliers-report') ? 'active' : '' }}">Suppliers Report</a>
+                <a href="{{ route('dashboard.reports.supplier-price-comparison') }}" class="child-item {{ request()->routeIs('dashboard.reports.supplier-price-comparison') ? 'active' : '' }}">Price Comparison</a>
             </div>
         </div>
 
