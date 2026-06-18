@@ -158,8 +158,8 @@ select.form-control{cursor:pointer;}
   box-shadow:0 4px 14px rgba(37,99,235,.35);
 }
 .btn-blue:hover{background:linear-gradient(135deg,#1d4ed8,#1e40af);transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,99,235,.4);}
-.btn-green:active{transform:translateY(0);}
-.btn-green:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-blue:active{transform:translateY(0);}
+.btn-blue:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-ghost{background:#f3f4f6;color:#374151;min-width:80px;}
 .btn-ghost:hover{background:#e5e7eb;}
 
@@ -301,7 +301,7 @@ select.form-control{cursor:pointer;}
         </div>
 
         <div class="btn-row">
-          <button type="button" class="btn btn-green" onclick="next()">
+          <button type="button" class="btn btn-blue" onclick="next()">
             Continue
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
           </button>
@@ -384,7 +384,7 @@ select.form-control{cursor:pointer;}
 
         <div class="btn-row">
           <button type="button" class="btn btn-ghost" onclick="back()">← Back</button>
-          <button type="submit" class="btn btn-green" id="subBtn">
+          <button type="submit" class="btn btn-blue" id="subBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             Create Account &amp; Start Free Trial
           </button>
