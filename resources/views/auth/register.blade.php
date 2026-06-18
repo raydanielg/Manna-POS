@@ -445,21 +445,133 @@
         btn.querySelector('svg').classList.toggle('text-emerald-600', isPassword);
     }
 
-    // ── Submit logic ──────────────────────────────────
-    document.getElementById('regForm').addEventListener('submit', function (e) {
+    // ── Tracker State Helper ──────────────────────────
+    function setTrackerState(trackId, state) {
+        const el = document.getElementById(trackId);
+        if (!el) return;
+        el.querySelector('.icon-check').classList.toggle('hidden', state !== 'done');
+        el.querySelector('.icon-pending').classList.toggle('hidden', state !== 'pending');
+        el.querySelector('.icon-spinner').classList.toggle('hidden', state !== 'loading');
+        el.querySelector('.label-text').className = 'text-sm font-medium transition-colors label-text ' + (state === 'done' ? 'text-emerald-600' : (state === 'loading' ? 'text-emerald-600' : 'text-slate-600'));
+    }
+
+    // Initial tracker sync
+    function syncTracker() {
+        const fn = document.getElementById('fn').value.trim();
+        const ln = document.getElementById('ln').value.trim();
+        const ph = document.getElementById('ph').value.trim();
+        const em = document.getElementById('em').value.trim();
+        const pw = document.getElementById('pw').value;
+        const pc = document.getElementById('pc').value;
+        const bn = document.getElementById('bn').value.trim();
+
+        // Step 1: personal details
+        if (fn && ln && ph && em) {
+            setTrackerState('track-personal', 'done');
+        } else {
+            setTrackerState('track-personal', currentStep === 1 ? 'loading' : 'pending');
+        }
+
+        // Step 2: password
+        if (pw.length >= 8 && pw === pc) {
+            setTrackerState('track-password', 'done');
+        } else if (pw || currentStep === 2) {
+            setTrackerState('track-password', 'loading');
+        } else {
+            setTrackerState('track-password', 'pending');
+        }
+
+        // Step 3: business
+        if (bn) {
+            setTrackerState('track-business', 'done');
+        } else if (currentStep === 2) {
+            setTrackerState('track-business', 'loading');
+        } else {
+            setTrackerState('track-business', 'pending');
+        }
+
+        // Step 4: finalize
+        setTrackerState('track-finalize', 'pending');
+    }
+
+    // Sync on input
+    ['fn','ln','ph','em','pw','pc','bn'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', syncTracker);
+    });
+    document.querySelector('[name="business_country"]')?.addEventListener('change', syncTracker);
+    syncTracker();
+
+    // ── Submit logic (AJAX) ───────────────────────────
+    document.getElementById('regForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
         const bn = document.getElementById('bn').value.trim();
         const country = document.querySelector('[name="business_country"]').value;
         const currency = document.querySelector('[name="currency"]').value;
         const agree = document.getElementById('terms-agree').checked;
 
-        if (!bn) { e.preventDefault(); toast('warning', 'Please enter your business name.'); document.getElementById('bn').focus(); return; }
-        if (!country) { e.preventDefault(); toast('warning', 'Please select your country.'); return; }
-        if (!currency) { e.preventDefault(); toast('warning', 'Please select your currency.'); return; }
-        if (!agree) { e.preventDefault(); toast('warning', 'You must agree to our Terms and Privacy Policy to continue.'); return; }
+        if (!bn) { toast('warning', 'Please enter your business name.'); document.getElementById('bn').focus(); return; }
+        if (!country) { toast('warning', 'Please select your country.'); return; }
+        if (!currency) { toast('warning', 'Please select your currency.'); return; }
+        if (!agree) { toast('warning', 'You must agree to our Terms and Privacy Policy to continue.'); return; }
 
         const btn = document.getElementById('subBtn');
+        const originalHTML = btn.innerHTML;
         btn.disabled = true;
         btn.innerHTML = '<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span> Creating account…';
+
+        // Update tracker to show finalizing
+        setTrackerState('track-personal', 'done');
+        setTrackerState('track-password', 'done');
+        setTrackerState('track-business', 'done');
+        setTrackerState('track-finalize', 'loading');
+
+        const formData = new FormData(this);
+        // prepend dial code to phone if needed
+        const dialCode = document.getElementById('current-code').textContent.trim();
+        const rawPhone = document.getElementById('ph').value.trim();
+        if (!rawPhone.startsWith('+')) {
+            formData.set('phone', dialCode + ' ' + rawPhone);
+        }
+
+        try {
+            const resp = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                redirect: 'manual'
+            });
+
+            // Laravel usually redirects on success (302), or returns JSON
+            if (resp.ok || resp.status === 302 || resp.type === 'opaqueredirect') {
+                setTrackerState('track-finalize', 'done');
+                toast('success', 'Account created successfully! Redirecting…');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1200);
+                return;
+            }
+
+            // Parse error response
+            let data;
+            try { data = await resp.json(); } catch (_) { data = null; }
+
+            if (data && data.errors) {
+                Object.values(data.errors).flat().forEach(msg => toast('error', msg));
+            } else if (data && data.message) {
+                toast('error', data.message);
+            } else {
+                toast('error', 'Something went wrong. Please try again.');
+            }
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+            syncTracker();
+        } catch (err) {
+            toast('error', 'Network error. Please check your connection and try again.');
+            btn.disabled = false;
+            btn.innerHTML = originalHTML;
+            syncTracker();
+        }
     });
 
     // ── Server-side errors → toasts ───────────────────
