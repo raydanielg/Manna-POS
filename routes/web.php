@@ -198,6 +198,14 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     Route::get('/reports/inventory-report', function () { return view('dashboard.reports.inventory-report'); })->name('dashboard.reports.inventory-report');
     Route::get('/reports/expense-report', function () { return view('dashboard.reports.expense-report'); })->name('dashboard.reports.expense-report');
     Route::get('/reports/profit-loss-report', function () { return view('dashboard.reports.profit-loss-report'); })->name('dashboard.reports.profit-loss-report');
+    Route::get('/reports/suppliers-report', [App\Http\Controllers\Dashboard\ReportViewController::class, 'suppliersReport'])->name('dashboard.reports.suppliers-report');
+    Route::get('/reports/supplier-price-comparison', [App\Http\Controllers\Dashboard\ReportViewController::class, 'supplierPriceComparison'])->name('dashboard.reports.supplier-price-comparison');
+    Route::get('/reports/expiry-report', [App\Http\Controllers\Dashboard\ReportViewController::class, 'expiryReport'])->name('dashboard.reports.expiry-report');
+    Route::get('/reports/product-trends-report', [App\Http\Controllers\Dashboard\ReportViewController::class, 'productTrendsReport'])->name('dashboard.reports.product-trends-report');
+
+    // CRM Routes
+    Route::get('/crm/activities', [App\Http\Controllers\Dashboard\CrmController::class, 'activities'])->name('dashboard.crm.activities');
+    Route::get('/crm/dashboard', [App\Http\Controllers\Dashboard\CrmController::class, 'dashboard'])->name('dashboard.crm.dashboard');
 
     // Notification Templates Routes
     Route::get('/notification-templates', function () { return view('dashboard.notification-templates.index'); })->name('dashboard.notification-templates');
