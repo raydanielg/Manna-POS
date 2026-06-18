@@ -308,7 +308,7 @@
 
                 {{-- Terms & Conditions Agreement text --}}
                 <div class="mt-6 flex items-start space-x-2.5">
-                    <input type="checkbox" id="terms-agree" checked class="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-blue-500/20 mt-0.5 cursor-pointer">
+                    <input type="checkbox" id="terms-agree" checked class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500/20 mt-0.5 cursor-pointer">
                     <label for="terms-agree" class="text-xs font-semibold text-slate-500 leading-relaxed cursor-pointer select-none">
                         By signing up, you are creating a MannaPOS account, and you agree to MannaPOS's <a href="/terms" class="text-slate-800 hover:underline font-bold">Terms of Use</a> and <a href="/privacy" class="text-slate-800 hover:underline font-bold">Privacy Policy</a>.
                     </label>
@@ -316,7 +316,7 @@
 
                 {{-- Account login link --}}
                 <div class="mt-8 pt-6 border-t border-slate-100 text-center text-xs font-bold text-slate-500">
-                    Already have an account? <a href="{{ route('login') }}" class="text-emerald-600 hover:underline font-extrabold ml-1">Sign in here</a>
+                    Already have an account? <a href="{{ route('login') }}" class="text-blue-600 hover:underline font-extrabold ml-1">Sign in here</a>
                 </div>
             </div>
         </div>
@@ -355,11 +355,11 @@
             d2.textContent = '2';
             sl.className = 'h-0.5 w-12 bg-slate-200 transition-all duration-300';
         } else {
-            d1.className = 'w-8 h-8 rounded-full border-2 border-blue-600 bg-emerald-600 text-white flex items-center justify-center text-xs font-bold transition-all duration-300';
+            d1.className = 'w-8 h-8 rounded-full border-2 border-blue-600 bg-blue-600 text-white flex items-center justify-center text-xs font-bold transition-all duration-300';
             d1.innerHTML = '&#10003;';
             d2.className = 'w-8 h-8 rounded-full border-2 border-blue-600 bg-blue-50 text-blue-700 flex items-center justify-center text-xs font-bold transition-all duration-300';
             d2.textContent = '2';
-            sl.className = 'h-0.5 w-12 bg-emerald-600 transition-all duration-300';
+            sl.className = 'h-0.5 w-12 bg-blue-600 transition-all duration-300';
         }
     }
 
@@ -444,7 +444,7 @@
         const input = document.getElementById(id);
         const isPassword = input.type === 'password';
         input.type = isPassword ? 'text' : 'password';
-        btn.querySelector('svg').classList.toggle('text-emerald-600', isPassword);
+        btn.querySelector('svg').classList.toggle('text-blue-600', isPassword);
     }
 
     // ── Tracker State Helper ──────────────────────────
@@ -454,7 +454,7 @@
         el.querySelector('.icon-check').classList.toggle('hidden', state !== 'done');
         el.querySelector('.icon-pending').classList.toggle('hidden', state !== 'pending');
         el.querySelector('.icon-spinner').classList.toggle('hidden', state !== 'loading');
-        el.querySelector('.label-text').className = 'text-sm font-medium transition-colors label-text ' + (state === 'done' ? 'text-emerald-600' : (state === 'loading' ? 'text-emerald-600' : 'text-slate-600'));
+        el.querySelector('.label-text').className = 'text-sm font-medium transition-colors label-text ' + (state === 'done' ? 'text-blue-600' : (state === 'loading' ? 'text-blue-600' : 'text-slate-600'));
     }
 
     // Initial tracker sync
