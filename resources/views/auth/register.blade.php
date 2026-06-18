@@ -14,16 +14,16 @@ body{
   font-family:'Inter',sans-serif;
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
-  padding:5rem 1.25rem 3.5rem;
+  padding:1.25rem;
   position:relative;
   overflow-x:hidden;
-  background:#0f172a;
+  background:#064e3b;
 }
 /* ── Background layers ── */
 body::before{
   content:'';position:fixed;inset:0;
   background:
-    linear-gradient(135deg,#0f172a 0%,#1e3a8a 35%,#2563eb 65%,#0f172a 100%);
+    linear-gradient(135deg,#064e3b 0%,#065f46 35%,#047857 65%,#0a3d25 100%);
   z-index:0;
 }
 body::after{
@@ -36,9 +36,9 @@ body::after{
 }
 /* decorative blobs */
 .bg-blob{position:fixed;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:1;}
-.blob1{width:400px;height:400px;background:rgba(59,130,246,0.18);top:-120px;right:-100px;}
-.blob2{width:350px;height:350px;background:rgba(37,99,235,0.12);bottom:-100px;left:-80px;}
-.blob3{width:200px;height:200px;background:rgba(96,165,250,0.10);top:40%;left:5%;}
+.blob1{width:400px;height:400px;background:rgba(16,185,129,0.15);top:-120px;right:-100px;}
+.blob2{width:350px;height:350px;background:rgba(5,150,105,0.1);bottom:-100px;left:-80px;}
+.blob3{width:200px;height:200px;background:rgba(167,243,208,0.08);top:40%;left:5%;}
 
 /* ── Card ── */
 .card{
@@ -52,7 +52,7 @@ body::after{
 
 /* ── Card header stripe ── */
 .card-head{
-  background:linear-gradient(135deg,#1e3a8a,#2563eb);
+  background:linear-gradient(135deg,#065f46,#047857);
   padding:1.5rem 2rem 1.375rem;
   display:flex;align-items:center;gap:.875rem;
 }
@@ -88,12 +88,12 @@ body::after{
   border:2px solid #d1d5db;color:#9ca3af;background:#fff;
   transition:all .25s ease;flex-shrink:0;
 }
-.step-dot.active{background:#2563eb;border-color:#2563eb;color:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.20);}
-.step-dot.done{background:#2563eb;border-color:#2563eb;color:#fff;}
+.step-dot.active{background:#16a34a;border-color:#16a34a;color:#fff;box-shadow:0 0 0 3px rgba(22,163,74,.18);}
+.step-dot.done{background:#16a34a;border-color:#16a34a;color:#fff;}
 .step-name{font-size:.72rem;font-weight:600;color:#9ca3af;transition:color .25s;}
-.step-name.active,.step-name.done{color:#2563eb;}
+.step-name.active,.step-name.done{color:#16a34a;}
 .step-line{flex:1;height:2px;background:#e5e7eb;margin:0 .5rem;transition:background .25s;}
-.step-line.done{background:#2563eb;}
+.step-line.done{background:#16a34a;}
 
 /* ── Form ── */
 .step-head{margin-bottom:1.25rem;}
@@ -121,8 +121,8 @@ body::after{
   appearance:none;
 }
 .form-control:focus{
-  border-color:#2563eb;background:#fff;
-  box-shadow:0 0 0 3px rgba(37,99,235,0.12);
+  border-color:#16a34a;background:#fff;
+  box-shadow:0 0 0 3px rgba(22,163,74,0.1);
 }
 .form-control.err{border-color:#ef4444;background:#fff;}
 select.form-control{cursor:pointer;}
@@ -152,20 +152,20 @@ select.form-control{cursor:pointer;}
   transition:transform .15s,box-shadow .15s,background .15s;
   display:flex;align-items:center;justify-content:center;gap:.4rem;
 }
-.btn-blue{
+.btn-green{
   flex:1;
-  background:linear-gradient(135deg,#2563eb,#1e3a8a);color:#fff;
-  box-shadow:0 4px 14px rgba(37,99,235,.35);
+  background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;
+  box-shadow:0 4px 14px rgba(22,163,74,.35);
 }
-.btn-blue:hover{background:linear-gradient(135deg,#1d4ed8,#1e40af);transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,99,235,.4);}
-.btn-blue:active{transform:translateY(0);}
-.btn-blue:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-green:hover{background:linear-gradient(135deg,#15803d,#166534);transform:translateY(-1px);box-shadow:0 6px 18px rgba(22,163,74,.4);}
+.btn-green:active{transform:translateY(0);}
+.btn-green:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-ghost{background:#f3f4f6;color:#374151;min-width:80px;}
 .btn-ghost:hover{background:#e5e7eb;}
 
 /* ── Login link ── */
 .login-link{text-align:center;margin-top:1.25rem;font-size:.8rem;color:#6b7280;}
-.login-link a{color:#2563eb;font-weight:600;text-decoration:none;}
+.login-link a{color:#16a34a;font-weight:600;text-decoration:none;}
 .login-link a:hover{text-decoration:underline;}
 
 /* ── Step panels ── */
@@ -179,80 +179,7 @@ select.form-control{cursor:pointer;}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .spin{animation:spin .8s linear infinite;display:inline-block;}
 
-/* ── Header ── */
-.top-header{
-  position:fixed;top:0;left:0;right:0;z-index:10;
-  background:rgba(15,23,42,0.85);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(59,130,246,0.15);
-}
-.top-header-inner{
-  max-width:1200px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.6rem 1.25rem;
-}
-.top-header .logo{
-  display:flex;align-items:center;gap:.6rem;
-  text-decoration:none;
-}
-.top-header .logo-icon{
-  width:34px;height:34px;border-radius:8px;
-  background:linear-gradient(135deg,#2563eb,#1e3a8a);
-  display:flex;align-items:center;justify-content:center;
-}
-.top-header .logo-icon svg{width:18px;height:18px;color:#fff;}
-.top-header .logo-text{font-size:1.05rem;font-weight:800;color:#fff;letter-spacing:-.3px;}
-.top-header .logo-sub{font-size:.65rem;color:rgba(255,255,255,.55);font-weight:500;}
-.top-header .nav-links{display:flex;align-items:center;gap:1.5rem;}
-.top-header .nav-links a{font-size:.8rem;color:rgba(255,255,255,.7);text-decoration:none;font-weight:500;transition:color .2s;}
-.top-header .nav-links a:hover{color:#fff;}
-.top-header .nav-links .btn-sm{
-  padding:.4rem 1rem;border-radius:6px;
-  background:linear-gradient(135deg,#2563eb,#1e3a8a);color:#fff;
-  font-size:.78rem;font-weight:600;text-decoration:none;
-  box-shadow:0 2px 8px rgba(37,99,235,.3);
-}
-
-/* ── Side stickers ── */
-.side-sticker{
-  position:fixed;z-index:2;pointer-events:none;
-  display:flex;flex-direction:column;align-items:center;gap:1rem;
-}
-.side-sticker.left{left:2rem;top:50%;transform:translateY(-50%);}
-.side-sticker.right{right:2rem;top:50%;transform:translateY(-50%);}
-.side-sticker img{
-  width:160px;height:auto;border-radius:16px;
-  box-shadow:0 12px 40px rgba(0,0,0,.25);
-  opacity:.9;transition:opacity .3s;
-}
-.side-sticker .sticker-tag{
-  background:rgba(37,99,235,.15);border:1px solid rgba(59,130,246,.25);
-  color:#60a5fa;padding:.35rem .85rem;border-radius:50px;
-  font-size:.7rem;font-weight:700;letter-spacing:.3px;
-  backdrop-filter:blur(4px);
-}
-
-/* ── Footer ── */
-.page-footer{
-  position:fixed;bottom:0;left:0;right:0;z-index:10;
-  background:rgba(15,23,42,0.85);
-  backdrop-filter:blur(12px);
-  border-top:1px solid rgba(59,130,246,0.15);
-}
-.page-footer-inner{
-  max-width:1200px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.5rem 1.25rem;
-}
-.page-footer .footer-left{font-size:.7rem;color:rgba(255,255,255,.45);}
-.page-footer .footer-links{display:flex;gap:1.2rem;}
-.page-footer .footer-links a{font-size:.7rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
-.page-footer .footer-links a:hover{color:#60a5fa;}
-
 /* ── Mobile ── */
-@media(max-width:1024px){
-  .side-sticker{display:none;}
-}
 @media(max-width:480px){
   .card-body{padding:1.25rem 1.25rem 1.5rem;}
   .card-head{padding:1.25rem 1.25rem 1.125rem;}
@@ -262,39 +189,6 @@ select.form-control{cursor:pointer;}
 </style>
 </head>
 <body>
-
-<!-- ── Top Header ── -->
-<header class="top-header">
-  <div class="top-header-inner">
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-      </div>
-      <div>
-        <div class="logo-text">MannaPOS</div>
-        <div class="logo-sub">Business Management System</div>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/#features">Features</a>
-      <a href="/#pricing">Pricing</a>
-      <a href="{{ route('login') }}">Sign In</a>
-      <a href="{{ route('register') }}" class="btn-sm">Get Started</a>
-    </div>
-  </div>
-</header>
-
-<!-- ── Side stickers ── -->
-<div class="side-sticker left">
-  <img src="{{ asset('image.png') }}" alt="MannaPOS Sticker">
-  <span class="sticker-tag">SMART POS</span>
-</div>
-<div class="side-sticker right">
-  <img src="{{ asset('image.png') }}" alt="MannaPOS Sticker">
-  <span class="sticker-tag">GROW FAST</span>
-</div>
-
 <div class="bg-blob blob1"></div>
 <div class="bg-blob blob2"></div>
 <div class="bg-blob blob3"></div>
@@ -407,7 +301,7 @@ select.form-control{cursor:pointer;}
         </div>
 
         <div class="btn-row">
-          <button type="button" class="btn btn-blue" onclick="next()">
+          <button type="button" class="btn btn-green" onclick="next()">
             Continue
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
           </button>
@@ -490,7 +384,7 @@ select.form-control{cursor:pointer;}
 
         <div class="btn-row">
           <button type="button" class="btn btn-ghost" onclick="back()">← Back</button>
-          <button type="submit" class="btn btn-blue" id="subBtn">
+          <button type="submit" class="btn btn-green" id="subBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             Create Account &amp; Start Free Trial
           </button>
@@ -575,7 +469,7 @@ function checkStr(el) {
   const lbl = document.getElementById('sLbl');
   let s = 0;
   if (v.length >= 8) s++; if (/[A-Z]/.test(v)) s++; if (/[0-9]/.test(v)) s++; if (/[^A-Za-z0-9]/.test(v)) s++;
-  const colors = ['', '#ef4444', '#f59e0b', '#2563eb', '#2563eb'];
+  const colors = ['', '#ef4444', '#f59e0b', '#16a34a', '#16a34a'];
   const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
   fill.style.width = (s * 25) + '%'; fill.style.background = colors[s] || '';
   lbl.textContent = v.length ? labels[s] || 'Strong' : '';
@@ -607,18 +501,5 @@ document.getElementById('regForm').addEventListener('submit', function (e) {
   setStep(2);
 @endif
 </script>
-
-<!-- ── Footer ── -->
-<footer class="page-footer">
-  <div class="page-footer-inner">
-    <div class="footer-left">&copy; {{ date('Y') }} MannaPOS. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
-      <a href="/help">Help</a>
-    </div>
-  </div>
-</footer>
-
 </body>
 </html>
