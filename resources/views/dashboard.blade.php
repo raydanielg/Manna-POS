@@ -916,36 +916,19 @@
             <div class="table-card">
                 <div class="table-head flex items-center justify-between">
                     <div class="table-title">Low Stock Alerts</div>
-                    <span class="text-xs font-bold text-red-500 bg-red-50 px-2.5 py-1 rounded-full">3 items</span>
+                    <span class="text-xs font-bold text-red-500 bg-red-50 px-2.5 py-1 rounded-full" id="low-stock-count">0 items</span>
                 </div>
                 <table class="tbl">
                     <thead>
                         <tr>
                             <th>Product</th>
-                            <th>Category</th>
+                            <th>SKU</th>
                             <th>Stock</th>
                             <th>Min Level</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="font-medium">Coca Cola 500ml</td>
-                            <td>Beverages</td>
-                            <td><span class="text-red-600 font-bold">2</span></td>
-                            <td class="text-slate-400">10</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium">Bread Loaf</td>
-                            <td>Bakery</td>
-                            <td><span class="text-orange-500 font-bold">4</span></td>
-                            <td class="text-slate-400">10</td>
-                        </tr>
-                        <tr>
-                            <td class="font-medium">Sugar 1kg</td>
-                            <td>Groceries</td>
-                            <td><span class="text-red-600 font-bold">1</span></td>
-                            <td class="text-slate-400">5</td>
-                        </tr>
+                    <tbody id="low-stock-body">
+                        <tr><td colspan="4" class="tbl-empty">No low stock alerts.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1123,7 +1106,7 @@ document.addEventListener('click', function(event) {
         });
     } else {
         document.getElementById('donut-no-data').style.display = 'none';
-        new Chart(ctx, {
+        window.donutChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['Cash','Mobile Money','Card'],
