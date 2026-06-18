@@ -93,7 +93,9 @@ class PlanManagementController extends Controller
 
     public function indexSubscriptions(Request $request)
     {
+        $bizId = $this->currentBusinessId();
         $q = UserSubscription::with(['user:id,name,email', 'plan:id,name,badge_color'])
+            ->whereHas('user', fn($u) => $u->where('id', $bizId)->orWhere('owner_id', $bizId))
             ->latest();
 
         if ($s = $request->search) {
@@ -164,12 +166,13 @@ class PlanManagementController extends Controller
 
     public function statsPlans()
     {
+        $bizId = $this->currentBusinessId();
         return response()->json([
             'total_plans'        => SubscriptionPlan::count(),
             'active_plans'       => SubscriptionPlan::where('is_active', true)->count(),
-            'total_subscribers'  => UserSubscription::count(),
-            'active_subscribers' => UserSubscription::where('status', 'active')->count(),
-            'monthly_revenue'    => UserSubscription::where('status', 'active')
+            'total_subscribers'  => UserSubscription::whereHas('user', fn($u) => $u->where('id', $bizId)->orWhere('owner_id', $bizId))->count(),
+            'active_subscribers' => UserSubscription::whereHas('user', fn($u) => $u->where('id', $bizId)->orWhere('owner_id', $bizId))->where('status', 'active')->count(),
+            'monthly_revenue'    => UserSubscription::whereHas('user', fn($u) => $u->where('id', $bizId)->orWhere('owner_id', $bizId))->where('status', 'active')
                 ->where('billing_cycle', 'monthly')
                 ->join('subscription_plans', 'subscription_plans.id', '=', 'user_subscriptions.subscription_plan_id')
                 ->sum('subscription_plans.price_monthly'),
