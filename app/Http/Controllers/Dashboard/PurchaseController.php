@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class PurchaseController extends Controller {
     public function index(Request $req) {
-        $q = Purchase::with("supplier");
+        $q = Purchase::with("supplier")->forCurrentUser($this->currentBusinessId());
         if ($req->search) $q->where("reference","like","%{$req->search}%");
         if ($req->status) $q->where("status",$req->status);
         if ($req->payment_status) $q->where("payment_status",$req->payment_status);
@@ -20,6 +20,7 @@ class PurchaseController extends Controller {
     public function store(Request $req) {
         $data = $req->validate(["supplier_id"=>"nullable|exists:suppliers,id","purchase_date"=>"required|date","subtotal"=>"required|numeric|min:0","discount"=>"nullable|numeric|min:0","tax"=>"nullable|numeric|min:0","shipping"=>"nullable|numeric|min:0","total"=>"required|numeric|min:0","payment_status"=>"in:paid,partial,unpaid","status"=>"in:received,pending,cancelled,return","notes"=>"nullable|string","items"=>"required|array|min:1","items.*.product_id"=>"nullable|exists:products,id","items.*.product_name"=>"required|string","items.*.quantity"=>"required|numeric|min:0.0001","items.*.unit_cost"=>"required|numeric|min:0","items.*.total"=>"required|numeric|min:0"]);
         $data["reference"] = "PO-".strtoupper(Str::random(8));
+        $data["created_by"] = $this->currentBusinessId();
         $items = $data["items"];
         unset($data["items"]);
         $purchase = Purchase::create($data);

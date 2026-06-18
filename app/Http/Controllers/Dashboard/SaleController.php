@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class SaleController extends Controller {
     public function index(Request $req) {
-        $q = Sale::with("customer");
+        $q = Sale::with("customer")->forCurrentUser($this->currentBusinessId());
         if ($req->search) $q->where("reference","like","%{$req->search}%");
         if ($req->status) $q->where("status",$req->status);
         if ($req->payment_status) $q->where("payment_status",$req->payment_status);
@@ -23,6 +23,7 @@ class SaleController extends Controller {
         $total = $data["total"];
         $data["payment_status"] = $paid >= $total ? "paid" : ($paid > 0 ? "partial" : "unpaid");
         $data["reference"] = "INV-".strtoupper(Str::random(8));
+        $data["created_by"] = $this->currentBusinessId();
         $items = $data["items"]; unset($data["items"]);
         $sale = Sale::create($data);
         foreach ($items as $item) $sale->items()->create($item);
