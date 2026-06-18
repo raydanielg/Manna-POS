@@ -435,6 +435,14 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
         }
         return response()->json(['success' => true, 'message' => 'Settings saved successfully']);
     });
+
+    // Dashboard Stats
+    Route::get('stats', [DashboardController::class, 'stats']);
+    Route::get('crm/dashboard', [DashboardController::class, 'crmStats']);
+
+    // CRM Activities
+    Route::get('crm-activities', [CrmActivityController::class, 'index']);
+    Route::post('crm-activities', [CrmActivityController::class, 'store']);
 });
 
 // ─── Admin API Routes ──────────────────────────────────────────────────────
