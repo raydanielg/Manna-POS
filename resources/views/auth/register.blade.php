@@ -340,6 +340,32 @@
         }
     }
 
+    // ── Phone Country Dropdown ────────────────────────
+    function togglePhoneDropdown() {
+        const dd = document.getElementById('dropdown-phone');
+        dd.classList.toggle('hidden');
+    }
+    function selectCountry(code, dialCode, flagUrl) {
+        document.getElementById('current-flag').src = flagUrl;
+        document.getElementById('current-code').textContent = dialCode;
+        document.getElementById('dropdown-phone').classList.add('hidden');
+        // Prepend dial code to phone input if empty or starts with old code
+        const phInput = document.getElementById('ph');
+        const raw = phInput.value.trim().replace(/\D/g, '');
+        if (!raw) {
+            phInput.value = dialCode + ' ';
+        }
+        phInput.focus();
+    }
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const wrapper = document.getElementById('phone-wrapper');
+        const dd = document.getElementById('dropdown-phone');
+        if (wrapper && !wrapper.contains(e.target)) {
+            dd.classList.add('hidden');
+        }
+    });
+
     function goToStepOne() {
         setStep(1);
     }
