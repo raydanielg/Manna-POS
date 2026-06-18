@@ -169,7 +169,7 @@
         .sign-out-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
 
         /* ── Main ─────────────────────────────────────── */
-        .main-wrap { margin-left: 240px; min-height: 100vh; display: flex; flex-direction: column; }
+        .main-wrap { margin-left: 260px; min-height: 100vh; display: flex; flex-direction: column; }
         .top-header {
             background: #fff; border-bottom: 1px solid #e9edf5;
             height: 60px; display: flex; align-items: center;
@@ -408,8 +408,8 @@
                 <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-5 h-5 object-contain brightness-0 invert">
             </div>
             <div class="min-w-0 logo-text">
-                <div class="text-[0.95rem] font-extrabold text-slate-900 leading-none tracking-tight truncate">{{ config('app.name','MannaPOS') }}</div>
-                <div class="text-[0.58rem] font-bold tracking-[0.16em] uppercase text-brand-500 mt-0.5">Admin Panel</div>
+                <div class="text-[0.95rem] font-extrabold text-white leading-none tracking-tight truncate">{{ config('app.name','MannaPOS') }}</div>
+                <div class="text-[0.58rem] font-bold tracking-[0.16em] uppercase text-blue-300 mt-0.5">Admin Panel</div>
             </div>
         </div>
     </div>
