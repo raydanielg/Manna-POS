@@ -92,36 +92,33 @@ class DashboardController extends Controller
     {
         $bizId = $this->currentBusinessId();
         $today = Carbon::today();
-        $startOfMonth = Carbon::now()->startOfMonth();
 
-        $totalCustomers = Customer::forCurrentUser($bizId)->count();
-        $newCustomers = Customer::forCurrentUser($bizId)->whereBetween('created_at', [$startOfMonth, Carbon::now()->endOfMonth()])->count();
-        $activeCustomers = Customer::forCurrentUser($bizId)->where('status', 'active')->count();
         $totalActivities = \App\Models\CrmActivity::forCurrentUser($bizId)->count();
-        $pendingFollowUps = \App\Models\CrmActivity::forCurrentUser($bizId)->where('status', 'pending')->whereDate('follow_up_date', '>=', $today)->count();
-        $overdueFollowUps = \App\Models\CrmActivity::forCurrentUser($bizId)->where('status', 'pending')->whereDate('follow_up_date', '<', $today)->count();
+        $pendingFollowups = \App\Models\CrmActivity::forCurrentUser($bizId)->where('status', 'pending')->whereDate('follow_up_date', '>=', $today)->count();
+        $overdueTasks = \App\Models\CrmActivity::forCurrentUser($bizId)->where('status', 'pending')->whereDate('follow_up_date', '<', $today)->count();
+        $recentInteractions = \App\Models\CrmActivity::forCurrentUser($bizId)->whereDate('created_at', '>=', $today->copy()->subDays(7))->count();
 
-        $recentActivities = \App\Models\CrmActivity::forCurrentUser($bizId)
-            ->with('customer:id,name')
-            ->latest()
+        $upcomingFollowups = \App\Models\CrmActivity::forCurrentUser($bizId)
+            ->with('customer:id,name,phone')
+            ->where('status', 'pending')
+            ->whereNotNull('follow_up_date')
+            ->orderBy('follow_up_date')
             ->take(10)
             ->get();
 
-        $activityByType = \App\Models\CrmActivity::forCurrentUser($bizId)
+        $activitiesByType = \App\Models\CrmActivity::forCurrentUser($bizId)
             ->select('type', DB::raw('COUNT(*) as count'))
             ->groupBy('type')
-            ->get()
-            ->map(fn($row) => ['type' => $row->type, 'count' => (int) $row->count]);
+            ->pluck('count', 'type')
+            ->toArray();
 
         return response()->json([
-            'total_customers' => $totalCustomers,
-            'new_customers' => $newCustomers,
-            'active_customers' => $activeCustomers,
             'total_activities' => $totalActivities,
-            'pending_follow_ups' => $pendingFollowUps,
-            'overdue_follow_ups' => $overdueFollowUps,
-            'recent_activities' => $recentActivities,
-            'activity_by_type' => $activityByType,
+            'pending_followups' => $pendingFollowups,
+            'overdue_tasks' => $overdueTasks,
+            'recent_interactions' => $recentInteractions,
+            'upcoming_followups' => $upcomingFollowups,
+            'activities_by_type' => $activitiesByType,
         ]);
     }
 }
