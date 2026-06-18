@@ -469,7 +469,7 @@ function checkStr(el) {
   const lbl = document.getElementById('sLbl');
   let s = 0;
   if (v.length >= 8) s++; if (/[A-Z]/.test(v)) s++; if (/[0-9]/.test(v)) s++; if (/[^A-Za-z0-9]/.test(v)) s++;
-  const colors = ['', '#ef4444', '#f59e0b', '#16a34a', '#16a34a'];
+  const colors = ['', '#ef4444', '#f59e0b', '#2563eb', '#2563eb'];
   const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
   fill.style.width = (s * 25) + '%'; fill.style.background = colors[s] || '';
   lbl.textContent = v.length ? labels[s] || 'Strong' : '';
