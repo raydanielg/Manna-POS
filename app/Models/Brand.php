@@ -2,6 +2,10 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 class Brand extends Model {
-    protected $fillable = ['name','description','status'];
+    protected $fillable = ['created_by','name','description','status'];
     public function products() { return $this->hasMany(Product::class); }
+    public function scopeForCurrentUser($query, $userId = null) {
+        $uid = $userId ?? auth()->id();
+        return $query->where('created_by', $uid);
+    }
 }
