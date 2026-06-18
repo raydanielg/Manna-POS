@@ -447,6 +447,20 @@
             </div>
         </div>
 
+        {{-- CRM --}}
+        @php $isCrm = request()->routeIs('dashboard.crm.*'); @endphp
+        <div class="dropdown {{ $isCrm ? 'open' : '' }}" id="dropdown-crm">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-crm')" data-tip="CRM">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h-11a3 3 0 0 1 -3-3v-11a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3z"/><path d="M9 9l2 2l4-4"/></svg>
+                <span class="nav-label">CRM</span>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="{{ route('dashboard.crm.activities') }}" class="child-item {{ request()->routeIs('dashboard.crm.activities') ? 'active' : '' }}">Activities</a>
+                <a href="{{ route('dashboard.crm.dashboard') }}" class="child-item {{ request()->routeIs('dashboard.crm.dashboard') ? 'active' : '' }}">CRM Dashboard</a>
+            </div>
+        </div>
+
         {{-- Products --}}
         <div class="dropdown {{ $isInventory ? 'open' : '' }}" id="dropdown-products">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-products')" data-tip="Products">
