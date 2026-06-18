@@ -323,7 +323,7 @@
         .confirm-actions { display:flex; gap:0.75rem; justify-content:center; }
 
         /* ── Responsive ─────────────────────────────── */
-        @media (max-width:1280px) { .sidebar { width:220px; min-width:220px; } .main-wrap { margin-left:220px; } }
+        @media (max-width:1280px) { .sidebar { width:240px; min-width:240px; } .main-wrap { margin-left:240px; } }
         @media (max-width:768px)  { .sidebar { transform:translateX(-100%); transition:transform 0.3s; } .sidebar.open { transform:translateX(0); } .main-wrap { margin-left:0; } .form-row { grid-template-columns:1fr; } }
 
         /* ── Sidebar collapse ───────────────────── */
