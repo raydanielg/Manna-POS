@@ -249,7 +249,7 @@
         .btn-icon { width:32px; height:32px; padding:0; border-radius:8px; justify-content:center; }
         .btn-edit   { background:#eff6ff; color:#2563eb; } .btn-edit:hover   { background:#dbeafe; }
         .btn-delete { background:#eff6ff; color:#2563eb; } .btn-delete:hover { background:#dbeafe; }
-        .btn-view   { background:#f0fdf4; color:#16a34a; } .btn-view:hover   { background:#dcfce7; }
+        .btn-view   { background:#eff6ff; color:#2563eb; } .btn-view:hover   { background:#dbeafe; }
 
         /* ── Search bar ─────────────────────────────── */
         .search-wrap { position:relative; }
