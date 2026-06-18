@@ -1,3 +1,7 @@
+@php
+    $plans = $plans ?? \App\Models\SubscriptionPlan::where('is_active', true)->orderBy('sort_order')->get();
+@endphp
+
 <section id="pricing" class="py-24 bg-slate-50 relative overflow-hidden">
     {{-- Decorative Background Elements --}}
     <div class="absolute inset-0 pointer-events-none opacity-40">
