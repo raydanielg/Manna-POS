@@ -664,8 +664,8 @@
 
                 <div class="auth-brand-bottom">
                     <div class="auth-brand-links">
-                        <a href="#">Terms</a>
-                        <a href="#">Privacy</a>
+                        <a href="/terms">Terms</a>
+                        <a href="/privacy">Privacy</a>
                         <a href="#">Support</a>
                     </div>
                     <div class="auth-brand-copy">
