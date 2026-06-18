@@ -41,11 +41,7 @@
     <div class="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 xl:p-20 bg-slate-100/40 border-r border-slate-200">
         {{-- Header Logo --}}
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-gradient-to-tr from-emerald-600 to-green-500 rounded-xl flex items-center justify-center shadow-md shadow-emerald-500/20">
-                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-            </div>
+            <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="MannaPOS Logo" class="w-10 h-10 object-contain rounded-xl shadow-md shadow-emerald-500/20">
             <span class="text-2xl font-extrabold tracking-tight text-slate-950">MannaPOS</span>
         </div>
 
@@ -101,11 +97,7 @@
         
         {{-- Mobile Logo Header --}}
         <div class="flex lg:hidden items-center space-x-2.5 mb-8">
-            <div class="w-8 h-8 bg-gradient-to-tr from-emerald-600 to-green-500 rounded-lg flex items-center justify-center shadow-md">
-                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-            </div>
+            <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="MannaPOS Logo" class="w-8 h-8 object-contain rounded-lg shadow-md">
             <span class="text-xl font-black text-slate-950">MannaPOS</span>
         </div>
 
