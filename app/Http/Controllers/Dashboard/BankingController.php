@@ -40,7 +40,7 @@ class BankingController extends Controller
             'currency' => 'nullable|string|max:10',
             'description' => 'nullable|string',
         ]);
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = $this->currentBusinessId();
         $data['current_balance'] = $data['opening_balance'] ?? 0;
         BankAccount::create($data);
         return redirect()->route('dashboard.banking.accounts')->with('success','Account created successfully');
@@ -135,7 +135,7 @@ class BankingController extends Controller
 
     private function authorizeAccount(BankAccount $account)
     {
-        if ($account->user_id !== auth()->id()) {
+        if ($account->user_id !== $this->currentBusinessId()) {
             abort(403);
         }
     }
