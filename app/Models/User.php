@@ -52,4 +52,14 @@ class User extends Authenticatable {
     public function owner() {
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    /**
+     * Return the business owner ID for data scoping.
+     * If this user is staff (has owner_id), return owner's ID.
+     * Otherwise return own ID.
+     */
+    public function businessId(): int
+    {
+        return $this->owner_id ?? $this->id;
+    }
 }
