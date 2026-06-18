@@ -20,7 +20,7 @@ class CreateBankTransactionsTable extends Migration
             $table->string('category')->nullable();
             $table->string('contact_name')->nullable();
             $table->string('contact_type')->nullable();
-            $table->morphs('transactionable')->nullable();
+            $table->nullableMorphs('transactionable');
             $table->date('transaction_date');
             $table->timestamps();
 
