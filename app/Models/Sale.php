@@ -6,4 +6,8 @@ class Sale extends Model {
     protected $casts = ['sale_date' => 'date'];
     public function customer() { return $this->belongsTo(Customer::class); }
     public function items()    { return $this->hasMany(SaleItem::class); }
+    public function scopeForCurrentUser($query, $userId = null) {
+        $uid = $userId ?? auth()->id();
+        return $query->where('created_by', $uid);
+    }
 }
