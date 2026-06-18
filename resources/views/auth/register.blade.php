@@ -179,7 +179,80 @@ select.form-control{cursor:pointer;}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .spin{animation:spin .8s linear infinite;display:inline-block;}
 
+/* ── Header ── */
+.top-header{
+  position:fixed;top:0;left:0;right:0;z-index:10;
+  background:rgba(15,23,42,0.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(59,130,246,0.15);
+}
+.top-header-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.6rem 1.25rem;
+}
+.top-header .logo{
+  display:flex;align-items:center;gap:.6rem;
+  text-decoration:none;
+}
+.top-header .logo-icon{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,#2563eb,#1e3a8a);
+  display:flex;align-items:center;justify-content:center;
+}
+.top-header .logo-icon svg{width:18px;height:18px;color:#fff;}
+.top-header .logo-text{font-size:1.05rem;font-weight:800;color:#fff;letter-spacing:-.3px;}
+.top-header .logo-sub{font-size:.65rem;color:rgba(255,255,255,.55);font-weight:500;}
+.top-header .nav-links{display:flex;align-items:center;gap:1.5rem;}
+.top-header .nav-links a{font-size:.8rem;color:rgba(255,255,255,.7);text-decoration:none;font-weight:500;transition:color .2s;}
+.top-header .nav-links a:hover{color:#fff;}
+.top-header .nav-links .btn-sm{
+  padding:.4rem 1rem;border-radius:6px;
+  background:linear-gradient(135deg,#2563eb,#1e3a8a);color:#fff;
+  font-size:.78rem;font-weight:600;text-decoration:none;
+  box-shadow:0 2px 8px rgba(37,99,235,.3);
+}
+
+/* ── Side stickers ── */
+.side-sticker{
+  position:fixed;z-index:2;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;gap:1rem;
+}
+.side-sticker.left{left:2rem;top:50%;transform:translateY(-50%);}
+.side-sticker.right{right:2rem;top:50%;transform:translateY(-50%);}
+.side-sticker img{
+  width:160px;height:auto;border-radius:16px;
+  box-shadow:0 12px 40px rgba(0,0,0,.25);
+  opacity:.9;transition:opacity .3s;
+}
+.side-sticker .sticker-tag{
+  background:rgba(37,99,235,.15);border:1px solid rgba(59,130,246,.25);
+  color:#60a5fa;padding:.35rem .85rem;border-radius:50px;
+  font-size:.7rem;font-weight:700;letter-spacing:.3px;
+  backdrop-filter:blur(4px);
+}
+
+/* ── Footer ── */
+.page-footer{
+  position:fixed;bottom:0;left:0;right:0;z-index:10;
+  background:rgba(15,23,42,0.85);
+  backdrop-filter:blur(12px);
+  border-top:1px solid rgba(59,130,246,0.15);
+}
+.page-footer-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.5rem 1.25rem;
+}
+.page-footer .footer-left{font-size:.7rem;color:rgba(255,255,255,.45);}
+.page-footer .footer-links{display:flex;gap:1.2rem;}
+.page-footer .footer-links a{font-size:.7rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.page-footer .footer-links a:hover{color:#60a5fa;}
+
 /* ── Mobile ── */
+@media(max-width:1024px){
+  .side-sticker{display:none;}
+}
 @media(max-width:480px){
   .card-body{padding:1.25rem 1.25rem 1.5rem;}
   .card-head{padding:1.25rem 1.25rem 1.125rem;}
@@ -189,6 +262,39 @@ select.form-control{cursor:pointer;}
 </style>
 </head>
 <body>
+
+<!-- ── Top Header ── -->
+<header class="top-header">
+  <div class="top-header-inner">
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">MannaPOS</div>
+        <div class="logo-sub">Business Management System</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/#features">Features</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="{{ route('login') }}">Sign In</a>
+      <a href="{{ route('register') }}" class="btn-sm">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── Side stickers ── -->
+<div class="side-sticker left">
+  <img src="{{ asset('image.png') }}" alt="MannaPOS Sticker">
+  <span class="sticker-tag">SMART POS</span>
+</div>
+<div class="side-sticker right">
+  <img src="{{ asset('image.png') }}" alt="MannaPOS Sticker">
+  <span class="sticker-tag">GROW FAST</span>
+</div>
+
 <div class="bg-blob blob1"></div>
 <div class="bg-blob blob2"></div>
 <div class="bg-blob blob3"></div>
