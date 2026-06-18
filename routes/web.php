@@ -216,6 +216,15 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     // Plan Management Routes
     Route::get('/plan-management/plans', function () { return view('dashboard.plan-management.plans'); })->name('dashboard.plan-management.plans');
     Route::get('/plan-management/subscriptions', function () { return view('dashboard.plan-management.subscriptions'); })->name('dashboard.plan-management.subscriptions');
+
+    // Banking / Cashflow Routes
+    Route::get('/banking', [\App\Http\Controllers\Dashboard\BankingController::class, 'index'])->name('dashboard.banking');
+    Route::get('/banking/accounts', [\App\Http\Controllers\Dashboard\BankingController::class, 'accounts'])->name('dashboard.banking.accounts');
+    Route::post('/banking/accounts', [\App\Http\Controllers\Dashboard\BankingController::class, 'storeAccount'])->name('dashboard.banking.accounts.store');
+    Route::put('/banking/accounts/{account}', [\App\Http\Controllers\Dashboard\BankingController::class, 'updateAccount'])->name('dashboard.banking.accounts.update');
+    Route::delete('/banking/accounts/{account}', [\App\Http\Controllers\Dashboard\BankingController::class, 'destroyAccount'])->name('dashboard.banking.accounts.destroy');
+    Route::get('/banking/transactions', [\App\Http\Controllers\Dashboard\BankingController::class, 'transactions'])->name('dashboard.banking.transactions');
+    Route::post('/banking/transactions', [\App\Http\Controllers\Dashboard\BankingController::class, 'storeTransaction'])->name('dashboard.banking.transactions.store');
 });
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────
