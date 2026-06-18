@@ -7,4 +7,8 @@ class Product extends Model {
     public function category() { return $this->belongsTo(ProductCategory::class,'category_id'); }
     public function unit()     { return $this->belongsTo(Unit::class); }
     public function taxRate()  { return $this->belongsTo(TaxRate::class); }
+    public function scopeForCurrentUser($query, $userId = null) {
+        $uid = $userId ?? auth()->id();
+        return $query->where('created_by', $uid);
+    }
 }
