@@ -1,8 +1,7 @@
 @extends('layouts.dashboard')
 @section('page_title','CRM Dashboard')
 @section('content')
-<div class="dash-content">
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;">
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;">
     <div style="background:#fff;border:1px solid #e9edf5;border-radius:14px;padding:1.25rem;">
       <div style="font-size:0.72rem;font-weight:600;color:#2563eb;text-transform:uppercase;">Total Activities</div>
       <div style="font-size:1.8rem;font-weight:700;color:#1d4ed8;" id="totalActivities">-</div>
@@ -36,7 +35,6 @@
       <div style="padding:1.5rem;" id="activitiesByType"><div style="color:#94a3b8;text-align:center;">Loading...</div></div>
     </div>
   </div>
-</div>
 @endsection
 @section('scripts')
 <script>
