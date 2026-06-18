@@ -717,7 +717,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png" alt="Orders">
                 </div>
                 <div>
-                    <div class="kpi-val">0</div>
+                    <div class="kpi-val" id="kpi-orders-today">0</div>
                     <div class="kpi-label">Orders Today</div>
                 </div>
             </div>
@@ -737,7 +737,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/4149/4149646.png" alt="New Customers">
                 </div>
                 <div>
-                    <div class="kpi-val">0</div>
+                    <div class="kpi-val"
                     <div class="kpi-label">New Customers</div>
                 </div>
             </div>
@@ -747,7 +747,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/3588/3588592.png" alt="Products">
                 </div>
                 <div>
-                    <div class="kpi-val">0</div>
+                    <div class="kpi-val" id="kpi-total-products">0</div>
                     <div class="kpi-label">Total Products</div>
                 </div>
             </div>
@@ -757,7 +757,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Low Stock">
                 </div>
                 <div>
-                    <div class="kpi-val text-red-500">3</div>
+                    <div class="kpi-val text-red-500" id="kpi-low-stock">0</div>
                     <div class="kpi-label">Low Stock Alerts</div>
                 </div>
             </div>
@@ -771,7 +771,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png" alt="Revenue">
                 </div>
                 <div>
-                    <div class="kpi-val">TSh 0</div>
+                    <div class="kpi-val" id="kpi-monthly-revenue">TSh 0</div>
                     <div class="kpi-label">Monthly Revenue (MTD)</div>
                 </div>
             </div>
@@ -801,7 +801,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/512/9195/9195785.png" alt="Avg Sale">
                 </div>
                 <div>
-                    <div class="kpi-val">TSh 0</div>
+                    <div class="kpi-val" id="kpi-avg-transaction">TSh 0</div>
                     <div class="kpi-label">Avg Transaction</div>
                 </div>
             </div>
