@@ -395,4 +395,53 @@
         from { opacity: 0; }
         to   { opacity: 1; }
     }
+
+    /* Phone mockup animations */
+    .hero-phone {
+        animation: fadeInUp 0.8s ease-out 0.5s both;
+    }
+    .phone-device {
+        animation: phoneFloat 6s ease-in-out infinite;
+    }
+    .phone-glow {
+        animation: glowPulse 4s ease-in-out infinite;
+    }
+    .floating-orb {
+        animation: orbFloatAround 8s ease-in-out infinite;
+    }
+    .floating-orb-delay {
+        animation: orbFloatAround 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes phoneFloat {
+        0%, 100% { transform: translateY(0) rotateY(-5deg) rotateX(2deg); }
+        50% { transform: translateY(-12px) rotateY(-5deg) rotateX(2deg); }
+    }
+    @keyframes glowPulse {
+        0%, 100% { opacity: 0.35; transform: scale(1); }
+        50% { opacity: 0.55; transform: scale(1.05); }
+    }
+    @keyframes orbFloatAround {
+        0%, 100% { transform: translate(0, 0); }
+        25% { transform: translate(10px, -15px); }
+        50% { transform: translate(-5px, 5px); }
+        75% { transform: translate(15px, 10px); }
+    }
+
+    /* Screen content shimmer */
+    .phone-frame::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+        animation: screenShimmer 5s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 30;
+        border-radius: 2.5rem;
+    }
+    @keyframes screenShimmer {
+        0% { left: -100%; }
+        50%, 100% { left: 200%; }
+    }
 </style>
