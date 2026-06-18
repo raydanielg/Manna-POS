@@ -31,26 +31,26 @@ class ReportController extends Controller
         $from = $dates['from']; $to = $dates['to'];
 
         $summary = [
-            'total_sales' => Sale::whereBetween('sale_date',[$from,$to])->count(),
-            'total_revenue' => Sale::whereBetween('sale_date',[$from,$to])->sum('total_amount'),
-            'total_paid' => Sale::whereBetween('sale_date',[$from,$to])->sum('paid_amount'),
-            'total_outstanding' => Sale::whereBetween('sale_date',[$from,$to])->sum('balance'),
+            'total_sales' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->count(),
+            'total_revenue' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total_amount'),
+            'total_paid' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('paid_amount'),
+            'total_outstanding' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('balance'),
         ];
 
-        $dailySales = Sale::selectRaw('DATE(sale_date) as date, COUNT(*) as count, SUM(total_amount) as revenue')
+        $dailySales = Sale::forCurrentUser($this->currentBusinessId())->selectRaw('DATE(sale_date) as date, COUNT(*) as count, SUM(total_amount) as revenue')
             ->whereBetween('sale_date',[$from,$to])
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
         $topProducts = SaleItem::selectRaw('product_name, SUM(quantity) as total_qty, SUM(total) as total_revenue')
-            ->whereHas('sale', fn($q) => $q->whereBetween('sale_date',[$from,$to]))
+            ->whereHas('sale', fn($q) => $q->forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to]))
             ->groupBy('product_name')
             ->orderByDesc('total_revenue')
             ->take(10)
             ->get();
 
-        $sales = Sale::with('customer')->whereBetween('sale_date',[$from,$to])->orderBy('sale_date','desc')->paginate(25);
+        $sales = Sale::forCurrentUser($this->currentBusinessId())->with('customer')->whereBetween('sale_date',[$from,$to])->orderBy('sale_date','desc')->paginate(25);
 
         return view('dashboard.reports.sales-report', compact('summary','dailySales','topProducts','sales','from','to'));
     }
@@ -61,31 +61,31 @@ class ReportController extends Controller
         $from = $dates['from']; $to = $dates['to'];
 
         $summary = [
-            'total_purchases' => Purchase::whereBetween('purchase_date',[$from,$to])->count(),
-            'total_amount' => Purchase::whereBetween('purchase_date',[$from,$to])->sum('total_amount'),
-            'total_paid' => Purchase::whereBetween('purchase_date',[$from,$to])->sum('paid_amount'),
+            'total_purchases' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->count(),
+            'total_amount' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total_amount'),
+            'total_paid' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('paid_amount'),
         ];
 
-        $dailyPurchases = Purchase::selectRaw('DATE(purchase_date) as date, COUNT(*) as count, SUM(total_amount) as amount')
+        $dailyPurchases = Purchase::forCurrentUser($this->currentBusinessId())->selectRaw('DATE(purchase_date) as date, COUNT(*) as count, SUM(total_amount) as amount')
             ->whereBetween('purchase_date',[$from,$to])
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
-        $purchases = Purchase::with('supplier')->whereBetween('purchase_date',[$from,$to])->orderBy('purchase_date','desc')->paginate(25);
+        $purchases = Purchase::forCurrentUser($this->currentBusinessId())->with('supplier')->whereBetween('purchase_date',[$from,$to])->orderBy('purchase_date','desc')->paginate(25);
 
         return view('dashboard.reports.purchase-report', compact('summary','dailyPurchases','purchases','from','to'));
     }
 
     public function inventoryReport(Request $request)
     {
-        $lowStock = Product::whereColumn('current_stock','<=','reorder_level')->orWhere('current_stock',0)->count();
-        $totalProducts = Product::count();
-        $totalStockValue = Product::selectRaw('SUM(current_stock * purchase_price) as val')->value('val') ?? 0;
-        $totalRetailValue = Product::selectRaw('SUM(current_stock * selling_price) as val')->value('val') ?? 0;
+        $lowStock = Product::forCurrentUser($this->currentBusinessId())->where(function($q){ $q->whereColumn('current_stock','<=','reorder_level')->orWhere('current_stock',0); })->count();
+        $totalProducts = Product::forCurrentUser($this->currentBusinessId())->count();
+        $totalStockValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(current_stock * purchase_price) as val')->value('val') ?? 0;
+        $totalRetailValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(current_stock * selling_price) as val')->value('val') ?? 0;
 
-        $products = Product::with('category')->orderBy('current_stock','asc')->paginate(25);
-        $categories = Product::selectRaw('product_categories.name as category, COUNT(products.id) as count, SUM(products.current_stock) as stock')
+        $products = Product::forCurrentUser($this->currentBusinessId())->with('category')->orderBy('current_stock','asc')->paginate(25);
+        $categories = Product::forCurrentUser($this->currentBusinessId())->selectRaw('product_categories.name as category, COUNT(products.id) as count, SUM(products.current_stock) as stock')
             ->join('product_categories','products.category_id','=','product_categories.id')
             ->groupBy('product_categories.name')
             ->get();
@@ -99,24 +99,24 @@ class ReportController extends Controller
         $from = $dates['from']; $to = $dates['to'];
 
         $summary = [
-            'total_expenses' => Expense::whereBetween('expense_date',[$from,$to])->count(),
-            'total_amount' => Expense::whereBetween('expense_date',[$from,$to])->sum('amount'),
+            'total_expenses' => Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->count(),
+            'total_amount' => Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->sum('amount'),
         ];
 
-        $byCategory = Expense::selectRaw('expense_categories.name as category, COUNT(*) as count, SUM(expenses.amount) as total')
+        $byCategory = Expense::forCurrentUser($this->currentBusinessId())->selectRaw('expense_categories.name as category, COUNT(*) as count, SUM(expenses.amount) as total')
             ->join('expense_categories','expenses.category_id','=','expense_categories.id')
             ->whereBetween('expense_date',[$from,$to])
             ->groupBy('expense_categories.name')
             ->orderByDesc('total')
             ->get();
 
-        $dailyExpenses = Expense::selectRaw('DATE(expense_date) as date, SUM(amount) as total')
+        $dailyExpenses = Expense::forCurrentUser($this->currentBusinessId())->selectRaw('DATE(expense_date) as date, SUM(amount) as total')
             ->whereBetween('expense_date',[$from,$to])
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
-        $expenses = Expense::with('category')->whereBetween('expense_date',[$from,$to])->orderBy('expense_date','desc')->paginate(25);
+        $expenses = Expense::forCurrentUser($this->currentBusinessId())->with('category')->whereBetween('expense_date',[$from,$to])->orderBy('expense_date','desc')->paginate(25);
 
         return view('dashboard.reports.expense-report', compact('summary','byCategory','dailyExpenses','expenses','from','to'));
     }
@@ -126,9 +126,9 @@ class ReportController extends Controller
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
 
-        $totalRevenue = Sale::whereBetween('sale_date',[$from,$to])->sum('total_amount');
-        $totalCost = Purchase::whereBetween('purchase_date',[$from,$to])->sum('total_amount');
-        $totalExpenses = Expense::whereBetween('expense_date',[$from,$to])->sum('amount');
+        $totalRevenue = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total_amount');
+        $totalCost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total_amount');
+        $totalExpenses = Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->sum('amount');
         $grossProfit = $totalRevenue - $totalCost;
         $netProfit = $grossProfit - $totalExpenses;
 
@@ -137,9 +137,9 @@ class ReportController extends Controller
         while ($current <= $to) {
             $mStart = $current->copy();
             $mEnd = $current->copy()->endOfMonth();
-            $rev = Sale::whereBetween('sale_date',[$mStart,$mEnd])->sum('total_amount');
-            $cost = Purchase::whereBetween('purchase_date',[$mStart,$mEnd])->sum('total_amount');
-            $exp = Expense::whereBetween('expense_date',[$mStart,$mEnd])->sum('amount');
+            $rev = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$mStart,$mEnd])->sum('total_amount');
+            $cost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$mStart,$mEnd])->sum('total_amount');
+            $exp = Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$mStart,$mEnd])->sum('amount');
             $monthly[] = [
                 'month' => $current->format('M Y'),
                 'revenue' => $rev,
@@ -158,7 +158,7 @@ class ReportController extends Controller
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
 
-        $suppliers = Supplier::withCount(['purchases as purchases_count'])
+        $suppliers = Supplier::forCurrentUser($this->currentBusinessId())->withCount(['purchases as purchases_count'])
             ->withSum(['purchases as purchases_total'], 'total_amount')
             ->withSum(['purchases as paid_total'], 'paid_amount')
             ->get()
@@ -172,7 +172,7 @@ class ReportController extends Controller
 
     public function supplierPriceComparison(Request $request)
     {
-        $products = Product::with(['purchaseItems' => function($q) {
+        $products = Product::forCurrentUser($this->currentBusinessId())->with(['purchaseItems' => function($q) {
             $q->selectRaw('product_id, supplier_id, AVG(unit_price) as avg_price, MAX(unit_price) as max_price, MIN(unit_price) as min_price, COUNT(*) as purchases_count')
                 ->groupBy('product_id','supplier_id');
         }, 'purchaseItems.supplier'])->take(50)->get();
@@ -185,10 +185,10 @@ class ReportController extends Controller
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
 
-        $expired = Product::whereNotNull('expiry_date')->where('expiry_date','<',now())->count();
-        $expiringSoon = Product::whereNotNull('expiry_date')->whereBetween('expiry_date',[now(),now()->addDays(30)])->count();
+        $expired = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')->where('expiry_date','<',now())->count();
+        $expiringSoon = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')->whereBetween('expiry_date',[now(),now()->addDays(30)])->count();
 
-        $products = Product::whereNotNull('expiry_date')
+        $products = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')
             ->where('expiry_date','<=',$to)
             ->orderBy('expiry_date')
             ->paginate(25);
@@ -202,7 +202,7 @@ class ReportController extends Controller
         $from = $dates['from']; $to = $dates['to'];
 
         $trends = SaleItem::selectRaw('product_name, SUM(quantity) as total_qty, SUM(total) as total_revenue, COUNT(DISTINCT sale_id) as sales_count')
-            ->whereHas('sale', fn($q) => $q->whereBetween('sale_date',[$from,$to]))
+            ->whereHas('sale', fn($q) => $q->forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to]))
             ->groupBy('product_name')
             ->orderByDesc('total_revenue')
             ->take(20)
