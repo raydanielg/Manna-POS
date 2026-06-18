@@ -24,7 +24,7 @@ class BankingController extends Controller
 
     public function accounts()
     {
-        $accounts = BankAccount::where('user_id', auth()->id())->paginate(15);
+        $accounts = BankAccount::where('user_id', $this->currentBusinessId())->paginate(15);
         return view('dashboard.banking.accounts', compact('accounts'));
     }
 
