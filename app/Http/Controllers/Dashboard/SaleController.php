@@ -37,8 +37,9 @@ class SaleController extends Controller {
         }
         return response()->json(["success"=>true,"sale"=>$sale->load(["customer","items"])], 201);
     }
-    public function show(Sale $sale) { return response()->json($sale->load(["customer","items.product"])); }
+    public function show(Sale $sale) { $this->ensureOwns($sale); return response()->json($sale->load(["customer","items.product"])); }
     public function update(Request $req, Sale $sale) {
+        $this->ensureOwns($sale);
         $wasCompleted = $sale->status === "completed";
         $data = $req->validate([
             "customer_id"    => "nullable|exists:customers,id",
@@ -62,5 +63,5 @@ class SaleController extends Controller {
         }
         return response()->json(["success"=>true,"sale"=>$sale->load(["customer","items"])]);
     }
-    public function destroy(Sale $sale) { $sale->delete(); return response()->json(["success"=>true]); }
+    public function destroy(Sale $sale) { $this->ensureOwns($sale); $sale->delete(); return response()->json(["success"=>true]); }
 }

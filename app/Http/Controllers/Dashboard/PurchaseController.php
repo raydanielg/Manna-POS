@@ -33,6 +33,6 @@ class PurchaseController extends Controller {
         }
         return response()->json(["success"=>true,"purchase"=>$purchase->load(["supplier","items"])], 201);
     }
-    public function show(Purchase $purchase) { return response()->json($purchase->load(["supplier","items.product"])); }
-    public function destroy(Purchase $purchase) { $purchase->delete(); return response()->json(["success"=>true]); }
+    public function show(Purchase $purchase) { $this->ensureOwns($purchase); return response()->json($purchase->load(["supplier","items.product"])); }
+    public function destroy(Purchase $purchase) { $this->ensureOwns($purchase); $purchase->delete(); return response()->json(["success"=>true]); }
 }
