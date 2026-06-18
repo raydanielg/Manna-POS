@@ -502,7 +502,6 @@
         if (el) el.addEventListener('input', syncTracker);
     });
     document.querySelector('[name="business_country"]')?.addEventListener('change', syncTracker);
-    syncTracker();
 
     // ── Submit logic (AJAX) ───────────────────────────
     document.getElementById('regForm').addEventListener('submit', async function (e) {
