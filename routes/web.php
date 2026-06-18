@@ -352,6 +352,8 @@ use App\Http\Controllers\Dashboard\ShipmentController;
 use App\Http\Controllers\Dashboard\SellingPriceGroupController;
 use App\Http\Controllers\Dashboard\ProductVariationController;
 use App\Http\Controllers\Dashboard\BusinessLocationController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\CrmActivityController;
 
 Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('suppliers',              SupplierController::class);
