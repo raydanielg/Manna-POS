@@ -811,20 +811,40 @@
         }
     @endphp
     @if($__sub && $__sub->status === 'trial' && $__daysLeft !== null)
-    <div style="background:linear-gradient(90deg,#0f2748,#1e3a5f);color:#fff;padding:.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.82rem;gap:1rem;flex-wrap:wrap;">
-        <span>
+    <div style="background:linear-gradient(90deg,#0f2748,#1a365d);color:#fff;padding:.65rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.82rem;gap:1rem;flex-wrap:wrap;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-50%;right:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(16,185,129,.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+        <span style="position:relative;z-index:1;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
             @if($__daysLeft > 3)
-                <span style="background:#10b981;padding:.15rem .5rem;border-radius:4px;font-weight:700;margin-right:.5rem;">FREE TRIAL</span> {{ $__daysLeft }} days remaining in your free trial
+                <span style="background:rgba(16,185,129,.2);color:#34d399;padding:.18rem .55rem;border-radius:6px;font-weight:800;font-size:.68rem;letter-spacing:.03em;">FREE TRIAL</span>
+                <span><strong>{{ $__daysLeft }}</strong> days remaining in your free trial</span>
             @else
-                <span style="background:#ef4444;padding:.15rem .5rem;border-radius:4px;font-weight:700;margin-right:.5rem;">⚠ TRIAL EXPIRING</span> Only <strong>{{ $__daysLeft }}</strong> day{{ $__daysLeft != 1 ? 's' : '' }} left!
+                <span style="background:rgba(239,68,68,.25);color:#fca5a5;padding:.18rem .55rem;border-radius:6px;font-weight:800;font-size:.68rem;letter-spacing:.03em;display:flex;align-items:center;gap:.25rem;">
+                    <svg width="14" height="14" fill="none" stroke="#fca5a5" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    TRIAL EXPIRING
+                </span>
+                <span>Only <strong>{{ $__daysLeft }}</strong> day{{ $__daysLeft != 1 ? 's' : '' }} left!</span>
             @endif
         </span>
-        <a href="/subscription/plans" style="background:#10b981;color:#fff;padding:.3rem .85rem;border-radius:6px;font-weight:700;font-size:.78rem;text-decoration:none;white-space:nowrap;">Upgrade Now →</a>
+        <a href="/subscription/plans" style="position:relative;z-index:1;background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:.35rem 1rem;border-radius:8px;font-weight:700;font-size:.78rem;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:.35rem;transition:all .2s;box-shadow:0 2px 8px rgba(16,185,129,.3);"
+           onmouseover="this.style.background='linear-gradient(135deg,#059669,#047857)';this.style.transform='translateY(-1px)'"
+           onmouseout="this.style.background='linear-gradient(135deg,#10b981,#059669)';this.style.transform=''">
+            Upgrade Now
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-7-7l7 7-7 7"/></svg>
+        </a>
     </div>
     @elseif(!$__sub)
-    <div style="background:#ef4444;color:#fff;padding:.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.82rem;gap:1rem;">
-        <span>⚠ Your subscription has expired. Some features may be limited.</span>
-        <a href="/subscription/plans" style="background:#fff;color:#ef4444;padding:.3rem .85rem;border-radius:6px;font-weight:700;font-size:.78rem;text-decoration:none;">Renew Now →</a>
+    <div style="background:linear-gradient(90deg,#dc2626,#b91c1c);color:#fff;padding:.65rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.82rem;gap:1rem;flex-wrap:wrap;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-50%;left:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+        <span style="position:relative;z-index:1;display:flex;align-items:center;gap:.5rem;">
+            <svg width="18" height="18" fill="none" stroke="#fca5a5" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Your subscription has expired. Some features may be limited.</span>
+        </span>
+        <a href="/subscription/plans" style="position:relative;z-index:1;background:#fff;color:#dc2626;padding:.35rem 1rem;border-radius:8px;font-weight:700;font-size:.78rem;text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;transition:all .2s;"
+           onmouseover="this.style.background='#fee2e2';this.style.transform='translateY(-1px)'"
+           onmouseout="this.style.background='#fff';this.style.transform=''">
+            Renew Now
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-7-7l7 7-7 7"/></svg>
+        </a>
     </div>
     @endif
 
