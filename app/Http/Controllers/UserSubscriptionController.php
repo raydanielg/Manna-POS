@@ -15,15 +15,7 @@ class UserSubscriptionController extends Controller
 
     public function plans()
     {
-        $user        = auth()->user();
-        $plans       = SubscriptionPlan::where('is_active', true)->orderBy('sort_order')->orderBy('price_monthly')->get();
-        $current     = $user->activeSubscription();
-        $trialUsed   = UserSubscription::where('user_id', $user->id)->where('status', 'trial')->exists();
-        $daysLeft    = null;
-        if ($current && $current->expires_at) {
-            $daysLeft = max(0, now()->diffInDays($current->expires_at, false));
-        }
-        return view('subscription.plans', compact('plans', 'current', 'trialUsed', 'daysLeft', 'user'));
+        return view('subscription.plans');
     }
 
     public function choosePlan(Request $req)
