@@ -562,6 +562,20 @@
             </div>
         </div>
 
+        {{-- Banking / Cashflow --}}
+        <div class="dropdown {{ $isBanking ? 'open' : '' }}" id="dropdown-banking">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-banking')" data-tip="Banking">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4l8 4v14"/><path d="M5 11h14"/><path d="M10 11v10"/><path d="M14 11v10"/></svg>
+                <span class="nav-label">Banking</span>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="{{ route('dashboard.banking') }}" class="child-item {{ request()->routeIs('dashboard.banking') ? 'active' : '' }}">Dashboard</a>
+                <a href="{{ route('dashboard.banking.accounts') }}" class="child-item {{ request()->routeIs('dashboard.banking.accounts') ? 'active' : '' }}">Accounts</a>
+                <a href="{{ route('dashboard.banking.transactions') }}" class="child-item {{ request()->routeIs('dashboard.banking.transactions') ? 'active' : '' }}">Transactions</a>
+            </div>
+        </div>
+
         <div class="nav-section-label">Analytics</div>
 
         {{-- Reports --}}
