@@ -1,505 +1,428 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-50">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Create Account — MannaPOS</title>
-<link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{height:100%;}
-body{
-  font-family:'Inter',sans-serif;
-  min-height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  padding:1.25rem;
-  position:relative;
-  overflow-x:hidden;
-  background:#064e3b;
-}
-/* ── Background layers ── */
-body::before{
-  content:'';position:fixed;inset:0;
-  background:
-    linear-gradient(135deg,#064e3b 0%,#065f46 35%,#047857 65%,#0a3d25 100%);
-  z-index:0;
-}
-body::after{
-  content:'';position:fixed;inset:0;
-  background-image:
-    radial-gradient(circle at 1px 1px,rgba(255,255,255,0.06) 1px,transparent 0);
-  background-size:28px 28px;
-  z-index:1;
-  pointer-events:none;
-}
-/* decorative blobs */
-.bg-blob{position:fixed;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:1;}
-.blob1{width:400px;height:400px;background:rgba(16,185,129,0.15);top:-120px;right:-100px;}
-.blob2{width:350px;height:350px;background:rgba(5,150,105,0.1);bottom:-100px;left:-80px;}
-.blob3{width:200px;height:200px;background:rgba(167,243,208,0.08);top:40%;left:5%;}
-
-/* ── Card ── */
-.card{
-  position:relative;z-index:2;
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 24px 64px rgba(0,0,0,0.28),0 4px 16px rgba(0,0,0,0.12);
-  width:100%;max-width:460px;
-  overflow:hidden;
-}
-
-/* ── Card header stripe ── */
-.card-head{
-  background:linear-gradient(135deg,#065f46,#047857);
-  padding:1.5rem 2rem 1.375rem;
-  display:flex;align-items:center;gap:.875rem;
-}
-.brand-icon{
-  width:40px;height:40px;border-radius:10px;
-  background:rgba(255,255,255,0.15);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.brand-icon svg{width:22px;height:22px;color:#fff;}
-.brand-text{flex:1;}
-.brand-name{font-size:1.15rem;font-weight:800;color:#fff;letter-spacing:-.4px;line-height:1;}
-.brand-tag{font-size:.7rem;color:rgba(255,255,255,.65);font-weight:500;margin-top:.15rem;}
-.trial-pill{
-  display:flex;align-items:center;gap:.35rem;
-  background:rgba(255,255,255,0.12);
-  border:1px solid rgba(255,255,255,0.2);
-  color:#d1fae5;padding:.3rem .65rem;
-  border-radius:50px;font-size:.68rem;font-weight:600;white-space:nowrap;
-}
-.trial-pill svg{width:12px;height:12px;}
-
-/* ── Card body ── */
-.card-body{padding:1.75rem 2rem 2rem;}
-
-/* ── Steps ── */
-.steps{display:flex;align-items:center;gap:0;margin-bottom:1.5rem;}
-.step{display:flex;align-items:center;gap:.45rem;}
-.step-dot{
-  width:28px;height:28px;border-radius:50%;
-  font-size:.75rem;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-  border:2px solid #d1d5db;color:#9ca3af;background:#fff;
-  transition:all .25s ease;flex-shrink:0;
-}
-.step-dot.active{background:#16a34a;border-color:#16a34a;color:#fff;box-shadow:0 0 0 3px rgba(22,163,74,.18);}
-.step-dot.done{background:#16a34a;border-color:#16a34a;color:#fff;}
-.step-name{font-size:.72rem;font-weight:600;color:#9ca3af;transition:color .25s;}
-.step-name.active,.step-name.done{color:#16a34a;}
-.step-line{flex:1;height:2px;background:#e5e7eb;margin:0 .5rem;transition:background .25s;}
-.step-line.done{background:#16a34a;}
-
-/* ── Form ── */
-.step-head{margin-bottom:1.25rem;}
-.step-title{font-size:1.1rem;font-weight:800;color:#111827;margin-bottom:.2rem;}
-.step-sub{font-size:.8rem;color:#6b7280;}
-
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
-.form-group{margin-bottom:.875rem;}
-.form-label{display:block;font-size:.76rem;font-weight:600;color:#374151;margin-bottom:.35rem;}
-.form-label .req{color:#ef4444;}
-
-.input-box{position:relative;}
-.input-box .ico{
-  position:absolute;left:.75rem;top:50%;transform:translateY(-50%);
-  width:15px;height:15px;color:#9ca3af;pointer-events:none;flex-shrink:0;
-}
-.form-control{
-  width:100%;
-  padding:.6rem .8rem .6rem 2.35rem;
-  border:1.5px solid #d1d5db;
-  border-radius:8px;
-  font-size:.83rem;color:#111827;background:#f9fafb;
-  font-family:inherit;outline:none;
-  transition:border-color .2s,box-shadow .2s,background .2s;
-  appearance:none;
-}
-.form-control:focus{
-  border-color:#16a34a;background:#fff;
-  box-shadow:0 0 0 3px rgba(22,163,74,0.1);
-}
-.form-control.err{border-color:#ef4444;background:#fff;}
-select.form-control{cursor:pointer;}
-
-/* password toggle */
-.pwd-btn{
-  position:absolute;right:.7rem;top:50%;transform:translateY(-50%);
-  background:none;border:none;cursor:pointer;color:#9ca3af;padding:0;
-  display:flex;line-height:0;
-}
-.pwd-btn svg{width:15px;height:15px;}
-.pwd-btn:hover{color:#374151;}
-
-/* strength bar */
-.strength{height:2px;background:#e5e7eb;border-radius:2px;margin-top:.35rem;overflow:hidden;}
-.strength-fill{height:100%;width:0;border-radius:2px;transition:width .3s,background .3s;}
-.strength-lbl{font-size:.68rem;color:#9ca3af;margin-top:.2rem;}
-
-/* phone hint */
-.hint{font-size:.7rem;color:#9ca3af;margin-top:.2rem;}
-
-/* ── Buttons ── */
-.btn-row{display:flex;gap:.6rem;margin-top:1.25rem;}
-.btn{
-  padding:.65rem 1.25rem;border-radius:8px;font-size:.83rem;font-weight:600;
-  cursor:pointer;border:none;font-family:inherit;
-  transition:transform .15s,box-shadow .15s,background .15s;
-  display:flex;align-items:center;justify-content:center;gap:.4rem;
-}
-.btn-green{
-  flex:1;
-  background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;
-  box-shadow:0 4px 14px rgba(22,163,74,.35);
-}
-.btn-green:hover{background:linear-gradient(135deg,#15803d,#166534);transform:translateY(-1px);box-shadow:0 6px 18px rgba(22,163,74,.4);}
-.btn-green:active{transform:translateY(0);}
-.btn-green:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
-.btn-ghost{background:#f3f4f6;color:#374151;min-width:80px;}
-.btn-ghost:hover{background:#e5e7eb;}
-
-/* ── Login link ── */
-.login-link{text-align:center;margin-top:1.25rem;font-size:.8rem;color:#6b7280;}
-.login-link a{color:#16a34a;font-weight:600;text-decoration:none;}
-.login-link a:hover{text-decoration:underline;}
-
-/* ── Step panels ── */
-.panel{display:none;}
-.panel.active{display:block;}
-
-/* ── Divider ── */
-.divider{height:1px;background:#f3f4f6;margin:.5rem 0 1rem;}
-
-/* ── Spinner ── */
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.spin{animation:spin .8s linear infinite;display:inline-block;}
-
-/* ── Mobile ── */
-@media(max-width:480px){
-  .card-body{padding:1.25rem 1.25rem 1.5rem;}
-  .card-head{padding:1.25rem 1.25rem 1.125rem;}
-  .form-row{grid-template-columns:1fr;}
-  .trial-pill{display:none;}
-}
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Account — MannaPOS</title>
+    <link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-panel { display: none; }
+        .step-panel.active { display: block; }
+    </style>
 </head>
-<body>
-<div class="bg-blob blob1"></div>
-<div class="bg-blob blob2"></div>
-<div class="bg-blob blob3"></div>
+<body class="h-full text-slate-900 font-sans antialiased">
 
-<div class="card">
-  <!-- ── Header ── -->
-  <div class="card-head">
-    <div class="brand-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-      </svg>
+<div class="min-h-screen flex flex-col lg:flex-row bg-slate-50">
+    
+    {{-- Left Pane: Benefits & Logo (Hidden on mobile/tablet) --}}
+    <div class="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 xl:p-20 bg-slate-100/40 border-r border-slate-200">
+        {{-- Header Logo --}}
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-tr from-emerald-600 to-green-500 rounded-xl flex items-center justify-center shadow-md shadow-emerald-500/20">
+                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <span class="text-2xl font-extrabold tracking-tight text-slate-950">MannaPOS</span>
+        </div>
+
+        {{-- Bullet Points --}}
+        <div class="max-w-xl my-auto space-y-10">
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 mt-1 bg-emerald-100 p-1.5 rounded-full text-emerald-600">
+                    <svg class="w-5 h-5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Get started quickly</h3>
+                    <p class="text-slate-500 mt-1 leading-relaxed text-sm">Set up your shop, products, staff, and locations in less than 2 minutes. Our interactive wizard guides you all the way.</p>
+                </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 mt-1 bg-emerald-100 p-1.5 rounded-full text-emerald-600">
+                    <svg class="w-5 h-5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Support any business model</h3>
+                    <p class="text-slate-500 mt-1 leading-relaxed text-sm">Manage single or multi-branch retail, supermarkets, hardware, pharmacies, services, restaurants, and wholesale outlets seamlessly.</p>
+                </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 mt-1 bg-emerald-100 p-1.5 rounded-full text-emerald-600">
+                    <svg class="w-5 h-5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Join millions of businesses</h3>
+                    <p class="text-slate-500 mt-1 leading-relaxed text-sm">Empower your team with professional, dynamic POS tools, robust stock adjustments, supplier management, and real-time backend reports.</p>
+                </div>
+            </div>
+        </div>
+
+        {{-- Footer links --}}
+        <div class="flex items-center space-x-6 text-sm font-medium text-slate-400">
+            <a href="/about" class="hover:text-slate-600 transition-colors">About</a>
+            <a href="/terms" class="hover:text-slate-600 transition-colors">Terms &amp; Conditions</a>
+            <a href="/contact" class="hover:text-slate-600 transition-colors">Contact</a>
+        </div>
     </div>
-    <div class="brand-text">
-      <div class="brand-name">MannaPOS</div>
-      <div class="brand-tag">Business Management System</div>
+
+    {{-- Right Pane: Registration Form Card --}}
+    <div class="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-20 bg-slate-50">
+        
+        {{-- Mobile Logo Header --}}
+        <div class="flex lg:hidden items-center space-x-2.5 mb-8">
+            <div class="w-8 h-8 bg-gradient-to-tr from-emerald-600 to-green-500 rounded-lg flex items-center justify-center shadow-md">
+                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <span class="text-xl font-black text-slate-950">MannaPOS</span>
+        </div>
+
+        <div class="w-full max-w-[500px]">
+            {{-- Form Card Container --}}
+            <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xl p-8 sm:p-10">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight mb-2">Create your Free Account</h2>
+                <p class="text-slate-500 text-sm mb-6">Enjoy a full-featured 14-day free trial. No credit card required.</p>
+
+                {{-- Social Registration Buttons --}}
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <button type="button" onclick="toast('info', 'Google registration is coming soon!')" class="flex items-center justify-center space-x-2 py-2.5 px-4 border border-slate-200 hover:border-slate-300 rounded-xl hover:bg-slate-50 transition-all font-semibold text-xs text-slate-700">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                        </svg>
+                        <span>Sign up with Google</span>
+                    </button>
+                    <button type="button" onclick="toast('info', 'Apple registration is coming soon!')" class="flex items-center justify-center space-x-2 py-2.5 px-4 border border-slate-200 hover:border-slate-300 rounded-xl hover:bg-slate-50 transition-all font-semibold text-xs text-slate-700">
+                        <svg class="w-4 h-4 fill-slate-900" viewBox="0 0 24 24">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.07 2.47.3 3.64 2.18-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.63M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .05-2.22.67-2.94 1.84-.63.99-1.18 2.11-1.03 3.22 1.1.09 2.25-.56 2.98-1.63"/>
+                        </svg>
+                        <span>Sign up with Apple</span>
+                    </button>
+                </div>
+
+                {{-- Separator --}}
+                <div class="relative flex items-center justify-center my-6">
+                    <div class="w-full border-t border-slate-200/80"></div>
+                    <span class="absolute bg-white px-4 text-xs font-bold uppercase tracking-wider text-slate-400">or</span>
+                </div>
+
+                {{-- Step Indicator Dots --}}
+                <div class="flex items-center justify-center space-x-4 mb-6">
+                    <div id="sd1" class="w-8 h-8 rounded-full border-2 border-emerald-600 bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs font-bold transition-all duration-300">1</div>
+                    <div id="sline" class="h-0.5 w-12 bg-slate-200 transition-all duration-300"></div>
+                    <div id="sd2" class="w-8 h-8 rounded-full border-2 border-slate-200 bg-slate-100 text-slate-400 flex items-center justify-center text-xs font-bold transition-all duration-300">2</div>
+                </div>
+
+                <form method="POST" action="{{ route('register') }}" id="regForm" novalidate>
+                    @csrf
+
+                    {{-- ── STEP 1: Personal / Account Details ── --}}
+                    <div class="step-panel active" id="p1">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">First Name <span class="text-rose-500">*</span></label>
+                                <input type="text" name="first_name" id="fn" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" value="{{ old('first_name') }}" placeholder="John" autocomplete="given-name">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Last Name <span class="text-rose-500">*</span></label>
+                                <input type="text" name="last_name" id="ln" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" value="{{ old('last_name') }}" placeholder="Doe" autocomplete="family-name">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Phone Number <span class="text-rose-500">*</span></label>
+                            <input type="tel" name="phone" id="ph" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" value="{{ old('phone') }}" placeholder="+255 712 345 678" autocomplete="tel">
+                            <p class="text-[10px] text-slate-400 font-semibold mt-1">Include country code — e.g. +255 for Tanzania</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Email Address <span class="text-rose-500">*</span></label>
+                            <input type="email" name="email" id="em" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" value="{{ old('email') }}" placeholder="name@company.com" autocomplete="email">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Password <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <input type="password" name="password" id="pw" class="w-full pl-4 pr-10 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" placeholder="••••••••" autocomplete="new-password" oninput="checkStrength(this)">
+                                    <button type="button" onclick="togglePasswordVisibility('pw', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600" tabindex="-1">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="w-full bg-slate-150 h-1 rounded-full mt-2 overflow-hidden">
+                                    <div id="strength-bar" class="h-full w-0 bg-rose-500 transition-all duration-300"></div>
+                                </div>
+                                <span id="strength-text" class="text-[10px] font-bold mt-1 block h-3"></span>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Confirm Password <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <input type="password" name="password_confirmation" id="pc" class="w-full pl-4 pr-10 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" placeholder="••••••••" autocomplete="new-password">
+                                    <button type="button" onclick="togglePasswordVisibility('pc', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600" tabindex="-1">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Next Action Button --}}
+                        <button type="button" onclick="goToStepTwo()" class="w-full py-3 px-6 bg-slate-900 hover:bg-slate-950 text-white font-bold text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2">
+                            <span>Continue</span>
+                            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- ── STEP 2: Business setup ── --}}
+                    <div class="step-panel" id="p2">
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Business Name <span class="text-rose-500">*</span></label>
+                            <input type="text" name="business_name" id="bn" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50" value="{{ old('business_name') }}" placeholder="e.g. Manna Supermarket">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Business Type</label>
+                            <select name="business_type" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50 cursor-pointer">
+                                <option value="">Select type</option>
+                                <option value="retail" {{ old('business_type')=='retail'?'selected':'' }}>Retail Shop</option>
+                                <option value="wholesale" {{ old('business_type')=='wholesale'?'selected':'' }}>Wholesale</option>
+                                <option value="restaurant" {{ old('business_type')=='restaurant'?'selected':'' }}>Restaurant / Cafe</option>
+                                <option value="supermarket" {{ old('business_type')=='supermarket'?'selected':'' }}>Supermarket</option>
+                                <option value="pharmacy" {{ old('business_type')=='pharmacy'?'selected':'' }}>Pharmacy</option>
+                                <option value="electronics" {{ old('business_type')=='electronics'?'selected':'' }}>Electronics</option>
+                                <option value="services" {{ old('business_type')=='services'?'selected':'' }}>Services</option>
+                                <option value="other" {{ old('business_type')=='other'?'selected':'' }}>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Country <span class="text-rose-500">*</span></label>
+                                <select name="business_country" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50 cursor-pointer">
+                                    <option value="">Select country</option>
+                                    <option value="Tanzania" {{ old('business_country')=='Tanzania'?'selected':'' }}>Tanzania</option>
+                                    <option value="Kenya" {{ old('business_country')=='Kenya'?'selected':'' }}>Kenya</option>
+                                    <option value="Uganda" {{ old('business_country')=='Uganda'?'selected':'' }}>Uganda</option>
+                                    <option value="Rwanda" {{ old('business_country')=='Rwanda'?'selected':'' }}>Rwanda</option>
+                                    <option value="Ethiopia" {{ old('business_country')=='Ethiopia'?'selected':'' }}>Ethiopia</option>
+                                    <option value="South Africa" {{ old('business_country')=='South Africa'?'selected':'' }}>South Africa</option>
+                                    <option value="Nigeria" {{ old('business_country')=='Nigeria'?'selected':'' }}>Nigeria</option>
+                                    <option value="Ghana" {{ old('business_country')=='Ghana'?'selected':'' }}>Ghana</option>
+                                    <option value="Other" {{ old('business_country')=='Other'?'selected':'' }}>Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Currency <span class="text-rose-500">*</span></label>
+                                <select name="currency" class="w-full px-4 py-2.5 border border-slate-200 focus:border-emerald-500 rounded-xl text-sm focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all bg-slate-50/50 cursor-pointer">
+                                    <option value="">Select currency</option>
+                                    <option value="TZS" {{ old('currency')=='TZS'?'selected':'' }}>TZS — TSh</option>
+                                    <option value="KES" {{ old('currency')=='KES'?'selected':'' }}>KES — KSh</option>
+                                    <option value="UGX" {{ old('currency')=='UGX'?'selected':'' }}>UGX — USh</option>
+                                    <option value="USD" {{ old('currency')=='USD'?'selected':'' }}>USD — $</option>
+                                    <option value="EUR" {{ old('currency')=='EUR'?'selected':'' }}>EUR — €</option>
+                                    <option value="GBP" {{ old('currency')=='GBP'?'selected':'' }}>GBP — £</option>
+                                    <option value="ZAR" {{ old('currency')=='ZAR'?'selected':'' }}>ZAR — R</option>
+                                    <option value="NGN" {{ old('currency')=='NGN'?'selected':'' }}>NGN — ₦</option>
+                                    <option value="GHS" {{ old('currency')=='GHS'?'selected':'' }}>GHS — ₵</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {{-- Buttons Row --}}
+                        <div class="flex items-center space-x-3">
+                            <button type="button" onclick="goToStepOne()" class="w-1/3 py-3 border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-sm rounded-xl transition-all duration-150">
+                                Back
+                            </button>
+                            <button type="submit" id="subBtn" class="flex-1 py-3 bg-slate-900 hover:bg-slate-950 text-white font-bold text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2">
+                                <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Create Account</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                {{-- Terms & Conditions Agreement text --}}
+                <div class="mt-6 flex items-start space-x-2.5">
+                    <input type="checkbox" id="terms-agree" checked class="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500/20 mt-0.5 cursor-pointer">
+                    <label for="terms-agree" class="text-xs font-semibold text-slate-500 leading-relaxed cursor-pointer select-none">
+                        By signing up, you are creating a MannaPOS account, and you agree to MannaPOS's <a href="/terms" class="text-slate-800 hover:underline font-bold">Terms of Use</a> and <a href="/privacy" class="text-slate-800 hover:underline font-bold">Privacy Policy</a>.
+                    </label>
+                </div>
+
+                {{-- Account login link --}}
+                <div class="mt-8 pt-6 border-t border-slate-100 text-center text-xs font-bold text-slate-500">
+                    Already have an account? <a href="{{ route('login') }}" class="text-emerald-600 hover:underline font-extrabold ml-1">Sign in here</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="trial-pill">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
-      14-day free trial
-    </div>
-  </div>
-
-  <!-- ── Body ── -->
-  <div class="card-body">
-
-    <!-- Step indicator -->
-    <div class="steps">
-      <div class="step">
-        <div class="step-dot active" id="sd1">1</div>
-        <span class="step-name active" id="sn1">Account</span>
-      </div>
-      <div class="step-line" id="sline"></div>
-      <div class="step">
-        <div class="step-dot" id="sd2">2</div>
-        <span class="step-name" id="sn2">Business</span>
-      </div>
-    </div>
-
-    <form method="POST" action="{{ route('register') }}" id="regForm" novalidate>
-      @csrf
-
-      <!-- ── STEP 1 ── -->
-      <div class="panel active" id="p1">
-        <div class="step-head">
-          <div class="step-title">Create your account</div>
-          <div class="step-sub">Enter your details — takes less than 2 minutes</div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">First Name <span class="req">*</span></label>
-            <div class="input-box">
-              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-              <input type="text" name="first_name" id="fn" class="form-control @error('first_name') err @enderror" value="{{ old('first_name') }}" placeholder="John" autocomplete="given-name">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Last Name <span class="req">*</span></label>
-            <div class="input-box">
-              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-              <input type="text" name="last_name" id="ln" class="form-control @error('last_name') err @enderror" value="{{ old('last_name') }}" placeholder="Doe" autocomplete="family-name">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">
-            Phone Number <span class="req">*</span>
-          </label>
-          <div class="input-box">
-            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-            <input type="tel" name="phone" id="ph" class="form-control @error('phone') err @enderror" value="{{ old('phone') }}" placeholder="+255 712 345 678" autocomplete="tel">
-          </div>
-          <div class="hint">Include country code — e.g. +255 for Tanzania</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Email Address <span class="req">*</span></label>
-          <div class="input-box">
-            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            <input type="email" name="email" id="em" class="form-control @error('email') err @enderror" value="{{ old('email') }}" placeholder="name@business.com" autocomplete="email">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Password <span class="req">*</span></label>
-            <div class="input-box">
-              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-              <input type="password" name="password" id="pw" class="form-control @error('password') err @enderror" placeholder="Min 8 characters" autocomplete="new-password" oninput="checkStr(this)">
-              <button type="button" class="pwd-btn" onclick="togPwd('pw',this)" tabindex="-1">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-            </div>
-            <div class="strength"><div class="strength-fill" id="sFill"></div></div>
-            <div class="strength-lbl" id="sLbl"></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Confirm Password <span class="req">*</span></label>
-            <div class="input-box">
-              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <input type="password" name="password_confirmation" id="pc" class="form-control" placeholder="Repeat password" autocomplete="new-password">
-              <button type="button" class="pwd-btn" onclick="togPwd('pc',this)" tabindex="-1">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="btn-row">
-          <button type="button" class="btn btn-green" onclick="next()">
-            Continue
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- ── STEP 2 ── -->
-      <div class="panel" id="p2">
-        <div class="step-head">
-          <div class="step-title">Set up your business</div>
-          <div class="step-sub">Help us personalize MannaPOS for you</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Business Name <span class="req">*</span></label>
-          <div class="input-box">
-            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-            <input type="text" name="business_name" id="bn" class="form-control @error('business_name') err @enderror" value="{{ old('business_name') }}" placeholder="e.g. Manna Supermarket">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Business Type</label>
-          <div class="input-box">
-            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-            <select name="business_type" class="form-control" style="padding-left:2.3rem;">
-              <option value="">Select type</option>
-              <option value="retail" {{ old('business_type')=='retail'?'selected':'' }}>Retail Shop</option>
-              <option value="wholesale" {{ old('business_type')=='wholesale'?'selected':'' }}>Wholesale</option>
-              <option value="restaurant" {{ old('business_type')=='restaurant'?'selected':'' }}>Restaurant / Cafe</option>
-              <option value="supermarket" {{ old('business_type')=='supermarket'?'selected':'' }}>Supermarket</option>
-              <option value="pharmacy" {{ old('business_type')=='pharmacy'?'selected':'' }}>Pharmacy</option>
-              <option value="electronics" {{ old('business_type')=='electronics'?'selected':'' }}>Electronics</option>
-              <option value="services" {{ old('business_type')=='services'?'selected':'' }}>Services</option>
-              <option value="other" {{ old('business_type')=='other'?'selected':'' }}>Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Country <span class="req">*</span></label>
-            <div class="input-box">
-              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
-              <select name="business_country" class="form-control @error('business_country') err @enderror" style="padding-left:2.3rem;">
-                <option value="">Select country</option>
-                <option value="Tanzania" {{ old('business_country')=='Tanzania'?'selected':'' }}>Tanzania</option>
-                <option value="Kenya" {{ old('business_country')=='Kenya'?'selected':'' }}>Kenya</option>
-                <option value="Uganda" {{ old('business_country')=='Uganda'?'selected':'' }}>Uganda</option>
-                <option value="Rwanda" {{ old('business_country')=='Rwanda'?'selected':'' }}>Rwanda</option>
-                <option value="Ethiopia" {{ old('business_country')=='Ethiopia'?'selected':'' }}>Ethiopia</option>
-                <option value="South Africa" {{ old('business_country')=='South Africa'?'selected':'' }}>South Africa</option>
-                <option value="Nigeria" {{ old('business_country')=='Nigeria'?'selected':'' }}>Nigeria</option>
-                <option value="Ghana" {{ old('business_country')=='Ghana'?'selected':'' }}>Ghana</option>
-                <option value="Other" {{ old('business_country')=='Other'?'selected':'' }}>Other</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Currency <span class="req">*</span></label>
-            <div class="input-box">
-              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <select name="currency" class="form-control @error('currency') err @enderror" style="padding-left:2.3rem;">
-                <option value="">Select currency</option>
-                <option value="TZS" {{ old('currency')=='TZS'?'selected':'' }}>TZS — Tanzanian Shilling</option>
-                <option value="KES" {{ old('currency')=='KES'?'selected':'' }}>KES — Kenyan Shilling</option>
-                <option value="UGX" {{ old('currency')=='UGX'?'selected':'' }}>UGX — Ugandan Shilling</option>
-                <option value="USD" {{ old('currency')=='USD'?'selected':'' }}>USD — US Dollar</option>
-                <option value="EUR" {{ old('currency')=='EUR'?'selected':'' }}>EUR — Euro</option>
-                <option value="GBP" {{ old('currency')=='GBP'?'selected':'' }}>GBP — British Pound</option>
-                <option value="ZAR" {{ old('currency')=='ZAR'?'selected':'' }}>ZAR — South African Rand</option>
-                <option value="NGN" {{ old('currency')=='NGN'?'selected':'' }}>NGN — Nigerian Naira</option>
-                <option value="GHS" {{ old('currency')=='GHS'?'selected':'' }}>GHS — Ghanaian Cedi</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="btn-row">
-          <button type="button" class="btn btn-ghost" onclick="back()">← Back</button>
-          <button type="submit" class="btn btn-green" id="subBtn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Create Account &amp; Start Free Trial
-          </button>
-        </div>
-      </div>
-
-    </form>
-
-    <div class="login-link">
-      Already have an account? <a href="{{ route('login') }}">Sign in here</a>
-    </div>
-  </div>
 </div>
 
 <script>
-// ── Toast helper ──────────────────────────────────
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 4500,
-  timerProgressBar: true,
-  customClass: { popup: 'toast-popup' },
-});
-function toast(icon, msg) {
-  Toast.fire({ icon, title: msg });
-}
+    // ── Toast helper ──────────────────────────────────
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 4500,
+        timerProgressBar: true,
+        customClass: { popup: 'toast-popup' },
+    });
+    function toast(icon, msg) {
+        Toast.fire({ icon, title: msg });
+    }
 
-// ── Step state ────────────────────────────────────
-let step = 1;
-function setStep(s) {
-  step = s;
-  // panels
-  document.getElementById('p1').classList.toggle('active', s === 1);
-  document.getElementById('p2').classList.toggle('active', s === 2);
-  // dot 1
-  const d1 = document.getElementById('sd1'), n1 = document.getElementById('sn1');
-  const d2 = document.getElementById('sd2'), n2 = document.getElementById('sn2');
-  const sl = document.getElementById('sline');
-  if (s === 1) {
-    d1.className = 'step-dot active'; d1.textContent = '1'; n1.className = 'step-name active';
-    d2.className = 'step-dot'; d2.textContent = '2'; n2.className = 'step-name';
-    sl.className = 'step-line';
-  } else {
-    d1.className = 'step-dot done'; d1.innerHTML = '&#10003;'; n1.className = 'step-name done';
-    d2.className = 'step-dot active'; d2.textContent = '2'; n2.className = 'step-name active';
-    sl.className = 'step-line done';
-  }
-}
-function back() { setStep(1); }
+    // ── Step management ────────────────────────────────
+    let currentStep = 1;
+    function setStep(s) {
+        currentStep = s;
+        document.getElementById('p1').classList.toggle('active', s === 1);
+        document.getElementById('p2').classList.toggle('active', s === 2);
+        
+        const d1 = document.getElementById('sd1');
+        const d2 = document.getElementById('sd2');
+        const sl = document.getElementById('sline');
+        
+        if (s === 1) {
+            d1.className = 'w-8 h-8 rounded-full border-2 border-emerald-600 bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs font-bold transition-all duration-300';
+            d1.textContent = '1';
+            d2.className = 'w-8 h-8 rounded-full border-2 border-slate-200 bg-slate-100 text-slate-400 flex items-center justify-center text-xs font-bold transition-all duration-300';
+            d2.textContent = '2';
+            sl.className = 'h-0.5 w-12 bg-slate-200 transition-all duration-300';
+        } else {
+            d1.className = 'w-8 h-8 rounded-full border-2 border-emerald-600 bg-emerald-600 text-white flex items-center justify-center text-xs font-bold transition-all duration-300';
+            d1.innerHTML = '&#10003;';
+            d2.className = 'w-8 h-8 rounded-full border-2 border-emerald-600 bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs font-bold transition-all duration-300';
+            d2.textContent = '2';
+            sl.className = 'h-0.5 w-12 bg-emerald-600 transition-all duration-300';
+        }
+    }
 
-// ── Step 1 → 2 validation ─────────────────────────
-function next() {
-  const fn = document.getElementById('fn').value.trim();
-  const ln = document.getElementById('ln').value.trim();
-  const ph = document.getElementById('ph').value.trim();
-  const em = document.getElementById('em').value.trim();
-  const pw = document.getElementById('pw').value;
-  const pc = document.getElementById('pc').value;
+    function goToStepOne() {
+        setStep(1);
+    }
 
-  if (!fn || !ln) { toast('warning', 'Please enter your first and last name.'); document.getElementById('fn').focus(); return; }
-  if (!ph) { toast('warning', 'Phone number is required — include country code.'); document.getElementById('ph').focus(); return; }
-  if (!ph.startsWith('+')) { toast('info', 'Phone should include country code, e.g. +255…'); document.getElementById('ph').focus(); return; }
-  if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { toast('warning', 'Please enter a valid email address.'); document.getElementById('em').focus(); return; }
-  if (pw.length < 8) { toast('warning', 'Password must be at least 8 characters.'); document.getElementById('pw').focus(); return; }
-  if (pw !== pc) { toast('error', 'Passwords do not match — please re-enter.'); document.getElementById('pc').focus(); return; }
+    function goToStepTwo() {
+        const fn = document.getElementById('fn').value.trim();
+        const ln = document.getElementById('ln').value.trim();
+        const ph = document.getElementById('ph').value.trim();
+        const em = document.getElementById('em').value.trim();
+        const pw = document.getElementById('pw').value;
+        const pc = document.getElementById('pc').value;
 
-  setStep(2);
-  document.getElementById('bn').focus();
-}
+        if (!fn || !ln) { toast('warning', 'Please enter your first and last name.'); document.getElementById('fn').focus(); return; }
+        if (!ph) { toast('warning', 'Phone number is required — include country code.'); document.getElementById('ph').focus(); return; }
+        if (!ph.startsWith('+')) { toast('info', 'Phone should include country code, e.g. +255…'); document.getElementById('ph').focus(); return; }
+        if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { toast('warning', 'Please enter a valid email address.'); document.getElementById('em').focus(); return; }
+        if (pw.length < 8) { toast('warning', 'Password must be at least 8 characters.'); document.getElementById('pw').focus(); return; }
+        if (pw !== pc) { toast('error', 'Passwords do not match — please re-enter.'); document.getElementById('pc').focus(); return; }
 
-// ── Password toggle ───────────────────────────────
-function togPwd(id, btn) {
-  const el = document.getElementById(id);
-  el.type = el.type === 'password' ? 'text' : 'password';
-}
+        setStep(2);
+        document.getElementById('bn').focus();
+    }
 
-// ── Password strength ─────────────────────────────
-function checkStr(el) {
-  const v = el.value;
-  const fill = document.getElementById('sFill');
-  const lbl = document.getElementById('sLbl');
-  let s = 0;
-  if (v.length >= 8) s++; if (/[A-Z]/.test(v)) s++; if (/[0-9]/.test(v)) s++; if (/[^A-Za-z0-9]/.test(v)) s++;
-  const colors = ['', '#ef4444', '#f59e0b', '#16a34a', '#16a34a'];
-  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
-  fill.style.width = (s * 25) + '%'; fill.style.background = colors[s] || '';
-  lbl.textContent = v.length ? labels[s] || 'Strong' : '';
-  lbl.style.color = colors[s] || '';
-}
+    // ── Password strength ─────────────────────────────
+    function checkStrength(el) {
+        const v = el.value;
+        const bar = document.getElementById('strength-bar');
+        const text = document.getElementById('strength-text');
+        
+        let s = 0;
+        if (v.length >= 8) s++; 
+        if (/[A-Z]/.test(v)) s++; 
+        if (/[0-9]/.test(v)) s++; 
+        if (/[^A-Za-z0-9]/.test(v)) s++;
+        
+        const colors = ['bg-rose-500', 'bg-rose-500', 'bg-amber-500', 'bg-emerald-500', 'bg-emerald-500'];
+        const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+        const textColors = ['text-rose-500', 'text-rose-500', 'text-amber-500', 'text-emerald-500', 'text-emerald-500'];
+        
+        bar.className = 'h-full transition-all duration-300 ' + (colors[s] || 'bg-rose-500');
+        bar.style.width = v.length ? (s * 25) + '%' : '0%';
+        
+        text.textContent = v.length ? labels[s] || 'Strong' : '';
+        text.className = 'text-[10px] font-bold mt-1 block h-3 ' + (textColors[s] || '');
+    }
 
-// ── Submit spinner ────────────────────────────────
-document.getElementById('regForm').addEventListener('submit', function (e) {
-  const bn = document.getElementById('bn').value.trim();
-  const country = document.querySelector('[name="business_country"]').value;
-  const currency = document.querySelector('[name="currency"]').value;
-  if (!bn) { e.preventDefault(); toast('warning', 'Please enter your business name.'); document.getElementById('bn').focus(); return; }
-  if (!country) { e.preventDefault(); toast('warning', 'Please select your country.'); return; }
-  if (!currency) { e.preventDefault(); toast('warning', 'Please select your currency.'); return; }
-  const btn = document.getElementById('subBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin">&#9696;</span> Creating account…';
-});
+    // ── Toggle Password Visibility ─────────────────────
+    function togglePasswordVisibility(id, btn) {
+        const input = document.getElementById(id);
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        btn.querySelector('svg').classList.toggle('text-emerald-600', isPassword);
+    }
 
-// ── Server-side errors → toasts ───────────────────
-@if($errors->any())
-  @foreach($errors->all() as $err)
-    toast('error', @json($err));
-  @endforeach
-@endif
+    // ── Submit logic ──────────────────────────────────
+    document.getElementById('regForm').addEventListener('submit', function (e) {
+        const bn = document.getElementById('bn').value.trim();
+        const country = document.querySelector('[name="business_country"]').value;
+        const currency = document.querySelector('[name="currency"]').value;
+        const agree = document.getElementById('terms-agree').checked;
 
-// ── Jump to step 2 if step-2 field had errors ─────
-@if($errors->has('business_name') || $errors->has('business_country') || $errors->has('currency'))
-  setStep(2);
-@endif
+        if (!bn) { e.preventDefault(); toast('warning', 'Please enter your business name.'); document.getElementById('bn').focus(); return; }
+        if (!country) { e.preventDefault(); toast('warning', 'Please select your country.'); return; }
+        if (!currency) { e.preventDefault(); toast('warning', 'Please select your currency.'); return; }
+        if (!agree) { e.preventDefault(); toast('warning', 'You must agree to our Terms and Privacy Policy to continue.'); return; }
+
+        const btn = document.getElementById('subBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span> Creating account…';
+    });
+
+    // ── Server-side errors → toasts ───────────────────
+    @if($errors->any())
+        @foreach($errors->all() as $err)
+            toast('error', @json($err));
+        @endforeach
+    @endif
+
+    // ── Jump to step 2 if step-2 field had errors ─────
+    @if($errors->has('business_name') || $errors->has('business_country') || $errors->has('currency'))
+        setStep(2);
+    @endif
 </script>
 </body>
 </html>
