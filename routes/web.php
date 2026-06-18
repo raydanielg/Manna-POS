@@ -19,7 +19,10 @@ Route::get('/', function () {
         ->orderByDesc('published_at')
         ->take(3)
         ->get();
-    return view('landing', compact('latestBlogs'));
+    $plans = \App\Models\SubscriptionPlan::where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
+    return view('landing', compact('latestBlogs', 'plans'));
 });
 
 // Product pages
