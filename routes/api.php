@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\WarrantyApiController;
 use App\Http\Controllers\Api\ExpenseCategoryApiController;
 use App\Http\Controllers\Api\CustomerGroupApiController;
 use App\Http\Controllers\Api\BusinessLocationApiController;
+use App\Http\Controllers\Api\CrmActivityApiController;
 use App\Models\ProductCategory;
 use App\Models\Brand;
 use App\Models\Unit;
@@ -59,9 +60,18 @@ Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
     Route::apiResource('expenses',     ExpenseApiController::class)->names('expenses');
 
     // Reports
-    Route::get('reports/sales',        [ReportApiController::class, 'sales'])->name('reports.sales');
-    Route::get('reports/profit-loss',  [ReportApiController::class, 'profitLoss'])->name('reports.pl');
-    Route::get('reports/inventory',    [ReportApiController::class, 'inventory'])->name('reports.inventory');
+    Route::get('reports/sales',                    [ReportApiController::class, 'sales'])->name('reports.sales');
+    Route::get('reports/purchases',                [ReportApiController::class, 'purchases'])->name('reports.purchases');
+    Route::get('reports/profit-loss',              [ReportApiController::class, 'profitLoss'])->name('reports.pl');
+    Route::get('reports/inventory',                [ReportApiController::class, 'inventory'])->name('reports.inventory');
+    Route::get('reports/suppliers',                [ReportApiController::class, 'suppliers'])->name('reports.suppliers');
+    Route::get('reports/supplier-price-comparison',[ReportApiController::class, 'supplierPriceComparison'])->name('reports.supplier-price-comparison');
+    Route::get('reports/expiry',                   [ReportApiController::class, 'expiry'])->name('reports.expiry');
+    Route::get('reports/product-trends',           [ReportApiController::class, 'productTrends'])->name('reports.product-trends');
+
+    // CRM
+    Route::apiResource('crm-activities', CrmActivityApiController::class)->names('crm-activities');
+    Route::get('crm/dashboard', [CrmActivityApiController::class, 'dashboard'])->name('crm.dashboard');
 
     // Lookup lists (read-only)
     Route::get('categories',           fn() => response()->json(ProductCategory::select('id','name')->orderBy('name')->get()))->name('categories');
