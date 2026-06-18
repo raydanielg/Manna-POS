@@ -30,7 +30,10 @@ Route::get('/features', function () {
     return view('product.features');
 });
 Route::get('/pricing', function () {
-    return view('product.pricing');
+    $plans = \App\Models\SubscriptionPlan::where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
+    return view('product.pricing', compact('plans'));
 });
 Route::get('/integrations', function () {
     return view('product.integrations');
