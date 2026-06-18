@@ -3,19 +3,10 @@
 
 @section('head_scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','sans-serif'] },
-                    colors: {
-                        brand: { 50:'#fff0f3', 100:'#ffe0e7', 500:'#e03057', 600:'#c41f44', 700:'#a01637' }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
+@endsection
+
+@section('page_styles')
+<style>
         body { background: #f1f4fb; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
