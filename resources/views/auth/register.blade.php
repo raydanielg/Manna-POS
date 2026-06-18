@@ -391,6 +391,7 @@
 
     function goToStepOne() {
         setStep(1);
+        syncTracker();
     }
 
     function goToStepTwo() {
@@ -411,6 +412,7 @@
         if (pw !== pc) { toast('error', 'Passwords do not match — please re-enter.'); document.getElementById('pc').focus(); return; }
 
         setStep(2);
+        syncTracker();
         document.getElementById('bn').focus();
     }
 
