@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller {
     public function index(Request $req) {
-        $q = Customer::with("group");
+        $q = Customer::with("group")->forCurrentUser($this->currentBusinessId());
         if ($req->search) $q->where(function($q2) use($req){ $q2->where("name","like","%{$req->search}%")->orWhere("email","like","%{$req->search}%")->orWhere("phone","like","%{$req->search}%"); });
         if ($req->group_id) $q->where("customer_group_id",$req->group_id);
         if ($req->status) $q->where("status",$req->status);
@@ -15,14 +15,16 @@ class CustomerController extends Controller {
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","email"=>"nullable|email|max:191","phone"=>"nullable|string|max:30","address"=>"nullable|string","city"=>"nullable|string|max:100","country"=>"nullable|string|max:100","customer_group_id"=>"nullable|exists:customer_groups,id","credit_limit"=>"nullable|numeric","status"=>"in:active,inactive","notes"=>"nullable|string"]);
+        $data["created_by"] = $this->currentBusinessId();
         $c = Customer::create($data);
         return response()->json(["success"=>true,"customer"=>$c->load("group")], 201);
     }
-    public function show(Customer $customer) { return response()->json($customer); }
+    public function show(Customer $customer) { $this->ensureOwns($customer); return response()->json($customer); }
     public function update(Request $req, Customer $customer) {
+        $this->ensureOwns($customer);
         $data = $req->validate(["name"=>"required|string|max:191","email"=>"nullable|email|max:191","phone"=>"nullable|string|max:30","address"=>"nullable|string","city"=>"nullable|string|max:100","country"=>"nullable|string|max:100","customer_group_id"=>"nullable|exists:customer_groups,id","credit_limit"=>"nullable|numeric","status"=>"in:active,inactive","notes"=>"nullable|string"]);
         $customer->update($data);
         return response()->json(["success"=>true,"customer"=>$customer->load("group")]);
     }
-    public function destroy(Customer $customer) { $customer->delete(); return response()->json(["success"=>true]); }
+    public function destroy(Customer $customer) { $this->ensureOwns($customer); $customer->delete(); return response()->json(["success"=>true]); }
 }

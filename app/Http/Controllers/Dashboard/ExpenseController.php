@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class ExpenseController extends Controller {
     public function index(Request $req) {
-        $q = Expense::with("category");
+        $q = Expense::with("category")->forCurrentUser($this->currentBusinessId());
         if ($req->search) $q->where(function($q2) use($req){ $q2->where("reference","like","%{$req->search}%")->orWhere("notes","like","%{$req->search}%"); });
         if ($req->category_id) $q->where("expense_category_id",$req->category_id);
         if ($req->from) $q->whereDate("expense_date",">=",$req->from);
@@ -17,15 +17,16 @@ class ExpenseController extends Controller {
     public function store(Request $req) {
         $data = $req->validate(["expense_category_id"=>"nullable|exists:expense_categories,id","expense_date"=>"required|date","amount"=>"required|numeric|min:0","payment_method"=>"in:cash,card,mobile_money,cheque","notes"=>"nullable|string"]);
         $data["reference"] = "EXP-".strtoupper(Str::random(6));
-        $data["created_by"] = auth()->id();
+        $data["created_by"] = $this->currentBusinessId();
         $e = Expense::create($data);
         return response()->json(["success"=>true,"expense"=>$e->load("category")], 201);
     }
-    public function show(Expense $expense) { return response()->json($expense); }
+    public function show(Expense $expense) { $this->ensureOwns($expense); return response()->json($expense); }
     public function update(Request $req, Expense $expense) {
+        $this->ensureOwns($expense);
         $data = $req->validate(["expense_category_id"=>"nullable|exists:expense_categories,id","expense_date"=>"required|date","amount"=>"required|numeric|min:0","payment_method"=>"in:cash,card,mobile_money,cheque","notes"=>"nullable|string"]);
         $expense->update($data);
         return response()->json(["success"=>true,"expense"=>$expense->load("category")]);
     }
-    public function destroy(Expense $expense) { $expense->delete(); return response()->json(["success"=>true]); }
+    public function destroy(Expense $expense) { $this->ensureOwns($expense); $expense->delete(); return response()->json(["success"=>true]); }
 }
