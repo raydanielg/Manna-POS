@@ -14,7 +14,7 @@ body{
   font-family:'Inter',sans-serif;
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
-  padding:1.25rem;
+  padding:5rem 1.25rem 3.5rem;
   position:relative;
   overflow-x:hidden;
   background:#0f172a;
@@ -607,5 +607,18 @@ document.getElementById('regForm').addEventListener('submit', function (e) {
   setStep(2);
 @endif
 </script>
+
+<!-- ── Footer ── -->
+<footer class="page-footer">
+  <div class="page-footer-inner">
+    <div class="footer-left">&copy; {{ date('Y') }} MannaPOS. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/help">Help</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
