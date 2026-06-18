@@ -310,7 +310,7 @@
                 <div class="mt-6 flex items-start space-x-2.5">
                     <input type="checkbox" id="terms-agree" checked class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500/20 mt-0.5 cursor-pointer">
                     <label for="terms-agree" class="text-xs font-semibold text-slate-500 leading-relaxed cursor-pointer select-none">
-                        By signing up, you are creating a MannaPOS account, and you agree to MannaPOS's <a href="/terms" class="text-slate-800 hover:underline font-bold">Terms of Use</a> and <a href="/privacy" class="text-slate-800 hover:underline font-bold">Privacy Policy</a>.
+                        By signing up, you are creating a MannaPOS account, and you agree to MannaPOS's <a href="/terms" class="text-blue-700 hover:underline font-bold">Terms of Use</a> and <a href="/privacy" class="text-blue-700 hover:underline font-bold">Privacy Policy</a>.
                     </label>
                 </div>
 
