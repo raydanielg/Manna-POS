@@ -5,4 +5,8 @@ class Expense extends Model {
     protected $fillable = ['expense_category_id','reference','expense_date','amount','payment_method','notes','created_by'];
     protected $casts = ['expense_date' => 'date'];
     public function category() { return $this->belongsTo(ExpenseCategory::class,'expense_category_id'); }
+    public function scopeForCurrentUser($query, $userId = null) {
+        $uid = $userId ?? auth()->id();
+        return $query->where('created_by', $uid);
+    }
 }
