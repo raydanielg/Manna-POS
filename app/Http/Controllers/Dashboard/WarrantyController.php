@@ -5,18 +5,20 @@ use App\Models\Warranty;
 use Illuminate\Http\Request;
 class WarrantyController extends Controller {
     public function index(Request $req) {
-        $q = Warranty::query();
+        $q = Warranty::forCurrentUser($this->currentBusinessId());
         if ($req->search) $q->where("name","like","%{$req->search}%");
         return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
         $data = $req->validate(["name"=>"required|string|max:191","duration"=>"required|integer|min:1","duration_unit"=>"in:days,months,years","description"=>"nullable|string"]);
+        $data["created_by"] = $this->currentBusinessId();
         return response()->json(["success"=>true,"warranty"=>Warranty::create($data)], 201);
     }
-    public function show(Warranty $warranty) { return response()->json($warranty); }
+    public function show(Warranty $warranty) { $this->ensureOwns($warranty); return response()->json($warranty); }
     public function update(Request $req, Warranty $warranty) {
+        $this->ensureOwns($warranty);
         $warranty->update($req->validate(["name"=>"required|string|max:191","duration"=>"required|integer|min:1","duration_unit"=>"in:days,months,years","description"=>"nullable|string"]));
         return response()->json(["success"=>true,"warranty"=>$warranty]);
     }
-    public function destroy(Warranty $warranty) { $warranty->delete(); return response()->json(["success"=>true]); }
+    public function destroy(Warranty $warranty) { $this->ensureOwns($warranty); $warranty->delete(); return response()->json(["success"=>true]); }
 }
