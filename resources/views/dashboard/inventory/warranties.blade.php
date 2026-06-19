@@ -10,6 +10,16 @@
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input type="text" id="searchInput" placeholder="Search warranties..." oninput="loadList()">
       </div>
+      <select id="unitFilter" class="form-control" style="width:160px;" onchange="loadList()">
+        <option value="">All Durations</option>
+        <option value="days">Days</option>
+        <option value="months">Months</option>
+        <option value="years">Years</option>
+      </select>
+      <button class="btn btn-info" onclick="openImportModal()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+        Import
+      </button>
       <button class="btn btn-success" onclick="openAddModal()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
         Add Warranty
@@ -51,6 +61,30 @@
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('modal')">Cancel</button>
       <button class="btn btn-primary" id="saveBtn" onclick="saveItem()">Save Warranty</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="importModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">Import Warranties from Library</div>
+      <button class="modal-close" onclick="closeModal('importModal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500;">
+          <input type="checkbox" id="selectAllImport" onchange="toggleSelectAll()" style="width:16px;height:16px;cursor:pointer;">
+          Select All
+        </label>
+        <span id="importCount" class="text-sm text-slate-500">0 selected</span>
+      </div>
+      <div id="importList" style="max-height:400px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;padding:0.5rem;">
+        <div class="tbl-empty">Loading...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('importModal')">Cancel</button>
+      <button class="btn btn-success" id="importBtn" onclick="importSelected()">Import Selected</button>
     </div>
   </div>
 </div>
