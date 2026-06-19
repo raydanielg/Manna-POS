@@ -264,6 +264,13 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     Route::post('/microfinance/guarantors', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'storeGuarantor'])->name('dashboard.microfinance.guarantors.store');
     Route::put('/microfinance/guarantors/{guarantor}', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'updateGuarantor'])->name('dashboard.microfinance.guarantors.update');
     Route::delete('/microfinance/guarantors/{guarantor}', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'destroyGuarantor'])->name('dashboard.microfinance.guarantors.destroy');
+
+    // SMS Campaigns Routes
+    Route::get('/sms-campaigns', [\App\Http\Controllers\Dashboard\SmsCampaignController::class, 'index'])->name('dashboard.sms-campaigns');
+    Route::post('/sms-campaigns', [\App\Http\Controllers\Dashboard\SmsCampaignController::class, 'store'])->name('dashboard.sms-campaigns.store');
+    Route::get('/sms-campaigns/{campaign}', [\App\Http\Controllers\Dashboard\SmsCampaignController::class, 'show'])->name('dashboard.sms-campaigns.show');
+    Route::post('/sms-campaigns/{campaign}/send', [\App\Http\Controllers\Dashboard\SmsCampaignController::class, 'send'])->name('dashboard.sms-campaigns.send');
+    Route::delete('/sms-campaigns/{campaign}', [\App\Http\Controllers\Dashboard\SmsCampaignController::class, 'destroy'])->name('dashboard.sms-campaigns.destroy');
 });
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────
