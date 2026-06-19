@@ -465,6 +465,7 @@
             </div>
         </div>
 
+        @if((Auth::user()->role ?? '') === 'admin')
         {{-- Plan Management --}}
         <div class="dropdown {{ $isPlanMgmt ? 'open' : '' }}" id="dropdown-plan-mgmt">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-plan-mgmt')" data-tip="Plan Management">
@@ -477,6 +478,7 @@
                 <a href="{{ route('dashboard.plan-management.subscriptions') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.subscriptions') ? 'active' : '' }}">Subscriptions</a>
             </div>
         </div>
+        @endif
 
         {{-- Contacts --}}
         <div class="dropdown {{ $isContacts ? 'open' : '' }}" id="dropdown-contacts">
