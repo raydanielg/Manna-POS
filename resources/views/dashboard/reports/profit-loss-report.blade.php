@@ -28,13 +28,13 @@
     </form>
 
     <div class="report-summary" data-aos="fade-up" data-aos-delay="100">
-        <div class="report-summary-card"><div class="rsc-bar green"></div><div class="rsc-label">Revenue</div><div class="rsc-value">TZS {{ number_format($totalRevenue,2) }}</div></div>
-        <div class="report-summary-card"><div class="rsc-bar red"></div><div class="rsc-label">Purchase Cost</div><div class="rsc-value">TZS {{ number_format($totalCost,2) }}</div></div>
-        <div class="report-summary-card"><div class="rsc-bar amber"></div><div class="rsc-label">Expenses</div><div class="rsc-value">TZS {{ number_format($totalExpenses,2) }}</div></div>
+        <div class="report-summary-card"><div class="rsc-bar green"></div><div class="rsc-label">Revenue</div><div class="rsc-value">{{ $userCurrency }} {{ number_format($totalRevenue,2) }}</div></div>
+        <div class="report-summary-card"><div class="rsc-bar red"></div><div class="rsc-label">Purchase Cost</div><div class="rsc-value">{{ $userCurrency }} {{ number_format($totalCost,2) }}</div></div>
+        <div class="report-summary-card"><div class="rsc-bar amber"></div><div class="rsc-label">Expenses</div><div class="rsc-value">{{ $userCurrency }} {{ number_format($totalExpenses,2) }}</div></div>
         <div class="report-summary-card" style="background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border:none;">
             <div class="rsc-label" style="color:#93c5fd;">Net Profit</div>
-            <div class="rsc-value" style="color:#fff;">TZS {{ number_format($netProfit,2) }}</div>
-            <div style="font-size:0.75rem;color:#93c5fd;margin-top:0.25rem;">Gross: TZS {{ number_format($grossProfit,2) }}</div>
+            <div class="rsc-value" style="color:#fff;">{{ $userCurrency }} {{ number_format($netProfit,2) }}</div>
+            <div style="font-size:0.75rem;color:#93c5fd;margin-top:0.25rem;">Gross: {{ $userCurrency }} {{ number_format($grossProfit,2) }}</div>
         </div>
     </div>
 
@@ -54,11 +54,11 @@
                     @foreach($monthly as $m)
                     <tr data-aos="fade-up" data-aos-delay="{{ 250 + $loop->iteration * 40 }}">
                         <td style="font-weight:700;">{{ $m['month'] }}</td>
-                        <td class="text-right" style="color:#16a34a;font-weight:600;">TZS {{ number_format($m['revenue'],2) }}</td>
-                        <td class="text-right" style="color:#e11d48;font-weight:600;">TZS {{ number_format($m['cost'],2) }}</td>
-                        <td class="text-right" style="color:#d97706;font-weight:600;">TZS {{ number_format($m['expenses'],2) }}</td>
-                        <td class="text-right" style="font-weight:700;">TZS {{ number_format($m['revenue'] - $m['cost'],2) }}</td>
-                        <td class="text-right" style="font-weight:800;color:{{ $m['profit'] >= 0 ? '#1d4ed8' : '#e11d48' }};">TZS {{ number_format($m['profit'],2) }}</td>
+                        <td class="text-right" style="color:#16a34a;font-weight:600;">{{ $userCurrency }} {{ number_format($m['revenue'],2) }}</td>
+                        <td class="text-right" style="color:#e11d48;font-weight:600;">{{ $userCurrency }} {{ number_format($m['cost'],2) }}</td>
+                        <td class="text-right" style="color:#d97706;font-weight:600;">{{ $userCurrency }} {{ number_format($m['expenses'],2) }}</td>
+                        <td class="text-right" style="font-weight:700;">{{ $userCurrency }} {{ number_format($m['revenue'] - $m['cost'],2) }}</td>
+                        <td class="text-right" style="font-weight:800;color:{{ $m['profit'] >= 0 ? '#1d4ed8' : '#e11d48' }};">{{ $userCurrency }} {{ number_format($m['profit'],2) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -88,7 +88,7 @@ new Chart(ctx, {
         plugins: { legend: { position:'top', labels:{ usePointStyle:true, boxWidth:8 } } },
         scales: {
             x: { grid:{ display:false }, ticks:{ font:{size:10} } },
-            y: { beginAtZero:true, grid:{ color:'#f1f5f9' }, ticks:{ callback:v=>'TZS '+Number(v).toLocaleString() } }
+            y: { beginAtZero:true, grid:{ color:'#f1f5f9' }, ticks:{ callback:v=>window.__USER_CURRENCY+' '+Number(v).toLocaleString() } }
         }
     }
 });
