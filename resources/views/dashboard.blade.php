@@ -222,6 +222,41 @@
         100% { transform: scale(0.9); opacity: 1; }
     }
 
+    /* Chart container (prevents infinite stretch) */
+    .chart-container {
+        position: relative;
+        height: 280px;
+        width: 100%;
+    }
+
+    /* Empty States */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 1rem;
+        text-align: center;
+    }
+    .empty-icon {
+        width: 48px;
+        height: 48px;
+        color: #cbd5e1;
+        margin-bottom: 0.75rem;
+    }
+    .empty-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #64748b;
+    }
+    .empty-desc {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-top: 0.25rem;
+        max-width: 240px;
+        line-height: 1.4;
+    }
+
     /* Screen size adaptations */
     @media (max-width: 1200px) {
         .charts-row { grid-template-columns: 1fr; }
@@ -375,7 +410,9 @@
                             <span class="flex items-center gap-1.5"><span class="w-3 h-1 bg-violet-400 inline-block rounded-full"></span>Customers</span>
                         </div>
                     </div>
-                    <canvas id="trendChart" height="120"></canvas>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
                 </div>
 
                 {{-- Distribution --}}
@@ -417,7 +454,13 @@
                         </tr>
                     </thead>
                     <tbody id="recent-transactions-body">
-                        <tr><td colspan="5" class="tbl-empty">No transactions yet.</td></tr>
+                        <tr><td colspan="5">
+                            <div class="empty-state">
+                                <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414a1 1 0 00-.707-.293H4"/></svg>
+                                <div class="empty-title">No transactions yet</div>
+                                <div class="empty-desc">When you make sales, they will appear here.</div>
+                            </div>
+                        </td></tr>
                     </tbody>
                 </table>
             </div>
@@ -443,7 +486,13 @@
                         </tr>
                     </thead>
                     <tbody id="recent-customers-body">
-                        <tr><td colspan="4" class="tbl-empty">No customers yet.</td></tr>
+                        <tr><td colspan="4">
+                            <div class="empty-state">
+                                <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                <div class="empty-title">No customers yet</div>
+                                <div class="empty-desc">Newly registered customers will show up here.</div>
+                            </div>
+                        </td></tr>
                     </tbody>
                 </table>
             </div>
@@ -474,7 +523,13 @@
                         </tr>
                     </thead>
                     <tbody id="low-stock-body">
-                        <tr><td colspan="4" class="tbl-empty">No low stock alerts.</td></tr>
+                        <tr><td colspan="4">
+                            <div class="empty-state">
+                                <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <div class="empty-title">No low stock alerts</div>
+                                <div class="empty-desc">All products are above the minimum level.</div>
+                            </div>
+                        </td></tr>
                     </tbody>
                 </table>
             </div>
@@ -694,37 +749,68 @@ function toggleSection(id) {
 
         // Recent transactions
         const txBody = document.getElementById('recent-transactions-body');
-        if (txBody && d.recent_sales && d.recent_sales.length) {
-            txBody.innerHTML = d.recent_sales.map(s => `<tr>
-                <td>${new Date(s.sale_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}</td>
-                <td class="font-semibold">${s.reference || '-'}</td>
-                <td>${s.customer ? s.customer.name : 'Walk-in'}</td>
-                <td class="font-bold">TSh ${Number(s.total).toLocaleString()}</td>
-                <td><span class="badge badge-success">Completed</span></td>
-            </tr>`).join('');
+        if (txBody) {
+            if (d.recent_sales && d.recent_sales.length) {
+                txBody.innerHTML = d.recent_sales.map(s => `<tr>
+                    <td>${new Date(s.sale_date).toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}</td>
+                    <td class="font-semibold">${s.reference || '-'}</td>
+                    <td>${s.customer ? s.customer.name : 'Walk-in'}</td>
+                    <td class="font-bold">TSh ${Number(s.total).toLocaleString()}</td>
+                    <td><span class="badge badge-success">Completed</span></td>
+                </tr>`).join('');
+            } else {
+                txBody.innerHTML = `<tr><td colspan="5">
+                    <div class="empty-state">
+                        <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414a1 1 0 00-.707-.293H4"/></svg>
+                        <div class="empty-title">No transactions yet</div>
+                        <div class="empty-desc">When you make sales, they will appear here.</div>
+                    </div>
+                </td></tr>`;
+            }
         }
 
         // Recent customers
         const custBody = document.getElementById('recent-customers-body');
-        if (custBody && d.recent_customers && d.recent_customers.length) {
-            custBody.innerHTML = d.recent_customers.map(c => `<tr>
-                <td class="font-semibold">${c.name || '-'}</td>
-                <td class="text-slate-500 font-medium">${c.phone || '-'}</td>
-                <td class="text-slate-400">${new Date(c.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</td>
-                <td><span class="badge badge-success">Active</span></td>
-            </tr>`).join('');
+        if (custBody) {
+            if (d.recent_customers && d.recent_customers.length) {
+                custBody.innerHTML = d.recent_customers.map(c => `<tr>
+                    <td class="font-semibold">${c.name || '-'}</td>
+                    <td class="text-slate-500 font-medium">${c.phone || '-'}</td>
+                    <td class="text-slate-400">${new Date(c.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}</td>
+                    <td><span class="badge badge-success">Active</span></td>
+                </tr>`).join('');
+            } else {
+                custBody.innerHTML = `<tr><td colspan="4">
+                    <div class="empty-state">
+                        <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        <div class="empty-title">No customers yet</div>
+                        <div class="empty-desc">Newly registered customers will show up here.</div>
+                    </div>
+                </td></tr>`;
+            }
         }
 
         // Low stock
         const lsBody = document.getElementById('low-stock-body');
-        if (lsBody && d.low_stock_products && d.low_stock_products.length) {
-            lsBody.innerHTML = d.low_stock_products.map(p => `<tr>
-                <td class="font-semibold">${p.name}</td>
-                <td class="text-slate-500 font-medium">${p.sku || '-'}</td>
-                <td><span class="text-red-500 font-bold bg-red-50 px-2 py-0.5 rounded">${p.stock_quantity}</span></td>
-                <td class="text-slate-400">${p.reorder_level || 0}</td>
-            </tr>`).join('');
-            document.getElementById('low-stock-count').textContent = (d.kpis.low_stock || 0) + ' items';
+        if (lsBody) {
+            if (d.low_stock_products && d.low_stock_products.length) {
+                lsBody.innerHTML = d.low_stock_products.map(p => `<tr>
+                    <td class="font-semibold">${p.name}</td>
+                    <td class="text-slate-500 font-medium">${p.sku || '-'}</td>
+                    <td><span class="text-red-500 font-bold bg-red-50 px-2 py-0.5 rounded">${p.stock_quantity}</span></td>
+                    <td class="text-slate-400">${p.reorder_level || 0}</td>
+                </tr>`).join('');
+                document.getElementById('low-stock-count').textContent = (d.kpis.low_stock || 0) + ' items';
+            } else {
+                lsBody.innerHTML = `<tr><td colspan="4">
+                    <div class="empty-state">
+                        <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="empty-title">No low stock alerts</div>
+                        <div class="empty-desc">All products are above the minimum level.</div>
+                    </div>
+                </td></tr>`;
+                document.getElementById('low-stock-count').textContent = '0 items';
+            }
         }
     } catch (e) {
         console.error('Dashboard stats failed', e);
