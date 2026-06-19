@@ -27,13 +27,13 @@
     <thead><tr><th>#</th><th>Product</th><th>SKU</th><th>Category</th><th class="text-right">Stock</th><th class="text-right">Purchase Price</th><th class="text-right">Selling Price</th><th class="text-right">Stock Value</th></tr></thead>
     <tbody>
         @forelse($products as $i => $p)
-        @php $stockVal = $p->current_stock * $p->purchase_price; @endphp
+        @php $stockVal = $p->stock_quantity * $p->purchase_price; @endphp
         <tr>
             <td>{{ $i+1 }}</td>
             <td>{{ $p->name }}</td>
             <td>{{ $p->sku ?? '—' }}</td>
             <td>{{ $p->category->name ?? 'N/A' }}</td>
-            <td class="text-right">{{ number_format($p->current_stock) }}</td>
+            <td class="text-right">{{ number_format($p->stock_quantity) }}</td>
             <td class="text-right">{{ $userCurrency }} {{ number_format($p->purchase_price,2) }}</td>
             <td class="text-right">{{ $userCurrency }} {{ number_format($p->selling_price,2) }}</td>
             <td class="text-right">{{ $userCurrency }} {{ number_format($stockVal,2) }}</td>

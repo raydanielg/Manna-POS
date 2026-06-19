@@ -27,7 +27,7 @@
         @forelse($expenses as $i => $e)
         <tr>
             <td>{{ $i+1 }}</td>
-            <td>{{ $e->reference_no ?? $e->id }}</td>
+            <td>{{ $e->reference ?? $e->id }}</td>
             <td>{{ $e->category->name ?? 'N/A' }}</td>
             <td>{{ $e->expense_date ? \Carbon\Carbon::parse($e->expense_date)->format('M d, Y') : '—' }}</td>
             <td class="text-right text-red">{{ $userCurrency }} {{ number_format($e->amount,2) }}</td>
