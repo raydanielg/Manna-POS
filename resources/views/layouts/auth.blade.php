@@ -44,7 +44,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("{{ asset('MannaPOS.gif') }}");
+            background-image: url("{{ asset('MannaPOS.png') }}");
             background-size: cover;
             background-position: center;
             opacity: 0.35;
