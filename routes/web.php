@@ -225,6 +225,20 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     Route::delete('/banking/accounts/{account}', [\App\Http\Controllers\Dashboard\BankingController::class, 'destroyAccount'])->name('dashboard.banking.accounts.destroy');
     Route::get('/banking/transactions', [\App\Http\Controllers\Dashboard\BankingController::class, 'transactions'])->name('dashboard.banking.transactions');
     Route::post('/banking/transactions', [\App\Http\Controllers\Dashboard\BankingController::class, 'storeTransaction'])->name('dashboard.banking.transactions.store');
+
+    // Feedback & Support Routes (Customer)
+    Route::get('/feedback', [\App\Http\Controllers\Dashboard\FeedbackController::class, 'index'])->name('dashboard.feedback.index');
+    Route::get('/feedback/create', [\App\Http\Controllers\Dashboard\FeedbackController::class, 'create'])->name('dashboard.feedback.create');
+    Route::post('/feedback', [\App\Http\Controllers\Dashboard\FeedbackController::class, 'store'])->name('dashboard.feedback.store');
+    Route::get('/feedback/{feedback}', [\App\Http\Controllers\Dashboard\FeedbackController::class, 'show'])->name('dashboard.feedback.show');
+    Route::post('/feedback/{feedback}/reply', [\App\Http\Controllers\Dashboard\FeedbackController::class, 'reply'])->name('dashboard.feedback.reply');
+
+    // Admin Feedback Routes
+    Route::get('/feedback-admin', [\App\Http\Controllers\Dashboard\AdminFeedbackController::class, 'index'])->name('dashboard.feedback.admin.index');
+    Route::get('/feedback-admin/{feedback}', [\App\Http\Controllers\Dashboard\AdminFeedbackController::class, 'show'])->name('dashboard.feedback.admin.show');
+    Route::post('/feedback-admin/{feedback}/reply', [\App\Http\Controllers\Dashboard\AdminFeedbackController::class, 'reply'])->name('dashboard.feedback.admin.reply');
+    Route::patch('/feedback-admin/{feedback}/status', [\App\Http\Controllers\Dashboard\AdminFeedbackController::class, 'updateStatus'])->name('dashboard.feedback.admin.status');
+    Route::patch('/feedback-admin/{feedback}/priority', [\App\Http\Controllers\Dashboard\AdminFeedbackController::class, 'updatePriority'])->name('dashboard.feedback.admin.priority');
 });
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────
