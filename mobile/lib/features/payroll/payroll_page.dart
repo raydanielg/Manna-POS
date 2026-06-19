@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/api_service.dart';
 import '../../shared/theme/app_colors.dart';
-import '../../shared/utils/formatters.dart';
+import '../../shared/utils/formatters.dart' as fmt;
 
 class PayrollPage extends StatefulWidget {
   const PayrollPage({super.key});

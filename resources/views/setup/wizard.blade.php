@@ -39,6 +39,10 @@ sel.inp{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org
 .btn-s{background:#f1f5f9;color:#475569}
 .btn-s:hover{background:#e2e8f0}
 .done-icon{width:64px;height:64px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;box-shadow:0 6px 20px rgba(22,163,74,.2)}
+.ripple-overlay{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,23,42,.82);backdrop-filter:blur(8px);opacity:0;pointer-events:none;visibility:hidden;transition:opacity .3s,visibility .3s}
+.ripple-overlay.open{opacity:1;pointer-events:auto;visibility:visible}
+.ripple-overlay img{width:120px;height:120px}
+.ripple-overlay .rt{margin-top:1rem;font-size:.85rem;font-weight:600;color:#cbd5e1;letter-spacing:.05em;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -260,10 +264,15 @@ function selectUse(el){
   el.classList.add('on');
 }
 document.getElementById('setupForm').addEventListener('submit',function(){
-  const btn=document.getElementById('completeBtn');
-  btn.disabled=true;
-  btn.innerHTML='<svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Setting up...';
+  showRipple('Setting up your business');
 });
+function showRipple(t){const el=document.getElementById('rippleOverlay');if(t)el.querySelector('.rt').textContent=t;el.classList.add('open');}
 </script>
+
+<div id="rippleOverlay" class="ripple-overlay">
+    <img src="{{ asset('Ripple@1x-1.0s-200px-200px (1).svg') }}" alt="Loading">
+    <div class="rt">Loading...</div>
+</div>
+
 </body>
 </html>
