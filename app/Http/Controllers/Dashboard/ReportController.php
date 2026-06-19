@@ -83,7 +83,7 @@ class ReportController extends Controller
 
         $purchases = Purchase::forCurrentUser($this->currentBusinessId())->with('supplier')->whereBetween('purchase_date',[$from,$to])->orderBy('purchase_date','desc')->paginate(25);
 
-        return view('dashboard.reports.purchase-report', compact('summary','dailyPurchases','purchases','from','to'));
+        return view('dashboard.reports.purchase-report', compact('summary','dailyPurchases','purchases','from','to','userCurrency'));
     }
 
     public function inventoryReport(Request $request)
