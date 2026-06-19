@@ -89,8 +89,8 @@
                         <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $s->reference ?? $s->id }}</td>
                         <td class="px-4 py-3 text-sm text-gray-900">{{ $s->customer->name ?? 'Walk-in' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
-                        <td class="px-4 py-3 text-sm text-right font-semibold text-gray-900">{{ $userCurrency }} {{ number_format($s->total_amount,2) }}</td>
-                        <td class="px-4 py-3 text-sm text-right font-semibold text-green-600">{{ $userCurrency }} {{ number_format($s->paid_amount,2) }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-gray-900">{{ $userCurrency }} {{ number_format($s->total,2) }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-green-600">{{ $userCurrency }} {{ number_format($s->paid,2) }}</td>
                         <td class="px-4 py-3 text-sm"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">{{ $s->payment_method ?? '—' }}</span></td>
                         <td class="px-4 py-3 text-sm">
                             @if($s->status=='completed')

@@ -65,10 +65,10 @@
                     @forelse($purchases as $p)
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($purchases->currentPage()-1)*$purchases->perPage() }}</td>
-                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $p->reference_no ?? $p->id }}</td>
+                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $p->reference ?? $p->id }}</td>
                         <td class="px-4 py-3 text-sm text-gray-900">{{ $p->supplier->name ?? 'N/A' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $p->purchase_date ? \Carbon\Carbon::parse($p->purchase_date)->format('M d, Y') : '—' }}</td>
-                        <td class="px-4 py-3 text-sm text-right font-semibold text-gray-900">{{ $userCurrency }} {{ number_format($p->total_amount,2) }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-gray-900">{{ $userCurrency }} {{ number_format($p->total,2) }}</td>
                         <td class="px-4 py-3 text-sm">
                             @php
                                 $payBadge = match($p->payment_status) { 'paid' => 'bg-green-50 text-green-700', 'partial' => 'bg-yellow-50 text-yellow-700', 'unpaid' => 'bg-red-50 text-red-700', default => 'bg-gray-50 text-gray-600' };
