@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\WelcomeEmail;
 use App\Mail\OtpVerificationEmail;
+use App\Services\NextSmsService;
 
 class RegisterController extends Controller
 {
@@ -20,9 +21,12 @@ class RegisterController extends Controller
 
     protected $redirectTo = '/verify-otp';
 
-    public function __construct()
+    protected NextSmsService $sms;
+
+    public function __construct(NextSmsService $sms)
     {
         $this->middleware('guest');
+        $this->sms = $sms;
     }
 
     protected function validator(array $data)
@@ -96,12 +100,16 @@ class RegisterController extends Controller
             'notes'                => '14-day free trial on registration',
         ]);
 
-        // Send welcome and OTP emails
+        // Send welcome and OTP via email + SMS
         try {
             Mail::to($user->email)->send(new WelcomeEmail($user));
             Mail::to($user->email)->send(new OtpVerificationEmail($user, $otp));
         } catch (\Exception $e) {
             \Log::error('Registration email failed: ' . $e->getMessage());
+        }
+
+        if ($user->phone) {
+            $this->sms->sendOtp($user->phone, $otp);
         }
 
         return $user;
