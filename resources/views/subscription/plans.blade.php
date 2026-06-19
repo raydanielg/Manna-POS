@@ -315,23 +315,16 @@ $__badgeColors = [
         Current Plan
       </button>
       @elseif($isFree)
-      <form method="POST" action="/subscription/choose">
-        @csrf
-        <input type="hidden" name="plan_id" value="{{ $plan->id }}">
-        <input type="hidden" name="billing_cycle" value="monthly">
-        <button type="submit" class="btn-plan green">Start 14-Day Free Trial</button>
-      </form>
+      <button class="btn-plan green" onclick="choosePlan({{ $plan->id }}, 'monthly', 'Start 14-Day Free Trial')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:.35rem;"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Start 14-Day Free Trial
+      </button>
       @else
-      <form method="POST" action="/subscription/choose" class="choose-form">
-        @csrf
-        <input type="hidden" name="plan_id" value="{{ $plan->id }}">
-        <input type="hidden" name="billing_cycle" value="monthly" class="bill-input">
-        <button type="submit" class="btn-plan {{ $plan->is_featured ? 'primary' : 'outline' }}">
-          @if($plan->price_monthly == 0) Get Started Free
-          @else Subscribe to {{ $plan->name }}
-          @endif
-        </button>
-      </form>
+      <button class="btn-plan {{ $plan->is_featured ? 'primary' : 'outline' }}" onclick="choosePlan({{ $plan->id }}, document.querySelector('.bill-input[data-plan=\'{{ $plan->id }}\']')?.value || 'monthly', 'Subscribe to {{ $plan->name }}')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:.35rem;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Subscribe to {{ $plan->name }}
+      </button>
+      <input type="hidden" class="bill-input" data-plan="{{ $plan->id }}" value="monthly">
       @endif
     </div>
     @endforeach
