@@ -80,13 +80,13 @@ class ReportController extends Controller
 
     public function inventoryReport(Request $request)
     {
-        $lowStock = Product::forCurrentUser($this->currentBusinessId())->where(function($q){ $q->whereColumn('current_stock','<=','reorder_level')->orWhere('current_stock',0); })->count();
+        $lowStock = Product::forCurrentUser($this->currentBusinessId())->where(function($q){ $q->whereColumn('stock_quantity','<=','reorder_level')->orWhere('stock_quantity',0); })->count();
         $totalProducts = Product::forCurrentUser($this->currentBusinessId())->count();
-        $totalStockValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(current_stock * purchase_price) as val')->value('val') ?? 0;
-        $totalRetailValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(current_stock * selling_price) as val')->value('val') ?? 0;
+        $totalStockValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(stock_quantity * purchase_price) as val')->value('val') ?? 0;
+        $totalRetailValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(stock_quantity * selling_price) as val')->value('val') ?? 0;
 
-        $products = Product::forCurrentUser($this->currentBusinessId())->with('category')->orderBy('current_stock','asc')->paginate(25);
-        $categories = Product::forCurrentUser($this->currentBusinessId())->selectRaw('product_categories.name as category, COUNT(products.id) as count, SUM(products.current_stock) as stock')
+        $products = Product::forCurrentUser($this->currentBusinessId())->with('category')->orderBy('stock_quantity','asc')->paginate(25);
+        $categories = Product::forCurrentUser($this->currentBusinessId())->selectRaw('product_categories.name as category, COUNT(products.id) as count, SUM(products.stock_quantity) as stock')
             ->join('product_categories','products.category_id','=','product_categories.id')
             ->groupBy('product_categories.name')
             ->get();
@@ -105,7 +105,7 @@ class ReportController extends Controller
         ];
 
         $byCategory = Expense::forCurrentUser($this->currentBusinessId())->selectRaw('expense_categories.name as category, COUNT(*) as count, SUM(expenses.amount) as total')
-            ->join('expense_categories','expenses.category_id','=','expense_categories.id')
+            ->join('expense_categories','expenses.expense_category_id','=','expense_categories.id')
             ->whereBetween('expense_date',[$from,$to])
             ->groupBy('expense_categories.name')
             ->orderByDesc('total')
