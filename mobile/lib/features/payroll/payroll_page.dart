@@ -146,7 +146,7 @@ class _PayrollPageState extends State<PayrollPage> {
           final status = p['status']?.toString() ?? 'open';
           final statusColor = status == 'open' ? const Color(0xFF10B981) : const Color(0xFF64748B);
           return GestureDetector(
-            onTap: () => context.push('/payroll/periods/${p['id']}'),
+            onTap: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Period ${p['name']} – coming soon'))),
             child: Container(
               width: 220,
               padding: const EdgeInsets.all(14),
