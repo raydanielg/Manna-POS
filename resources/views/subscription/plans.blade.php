@@ -415,12 +415,54 @@ async function choosePlan(planId, cycle, actionLabel) {
     const data = await resp.json();
 
     if (resp.ok) {
-      Swal.close();
-      Toast.fire({ icon: 'success', title: data.message || 'Subscribed successfully!' });
-      setTimeout(() => window.location.reload(), 1200);
+      if (data.checkout_url) {
+        // Paid plan — redirect to Snippe checkout
+        Swal.fire({
+          title: 'Redirecting to payment...',
+          html: `
+            <div style="text-align:center;">
+              <div style="width:60px;height:60px;border-radius:50%;border:4px solid #e2e8f0;border-top-color:#2563eb;animation:spin 0.8s linear infinite;margin:0 auto 1rem;"></div>
+              <p style="color:#64748b;font-size:.88rem;margin-bottom:.5rem;">You will be redirected to Snippe secure checkout to complete payment.</p>
+              <p style="color:#94a3b8;font-size:.78rem;">After payment, your subscription will be activated automatically.</p>
+            </div>
+          `,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          didOpen: () => {
+            window.open(data.checkout_url, '_blank');
+            setTimeout(() => {
+              Swal.fire({
+                title: 'Payment Started',
+                html: `
+                  <p style="color:#64748b;font-size:.88rem;">Checkout opened in a new tab.</p>
+                  <p style="color:#94a3b8;font-size:.78rem;margin-top:.3rem;">Complete payment there, then refresh this page.</p>
+                `,
+                icon: 'info',
+                confirmButtonColor: '#2563eb',
+                confirmText: 'I\'ve completed payment',
+                showCancelButton: true,
+                cancelButtonText: 'Cancel',
+                reverseButtons: true,
+              }).then((r) => {
+                if (r.isConfirmed) window.location.reload();
+              });
+            }, 1500);
+          }
+        });
+      } else {
+        // Free / Trial — activated immediately
+        Swal.close();
+        Toast.fire({ icon: 'success', title: data.message || 'Subscribed successfully!' });
+        setTimeout(() => window.location.reload(), 1200);
+      }
     } else {
       Swal.close();
       Toast.fire({ icon: 'error', title: data.message || 'Subscription failed. Please try again.' });
+      if (data.checkout_url) {
+        // Fallback: still provide checkout link
+        window.open(data.checkout_url, '_blank');
+      }
     }
   } catch (err) {
     Swal.close();
