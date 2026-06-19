@@ -1914,8 +1914,17 @@ function exportTableToCSV(tableSelector, filename) {
     const items = document.querySelectorAll('.mb-item');
     items.forEach(function(el){
         const route = el.getAttribute('data-route');
-        if (route && path.includes('/' + route)) {
-            el.classList.add('active');
+        if (!route) return;
+        // Exact match first
+        if (path === '/dashboard/'+route || path === '/dashboard/m/'+route) {
+            el.classList.add('active'); return;
+        }
+        // Partial match - but avoid false positives (e.g. "sales" in "profile")
+        if (path.includes('/' + route + '/') || path.includes('/' + route + '?')) {
+            el.classList.add('active'); return;
+        }
+        if (route === 'pos' && path.includes('/sell/pos')) {
+            el.classList.add('active'); return;
         }
     });
     // Dashboard root
