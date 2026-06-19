@@ -46,26 +46,20 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        $token = Str::random(64);
-
         $user = User::create([
             'name'             => $data['first_name'] . ' ' . $data['last_name'],
             'email'            => $data['email'],
             'password'         => Hash::make($data['password']),
             'phone'            => $data['phone'],
             'role'             => 'user',
-            'status'           => 'pending',
+            'status'           => 'active',
             'business_name'    => $data['business_name'],
             'business_type'    => $data['business_type'] ?? null,
             'business_country' => $data['business_country'],
             'business_city'    => $data['business_city'] ?? null,
             'currency'         => $data['currency'],
             'setup_completed'  => false,
-            'otp_code'         => $otp,
-            'otp_expires_at'   => now()->addMinutes(30),
-            'activation_token' => $token,
-            'activation_token_expires_at' => now()->addHours(24),
+            'email_verified_at'=> now(),
         ]);
 
         // Find or create a free trial plan
@@ -99,12 +93,6 @@ class RegisterController extends Controller
             'expires_at'           => now()->addDays(14),
             'notes'                => '14-day free trial on registration',
         ]);
-
-        // Send OTP via SMS only (email OTP disabled)
-        if ($user->phone) {
-            $this->sms->sendWelcome($user->phone, explode(' ', $user->name)[0]);
-            $this->sms->sendOtp($user->phone, $otp);
-        }
 
         return $user;
     }
