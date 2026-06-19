@@ -451,6 +451,25 @@
         .social-btn:hover { transform: translateY(-1px); opacity: 0.92; }
         .social-btn:active { transform: translateY(0); }
 
+        .ripple-overlay {
+            position: fixed; inset: 0; z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(8px);
+            opacity: 0; pointer-events: none; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .ripple-overlay.open { opacity: 1; pointer-events: auto; visibility: visible; }
+        .ripple-overlay img { width: 120px; height: 120px; }
+        .ripple-overlay .ripple-text {
+            margin-top: 1rem; font-size: 0.85rem; font-weight: 600; color: #cbd5e1;
+            letter-spacing: 0.05em; text-transform: uppercase;
+        }
+        .ripple-overlay .ripple-dots::after {
+            content: ''; animation: rippleDots 1.4s infinite steps(4, end);
+        }
+        @keyframes rippleDots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
+
         .auth-footer {
             text-align: center;
             margin-top: 2rem;
