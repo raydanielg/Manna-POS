@@ -1828,5 +1828,158 @@ function exportTableToCSV(tableSelector, filename) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script>AOS.init({ once: true, offset: 40, duration: 700, easing: 'ease-out-cubic' });</script>
 
+{{-- ─── Mobile Bottom Navigation ──────────────────────────────────── --}}
+<nav id="mobileBottomNav" class="mobile-bottom-nav">
+    <a href="{{ route('dashboard') }}" class="mb-item" data-route="dashboard" data-ripple onclick="hideRipple()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>Home</span>
+    </a>
+    <a href="{{ route('dashboard.sell.pos') }}" class="mb-item" data-route="sell" data-ripple onclick="hideRipple()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+        <span>POS</span>
+    </a>
+    <a href="{{ route('dashboard.inventory.products') }}" class="mb-item" data-route="inventory" data-ripple onclick="hideRipple()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        <span>Stock</span>
+    </a>
+    <a href="{{ route('dashboard.contacts.customers') }}" class="mb-item" data-route="customers" data-ripple onclick="hideRipple()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>
+        <span>Clients</span>
+    </a>
+    <a href="{{ route('dashboard.reports.sales-report') }}" class="mb-item" data-route="reports" data-ripple onclick="hideRipple()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span>Reports</span>
+    </a>
+    <a href="{{ route('dashboard.profile') }}" class="mb-item" data-route="profile" data-ripple onclick="hideRipple()">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        <span>Profile</span>
+    </a>
+</nav>
+
+<style>
+/* ── Mobile Bottom Navigation ──────────────────────────────────── */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 64px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(233,237,245,0.8);
+    z-index: 999;
+    padding: 0 4px;
+    box-shadow: 0 -4px 20px rgba(15,23,42,0.06);
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.mobile-bottom-nav .mb-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px; padding: 4px 6px; min-width: 48px;
+    color: #94a3b8; text-decoration: none;
+    transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+}
+.mobile-bottom-nav .mb-item svg {
+    width: 22px; height: 22px; transition: all 0.2s;
+}
+.mobile-bottom-nav .mb-item span {
+    font-size: 0.55rem; font-weight: 600;
+    letter-spacing: 0.02em; text-transform: uppercase;
+}
+.mobile-bottom-nav .mb-item.active { color: #2563eb; }
+.mobile-bottom-nav .mb-item.active svg { transform: translateY(-1px); filter: drop-shadow(0 1px 4px rgba(37,99,235,0.25)); }
+.mobile-bottom-nav .mb-item::after {
+    content: ''; position: absolute; top: 2px;
+    width: 20px; height: 3px; border-radius: 0 0 3px 3px;
+    background: linear-gradient(90deg,#2563eb,#7c3aed);
+    opacity: 0; transform: scaleX(0);
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.mobile-bottom-nav .mb-item.active::after { opacity: 1; transform: scaleX(1); }
+
+/* Show bottom nav only on mobile */
+@media (max-width: 767px) {
+    .mobile-bottom-nav { display: flex; }
+    .main-wrap { padding-bottom: 72px; }
+    .dash-content { padding-bottom: 4px; }
+}
+</style>
+
+<script>
+// ── Mobile Bottom Nav Active State ──────────────────────────────
+(function(){
+    const path = window.location.pathname;
+    const items = document.querySelectorAll('.mb-item');
+    items.forEach(function(el){
+        const route = el.getAttribute('data-route');
+        if (route && path.includes('/' + route)) {
+            el.classList.add('active');
+        }
+    });
+    // Dashboard root
+    if (path === '/dashboard' || path === '/dashboard/') {
+        document.querySelector('.mb-item[data-route="dashboard"]')?.classList.add('active');
+    }
+})();
+
+// ── PWA Install Prompt ──────────────────────────────────────────
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Show install banner after 3 seconds
+    setTimeout(() => {
+        if (deferredPrompt) {
+            const banner = document.getElementById('pwaInstallBanner');
+            if (banner) banner.style.display = 'flex';
+        }
+    }, 3000);
+});
+async function installPWA() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const result = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    const banner = document.getElementById('pwaInstallBanner');
+    if (banner) banner.style.display = 'none';
+}
+
+// ── Service Worker Registration ─────────────────────────────────
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+}
+
+// ── Pull-to-refresh (mobile) ────────────────────────────────────
+let touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+    if (window.scrollY === 0) touchStartY = e.touches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchmove', (e) => {
+    if (touchStartY > 0 && window.scrollY === 0 && (e.touches[0].clientY - touchStartY) > 100) {
+        touchStartY = 0;
+        window.location.reload();
+    }
+}, { passive: true });
+</script>
+
+{{-- PWA Install Banner --}}
+<div id="pwaInstallBanner" style="display:none;position:fixed;bottom:80px;left:12px;right:12px;z-index:9998;background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:16px;padding:14px 18px;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,0.3);align-items:center;gap:12px;backdrop-filter:blur(12px);max-width:400px;margin:0 auto;">
+    <div style="display:flex;align-items:center;gap:12px;flex:1;">
+        <img src="{{ asset('logo.png') }}" alt="MannaPOS" style="width:40px;height:40px;border-radius:10px;">
+        <div>
+            <div style="font-weight:700;font-size:.82rem;">Install MannaPOS</div>
+            <div style="font-size:.68rem;color:#94a3b8;">Add to home screen for faster access</div>
+        </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+        <button onclick="document.getElementById('pwaInstallBanner').style.display='none'" style="background:rgba(255,255,255,0.1);border:none;color:#94a3b8;padding:8px 14px;border-radius:10px;font-size:.75rem;font-weight:600;cursor:pointer;">Later</button>
+        <button onclick="installPWA()" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);border:none;color:#fff;padding:8px 18px;border-radius:10px;font-size:.75rem;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(37,99,235,0.3);">Install</button>
+    </div>
+</div>
+
 </body>
 </html>
