@@ -13,12 +13,14 @@ class UserSubscription extends Model
         'user_id', 'subscription_plan_id',
         'billing_cycle', 'amount_paid', 'currency',
         'status', 'starts_at', 'expires_at',
-        'transaction_ref', 'notes',
+        'transaction_ref', 'snippe_session_ref', 'payment_status', 'paid_at',
+        'notes',
     ];
 
     protected $casts = [
         'starts_at'   => 'datetime',
         'expires_at'  => 'datetime',
+        'paid_at'     => 'datetime',
         'amount_paid' => 'decimal:2',
     ];
 
