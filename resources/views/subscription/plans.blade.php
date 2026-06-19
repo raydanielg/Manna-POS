@@ -106,6 +106,8 @@
   .bill-wrap{margin-bottom:1.75rem;}
 }
 
+@keyframes spin{to{transform:rotate(360deg)}}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .plan-card, .stat-card { transition: none !important; animation: none !important; }
