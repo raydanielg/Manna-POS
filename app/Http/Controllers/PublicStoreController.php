@@ -69,7 +69,6 @@ class PublicStoreController extends Controller
         }
 
         // Store order as JSON in user's store_settings.orders or create a simple table
-        $orders = $settings['orders'] ?? [];
         $order = [
             'id'              => 'ORD-' . strtoupper(Str::random(8)),
             'customer_name'   => $data['customer_name'],
