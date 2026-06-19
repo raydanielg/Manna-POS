@@ -262,11 +262,11 @@ async function loadList(page = 1) {
             ? `<button class="btn btn-warning btn-xs" onclick="openBlockModal(${u.id},'${escHtml(u.name).replace(/'/g,"\\'")}','block')" title="Block">
                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
                </button>`
-            : `<button class="btn btn-success btn-xs" onclick="unblockUser(${u.id},'${escHtml(u.name).replace(/'/g,"\\'")}'" title="Unblock">
+            : `<button class="btn btn-success btn-xs" onclick="unblockUser(${u.id},'${escHtml(u.name).replace(/'/g,"\\'")}')" title="Unblock">
                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                </button>`
           }
-          <button class="btn btn-danger btn-xs" onclick="deleteUser(${u.id},'${escHtml(u.name).replace(/'/g,"\\'")}'" title="Delete">
+          <button class="btn btn-danger btn-xs" onclick="deleteUser(${u.id},'${escHtml(u.name).replace(/'/g,"\\'")}')" title="Delete">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           </button>
         </div></td>
