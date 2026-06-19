@@ -107,6 +107,7 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = $this->userCurrency();
 
         $summary = [
             'total_expenses' => Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->count(),
@@ -128,13 +129,14 @@ class ReportController extends Controller
 
         $expenses = Expense::forCurrentUser($this->currentBusinessId())->with('category')->whereBetween('expense_date',[$from,$to])->orderBy('expense_date','desc')->paginate(25);
 
-        return view('dashboard.reports.expense-report', compact('summary','byCategory','dailyExpenses','expenses','from','to'));
+        return view('dashboard.reports.expense-report', compact('summary','byCategory','dailyExpenses','expenses','from','to','userCurrency'));
     }
 
     public function profitLossReport(Request $request)
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = $this->userCurrency();
 
         $totalRevenue = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total');
         $totalCost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total');
