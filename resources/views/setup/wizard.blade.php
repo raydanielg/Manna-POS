@@ -134,48 +134,64 @@ sel.inp{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org
 
     <!-- PANEL 2: Preferences -->
     <div class="panel" id="wp2">
-      <h3 class="panel-title">Set your preferences</h3>
-      <p class="panel-desc">Help us customize your experience for your business needs.</p>
+      <h3 class="text-lg font-extrabold text-slate-900 mb-1">Preferences</h3>
+      <p class="text-sm text-slate-500 mb-5">Customize your experience.</p>
 
-      <div class="form-group">
-        <label class="form-label">Fiscal Year Start</label>
-        <div class="input-wrap">
-          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          <select name="fiscal_year_start" class="form-control" style="padding-left:2.5rem;">
-            <option value="January">January</option><option value="February">February</option>
-            <option value="March">March</option><option value="April">April</option>
-            <option value="May">May</option><option value="June">June</option>
-            <option value="July">July</option><option value="August">August</option>
-            <option value="September">September</option><option value="October">October</option>
-            <option value="November">November</option><option value="December">December</option>
+      <div class="mb-4">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Business Type</label>
+        <div class="relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <select name="business_type" class="inp sel">
+            <option value="">Select type</option>
+            <option value="retail" {{ $user->business_type=='retail'?'selected':'' }}>Retail Shop</option>
+            <option value="wholesale" {{ $user->business_type=='wholesale'?'selected':'' }}>Wholesale</option>
+            <option value="restaurant" {{ $user->business_type=='restaurant'?'selected':'' }}>Restaurant / Cafe</option>
+            <option value="supermarket" {{ $user->business_type=='supermarket'?'selected':'' }}>Supermarket</option>
+            <option value="pharmacy" {{ $user->business_type=='pharmacy'?'selected':'' }}>Pharmacy</option>
+            <option value="electronics" {{ $user->business_type=='electronics'?'selected':'' }}>Electronics</option>
+            <option value="services" {{ $user->business_type=='services'?'selected':'' }}>Services</option>
+            <option value="other" {{ $user->business_type=='other'?'selected':'' }}>Other</option>
           </select>
         </div>
       </div>
 
-      <p style="font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.75rem;">What will you mainly use MannaPOS for?</p>
-      <div class="feature-cards" id="useCase">
-        <div class="feat-card selected" onclick="selectUse(this)">
-          <div class="feat-card-icon" style="background:#dbeafe;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
-          <div><h4>Retail Sales</h4><p>POS, inventory & customers</p></div>
-        </div>
-        <div class="feat-card" onclick="selectUse(this)">
-          <div class="feat-card-icon" style="background:#dcfce7;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
-          <div><h4>Wholesale</h4><p>Bulk orders & purchases</p></div>
-        </div>
-        <div class="feat-card" onclick="selectUse(this)">
-          <div class="feat-card-icon" style="background:#fef9c3;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
-          <div><h4>Services</h4><p>Invoices & billing</p></div>
-        </div>
-        <div class="feat-card" onclick="selectUse(this)">
-          <div class="feat-card-icon" style="background:#fce7f3;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
-          <div><h4>Restaurant</h4><p>Menu, orders & tables</p></div>
+      <div class="mb-5">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Fiscal Year Start</label>
+        <div class="relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <select name="fiscal_year_start" class="inp sel">
+            @foreach(['January','February','March','April','May','June','July','August','September','October','November','December'] as $m)
+            <option value="{{ $m }}">{{ $m }}</option>
+            @endforeach
+          </select>
         </div>
       </div>
 
-      <div class="btn-row">
-        <button type="button" class="btn btn-secondary" onclick="goWiz(1)">← Back</button>
-        <button type="button" class="btn btn-primary" onclick="goWiz(3)">
-          All Done! →
+      <p class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">What will you mainly use MannaPOS for?</p>
+      <div class="grid grid-cols-2 gap-2.5 mb-6" id="useCase">
+        <div class="feat-card on" onclick="selectUse(this)">
+          <div class="feat-card-icon" style="background:#dbeafe;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+          <div><h4 class="text-sm font-bold text-slate-800">Retail Sales</h4><p class="text-xs text-slate-500">POS, inventory & customers</p></div>
+        </div>
+        <div class="feat-card" onclick="selectUse(this)">
+          <div class="feat-card-icon" style="background:#dcfce7;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+          <div><h4 class="text-sm font-bold text-slate-800">Wholesale</h4><p class="text-xs text-slate-500">Bulk orders & purchases</p></div>
+        </div>
+        <div class="feat-card" onclick="selectUse(this)">
+          <div class="feat-card-icon" style="background:#fef9c3;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+          <div><h4 class="text-sm font-bold text-slate-800">Services</h4><p class="text-xs text-slate-500">Invoices & billing</p></div>
+        </div>
+        <div class="feat-card" onclick="selectUse(this)">
+          <div class="feat-card-icon" style="background:#fce7f3;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+          <div><h4 class="text-sm font-bold text-slate-800">Restaurant</h4><p class="text-xs text-slate-500">Menu, orders & tables</p></div>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button" class="btn-s py-2.5 px-5 rounded-lg font-bold text-sm" onclick="goWiz(1)">← Back</button>
+        <button type="button" class="btn-p py-2.5 px-5 rounded-lg font-bold text-sm flex items-center justify-center gap-2" onclick="goWiz(3)">
+          <span>Finish Setup</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </button>
       </div>
     </div>
