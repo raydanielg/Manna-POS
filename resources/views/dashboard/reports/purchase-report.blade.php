@@ -1,37 +1,46 @@
 ﻿@extends('layouts.dashboard')
 @section('page_title','Purchase Report')
 @section('content')
-<div class="dash-content">
-<div class="page-card">
-  <div class="card-header">
-    <div class="card-title">Purchase Report</div>
-    <div class="filters-row">
-      <input type="date" id="fromDate" class="form-control" style="width:160px;" onchange="loadReport()">
-      <input type="date" id="toDate" class="form-control" style="width:160px;" onchange="loadReport()">
-      <button class="btn btn-primary" onclick="loadReport()">Generate</button>
+<div class="dash-content animate__animated animate__fadeInUp report-page">
+
+    <div class="report-header-bar" data-aos="fade-down">
+        <div>
+            <h1>Purchase Report</h1>
+            <p>Track supplier orders, costs, and payment status over time</p>
+        </div>
+        <div class="report-actions no-print">
+            <button type="button" class="btn btn-primary" onclick="openPdfPreview('Purchase Report')">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Preview PDF
+            </button>
+            <button type="button" class="btn btn-success" onclick="exportTableToCSV('#purchaseTable', 'purchase-report.csv')">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Export Excel
+            </button>
+        </div>
     </div>
-  </div>
-  <div id="summaryCards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:1.25rem;border-bottom:1px solid #e9edf5;">
-    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:1rem;">
-      <div style="font-size:0.72rem;font-weight:600;color:#2563eb;text-transform:uppercase;">Total Orders</div>
-      <div style="font-size:1.6rem;font-weight:700;color:#1d4ed8;" id="totalOrders">-</div>
+
+    <div class="report-filters no-print" data-aos="fade-up" data-aos-delay="50">
+        <div><label>From</label><input type="date" id="fromDate" onchange="loadReport()"></div>
+        <div><label>To</label><input type="date" id="toDate" onchange="loadReport()"></div>
+        <button class="btn btn-primary" style="height:40px;" onclick="loadReport()">Generate</button>
     </div>
-    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:1rem;">
-      <div style="font-size:0.72rem;font-weight:600;color:#16a34a;text-transform:uppercase;">Total Cost</div>
-      <div style="font-size:1.6rem;font-weight:700;color:#15803d;" id="totalCost">-</div>
+
+    <div class="report-summary" data-aos="fade-up" data-aos-delay="100">
+        <div class="report-summary-card"><div class="rsc-bar blue"></div><div class="rsc-label">Total Orders</div><div class="rsc-value" id="totalOrders">-</div></div>
+        <div class="report-summary-card"><div class="rsc-bar emerald"></div><div class="rsc-label">Total Cost</div><div class="rsc-value" id="totalCost">-</div></div>
+        <div class="report-summary-card"><div class="rsc-bar amber"></div><div class="rsc-label">Unpaid</div><div class="rsc-value" id="totalUnpaid">-</div></div>
     </div>
-    <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:1rem;">
-      <div style="font-size:0.72rem;font-weight:600;color:#d97706;text-transform:uppercase;">Unpaid</div>
-      <div style="font-size:1.6rem;font-weight:700;color:#b45309;" id="totalUnpaid">-</div>
+
+    <div class="report-table-wrap" data-aos="fade-up" data-aos-delay="150">
+        <div class="rtw-head"><div class="rtw-title">Purchase Details</div></div>
+        <div class="rtw-body tbl-responsive">
+            <table class="report-table" id="purchaseTable">
+                <thead><tr><th>#</th><th>Reference</th><th>Supplier</th><th>Date</th><th class="text-right">Total</th><th>Payment</th><th>Status</th></tr></thead>
+                <tbody id="tableBody"><tr><td colspan="7"><div class="empty-state"><div class="empty-title">Select date range</div></div></td></tr></tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <div style="overflow-x:auto;">
-    <table class="tbl">
-      <thead><tr><th>#</th><th>Reference</th><th>Supplier</th><th>Date</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead>
-      <tbody id="tableBody"><tr><td colspan="7" class="tbl-empty">Select date range to generate report.</td></tr></tbody>
-    </table>
-  </div>
-</div>
 </div>
 @endsection
 @section('scripts')
@@ -45,24 +54,24 @@ const statusColors={received:'badge-success',pending:'badge-warning',cancelled:'
 async function loadReport(){
   const from=document.getElementById('fromDate').value;const to=document.getElementById('toDate').value;
   const tbody=document.getElementById('tableBody');
-  tbody.innerHTML='<tr><td colspan="7" class="tbl-empty">Loading...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="empty-title">Loading...</div></div></td></tr>';
   try{
     const items=await apiFetch(`/api/dashboard/purchases?from=${from}&to=${to}&per_page=500`);
-    document.getElementById('totalOrders').textContent=items.length;
-    document.getElementById('totalCost').textContent=items.reduce((a,p)=>a+parseFloat(p.total||0),0).toFixed(2);
+    document.getElementById('totalOrders').textContent=items.length.toLocaleString();
+    document.getElementById('totalCost').textContent='TZS ' + items.reduce((a,p)=>a+parseFloat(p.total||0),0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
     const unpaid=items.filter(p=>p.payment_status==='unpaid').reduce((a,p)=>a+parseFloat(p.total||0),0);
-    document.getElementById('totalUnpaid').textContent=unpaid.toFixed(2);
-    if(!items.length){tbody.innerHTML='<tr><td colspan="7" class="tbl-empty">No purchases in this period.</td></tr>';return;}
+    document.getElementById('totalUnpaid').textContent='TZS ' + unpaid.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    if(!items.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><div class="empty-title">No purchases found</div><div class="empty-desc">Adjust the date range to see results.</div></div></td></tr>';return;}
     tbody.innerHTML=items.map((p,i)=>`<tr>
       <td class="text-slate-400">${i+1}</td>
-      <td class="font-mono text-xs text-blue-600">${p.reference}</td>
+      <td class="font-mono text-xs" style="color:#2563eb;font-weight:600;">${p.reference}</td>
       <td>${p.supplier?p.supplier.name:'N/A'}</td>
-      <td class="text-slate-500 text-xs">${p.purchase_date}</td>
-      <td class="font-semibold">${parseFloat(p.total).toFixed(2)}</td>
+      <td style="white-space:nowrap;color:#64748b;font-size:0.82rem;">${p.purchase_date}</td>
+      <td class="text-right" style="font-weight:700;">${parseFloat(p.total).toFixed(2)}</td>
       <td><span class="badge ${payColors[p.payment_status]||'badge-gray'}">${p.payment_status}</span></td>
       <td><span class="badge ${statusColors[p.status]||'badge-gray'}">${p.status}</span></td>
     </tr>`).join('');
-  }catch(e){tbody.innerHTML='<tr><td colspan="7" class="tbl-empty">Error loading report.</td></tr>';}
+  }catch(e){tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="empty-title">Error loading report</div></div></td></tr>';}
 }
 loadReport();
 </script>
