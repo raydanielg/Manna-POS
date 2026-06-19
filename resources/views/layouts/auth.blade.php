@@ -47,16 +47,7 @@
             background-image: url("{{ asset('MannaPOS.png') }}");
             background-size: cover;
             background-position: center;
-            opacity: 0.2;
             z-index: 0;
-        }
-
-        .auth-brand-side::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(145deg, rgba(10,25,47,0.9) 0%, rgba(13,45,107,0.88) 40%, rgba(10,61,143,0.85) 70%, rgba(21,101,192,0.8) 100%);
-            z-index: 1;
         }
 
         @keyframes breathe {
