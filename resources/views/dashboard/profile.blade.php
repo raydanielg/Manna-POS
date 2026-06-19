@@ -203,15 +203,20 @@ avatarInput.addEventListener('change', async function(e) {
       if (res.success) {
         // Update preview with server URL
         avatarPreview.innerHTML = `<img src="${res.avatar_url}?t=${Date.now()}" alt="Avatar">`;
-        // Update header avatar
+        // Update header avatar (layout)
         const hdrAvatar = document.querySelector('.user-avatar img');
         if (hdrAvatar) {
           hdrAvatar.src = res.avatar_url + '?t=' + Date.now();
         } else {
           const hdrDiv = document.querySelector('.user-avatar');
           if (hdrDiv) {
-            hdrDiv.innerHTML = `<img src="${res.avatar_url}?t=${Date.now()}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">`;
+            hdrDiv.innerHTML = `<img src="${res.avatar_url}?t=${Date.now()}">`;
           }
+        }
+        // Update profile-header avatar
+        const profileAvatar = document.querySelector('.profile-avatar');
+        if (profileAvatar) {
+          profileAvatar.innerHTML = `<img src="${res.avatar_url}?t=${Date.now()}" alt="Avatar">`;
         }
         Toast.fire({ icon: 'success', title: res.message || 'Avatar updated!' });
       } else {
