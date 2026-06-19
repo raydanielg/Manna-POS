@@ -1,6 +1,6 @@
 @extends('dashboard.reports.pdf.layouts.a4')
 @section('title', 'Expiry Date Report')
-@section('subtitle', 'Products approaching or past their expiry date')
+@section('subtitle', 'Product batches approaching or past their expiry date')
 @section('date_range', $from->format('M d, Y') . ' — ' . $to->format('M d, Y'))
 @section('content')
 <div class="summary-grid">
@@ -9,11 +9,11 @@
 </div>
 
 <table>
-    <thead><tr><th>#</th><th>Product</th><th>SKU</th><th class="text-right">Stock</th><th>Expiry Date</th><th>Status</th></tr></thead>
+    <thead><tr><th>#</th><th>Product</th><th>SKU</th><th>Batch #</th><th>Supplier</th><th class="text-right">Qty</th><th>Expiry Date</th><th>Status</th></tr></thead>
     <tbody>
-        @forelse($products as $i => $p)
+        @forelse($batches as $i => $b)
         @php
-            $expiry = $p->expiry_date ? \Carbon\Carbon::parse($p->expiry_date) : null;
+            $expiry = $b->expiry_date ? \Carbon\Carbon::parse($b->expiry_date) : null;
             $daysLeft = $expiry ? now()->diffInDays($expiry, false) : null;
             if ($daysLeft === null) { $badge = 'gray'; $label = 'No Date'; }
             elseif ($daysLeft < 0) { $badge = 'danger'; $label = 'Expired'; }
@@ -23,14 +23,16 @@
         @endphp
         <tr>
             <td>{{ $i+1 }}</td>
-            <td><strong>{{ $p->name }}</strong></td>
-            <td>{{ $p->sku ?? '—' }}</td>
-            <td class="text-right">{{ number_format($p->current_stock) }}</td>
+            <td><strong>{{ $b->product->name ?? 'N/A' }}</strong></td>
+            <td>{{ $b->product->sku ?? '—' }}</td>
+            <td>{{ $b->batch_number ?? '—' }}</td>
+            <td>{{ $b->supplier->name ?? '—' }}</td>
+            <td class="text-right">{{ number_format($b->quantity) }}</td>
             <td>{{ $expiry ? $expiry->format('M d, Y') : '—' }}</td>
             <td><span class="badge badge-{{ $badge }}">{{ $label }}</span></td>
         </tr>
         @empty
-        <tr><td colspan="6" class="text-center">No products with expiry dates found.</td></tr>
+        <tr><td colspan="8" class="text-center">No batches with expiry dates found.</td></tr>
         @endforelse
     </tbody>
 </table>

@@ -6,7 +6,7 @@
     <div class="flex items-center justify-between mb-4">
         <div>
             <h1 class="text-xl font-bold text-gray-900">Expiry Date Report</h1>
-            <p class="text-sm text-gray-500">Products approaching or past their expiry date</p>
+            <p class="text-sm text-gray-500">{{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }}</p>
         </div>
         <div class="flex gap-2 no-print">
             <button type="button" onclick="window.print()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
@@ -42,7 +42,7 @@
 
     <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-200">
-            <h3 class="text-sm font-semibold text-gray-700">Products with Expiry Dates</h3>
+            <h3 class="text-sm font-semibold text-gray-700">Product Batches by Expiry</h3>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -51,15 +51,17 @@
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Stock</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Batch #</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Qty</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Expiry Date</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($products as $p)
+                    @forelse($batches as $i => $b)
                     @php
-                        $expiry = $p->expiry_date ? \Carbon\Carbon::parse($p->expiry_date) : null;
+                        $expiry = $b->expiry_date ? \Carbon\Carbon::parse($b->expiry_date) : null;
                         $daysLeft = $expiry ? now()->diffInDays($expiry, false) : null;
                         if ($daysLeft === null) { $badge = 'bg-gray-50 text-gray-600'; $label = 'No Date'; }
                         elseif ($daysLeft < 0) { $badge = 'bg-red-50 text-red-700'; $label = 'Expired'; }
@@ -68,23 +70,25 @@
                         else { $badge = 'bg-green-50 text-green-700'; $label = $daysLeft . ' days'; }
                     @endphp
                     <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($products->currentPage()-1)*$products->perPage() }}</td>
-                        <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ $p->name }}</td>
-                        <td class="px-4 py-3 text-sm font-mono text-gray-400">{{ $p->sku ?? '—' }}</td>
-                        <td class="px-4 py-3 text-sm text-right text-gray-700">{{ number_format($p->current_stock) }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-400">{{ $i + 1 + ($batches->currentPage()-1)*$batches->perPage() }}</td>
+                        <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ $b->product->name ?? 'N/A' }}</td>
+                        <td class="px-4 py-3 text-sm font-mono text-gray-400">{{ $b->product->sku ?? '—' }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">{{ $b->batch_number ?? '—' }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">{{ $b->supplier->name ?? '—' }}</td>
+                        <td class="px-4 py-3 text-sm text-right text-gray-700">{{ number_format($b->quantity) }}</td>
                         <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{{ $expiry ? $expiry->format('M d, Y') : '—' }}</td>
                         <td class="px-4 py-3 text-sm"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $badge }}">{{ $label }}</span></td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-4 py-12 text-center text-sm text-gray-500">No products with expiry dates found.</td>
+                        <td colspan="8" class="px-4 py-12 text-center text-sm text-gray-500">No batches with expiry dates found.</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        @if($products->hasPages())
-        <div class="px-4 py-3 border-t border-gray-200 no-print">{{ $products->links() }}</div>
+        @if($batches->hasPages())
+        <div class="px-4 py-3 border-t border-gray-200 no-print">{{ $batches->links() }}</div>
         @endif
     </div>
 </div>
