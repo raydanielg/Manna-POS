@@ -8,12 +8,25 @@ use App\Models\RecipeItem;
 use App\Models\ProductionRun;
 use App\Models\ProductionUsage;
 use App\Models\Product;
+use App\Models\StockAdjustment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ManufacturingController extends Controller
 {
     public function __construct() { $this->middleware('auth'); }
+
+    private function jsonSuccess($message, $data = [])
+    {
+        return response()->json(array_merge(['success' => true, 'message' => $message], $data));
+    }
+
+    private function jsonError($message, $code = 422)
+    {
+        return response()->json(['success' => false, 'message' => $message], $code);
+    }
 
     public function index()
     {
@@ -54,6 +67,10 @@ class ManufacturingController extends Controller
         ]);
         $data['user_id'] = auth()->id();
         $recipe = Recipe::create($data);
+        Log::info('Recipe created', ['user_id' => auth()->id(), 'recipe_id' => $recipe->id]);
+        if ($req->ajax() || $req->wantsJson()) {
+            return $this->jsonSuccess('Recipe created. Now add ingredients.', ['recipe' => $recipe]);
+        }
         return redirect()->route('dashboard.manufacturing.recipe.show', $recipe)->with('success', 'Recipe created. Now add ingredients.');
     }
 
@@ -114,20 +131,38 @@ class ManufacturingController extends Controller
         $data['batch_number'] = 'B-' . strtoupper(Str::random(8));
         $data['status'] = 'planned';
 
-        $run = ProductionRun::create($data);
+        try {
+            DB::beginTransaction();
+            $run = ProductionRun::create($data);
 
-        // Auto-create planned usages from recipe items
-        foreach ($recipe->items as $item) {
-            $qty = $item->quantity * ($data['planned_quantity'] / $recipe->output_quantity);
-            ProductionUsage::create([
-                'production_run_id' => $run->id,
-                'product_id' => $item->product_id,
-                'planned_quantity' => $qty,
-                'unit_cost' => $item->cost,
-            ]);
+            $usages = [];
+            foreach ($recipe->items as $item) {
+                $qty = $item->quantity * ($data['planned_quantity'] / $recipe->output_quantity);
+                $usages[] = [
+                    'production_run_id' => $run->id,
+                    'product_id' => $item->product_id,
+                    'planned_quantity' => $qty,
+                    'unit_cost' => $item->cost,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            ProductionUsage::insert($usages);
+            DB::commit();
+
+            Log::info('Production run created', ['user_id' => auth()->id(), 'run_id' => $run->id, 'batch' => $run->batch_number]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonSuccess('Production run created', ['run' => $run->load('usages')]);
+            }
+            return redirect()->route('dashboard.manufacturing.production.show', $run)->with('success', 'Production run created');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Production run creation failed', ['error' => $e->getMessage()]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonError('Failed to create production run', 500);
+            }
+            return redirect()->route('dashboard.manufacturing.production')->with('error', 'Failed to create production run');
         }
-
-        return redirect()->route('dashboard.manufacturing.production.show', $run)->with('success', 'Production run created');
     }
 
     public function showProduction(ProductionRun $run)
@@ -145,14 +180,35 @@ class ManufacturingController extends Controller
 
         if ($req->status === 'completed') {
             $run->update(['end_date' => now()]);
-            // Calculate total cost from usages
             $totalCost = $run->usages->sum(function($u) {
                 return ($u->actual_quantity ?? $u->planned_quantity) * ($u->unit_cost ?? 0);
             });
             $totalCost += ($run->recipe->labor_cost ?? 0) + ($run->recipe->overhead_cost ?? 0);
             $run->update(['total_cost' => $totalCost]);
+
+            // Deduct raw materials from stock
+            foreach ($run->usages as $usage) {
+                $product = Product::find($usage->product_id);
+                if ($product && $product->user_id === auth()->id()) {
+                    $deductQty = $usage->actual_quantity ?? $usage->planned_quantity;
+                    $product->stock_quantity = max(0, $product->stock_quantity - $deductQty);
+                    $product->save();
+                }
+            }
+
+            // Add finished goods to stock
+            $finished = $run->recipe->product;
+            if ($finished && $finished->user_id === auth()->id()) {
+                $finished->stock_quantity += $run->actual_quantity ?? $run->planned_quantity;
+                $finished->save();
+            }
+
+            Log::info('Production completed', ['user_id' => auth()->id(), 'run_id' => $run->id, 'cost' => $totalCost]);
         }
 
+        if ($req->ajax() || $req->wantsJson()) {
+            return $this->jsonSuccess('Status updated to ' . ucfirst(str_replace('_',' ',$req->status)), ['run' => $run->fresh()]);
+        }
         return redirect()->route('dashboard.manufacturing.production.show', $run)->with('success', 'Status updated');
     }
 
