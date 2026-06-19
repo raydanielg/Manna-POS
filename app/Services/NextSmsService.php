@@ -15,9 +15,9 @@ class NextSmsService
     public function __construct()
     {
         $this->url      = config('services.nextsms.url', 'https://messaging-service.co.tz/api/sms/v1/text/single');
-        $this->username = config('services.nextsms.username');
-        $this->password = config('services.nextsms.password');
-        $this->from     = config('services.nextsms.from', 'UZAZICLINIC');
+        $this->username = config('services.nextsms.username') ?? '';
+        $this->password = config('services.nextsms.password') ?? '';
+        $this->from     = config('services.nextsms.from', 'UZAZICLINIC') ?? 'UZAZICLINIC';
     }
 
     /**
