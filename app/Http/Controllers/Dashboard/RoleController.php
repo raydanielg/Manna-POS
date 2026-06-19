@@ -10,14 +10,24 @@ class RoleController extends Controller {
         return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
-        $data = $req->validate(["name"=>"required|string|max:191|unique:roles,name","description"=>"nullable|string"]);
+        $data = $req->validate([
+            "name"=>"required|string|max:191|unique:roles,name",
+            "description"=>"nullable|string",
+            "permissions"=>"nullable|array",
+            "permissions.*"=>"string",
+        ]);
         $data["created_by"] = $this->currentBusinessId();
         return response()->json(["success"=>true,"role"=>Role::create($data)], 201);
     }
     public function show(Role $role) { $this->ensureOwns($role); return response()->json($role); }
     public function update(Request $req, Role $role) {
         $this->ensureOwns($role);
-        $role->update($req->validate(["name"=>"required|string|max:191|unique:roles,name,{$role->id}","description"=>"nullable|string"]));
+        $role->update($req->validate([
+            "name"=>"required|string|max:191|unique:roles,name,{$role->id}",
+            "description"=>"nullable|string",
+            "permissions"=>"nullable|array",
+            "permissions.*"=>"string",
+        ]));
         return response()->json(["success"=>true,"role"=>$role]);
     }
     public function destroy(Role $role) { $this->ensureOwns($role); $role->delete(); return response()->json(["success"=>true]); }
