@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Country;
+use App\Models\Currency;
 
 class SetupController extends Controller
 {
@@ -17,7 +19,11 @@ class SetupController extends Controller
         if ($user->setup_completed) {
             return redirect('/dashboard');
         }
-        return view('setup.wizard', compact('user'));
+
+        $countries = Country::eastAfrica()->orderBy('name')->get();
+        $currencies = Currency::active()->orderBy('name')->get();
+
+        return view('setup.wizard', compact('user', 'countries', 'currencies'));
     }
 
     public function complete(Request $req)
