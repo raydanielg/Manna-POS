@@ -161,17 +161,17 @@ class PayrollController extends Controller
         return view('dashboard.payroll.payslip', compact('entry'));
     }
 
-    private function authorize($period)
+    private function guardPeriod($period)
     {
         if ($period->user_id !== auth()->id()) abort(403);
     }
 
-    private function authorizeEntry($entry)
+    private function guardEntry($entry)
     {
         if ($entry->user_id !== auth()->id()) abort(403);
     }
 
-    private function authorizeType($type)
+    private function guardType($type)
     {
         if ($type->user_id !== auth()->id()) abort(403);
     }
