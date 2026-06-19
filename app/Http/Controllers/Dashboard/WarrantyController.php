@@ -7,6 +7,7 @@ class WarrantyController extends Controller {
     public function index(Request $req) {
         $q = Warranty::forCurrentUser($this->currentBusinessId());
         if ($req->search) $q->where("name","like","%{$req->search}%");
+        if ($req->duration_unit) $q->where('duration_unit', $req->duration_unit);
         return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
