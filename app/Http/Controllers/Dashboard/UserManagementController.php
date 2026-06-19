@@ -59,4 +59,24 @@ class UserManagementController extends Controller {
         $user->update($data);
         return response()->json(["success"=>true,"user"=>$user]);
     }
+
+    public function uploadAvatar(Request $req) {
+        $user = auth()->user();
+        $req->validate(["avatar" => "required|image|mimes:jpeg,png,jpg,gif,webp|max:2048"]);
+
+        // Delete old avatar
+        if ($user->avatar && Storage::disk('public')->exists('avatars/'.$user->avatar)) {
+            Storage::disk('public')->delete('avatars/'.$user->avatar);
+        }
+
+        $filename = 'avatar_'.$user->id.'_'.time().'.'.$req->avatar->extension();
+        $req->avatar->storeAs('avatars', $filename, 'public');
+        $user->update(['avatar' => $filename]);
+
+        return response()->json([
+            "success" => true,
+            "avatar_url" => $user->avatar_url,
+            "message" => "Avatar updated successfully!"
+        ]);
+    }
 }

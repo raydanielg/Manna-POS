@@ -144,6 +144,7 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     // Profile Routes (controllers)
     Route::get('/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'profile'])->name('dashboard.profile');
     Route::put('/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'updateProfile'])->name('dashboard.profile.update');
+    Route::post('/profile/avatar', [App\Http\Controllers\Dashboard\UserManagementController::class, 'uploadAvatar'])->name('dashboard.profile.avatar');
 
     // Contacts Routes
     Route::get('/contacts/suppliers', function () { return view('dashboard.contacts.suppliers'); })->name('dashboard.contacts.suppliers');
