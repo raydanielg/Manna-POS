@@ -85,7 +85,7 @@ sel.inp{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org
         <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Country <span class="text-rose-500">*</span></label>
         <div class="grid grid-cols-3 gap-2 mb-2" id="countryGrid">
           @foreach($countries as $country)
-          <div class="country-chip {{ $user->business_country == $country->name ? 'on' : '' }}" onclick="pickCountry(this,'{{ $country->name }}')">
+          <div class="country-chip {{ $user->business_country == $country->name ? 'on' : '' }}" onclick="pickCountry(this,'{{ $country->name }}','{{ $country->code }}')">
             <span class="flag">{{ $country->flag_emoji }}</span>
             <span>{{ $country->name }}</span>
           </div>
