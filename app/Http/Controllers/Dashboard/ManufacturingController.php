@@ -59,7 +59,7 @@ class ManufacturingController extends Controller
 
     public function showRecipe(Recipe $recipe)
     {
-        $this->authorize($recipe);
+        $this->guardModel($recipe);
         $recipe->load('items.product', 'product');
         $products = Product::where('user_id', auth()->id())->where('is_active', true)->get();
         $totalMaterialCost = $recipe->items->sum(function($i) { return ($i->cost ?? 0) * $i->quantity; });
@@ -68,7 +68,7 @@ class ManufacturingController extends Controller
 
     public function storeRecipeItem(Request $req, Recipe $recipe)
     {
-        $this->authorize($recipe);
+        $this->guardModel($recipe);
         $data = $req->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|numeric|min:0.0001',
@@ -83,7 +83,7 @@ class ManufacturingController extends Controller
     public function destroyRecipeItem(RecipeItem $item)
     {
         $recipeId = $item->recipe_id;
-        $this->authorize($item->recipe);
+        $this->guardModel($item->recipe);
         $item->delete();
         return redirect()->route('dashboard.manufacturing.recipe.show', $recipeId)->with('success', 'Ingredient removed');
     }
@@ -132,14 +132,14 @@ class ManufacturingController extends Controller
 
     public function showProduction(ProductionRun $run)
     {
-        $this->authorize($run);
+        $this->guardModel($run);
         $run->load('recipe.items.product', 'recipe.product', 'usages.product');
         return view('dashboard.manufacturing.production-show', compact('run'));
     }
 
     public function updateProductionStatus(Request $req, ProductionRun $run)
     {
-        $this->authorize($run);
+        $this->guardModel($run);
         $data = $req->validate(['status' => 'required|in:planned,in_progress,completed,cancelled']);
         $run->update($data);
 
@@ -158,7 +158,7 @@ class ManufacturingController extends Controller
 
     public function recordUsage(Request $req, ProductionRun $run)
     {
-        $this->authorize($run);
+        $this->guardModel($run);
         $data = $req->validate([
             'usage_id' => 'required|exists:production_usages,id',
             'actual_quantity' => 'required|numeric|min:0',
@@ -169,7 +169,7 @@ class ManufacturingController extends Controller
         return redirect()->route('dashboard.manufacturing.production.show', $run)->with('success', 'Usage recorded');
     }
 
-    private function authorize($model)
+    private function guardModel($model)
     {
         if ($model->user_id !== auth()->id()) abort(403);
     }
