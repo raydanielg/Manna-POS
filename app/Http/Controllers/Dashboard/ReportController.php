@@ -20,6 +20,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
 {
+    private function userCurrency(): string
+    {
+        return auth()->user()->currency ?? 'TZS';
+    }
+
     private function resolveDates(Request $request)
     {
         $from = $request->filled('from_date') ? Carbon::parse($request->from_date) : Carbon::now()->startOfMonth();
