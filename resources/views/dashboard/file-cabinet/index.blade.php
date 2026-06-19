@@ -78,89 +78,107 @@
 </style>
 @endsection
 @section('content')
-<div class="dash-content">
+<div class="dash-content animate__animated animate__fadeInUp">
 <div class="fc-wrap">
 
-  <div class="fc-hero">
-    <h1>File Cabinet</h1>
-    <p>Store, organize, and manage your business documents</p>
-  </div>
+    <div class="fc-hero" data-aos="fade-down">
+        <div>
+            <h1>File Cabinet</h1>
+            <p>Store, organize, and manage your business documents securely</p>
+        </div>
+        <button class="btn btn-primary" style="gap:.4rem;padding:.65rem 1.1rem;font-size:.85rem;" onclick="document.getElementById('uploadModal').classList.add('open')">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            Upload File
+        </button>
+    </div>
 
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
-    <div style="background:#fff;border-radius:14px;border:1.5px solid #eef2f6;padding:1.25rem;text-align:center;">
-      <div style="font-size:.65rem;color:#94a3b8;font-weight:700;uppercase;">Total Files</div>
-      <div style="font-size:1.4rem;font-weight:800;color:#0f172a;">{{ number_format($stats['total']) }}</div>
+    <div class="fc-stats" data-aos="fade-up" data-aos-delay="50">
+        <div class="fc-stat">
+            <div class="fcs-icon blue"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/></svg></div>
+            <div class="fcs-label">Total Files</div>
+            <div class="fcs-value">{{ number_format($stats['total']) }}</div>
+        </div>
+        <div class="fc-stat">
+            <div class="fcs-icon green"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V4h3M4 17v3h3M20 7V4h-3M20 17v3h-3M9 9h6v6H9z"/></svg></div>
+            <div class="fcs-label">Storage Used</div>
+            <div class="fcs-value">
+                @if($stats['total_size'] >= 1048576) {{ number_format($stats['total_size']/1048576, 1) }} MB
+                @elseif($stats['total_size'] >= 1024) {{ number_format($stats['total_size']/1024, 1) }} KB
+                @else {{ $stats['total_size'] }} B @endif
+            </div>
+        </div>
+        <div class="fc-stat">
+            <div class="fcs-icon amber"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg></div>
+            <div class="fcs-label">Upload New</div>
+            <div style="padding-top:.35rem;">
+                <button class="btn btn-primary" style="font-size:.78rem;padding:.4rem .85rem;border-radius:10px;" onclick="document.getElementById('uploadModal').classList.add('open')">Choose File</button>
+            </div>
+        </div>
     </div>
-    <div style="background:#fff;border-radius:14px;border:1.5px solid #eef2f6;padding:1.25rem;text-align:center;">
-      <div style="font-size:.65rem;color:#94a3b8;font-weight:700;uppercase;">Storage Used</div>
-      <div style="font-size:1.4rem;font-weight:800;color:#0f172a;">
-        @if($stats['total_size'] >= 1048576)
-          {{ number_format($stats['total_size']/1048576, 2) }} MB
-        @elseif($stats['total_size'] >= 1024)
-          {{ number_format($stats['total_size']/1024, 2) }} KB
-        @else
-          {{ $stats['total_size'] }} B
-        @endif
-      </div>
-    </div>
-    <div style="background:#fff;border-radius:14px;border:1.5px solid #eef2f6;padding:1.25rem;text-align:center;display:flex;align-items:center;justify-content:center;">
-      <button class="btn btn-primary" style="gap:.35rem;" onclick="document.getElementById('uploadModal').classList.add('open')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-        Upload File
-      </button>
-    </div>
-  </div>
 
-  <div class="filter-row">
-    <form method="GET" action="{{ route('dashboard.file-cabinet') }}" style="display:flex;gap:.75rem;flex-wrap:wrap;flex:1;">
-      <input type="text" name="search" value="{{ request('search') }}" placeholder="Search files...">
-      <select name="category" onchange="this.form.submit()">
-        <option value="">All Categories</option>
-        @foreach($categories as $cat)
-        <option value="{{ $cat }}" {{ request('category')==$cat?'selected':'' }}>{{ $cat }}</option>
+    <div class="fc-toolbar" data-aos="fade-up" data-aos-delay="100">
+        <div class="fc-search">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" name="search" id="fcSearch" value="{{ request('search') }}" placeholder="Search files by name..." oninput="debounceSearch()">
+        </div>
+        <div class="fc-categories">
+            <a href="{{ route('dashboard.file-cabinet') }}" class="fc-chip {{ !request('category') ? 'active' : '' }}">All</a>
+            @foreach($categories as $cat)
+            <a href="{{ route('dashboard.file-cabinet', ['category'=>$cat,'search'=>request('search')]) }}" class="fc-chip {{ request('category')==$cat ? 'active' : '' }}">{{ $cat }}</a>
+            @endforeach
+        </div>
+    </div>
+
+    @if($files->count())
+    <div class="file-grid" data-aos="fade-up" data-aos-delay="150">
+        @foreach($files as $f)
+        <div class="file-card">
+            <img src="{{ asset('images/foldericons.png') }}" class="folder-img" alt="">
+            <div class="file-icon-wrap">
+                <div class="file-icon {{ $f->icon }}">
+                    @if($f->icon === 'image')
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2l1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
+                    @elseif($f->icon === 'pdf')
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
+                    @elseif($f->icon === 'doc')
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+                    @elseif($f->icon === 'xls')
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M5 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 3v4"/></svg>
+                    @else
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
+                    @endif
+                </div>
+                <span class="file-ext">{{ strtoupper($f->file_extension) }}</span>
+            </div>
+            <div class="file-title" title="{{ $f->title }}">{{ $f->title }}</div>
+            <div class="file-meta">{{ $f->file_size_formatted }} <span class="dot"></span> {{ $f->created_at->format('M d, Y') }}</div>
+            <div class="file-actions">
+                <a href="{{ route('dashboard.file-cabinet.download', $f) }}" class="btn btn-edit btn-sm">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Download
+                </a>
+                <button type="button" class="btn btn-delete btn-sm" onclick="confirmDelete('{{ route('dashboard.file-cabinet.destroy', $f) }}')">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/></svg>
+                    Delete
+                </button>
+            </div>
+        </div>
         @endforeach
-      </select>
-      @if(request('search') || request('category'))
-      <a href="{{ route('dashboard.file-cabinet') }}" class="btn btn-secondary btn-sm">Clear</a>
-      @endif
-    </form>
-  </div>
-
-  @if($files->count())
-  <div class="file-grid">
-    @foreach($files as $f)
-    <div class="file-card">
-      <div class="file-icon {{ $f->icon }}">
-        @if($f->icon === 'image')
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2l1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
-        @elseif($f->icon === 'pdf')
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
-        @elseif($f->icon === 'doc')
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
-        @elseif($f->icon === 'xls')
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M5 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 3v4"/></svg>
-        @else
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
-        @endif
-      </div>
-      <div class="file-title" title="{{ $f->title }}">{{ $f->title }}</div>
-      <div class="file-meta">{{ strtoupper($f->file_extension) }} &middot; {{ $f->file_size_formatted }} &middot; {{ $f->created_at->format('M d, Y') }}</div>
-      <div class="file-actions">
-        <a href="{{ route('dashboard.file-cabinet.download', $f) }}" class="btn btn-edit btn-sm">Download</a>
-        <form method="POST" action="{{ route('dashboard.file-cabinet.destroy', $f) }}" style="display:inline;" onsubmit="return confirm('Delete this file?');">@csrf @method('DELETE')
-          <button type="submit" class="btn btn-delete btn-sm">Delete</button>
-        </form>
-      </div>
     </div>
-    @endforeach
-  </div>
-  @else
-  <div style="padding:4rem;text-align:center;color:#94a3b8;">
-    <svg width="48" height="48" fill="none" stroke="#cbd5e1" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 1rem;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M9 9l2 2l4-4"/></svg>
-    <p style="font-weight:600;color:#64748b;">No files yet</p>
-    <p style="font-size:.8rem;margin-top:.25rem;">Upload your first document to get started</p>
-  </div>
-  @endif
+
+    @if($files->hasPages())
+    <div class="fc-pagination" data-aos="fade-up" data-aos-delay="200">
+        {{ $files->onEachSide(1)->links('pagination::simple-tailwind') }}
+    </div>
+    @endif
+
+    @else
+    <div class="fc-empty" data-aos="fade-up" data-aos-delay="150">
+        <svg class="fe-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M9 9l2 2l4-4"/></svg>
+        <div class="fe-title">No files yet</div>
+        <div class="fe-desc">Upload your first document to get started</div>
+    </div>
+    @endif
 
 </div>
 </div>
