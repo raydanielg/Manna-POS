@@ -939,6 +939,18 @@
         </a>
         @endcan
 
+        {{-- Online Orders --}}
+        <a href="{{ route('dashboard.online-orders') }}" class="nav-item {{ $isOnlineOrders ? 'active' : '' }}" data-tip="Online Orders">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/><path d="M15 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>
+            <span class="nav-label">Online Orders</span>
+            @php
+                $pendingCount = collect(json_decode(Auth::user()->store_settings, true)['orders'] ?? [])->where('status', 'pending')->count();
+            @endphp
+            @if($pendingCount > 0)
+            <span style="margin-left:auto;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;padding:0.15rem 0.45rem;border-radius:99px;">{{ $pendingCount }}</span>
+            @endif
+        </a>
+
         <div class="nav-section-label">Management</div>
 
         @canany(['users.view','roles.view'])
