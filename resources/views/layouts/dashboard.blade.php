@@ -1268,7 +1268,14 @@
             {{-- Profile --}}
             <div class="header-dropdown" id="hdr-profile">
                 <div class="user-chip" onclick="toggleHeaderDropdown('hdr-profile')">
-                    <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
+                    <div class="user-avatar">
+                        @php $__av = Auth::user()->avatar; @endphp
+                        @if($__av)
+                            <img src="{{ asset('storage/avatars/'.$__av) }}" alt="Avatar" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
+                        @endif
+                    </div>
                     <span class="hidden md:block text-xs font-semibold text-slate-700">{{ Auth::user()->name ?? 'Admin' }}</span>
                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                 </div>
