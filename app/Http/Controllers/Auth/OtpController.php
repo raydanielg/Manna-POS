@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\NextSmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OtpVerificationEmail;
@@ -11,9 +12,12 @@ use Illuminate\Support\Str;
 
 class OtpController extends Controller
 {
-    public function __construct()
+    protected NextSmsService $sms;
+
+    public function __construct(NextSmsService $sms)
     {
         $this->middleware('auth');
+        $this->sms = $sms;
     }
 
     public function show()
@@ -57,7 +61,7 @@ class OtpController extends Controller
         return response()->json(['success' => true, 'message' => 'Your account has been verified successfully!']);
     }
 
-    public function resend()
+    public function resend(Request $request)
     {
         $user = auth()->user();
 
@@ -65,19 +69,47 @@ class OtpController extends Controller
             return response()->json(['success' => false, 'message' => 'Account already verified.'], 422);
         }
 
+        $method = $request->input('method', 'email');
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $user->update([
             'otp_code' => $otp,
             'otp_expires_at' => now()->addMinutes(30),
         ]);
 
-        try {
-            Mail::to($user->email)->send(new OtpVerificationEmail($user, $otp));
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Failed to send email. Please try again later.'], 500);
+        $sent = false;
+        $errors = [];
+
+        if ($method === 'email') {
+            try {
+                Mail::to($user->email)->send(new OtpVerificationEmail($user, $otp));
+                $sent = true;
+            } catch (\Exception $e) {
+                $errors[] = 'Email failed: ' . $e->getMessage();
+            }
+        } elseif ($method === 'sms') {
+            if ($user->phone) {
+                $result = $this->sms->sendOtp($user->phone, $otp);
+                if ($result['success']) {
+                    $sent = true;
+                } else {
+                    $errors[] = 'SMS failed: ' . $result['message'];
+                }
+            } else {
+                $errors[] = 'No phone number on file.';
+            }
+        } else {
+            $errors[] = 'Invalid method.';
         }
 
-        return response()->json(['success' => true, 'message' => 'New OTP has been sent to your email.']);
+        if (!$sent) {
+            return response()->json(['success' => false, 'message' => implode(' | ', $errors)], 500);
+        }
+
+        $msg = $method === 'sms'
+            ? 'New OTP has been sent to your phone.'
+            : 'New OTP has been sent to your email.';
+
+        return response()->json(['success' => true, 'message' => $msg]);
     }
 
     public function activateByToken($token)
