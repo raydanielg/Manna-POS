@@ -270,7 +270,7 @@ class ReportController extends Controller
             'total_amount' => Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->sum('amount'),
         ];
         $byCategory = Expense::forCurrentUser($this->currentBusinessId())->selectRaw('expense_categories.name as category, COUNT(*) as count, SUM(expenses.amount) as total')
-            ->join('expense_categories','expenses.category_id','=','expense_categories.id')
+            ->join('expense_categories','expenses.expense_category_id','=','expense_categories.id')
             ->whereBetween('expense_date',[$from,$to])->groupBy('expense_categories.name')->orderByDesc('total')->get();
         $expenses = Expense::forCurrentUser($this->currentBusinessId())->with('category')
             ->whereBetween('expense_date',[$from,$to])->orderBy('expense_date','desc')->get();
@@ -282,8 +282,8 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
-        $totalRevenue = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total_amount');
-        $totalCost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total_amount');
+        $totalRevenue = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total');
+        $totalCost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total');
         $totalExpenses = Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->sum('amount');
         $grossProfit = $totalRevenue - $totalCost;
         $netProfit = $grossProfit - $totalExpenses;
@@ -291,8 +291,8 @@ class ReportController extends Controller
         $current = $from->copy()->startOfMonth();
         while ($current <= $to) {
             $mStart = $current->copy(); $mEnd = $current->copy()->endOfMonth();
-            $rev = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$mStart,$mEnd])->sum('total_amount');
-            $cost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$mStart,$mEnd])->sum('total_amount');
+            $rev = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$mStart,$mEnd])->sum('total');
+            $cost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$mStart,$mEnd])->sum('total');
             $exp = Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$mStart,$mEnd])->sum('amount');
             $monthly[] = ['month' => $current->format('M Y'), 'revenue' => $rev, 'cost' => $cost, 'expenses' => $exp, 'profit' => $rev - $cost - $exp];
             $current->addMonth();
