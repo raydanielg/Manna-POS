@@ -334,6 +334,17 @@ async function loadSettings(){
       const el = form.querySelector(`[name="${k}"]`);
       if (el && v != null) el.value = v;
     });
+
+    // Load store settings
+    if (d.store_slug) updateStoreLinkUI(d.store_slug);
+    if (d.store_settings) {
+      const ss = typeof d.store_settings === 'string' ? JSON.parse(d.store_settings) : d.store_settings;
+      if (ss.store_title && form.querySelector('[name="store_title"]')) form.querySelector('[name="store_title"]').value = ss.store_title;
+      if (ss.store_description && form.querySelector('[name="store_description"]')) form.querySelector('[name="store_description"]').value = ss.store_description;
+      if (ss.show_images != null) {
+        document.getElementById('showImagesToggle').checked = !!ss.show_images;
+      }
+    }
     checkCompleteness();
   } catch(e) { console.error(e); }
 }
@@ -349,6 +360,8 @@ async function saveSettings(e){
   try{
     const data = Object.fromEntries(new FormData(document.getElementById('settingsForm')));
     await apiFetch('/api/dashboard/settings', {method:'PUT', body:JSON.stringify(data)});
+    // Save store settings
+    await updateStoreSettings();
     checkCompleteness();
     Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
   } catch(err) {
@@ -357,6 +370,73 @@ async function saveSettings(e){
     btn.disabled = false;
     btn.innerHTML = originalHTML;
   }
+}
+
+/* ── Store Link ───────────────────────────────────────── */
+function updateStoreLinkUI(slug) {
+  const url = window.location.origin + '/store/' + slug;
+  const input = document.getElementById('storeLink');
+  const preview = document.getElementById('previewLink');
+  input.value = url;
+  preview.href = url;
+  preview.style.display = 'inline-flex';
+}
+
+async function generateStoreLink() {
+  const btn = document.getElementById('generateLinkBtn');
+  btn.disabled = true;
+  const original = btn.innerHTML;
+  btn.innerHTML = 'Generating…';
+  try {
+    const d = await apiFetch('/api/dashboard/store/generate-slug', { method: 'POST' });
+    updateStoreLinkUI(d.slug);
+    Toast.fire({ icon: 'success', title: 'Store link generated!' });
+  } catch(e) {
+    Toast.fire({ icon: 'error', title: e.message || 'Failed to generate link' });
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+  }
+}
+
+function copyStoreLink() {
+  const input = document.getElementById('storeLink');
+  if (!input.value || input.value === 'Not generated yet') {
+    Toast.fire({ icon: 'warning', title: 'Generate a link first!' });
+    return;
+  }
+  navigator.clipboard.writeText(input.value).then(() => {
+    Toast.fire({ icon: 'success', title: 'Link copied to clipboard!' });
+  }).catch(() => {
+    input.select();
+    document.execCommand('copy');
+    Toast.fire({ icon: 'success', title: 'Link copied to clipboard!' });
+  });
+}
+
+async function toggleStoreImages() {
+  const checked = document.getElementById('showImagesToggle').checked;
+  try {
+    await apiFetch('/api/dashboard/store/settings', {
+      method: 'PUT',
+      body: JSON.stringify({ show_images: checked })
+    });
+    Toast.fire({ icon: 'success', title: checked ? 'Images enabled' : 'Images disabled' });
+  } catch(e) {
+    Toast.fire({ icon: 'error', title: 'Failed to update preference' });
+  }
+}
+
+async function updateStoreSettings() {
+  const title = document.querySelector('[name="store_title"]')?.value || '';
+  const desc  = document.querySelector('[name="store_description"]')?.value || '';
+  const show  = document.getElementById('showImagesToggle').checked;
+  try {
+    await apiFetch('/api/dashboard/store/settings', {
+      method: 'PUT',
+      body: JSON.stringify({ store_title: title, store_description: desc, show_images: show })
+    });
+  } catch(e) { console.error(e); }
 }
 
 // Re-check on input
