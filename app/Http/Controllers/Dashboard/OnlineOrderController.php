@@ -31,7 +31,8 @@ class OnlineOrderController extends Controller
             'revenue'   => $orders->where('status', '!=', 'cancelled')->sum('total'),
         ];
 
-        return view('dashboard.online-orders', compact('orders', 'stats'));
+        $userCurrency = auth()->user()->currency ?? 'TZS';
+        return view('dashboard.online-orders', compact('orders', 'stats', 'userCurrency'));
     }
 
     /**
