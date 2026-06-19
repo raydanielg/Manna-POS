@@ -69,47 +69,21 @@ class OtpController extends Controller
             return response()->json(['success' => false, 'message' => 'Account already verified.'], 422);
         }
 
-        $method = $request->input('method', 'email');
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $user->update([
             'otp_code' => $otp,
             'otp_expires_at' => now()->addMinutes(30),
         ]);
 
-        $sent = false;
-        $errors = [];
-
-        if ($method === 'email') {
-            try {
-                Mail::to($user->email)->send(new OtpVerificationEmail($user, $otp));
-                $sent = true;
-            } catch (\Exception $e) {
-                $errors[] = 'Email failed: ' . $e->getMessage();
+        if ($user->phone) {
+            $result = $this->sms->sendOtp($user->phone, $otp);
+            if ($result['success']) {
+                return response()->json(['success' => true, 'message' => 'New OTP has been sent to your phone.']);
             }
-        } elseif ($method === 'sms') {
-            if ($user->phone) {
-                $result = $this->sms->sendOtp($user->phone, $otp);
-                if ($result['success']) {
-                    $sent = true;
-                } else {
-                    $errors[] = 'SMS failed: ' . $result['message'];
-                }
-            } else {
-                $errors[] = 'No phone number on file.';
-            }
-        } else {
-            $errors[] = 'Invalid method.';
+            return response()->json(['success' => false, 'message' => 'SMS failed: ' . $result['message']], 500);
         }
 
-        if (!$sent) {
-            return response()->json(['success' => false, 'message' => implode(' | ', $errors)], 500);
-        }
-
-        $msg = $method === 'sms'
-            ? 'New OTP has been sent to your phone.'
-            : 'New OTP has been sent to your email.';
-
-        return response()->json(['success' => true, 'message' => $msg]);
+        return response()->json(['success' => false, 'message' => 'No phone number on file.'], 500);
     }
 
     public function activateByToken($token)
