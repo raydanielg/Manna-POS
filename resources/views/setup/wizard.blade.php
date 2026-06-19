@@ -54,27 +54,17 @@ sel.inp{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org
     </div>
   </div>
 
-  <!-- Steps indicator -->
-  <div style="padding:1.5rem 2.5rem 0;">
-    <div style="display:flex;align-items:center;">
-      <div style="display:flex;flex-direction:column;align-items:center;">
-        <div class="wiz-circle active" id="wc1">1</div>
-        <span class="wiz-step-label active" id="wl1">Business Info</span>
-      </div>
-      <div style="flex:1;height:2px;background:#e2e8f0;margin:-14px .75rem 0;" id="wline1"></div>
-      <div style="display:flex;flex-direction:column;align-items:center;">
-        <div class="wiz-circle" id="wc2">2</div>
-        <span class="wiz-step-label" id="wl2">Preferences</span>
-      </div>
-      <div style="flex:1;height:2px;background:#e2e8f0;margin:-14px .75rem 0;" id="wline2"></div>
-      <div style="display:flex;flex-direction:column;align-items:center;">
-        <div class="wiz-circle" id="wc3">3</div>
-        <span class="wiz-step-label" id="wl3">Done!</span>
-      </div>
+  <div class="px-8 pt-5 pb-2">
+    <div class="flex items-center">
+      <div class="flex flex-col items-center"><div class="wiz-circle active" id="wc1">1</div><span class="wiz-step-label active" id="wl1">Business</span></div>
+      <div class="flex-1 h-[2px] bg-slate-200 -mt-5 mx-3" id="wline1"></div>
+      <div class="flex flex-col items-center"><div class="wiz-circle" id="wc2">2</div><span class="wiz-step-label" id="wl2">Details</span></div>
+      <div class="flex-1 h-[2px] bg-slate-200 -mt-5 mx-3" id="wline2"></div>
+      <div class="flex flex-col items-center"><div class="wiz-circle" id="wc3">3</div><span class="wiz-step-label" id="wl3">Done</span></div>
     </div>
   </div>
 
-  <div class="setup-body">
+  <div class="p-8">
     <form id="setupForm" method="POST" action="/setup">
       @csrf
 
