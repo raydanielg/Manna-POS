@@ -334,24 +334,28 @@ async function loadStats() {
 async function loadPlans() {
     const s = document.getElementById('searchInput').value;
     const grid = document.getElementById('planGrid');
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#94a3b8;">
-        <div class="animate-spin" style="width:28px;height:28px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;margin:0 auto 0.75rem;"></div>
-        Loading plans…
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:4rem 1rem;color:#94a3b8;">
+        <div style="width:36px;height:36px;border:3px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;margin:0 auto 1rem;animation:spin 1s linear infinite;"></div>
+        <div style="font-size:0.9rem;font-weight:600;">Loading plans…</div>
     </div>`;
     try {
         const plans = await apiFetch(`${API_PLANS}?search=${encodeURIComponent(s)}`);
         if (!plans.length) {
-            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem 1rem;">
-                <svg width="48" height="48" fill="none" stroke="#cbd5e1" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 1rem;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/></svg>
-                <div style="font-size:0.92rem;font-weight:600;color:#64748b;">No plans yet</div>
-                <div style="font-size:0.78rem;color:#94a3b8;margin-top:0.25rem;">Click <strong>New Plan</strong> to create your first subscription plan</div>
-                <button class="btn btn-primary" style="margin-top:1rem;" onclick="openAddPlan()">Create First Plan</button>
+            grid.innerHTML = `<div class="empty-plans">
+                <svg width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/></svg>
+                <h3>No plans yet</h3>
+                <p>Create your first subscription plan to start accepting customers</p>
+                <button class="btn btn-primary" onclick="openAddPlan()">Create First Plan</button>
             </div>`;
             return;
         }
         grid.innerHTML = plans.map(p => renderPlanCard(p)).join('');
     } catch (e) {
-        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#ef4444;">Failed to load plans.</div>`;
+        grid.innerHTML = `<div class="empty-plans">
+            <svg width="56" height="56" fill="none" stroke="#fca5a5" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <h3 style="color:#ef4444;">Failed to load plans</h3>
+            <p>Please check your connection and try again</p>
+        </div>`;
     }
 }
 
