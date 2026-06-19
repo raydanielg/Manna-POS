@@ -6,7 +6,6 @@
 @endsection
 
 @section('page_styles')
-<style>
     /* Pulser for stock alert */
     .stock-badge {
         position: relative;
@@ -38,7 +37,6 @@
         opacity: 1;
         transform: translateY(0);
     }
-</style>
 @endsection
 
 @section('content')
