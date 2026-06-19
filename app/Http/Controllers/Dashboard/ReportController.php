@@ -219,6 +219,7 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = $this->userCurrency();
 
         $trends = SaleItem::selectRaw('product_name, SUM(quantity) as total_qty, SUM(total) as total_revenue, COUNT(DISTINCT sale_id) as sales_count')
             ->whereHas('sale', fn($q) => $q->forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to]))
@@ -227,7 +228,7 @@ class ReportController extends Controller
             ->take(20)
             ->get();
 
-        return view('dashboard.reports.product-trends-report', compact('trends','from','to'));
+        return view('dashboard.reports.product-trends-report', compact('trends','from','to','userCurrency'));
     }
 
     // --- PDF Download Methods ---
