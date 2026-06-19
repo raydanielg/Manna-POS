@@ -1,0 +1,26 @@
+{
+  "name": "MannaPOS",
+  "short_name": "MannaPOS",
+  "description": "Complete POS & Business Management System",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f1f4fb",
+  "theme_color": "#2563eb",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "/icons8-dynamics-365-96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/icons8-dynamics-365-100.png", "sizes": "100x100", "type": "image/png" },
+    { "src": "/logo.png", "sizes": "300x300", "type": "image/png" }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    { "name": "New Sale", "short_name": "Sell", "url": "/dashboard/sell/pos", "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }] },
+    { "name": "Products", "short_name": "Stock", "url": "/dashboard/inventory/products", "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }] },
+    { "name": "Customers", "short_name": "Clients", "url": "/dashboard/customers/all", "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }] }
+  ]
+}
