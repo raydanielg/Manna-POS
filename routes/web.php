@@ -469,6 +469,17 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     // CRM Activities
     Route::get('crm-activities', [CrmActivityController::class, 'index']);
     Route::post('crm-activities', [CrmActivityController::class, 'store']);
+
+    // Todo API
+    Route::get('todos', [App\Http\Controllers\Dashboard\TodoController::class, 'list']);
+    Route::post('todos', [App\Http\Controllers\Dashboard\TodoController::class, 'store']);
+    Route::put('todos/{todo}', [App\Http\Controllers\Dashboard\TodoController::class, 'update']);
+    Route::put('todos/{todo}/toggle', [App\Http\Controllers\Dashboard\TodoController::class, 'toggleStatus']);
+    Route::put('todos/sort/update', [App\Http\Controllers\Dashboard\TodoController::class, 'updateSort']);
+    Route::delete('todos/{todo}', [App\Http\Controllers\Dashboard\TodoController::class, 'destroy']);
+
+    // Calendar data
+    Route::get('calendar/data', [App\Http\Controllers\Dashboard\TodoController::class, 'calendarData']);
 });
 
 // ─── Admin API Routes ──────────────────────────────────────────────────────
