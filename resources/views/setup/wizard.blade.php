@@ -70,50 +70,64 @@ sel.inp{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org
 
     <!-- PANEL 1: Business Info -->
     <div class="panel active" id="wp1">
-      <h3 class="panel-title">Confirm your business details</h3>
-      <p class="panel-desc">We've pre-filled this from your registration. Update anything that's not right.</p>
+      <h3 class="text-lg font-extrabold text-slate-900 mb-1">Business Information</h3>
+      <p class="text-sm text-slate-500 mb-5">Confirm your business details below.</p>
 
-      <div class="form-group">
-        <label class="form-label">Business Name *</label>
-        <div class="input-wrap">
-          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-          <input type="text" name="business_name" class="form-control" value="{{ $user->business_name }}" required>
+      <div class="mb-4">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Business Name <span class="text-rose-500">*</span></label>
+        <div class="relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <input type="text" name="business_name" class="inp" value="{{ $user->business_name }}" required>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">City / Town</label>
-          <div class="input-wrap">
-            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            <input type="text" name="business_city" class="form-control" value="{{ $user->business_city }}" placeholder="e.g. Dar es Salaam">
+
+      <div class="mb-4">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Country <span class="text-rose-500">*</span></label>
+        <div class="grid grid-cols-3 gap-2 mb-2" id="countryGrid">
+          @foreach($countries as $country)
+          <div class="country-chip {{ $user->business_country == $country->name ? 'on' : '' }}" onclick="pickCountry(this,'{{ $country->name }}')">
+            <span class="flag">{{ $country->flag_emoji }}</span>
+            <span>{{ $country->name }}</span>
+          </div>
+          @endforeach
+        </div>
+        <input type="hidden" name="business_country" id="bizCountry" value="{{ $user->business_country }}">
+        <p class="text-[10px] text-slate-400 mt-1">Click your country. Showing East African countries.</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">City / Town</label>
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <input type="text" name="business_city" class="inp" value="{{ $user->business_city }}" placeholder="e.g. Dar es Salaam">
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Currency *</label>
-          <div class="input-wrap">
-            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <select name="currency" class="form-control" style="padding-left:2.5rem;" required>
-              <option value="TZS" {{ $user->currency=='TZS'?'selected':'' }}>TZS — Tanzanian Shilling</option>
-              <option value="KES" {{ $user->currency=='KES'?'selected':'' }}>KES — Kenyan Shilling</option>
-              <option value="UGX" {{ $user->currency=='UGX'?'selected':'' }}>UGX — Ugandan Shilling</option>
-              <option value="USD" {{ $user->currency=='USD'?'selected':'' }}>USD — US Dollar</option>
-              <option value="EUR" {{ $user->currency=='EUR'?'selected':'' }}>EUR — Euro</option>
-              <option value="GBP" {{ $user->currency=='GBP'?'selected':'' }}>GBP — British Pound</option>
-              <option value="NGN" {{ $user->currency=='NGN'?'selected':'' }}>NGN — Nigerian Naira</option>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Currency <span class="text-rose-500">*</span></label>
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <select name="currency" class="inp sel" required>
+              @foreach($currencies as $c)
+              <option value="{{ $c->code }}" {{ $user->currency==$c->code?'selected':'' }}>{{ $c->code }} — {{ $c->name }}</option>
+              @endforeach
             </select>
           </div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Business Address</label>
-        <div class="input-wrap">
-          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-          <input type="text" name="business_address" class="form-control" value="{{ $user->business_address }}" placeholder="Street address">
+
+      <div class="mb-5">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Business Address</label>
+        <div class="relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <input type="text" name="business_address" class="inp" value="{{ $user->business_address }}" placeholder="Street address, building, area">
         </div>
       </div>
-      <div class="btn-row">
-        <button type="button" class="btn btn-primary" onclick="goWiz(2)">
-          Next: Preferences →
+
+      <div class="flex gap-3">
+        <button type="button" class="btn-p py-2.5 px-5 rounded-lg font-bold text-sm flex items-center justify-center gap-2" onclick="goWiz(2)">
+          <span>Continue</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
     </div>
