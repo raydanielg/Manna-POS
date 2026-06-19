@@ -175,6 +175,16 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'blocked', 'user.d
     Route::get('/user-management/roles', function () { return view('dashboard.user-management.roles'); })->name('dashboard.user-management.roles');
     Route::get('/user-management/sales-commission-agents', function () { return view('dashboard.user-management.sales-commission-agents'); })->name('dashboard.user-management.sales-commission-agents');
 
+    // Staff Management (owner only - controller checks isOwner)
+    Route::get('/staff', [\App\Http\Controllers\Dashboard\UserManagementController::class, 'staffIndex'])->name('dashboard.staff.index');
+
+    // Approval Routes
+    Route::get('/approvals', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'index'])->name('dashboard.approvals.index');
+    Route::post('/approvals', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'store'])->name('dashboard.approvals.store')->withoutMiddleware(['verify.otp', 'blocked', 'subscription']);
+    Route::post('/approvals/{approval}/approve', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'approve'])->name('dashboard.approvals.approve')->withoutMiddleware(['verify.otp', 'blocked', 'subscription']);
+    Route::post('/approvals/{approval}/reject', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'reject'])->name('dashboard.approvals.reject')->withoutMiddleware(['verify.otp', 'blocked', 'subscription']);
+    Route::get('/approvals/pending-count', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'pendingCount'])->name('dashboard.approvals.pending-count');
+
     // Profile Routes (controllers)
     Route::get('/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'profile'])->name('dashboard.profile');
     Route::put('/profile', [App\Http\Controllers\Dashboard\UserManagementController::class, 'updateProfile'])->name('dashboard.profile.update');
