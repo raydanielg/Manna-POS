@@ -86,7 +86,7 @@
                     @forelse($sales as $s)
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($sales->currentPage()-1)*$sales->perPage() }}</td>
-                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $s->reference_no ?? $s->id }}</td>
+                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $s->reference ?? $s->id }}</td>
                         <td class="px-4 py-3 text-sm text-gray-900">{{ $s->customer->name ?? 'Walk-in' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
                         <td class="px-4 py-3 text-sm text-right font-semibold text-gray-900">{{ $userCurrency }} {{ number_format($s->total_amount,2) }}</td>
