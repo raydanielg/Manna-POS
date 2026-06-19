@@ -7,20 +7,11 @@
 
 @section('page_styles')
 <style>
-    /* ── Dashboard Animations & Smooth Transitions ──────────────── */
-    .fade-in {
-        animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(16px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Staggered load effects */
-    .stagger-1 { animation-delay: 0.05s; }
-    .stagger-2 { animation-delay: 0.1s; }
-    .stagger-3 { animation-delay: 0.15s; }
-    .stagger-4 { animation-delay: 0.2s; }
+    /* Staggered load effects (works with animate.css) */
+    .stagger-1 { --animate-delay: 0.1s; animation-delay: 0.1s; }
+    .stagger-2 { --animate-delay: 0.25s; animation-delay: 0.25s; }
+    .stagger-3 { --animate-delay: 0.4s; animation-delay: 0.4s; }
+    .stagger-4 { --animate-delay: 0.55s; animation-delay: 0.55s; }
 
     /* Premium KPI Card Styling */
     .kpi-grid {
@@ -266,7 +257,7 @@
 @endsection
 
 @section('content')
-<div class="dash-content fade-in stagger-1">
+<div class="dash-content animate__animated animate__fadeInUp stagger-1">
 
     {{-- ── KPI Section ─────────────────────────────── --}}
     <div class="dash-section" id="kpi-section">
@@ -389,7 +380,7 @@
     </div>
 
     {{-- ── Charts Section ───────────────────────────── --}}
-    <div class="dash-section fade-in stagger-2" id="charts-section">
+    <div class="dash-section animate__animated animate__fadeInUp stagger-2" id="charts-section">
         <div class="dash-section-header" onclick="toggleSection('charts-section')">
             <div class="dash-section-title flex items-center gap-2">
                 <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v16.5c0 .414.336.75.75.75H21m-16.5-3l2.25-3c.245-.327.67-.425 1.02-.236l2.232 1.116a1.125 1.125 0 0 0 1.221-.144l4.5-3.75M21 9.75V3m0 0h-6.75M21 3l-8.25 8.25"/></svg>
@@ -431,7 +422,7 @@
     </div>
 
     {{-- ── Transactions & Customers Sections ─────────── --}}
-    <div class="tables-row fade-in stagger-3">
+    <div class="tables-row animate__animated animate__fadeInUp stagger-3">
 
         {{-- Recent Transactions --}}
         <div class="table-card">
@@ -501,7 +492,7 @@
     </div>
 
     {{-- ── Alerts & Activities Row ─────────────────────── --}}
-    <div class="tables-row mt-6 fade-in stagger-4">
+    <div class="tables-row mt-6 animate__animated animate__fadeInUp stagger-4">
 
         {{-- Low Stock Alerts --}}
         <div class="table-card">
