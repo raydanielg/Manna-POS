@@ -275,6 +275,8 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     // File Cabinet Routes
     Route::get('/file-cabinet', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'index'])->name('dashboard.file-cabinet');
     Route::post('/file-cabinet', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'store'])->name('dashboard.file-cabinet.store');
+    Route::post('/file-cabinet/folders', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'storeFolder'])->name('dashboard.file-cabinet.folders.store');
+    Route::delete('/file-cabinet/folders/{folder}', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'destroyFolder'])->name('dashboard.file-cabinet.folders.destroy');
     Route::get('/file-cabinet/{file}/download', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'download'])->name('dashboard.file-cabinet.download');
     Route::delete('/file-cabinet/{file}', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'destroy'])->name('dashboard.file-cabinet.destroy');
 
