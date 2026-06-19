@@ -185,12 +185,13 @@ class ReportController extends Controller
 
     public function supplierPriceComparison(Request $request)
     {
+        $userCurrency = $this->userCurrency();
         $products = Product::forCurrentUser($this->currentBusinessId())->with(['purchaseItems' => function($q) {
             $q->selectRaw('product_id, supplier_id, AVG(unit_cost) as avg_price, MAX(unit_cost) as max_price, MIN(unit_cost) as min_price, COUNT(*) as purchases_count')
                 ->groupBy('product_id','supplier_id');
         }, 'purchaseItems.supplier'])->take(50)->get();
 
-        return view('dashboard.reports.supplier-price-comparison', compact('products'));
+        return view('dashboard.reports.supplier-price-comparison', compact('products','userCurrency'));
     }
 
     public function expiryReport(Request $request)
@@ -198,6 +199,7 @@ class ReportController extends Controller
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
         $bizId = $this->currentBusinessId();
+        $userCurrency = $this->userCurrency();
 
         $base = ProductBatch::whereHas('product', fn($q) => $q->forCurrentUser($bizId));
 
@@ -210,7 +212,7 @@ class ReportController extends Controller
             ->orderBy('expiry_date')
             ->paginate(25);
 
-        return view('dashboard.reports.expiry-report', compact('expired','expiringSoon','batches','from','to'));
+        return view('dashboard.reports.expiry-report', compact('expired','expiringSoon','batches','from','to','userCurrency'));
     }
 
     public function productTrendsReport(Request $request)
