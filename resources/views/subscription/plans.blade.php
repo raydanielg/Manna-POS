@@ -82,12 +82,33 @@
 /* Alert */
 .alert-custom{padding:.85rem 1.25rem;border-radius:12px;font-size:.875rem;font-weight:500;margin-bottom:1.5rem;display:flex;align-items:center;gap:.6rem;}
 
-/* Responsive */
+/* Animate.css stagger */
+.stagger-1{animation-delay:.08s}
+.stagger-2{animation-delay:.18s}
+.stagger-3{animation-delay:.28s}
+.stagger-4{animation-delay:.38s}
+.stagger-5{animation-delay:.48s}
+
+/* Mobile polish */
 @media(max-width:640px){
-  .sub-head h1{font-size:1.4rem;}
-  .plans-grid{grid-template-columns:1fr;}
-  .current-banner{padding:1.2rem 1.25rem;flex-direction:column;text-align:center;}
-  .current-banner .right{width:100%;justify-content:center;}
+  .sub-head h1{font-size:1.35rem;}
+  .sub-head p{font-size:.85rem;}
+  .plans-grid{grid-template-columns:1fr;gap:1.25rem;}
+  .plan-card{padding:1.5rem 1.25rem;border-radius:18px;}
+  .plan-name{font-size:1rem;}
+  .plan-price .amt{font-size:1.9rem;}
+  .limits-row{gap:.4rem;}
+  .limit-box{padding:.35rem .4rem;}
+  .limit-box .val{font-size:.82rem;}
+  .current-banner{padding:1.1rem 1.15rem;flex-direction:column;text-align:center;gap:.85rem;}
+  .current-banner .right{width:100%;justify-content:center;flex-wrap:wrap;}
+  .no-plan-banner{padding:1rem 1.25rem;text-align:center;flex-direction:column;gap:.5rem;}
+  .bill-wrap{margin-bottom:1.75rem;}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .plan-card, .stat-card { transition: none !important; animation: none !important; }
 }
 </style>
 @endsection
