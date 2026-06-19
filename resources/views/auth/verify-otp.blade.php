@@ -228,25 +228,7 @@ verifyBtn.addEventListener('click', () => {
     });
 });
 
-let currentMethod = 'email';
-const methodLabels = {
-    email: '{{ $user->email }}',
-    sms: '{{ $user->phone ? substr($user->phone,0,2) . "xxxx" . substr($user->phone,-4) : "No phone" }}'
-};
-const methodHints = {
-    email: "We sent a code to your email. Can't find it? Check your spam folder or <a href='{{ url('/activate/' . $user->activation_token) }}'>click here to activate instantly</a>.",
-    sms: "We sent a code to your phone via SMS. Make sure your phone has signal."
-};
-
-function pickMethod(el, method) {
-    document.querySelectorAll('.method-chip').forEach(c => c.classList.remove('on'));
-    el.classList.add('on');
-    currentMethod = method;
-    document.getElementById('targetLabel').textContent = methodLabels[method];
-    document.getElementById('methodHint').innerHTML = methodHints[method];
-}
-
-// Resend
+// Resend (SMS only)
 resendBtn.addEventListener('click', () => {
     resendBtn.disabled = true;
     resendSeconds = 60;
@@ -258,7 +240,7 @@ resendBtn.addEventListener('click', () => {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
-        body: JSON.stringify({ method: currentMethod })
+        body: JSON.stringify({})
     })
     .then(r => r.json())
     .then(data => {
