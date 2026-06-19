@@ -185,30 +185,73 @@
 
 {{-- Upload Modal --}}
 <div class="modal-overlay" id="uploadModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal-box" style="max-width:520px;" onclick="event.stopPropagation()">
-    <div class="modal-header"><h3 class="modal-title">Upload File</h3><button class="modal-close" onclick="document.getElementById('uploadModal').classList.remove('open')">&times;</button></div>
-    <form method="POST" action="{{ route('dashboard.file-cabinet.store') }}" enctype="multipart/form-data">@csrf
-      <div class="form-group"><label class="form-label">Title *</label><input name="title" class="form-control" required></div>
-      <div class="form-group"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="2"></textarea></div>
-      <div class="form-group"><label class="form-label">Category</label><input name="category" class="form-control" placeholder="e.g. Invoice, Receipt, Contract"></div>
-      <div class="form-group">
-        <label class="form-label">File * (max 50MB)</label>
-        <div class="drop-zone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');const dt=event.dataTransfer;document.getElementById('fileInput').files=dt.files;updateFileName()">
-          <svg width="32" height="32" fill="none" stroke="#94a3b8" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto .5rem;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
-          <p style="font-size:.85rem;color:#64748b;font-weight:600;margin:0;">Click or drag file here</p>
-          <p style="font-size:.7rem;color:#94a3b8;margin:.25rem 0 0;" id="fileName">No file selected</p>
+  <div class="modal-box" style="max-width:520px;border-radius:20px;" onclick="event.stopPropagation()">
+    <div class="modal-header" style="padding:1.25rem 1.5rem;">
+      <h3 class="modal-title" style="font-size:1.05rem;font-weight:800;letter-spacing:-0.02em;">Upload File</h3>
+      <button class="modal-close" style="width:32px;height:32px;border-radius:10px;" onclick="document.getElementById('uploadModal').classList.remove('open')">&times;</button>
+    </div>
+    <form method="POST" action="{{ route('dashboard.file-cabinet.store') }}" enctype="multipart/form-data" id="uploadForm">@csrf
+      <div style="padding:1.25rem 1.5rem;">
+        <div class="form-group"><label class="form-label">Title *</label><input name="title" class="form-control" style="border-radius:12px;" required></div>
+        <div class="form-group"><label class="form-label">Description</label><textarea name="description" class="form-control" style="border-radius:12px;" rows="2"></textarea></div>
+        <div class="form-group"><label class="form-label">Category</label><input name="category" class="form-control" style="border-radius:12px;" placeholder="e.g. Invoice, Receipt, Contract"></div>
+        <div class="form-group">
+          <label class="form-label">File * (max 50MB)</label>
+          <div class="drop-zone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');const dt=event.dataTransfer;document.getElementById('fileInput').files=dt.files;updateFileName()">
+            <svg class="dz-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+            <div class="dz-title">Click or drag file here</div>
+            <div class="dz-sub" id="fileName">No file selected</div>
+          </div>
+          <input type="file" name="file" id="fileInput" style="display:none;" required onchange="updateFileName()">
         </div>
-        <input type="file" name="file" id="fileInput" style="display:none;" required onchange="updateFileName()">
       </div>
-      <div class="modal-footer"><button type="button" class="btn btn-secondary" onclick="document.getElementById('uploadModal').classList.remove('open')">Cancel</button><button type="submit" class="btn btn-primary">Upload</button></div>
+      <div class="modal-footer" style="padding:1rem 1.5rem;">
+        <button type="button" class="btn btn-secondary" style="border-radius:10px;font-weight:700;" onclick="document.getElementById('uploadModal').classList.remove('open')">Cancel</button>
+        <button type="submit" class="btn btn-primary" style="border-radius:10px;font-weight:700;gap:.35rem;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          Upload
+        </button>
+      </div>
     </form>
   </div>
 </div>
 
+<form method="POST" id="deleteForm" style="display:none;">@csrf @method('DELETE')</form>
+
 <script>
+let _fcTimer;
+function debounceSearch() {
+  clearTimeout(_fcTimer);
+  _fcTimer = setTimeout(() => {
+    const s = document.getElementById('fcSearch').value;
+    const url = new URL(window.location.href);
+    if (s) url.searchParams.set('search', s); else url.searchParams.delete('search');
+    window.location.href = url.toString();
+  }, 500);
+}
 function updateFileName() {
   const input = document.getElementById('fileInput');
-  document.getElementById('fileName').textContent = input.files.length ? input.files[0].name : 'No file selected';
+  const name = input.files.length ? input.files[0].name : 'No file selected';
+  document.getElementById('fileName').textContent = name;
+}
+function confirmDelete(actionUrl) {
+  Swal.fire({
+    title: 'Delete file?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Delete',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#64748b',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const form = document.getElementById('deleteForm');
+      form.action = actionUrl;
+      form.submit();
+    }
+  });
 }
 </script>
 @endsection
