@@ -268,6 +268,11 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'blocked', 'user.d
     // Calendar & Todo Routes
     Route::get('/calendar', [App\Http\Controllers\Dashboard\TodoController::class, 'index'])->name('dashboard.calendar');
 
+    // ─── Mobile Optimized Pages ────────────────────────────────────
+    Route::get('/m/products', function () { return view('dashboard.mobile.products'); })->name('dashboard.mobile.products');
+    Route::get('/m/customers', function () { return view('dashboard.mobile.customers'); })->name('dashboard.mobile.customers');
+    Route::get('/m/sales', function () { return view('dashboard.mobile.sales'); })->name('dashboard.mobile.sales');
+
     // Notification Templates Routes
     Route::get('/notification-templates', function () { return view('dashboard.notification-templates.index'); })->name('dashboard.notification-templates');
 
