@@ -100,7 +100,7 @@ class _PayrollPageState extends State<PayrollPage> {
   Widget _buildStatsGrid() {
     final items = [
       _StatItem('Total Staff', _stats?['total_staff'] ?? 0, Icons.people_rounded, const Color(0xFF3B82F6), const Color(0xFFDBEAFE)),
-      _StatItem('Total Paid', _stats?['total_paid'] ?? 0.0, Icons.payments_rounded, const Color(0xFF10B981), const Color(0xFFD1FAE5)), isMoney: true,
+      _StatItem('Total Paid', _stats?['total_paid'] ?? 0.0, Icons.payments_rounded, const Color(0xFF10B981), const Color(0xFFD1FAE5), isMoney: true),
       _StatItem('Pending', _stats?['pending_payroll'] ?? 0, Icons.pending_actions_rounded, const Color(0xFFF59E0B), const Color(0xFFFEF3C7)),
       _StatItem('Entries', _stats?['total_entries'] ?? 0, Icons.receipt_long_rounded, const Color(0xFF8B5CF6), const Color(0xFFEDE9FE)),
     ];
