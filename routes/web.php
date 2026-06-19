@@ -120,6 +120,22 @@ Route::post('/setup', [App\Http\Controllers\SetupController::class, 'complete'])
 Route::get('/subscription/plans', [App\Http\Controllers\UserSubscriptionController::class, 'plans'])->middleware(['auth', 'verify.otp']);
 Route::post('/subscription/choose', [App\Http\Controllers\UserSubscriptionController::class, 'choosePlan'])->middleware(['auth', 'verify.otp']);
 
+// Blocked / Expired pages
+Route::get('/blocked', function () {
+    $user = auth()->user();
+    return view('blocked', [
+        'name' => $user?->name ?? 'User',
+        'reason' => $user?->block_reason ?? 'Your account has been suspended. Please contact support for assistance.',
+        'email' => config('app.support_email', 'support@mannapos.co.tz')
+    ]);
+})->middleware('auth')->name('blocked');
+
+Route::get('/subscription/expired', function () {
+    $user = auth()->user();
+    $plans = \App\Models\SubscriptionPlan::where('is_active', true)->orderBy('sort_order')->get();
+    return view('subscription-expired', compact('user', 'plans'));
+})->middleware('auth')->name('subscription.expired');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware(['auth', 'user.dashboard'])->name('home');
 
 Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'user.dashboard', 'subscription'])->group(function () {
