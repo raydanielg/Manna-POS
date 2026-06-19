@@ -127,8 +127,8 @@ class ReportController extends Controller
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
 
-        $totalRevenue = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total_amount');
-        $totalCost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total_amount');
+        $totalRevenue = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total');
+        $totalCost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total');
         $totalExpenses = Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->sum('amount');
         $grossProfit = $totalRevenue - $totalCost;
         $netProfit = $grossProfit - $totalExpenses;
@@ -138,8 +138,8 @@ class ReportController extends Controller
         while ($current <= $to) {
             $mStart = $current->copy();
             $mEnd = $current->copy()->endOfMonth();
-            $rev = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$mStart,$mEnd])->sum('total_amount');
-            $cost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$mStart,$mEnd])->sum('total_amount');
+            $rev = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$mStart,$mEnd])->sum('total');
+            $cost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$mStart,$mEnd])->sum('total');
             $exp = Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$mStart,$mEnd])->sum('amount');
             $monthly[] = [
                 'month' => $current->format('M Y'),
@@ -220,9 +220,9 @@ class ReportController extends Controller
         $from = $dates['from']; $to = $dates['to'];
         $summary = [
             'total_sales' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->count(),
-            'total_revenue' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total_amount'),
-            'total_paid' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('paid_amount'),
-            'total_outstanding' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('balance'),
+            'total_revenue' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total'),
+            'total_paid' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('paid'),
+            'total_outstanding' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->selectRaw('COALESCE(SUM(total - paid),0) as balance')->value('balance'),
         ];
         $topProducts = SaleItem::selectRaw('product_name, SUM(quantity) as total_qty, SUM(total) as total_revenue')
             ->whereHas('sale', fn($q) => $q->forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to]))
