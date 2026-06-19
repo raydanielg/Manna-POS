@@ -112,7 +112,7 @@ async function loadList(){
     }).join('');
   }catch(e){tbody.innerHTML='<tr><td colspan="5" class="tbl-empty">Error loading data.</td></tr>';}
 }
-function openAddModal(){editId=null;document.getElementById('modal-title').textContent='Add Role';document.getElementById('itemForm').reset();document.querySelectorAll('#permGrid input[type=checkbox]').forEach(c=>c.checked=false);clearFormErrors('itemForm');openModal('modal');}
+function openAddModal(){editId=null;document.getElementById('modal-title').textContent='Add Role';document.getElementById('itemForm').reset();document.querySelectorAll('[name="permissions[]"]').forEach(c=>c.checked=false);clearFormErrors('itemForm');openModal('modal');}
 async function editItem(id){
   try{const r=await apiFetch(`${API}/${id}`);editId=id;document.getElementById('modal-title').textContent='Edit Role';
   const form=document.getElementById('itemForm');
