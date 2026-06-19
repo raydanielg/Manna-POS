@@ -805,6 +805,7 @@
     $isMicrofinance = request()->routeIs('dashboard.microfinance.*');
     $isSmsCampaigns = request()->routeIs('dashboard.sms-campaigns.*');
     $isFileCabinet = request()->routeIs('dashboard.file-cabinet.*');
+    $isPayroll     = request()->routeIs('dashboard.payroll.*');
     $isReports     = request()->routeIs('dashboard.reports.*');
     $isNotifTpl    = request()->routeIs('dashboard.notification-templates');
     $isSettings    = request()->routeIs('dashboard.settings.*');

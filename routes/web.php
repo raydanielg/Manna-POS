@@ -277,6 +277,20 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     Route::post('/file-cabinet', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'store'])->name('dashboard.file-cabinet.store');
     Route::get('/file-cabinet/{file}/download', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'download'])->name('dashboard.file-cabinet.download');
     Route::delete('/file-cabinet/{file}', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'destroy'])->name('dashboard.file-cabinet.destroy');
+
+    // Payroll Routes
+    Route::get('/payroll', [\App\Http\Controllers\Dashboard\PayrollController::class, 'index'])->name('dashboard.payroll');
+    Route::get('/payroll/periods', [\App\Http\Controllers\Dashboard\PayrollController::class, 'periods'])->name('dashboard.payroll.periods');
+    Route::post('/payroll/periods', [\App\Http\Controllers\Dashboard\PayrollController::class, 'storePeriod'])->name('dashboard.payroll.periods.store');
+    Route::get('/payroll/periods/{period}', [\App\Http\Controllers\Dashboard\PayrollController::class, 'showPeriod'])->name('dashboard.payroll.period.show');
+    Route::post('/payroll/periods/{period}/entries', [\App\Http\Controllers\Dashboard\PayrollController::class, 'storeEntry'])->name('dashboard.payroll.entry.store');
+    Route::post('/payroll/entries/{entry}/status', [\App\Http\Controllers\Dashboard\PayrollController::class, 'updateEntryStatus'])->name('dashboard.payroll.entry.status');
+    Route::delete('/payroll/entries/{entry}', [\App\Http\Controllers\Dashboard\PayrollController::class, 'destroyEntry'])->name('dashboard.payroll.entry.destroy');
+    Route::get('/payroll/deductions', [\App\Http\Controllers\Dashboard\PayrollController::class, 'deductionTypes'])->name('dashboard.payroll.deductions');
+    Route::post('/payroll/deductions', [\App\Http\Controllers\Dashboard\PayrollController::class, 'storeDeductionType'])->name('dashboard.payroll.deductions.store');
+    Route::put('/payroll/deductions/{type}', [\App\Http\Controllers\Dashboard\PayrollController::class, 'updateDeductionType'])->name('dashboard.payroll.deductions.update');
+    Route::delete('/payroll/deductions/{type}', [\App\Http\Controllers\Dashboard\PayrollController::class, 'destroyDeductionType'])->name('dashboard.payroll.deductions.destroy');
+    Route::get('/payroll/payslip/{entry}', [\App\Http\Controllers\Dashboard\PayrollController::class, 'payslip'])->name('dashboard.payroll.payslip');
 });
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────
