@@ -88,6 +88,7 @@ class ReportController extends Controller
 
     public function inventoryReport(Request $request)
     {
+        $userCurrency = $this->userCurrency();
         $lowStock = Product::forCurrentUser($this->currentBusinessId())->where(function($q){ $q->whereColumn('stock_quantity','<=','reorder_level')->orWhere('stock_quantity',0); })->count();
         $totalProducts = Product::forCurrentUser($this->currentBusinessId())->count();
         $totalStockValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(stock_quantity * purchase_price) as val')->value('val') ?? 0;
@@ -99,7 +100,7 @@ class ReportController extends Controller
             ->groupBy('product_categories.name')
             ->get();
 
-        return view('dashboard.reports.inventory-report', compact('lowStock','totalProducts','totalStockValue','totalRetailValue','products','categories'));
+        return view('dashboard.reports.inventory-report', compact('lowStock','totalProducts','totalStockValue','totalRetailValue','products','categories','userCurrency'));
     }
 
     public function expenseReport(Request $request)
