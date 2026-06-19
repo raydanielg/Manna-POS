@@ -204,6 +204,64 @@
       </div>
     </div>
 
+    {{-- Store Settings --}}
+    <div class="section-card" id="storeSection">
+      <div class="section-header">
+        <div class="icon" style="background:#fff7ed;color:#ea580c;">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <div>
+          <h3>Online Store</h3>
+          <p>Generate a public storefront for your customers</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Store Title</label>
+            <input name="store_title" class="form-control" placeholder="e.g. Manna Supermarket Online">
+            <div class="field-hint">Shown at the top of your public store</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Store Description</label>
+            <input name="store_description" class="form-control" placeholder="Short tagline for your store">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Store Link</label>
+            <div style="display:flex;gap:0.5rem;">
+              <input id="storeLink" class="form-control" readonly style="background:#f8fafc;color:#475569;font-size:0.82rem;" value="Not generated yet">
+              <button type="button" class="btn btn-edit btn-sm" id="copyLinkBtn" style="white-space:nowrap;" onclick="copyStoreLink()">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                Copy
+              </button>
+            </div>
+          </div>
+          <div class="form-group" style="display:flex;align-items:flex-end;gap:0.75rem;">
+            <button type="button" class="btn btn-primary" id="generateLinkBtn" onclick="generateStoreLink()" style="gap:0.4rem;">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              Generate Link
+            </button>
+            <a id="previewLink" href="#" target="_blank" class="btn btn-view btn-sm" style="display:none;white-space:nowrap;">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              Preview Store
+            </a>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:0.5rem;">
+          <label class="toggle-wrap" style="cursor:pointer;">
+            <label class="toggle">
+              <input type="checkbox" id="showImagesToggle" name="show_images" checked onchange="toggleStoreImages()">
+              <span class="toggle-slider"></span>
+            </label>
+            <span style="font-size:0.85rem;font-weight:600;color:#475569;">Show product images on store</span>
+          </label>
+          <div class="field-hint">Turn off if your products don't have images yet</div>
+        </div>
+      </div>
+    </div>
+
     {{-- Save button --}}
     <div style="display:flex;justify-content:flex-end;gap:0.75rem;margin-bottom:2rem;">
       <button type="button" class="btn btn-secondary" onclick="loadSettings()">Reset</button>
