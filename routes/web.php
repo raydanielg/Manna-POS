@@ -157,6 +157,8 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'user.dashboard', 
     Route::get('/contacts/customers', [App\Http\Controllers\Dashboard\CustomerController::class, 'index'])->name('dashboard.contacts.customers');
     Route::get('/contacts/customer-groups', function () { return view('dashboard.contacts.customer-groups'); })->name('dashboard.contacts.customer-groups');
     Route::get('/contacts/import-contacts', function () { return view('dashboard.contacts.import-contacts'); })->name('dashboard.contacts.import-contacts');
+    Route::post('/contacts/import-contacts', [App\Http\Controllers\Dashboard\ContactImportController::class, 'store'])->name('dashboard.contacts.import-contacts.post');
+    Route::get('/contacts/import-results', [App\Http\Controllers\Dashboard\ContactImportController::class, 'results'])->name('dashboard.contacts.import-results');
 
     // Products Routes
     Route::get('/inventory/list-products', [App\Http\Controllers\Dashboard\ProductController::class, 'create'])->name('dashboard.inventory.list-products');
