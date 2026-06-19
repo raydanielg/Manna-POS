@@ -168,6 +168,10 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'user.dashboard', 
     // Contacts Routes
     Route::get('/contacts/suppliers', function () { return view('dashboard.contacts.suppliers'); })->name('dashboard.contacts.suppliers');
     Route::get('/contacts/customers', [App\Http\Controllers\Dashboard\CustomerController::class, 'index'])->name('dashboard.contacts.customers');
+    Route::get('/contacts/customers/{customer}', function (\App\Models\Customer $customer) {
+        $customer->load('group');
+        return view('dashboard.contacts.customer-view', compact('customer'));
+    })->name('dashboard.contacts.customers.view');
     Route::get('/contacts/customer-groups', function () { return view('dashboard.contacts.customer-groups'); })->name('dashboard.contacts.customer-groups');
     Route::get('/contacts/import-contacts', function () { return view('dashboard.contacts.import-contacts'); })->name('dashboard.contacts.import-contacts');
     Route::post('/contacts/import-contacts', [App\Http\Controllers\Dashboard\ContactImportController::class, 'store'])->name('dashboard.contacts.import-contacts.post');
