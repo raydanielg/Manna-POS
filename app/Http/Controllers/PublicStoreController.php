@@ -20,8 +20,8 @@ class PublicStoreController extends Controller
         $showImages = $settings['show_images'] ?? true;
 
         $products = Product::where('user_id', $user->id)
-            ->where('is_active', true)
-            ->select(['id', 'name', 'description', 'price', 'image', 'sku', 'stock_quantity'])
+            ->where('status', 'active')
+            ->select(['id', 'name', 'description', 'selling_price', 'image', 'sku', 'stock_quantity'])
             ->orderBy('name')
             ->get();
 
