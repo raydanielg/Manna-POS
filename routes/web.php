@@ -464,6 +464,18 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('product-variations',     ProductVariationController::class);
     Route::apiResource('business-locations',     BusinessLocationController::class);
 
+    // Import Library Routes
+    Route::get('units/library',       [UnitController::class, 'importLibrary']);
+    Route::post('units/import',        [UnitController::class, 'import']);
+    Route::get('categories/library',   [CategoryController::class, 'importLibrary']);
+    Route::post('categories/import',   [CategoryController::class, 'import']);
+    Route::get('brands/library',       [BrandController::class, 'importLibrary']);
+    Route::post('brands/import',       [BrandController::class, 'import']);
+    Route::get('warranties/library',   [WarrantyController::class, 'importLibrary']);
+    Route::post('warranties/import',   [WarrantyController::class, 'import']);
+    Route::get('product-variations/library', [ProductVariationController::class, 'importLibrary']);
+    Route::post('product-variations/import',   [ProductVariationController::class, 'import']);
+
     // Plan Management API
     Route::get('plans/stats',             [PlanManagementController::class, 'statsPlans']);
     Route::get('plans',                   [PlanManagementController::class, 'indexPlans']);
