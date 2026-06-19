@@ -1013,6 +1013,21 @@
             </div>
         </div>
 
+        {{-- Microfinance / Loans --}}
+        <div class="dropdown {{ $isMicrofinance ? 'open' : '' }}" id="dropdown-microfinance">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-microfinance')" data-tip="Loans">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
+                <span class="nav-label">Microfinance</span>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="{{ route('dashboard.microfinance') }}" class="child-item {{ request()->routeIs('dashboard.microfinance') ? 'active' : '' }}">Dashboard</a>
+                <a href="{{ route('dashboard.microfinance.loans') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.loans') ? 'active' : '' }}">Loans</a>
+                <a href="{{ route('dashboard.microfinance.products') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.products') ? 'active' : '' }}">Loan Products</a>
+                <a href="{{ route('dashboard.microfinance.guarantors') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.guarantors') ? 'active' : '' }}">Guarantors</a>
+            </div>
+        </div>
+
         <div class="nav-section-label">Analytics</div>
 
         {{-- Reports --}}
