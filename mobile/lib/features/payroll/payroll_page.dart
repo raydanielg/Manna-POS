@@ -59,7 +59,7 @@ class _PayrollPageState extends State<PayrollPage> {
               actions: [
                 IconButton(
                   icon: const Icon(Icons.add_circle_rounded, color: AppColors.primary, size: 26),
-                  onPressed: () => context.push('/payroll/periods/new'),
+                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Create period – coming soon'))),
                 ),
                 const SizedBox(width: 8),
               ],
