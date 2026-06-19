@@ -185,3 +185,96 @@
         updateBilling();
     });
 </script>
+
+<style>
+    /* Mobile Pricing Responsive */
+    @media (max-width: 768px) {
+        #pricing {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        #pricing .max-w-7xl {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        #pricing h2 {
+            font-size: 1.75rem;
+        }
+        #pricing p.text-lg {
+            font-size: 0.9rem;
+        }
+
+        /* Horizontal scroll single row */
+        .pricing-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 0.75rem;
+            padding: 0 1rem 1.5rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .pricing-grid > div {
+            min-width: 260px;
+            max-width: 82vw;
+            flex-shrink: 0;
+            scroll-snap-align: center;
+            border-radius: 1.25rem;
+        }
+
+        /* Free tier: compact, shown first */
+        .pricing-grid .pricing-card-free {
+            min-width: 220px;
+            max-width: 78vw;
+            order: -1;
+        }
+        .pricing-grid .pricing-card-free .p-8 {
+            padding: 1rem;
+        }
+
+        /* Compact card internals */
+        .pricing-grid .p-8 {
+            padding: 1.25rem;
+        }
+        .pricing-grid h3 {
+            font-size: 1.1rem;
+        }
+        .pricing-grid p.text-sm {
+            font-size: 0.7rem;
+            min-height: auto;
+        }
+        .pricing-grid .text-5xl {
+            font-size: 1.75rem;
+        }
+        .pricing-grid .my-6 {
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+            min-height: auto;
+        }
+        .pricing-grid .space-y-2 > div {
+            font-size: 0.72rem;
+        }
+        .pricing-grid ul.space-y-3\.5 {
+            margin-bottom: 1rem;
+        }
+        .pricing-grid ul.space-y-3\.5 li {
+            font-size: 0.72rem;
+        }
+        .pricing-grid ul.space-y-3\.5 li svg {
+            width: 16px;
+            height: 16px;
+        }
+        .pricing-grid a.block.w-full {
+            padding: 0.7rem 1rem;
+            font-size: 0.78rem;
+            border-radius: 0.75rem;
+        }
+        .pricing-grid .absolute.-top-4 {
+            top: -0.75rem;
+        }
+        .pricing-grid .absolute.-top-4 span {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.6rem;
+        }
+    }
+</style>
