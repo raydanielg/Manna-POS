@@ -233,7 +233,7 @@ $__badgeColors = [
       $features  = is_array($plan->features) ? $plan->features : [];
       $bc = $__badgeColors[$plan->badge_color] ?? $__badgeColors['blue'];
     @endphp
-    <div class="plan-card {{ $plan->is_featured && !$isCurrent ? 'featured' : '' }} {{ $isCurrent ? 'current' : '' }}">
+    <div class="plan-card {{ $plan->is_featured && !$isCurrent ? 'featured' : '' }} {{ $isCurrent ? 'current' : '' }} animate__animated animate__fadeInUp stagger-{{ ($loop->iteration % 5) + 1 }}">
 
       {{-- Badges --}}
       @if($isCurrent)
