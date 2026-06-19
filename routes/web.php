@@ -247,6 +247,23 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     Route::post('/feedback-admin/{feedback}/reply', [\App\Http\Controllers\Dashboard\AdminFeedbackController::class, 'reply'])->name('dashboard.feedback.admin.reply');
     Route::patch('/feedback-admin/{feedback}/status', [\App\Http\Controllers\Dashboard\AdminFeedbackController::class, 'updateStatus'])->name('dashboard.feedback.admin.status');
     Route::patch('/feedback-admin/{feedback}/priority', [\App\Http\Controllers\Dashboard\AdminFeedbackController::class, 'updatePriority'])->name('dashboard.feedback.admin.priority');
+
+    // Microfinance / Loans Routes
+    Route::get('/microfinance', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'index'])->name('dashboard.microfinance');
+    Route::get('/microfinance/products', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'products'])->name('dashboard.microfinance.products');
+    Route::post('/microfinance/products', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'storeProduct'])->name('dashboard.microfinance.products.store');
+    Route::put('/microfinance/products/{product}', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'updateProduct'])->name('dashboard.microfinance.products.update');
+    Route::delete('/microfinance/products/{product}', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'destroyProduct'])->name('dashboard.microfinance.products.destroy');
+    Route::get('/microfinance/loans', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'loans'])->name('dashboard.microfinance.loans');
+    Route::get('/microfinance/loans/create', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'createLoan'])->name('dashboard.microfinance.loan.create');
+    Route::post('/microfinance/loans', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'storeLoan'])->name('dashboard.microfinance.loan.store');
+    Route::get('/microfinance/loans/{loan}', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'showLoan'])->name('dashboard.microfinance.loan.show');
+    Route::post('/microfinance/loans/{loan}/status', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'updateLoanStatus'])->name('dashboard.microfinance.loan.status');
+    Route::post('/microfinance/loans/{loan}/repay', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'storeRepayment'])->name('dashboard.microfinance.loan.repay');
+    Route::get('/microfinance/guarantors', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'guarantors'])->name('dashboard.microfinance.guarantors');
+    Route::post('/microfinance/guarantors', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'storeGuarantor'])->name('dashboard.microfinance.guarantors.store');
+    Route::put('/microfinance/guarantors/{guarantor}', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'updateGuarantor'])->name('dashboard.microfinance.guarantors.update');
+    Route::delete('/microfinance/guarantors/{guarantor}', [\App\Http\Controllers\Dashboard\MicrofinanceController::class, 'destroyGuarantor'])->name('dashboard.microfinance.guarantors.destroy');
 });
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────

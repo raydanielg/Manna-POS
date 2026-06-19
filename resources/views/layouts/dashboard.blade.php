@@ -622,73 +622,102 @@
         .report-page { max-width: 100%; }
         .report-header-bar {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 1rem 1.5rem; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-            border-radius: 14px; margin-bottom: 1.5rem; color: #fff;
+            padding: 1.25rem 1.75rem; border-radius: 16px; margin-bottom: 1.5rem; color: #fff;
+            background: linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,58,138,0.92) 50%, rgba(37,99,235,0.85) 100%);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 12px 32px rgba(15,23,42,0.18), inset 0 1px 0 rgba(255,255,255,0.1);
+            position: relative; overflow: hidden;
         }
-        .report-header-bar h1 { font-size: 1.25rem; font-weight: 800; margin: 0; }
-        .report-header-bar p { font-size: 0.8rem; opacity: 0.85; margin: 0.25rem 0 0; }
-        .report-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .report-actions .btn { border-radius: 10px; padding: 0.55rem 1rem; font-size: 0.8rem; }
+        .report-header-bar::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(59,130,246,0.25) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .report-header-bar h1 { font-size: 1.35rem; font-weight: 800; margin: 0; position: relative; letter-spacing: -0.03em; }
+        .report-header-bar p { font-size: 0.82rem; opacity: 0.82; margin: 0.3rem 0 0; position: relative; }
+        .report-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; position: relative; }
+        .report-actions .btn {
+            border-radius: 10px; padding: 0.55rem 1rem; font-size: 0.8rem; font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .report-actions .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.18); }
         .report-filters {
-            background: #fff; border-radius: 14px; border: 1px solid #eef2f6;
+            background: rgba(255,255,255,0.7); border-radius: 16px;
+            border: 1px solid rgba(226,232,240,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             padding: 1.25rem; margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;
+            box-shadow: 0 4px 16px rgba(15,23,42,0.04);
         }
-        .report-filters label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; margin-bottom: 0.35rem; display: block; }
+        .report-filters label { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.08em; margin-bottom: 0.4rem; display: block; }
         .report-filters input, .report-filters select {
-            border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.55rem 0.85rem;
-            font-size: 0.85rem; color: #0f172a; background: #f8fafc; outline: none;
+            border: 1px solid rgba(226,232,240,0.8); border-radius: 12px; padding: 0.6rem 0.9rem;
+            font-size: 0.85rem; color: #0f172a; background: rgba(248,250,252,0.8); outline: none;
+            transition: all 0.2s ease; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
         }
-        .report-filters input:focus, .report-filters select:focus { border-color: #2563eb; background: #fff; }
+        .report-filters input:focus, .report-filters select:focus {
+            border-color: #3b82f6; background: #fff; box-shadow: 0 0 0 3px rgba(59,130,246,0.1), inset 0 1px 2px rgba(0,0,0,0.02);
+        }
         .report-summary {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;
         }
         .report-summary-card {
-            background: #fff; border-radius: 14px; padding: 1.25rem 1.5rem;
-            border: 1px solid #eef2f6; position: relative; overflow: hidden;
-            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.85); border-radius: 16px; padding: 1.35rem 1.5rem;
+            border: 1px solid rgba(226,232,240,0.5); position: relative; overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(15,23,42,0.03);
         }
-        .report-summary-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,23,42,0.06); }
-        .report-summary-card .rsc-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; margin-bottom: 0.4rem; }
-        .report-summary-card .rsc-value { font-size: 1.5rem; font-weight: 800; color: #0f172a; line-height: 1.2; }
-        .report-summary-card .rsc-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 14px 0 0 14px; }
-        .report-summary-card .rsc-bar.green { background: #22c55e; }
-        .report-summary-card .rsc-bar.blue { background: #3b82f6; }
-        .report-summary-card .rsc-bar.amber { background: #f59e0b; }
-        .report-summary-card .rsc-bar.red { background: #ef4444; }
-        .report-summary-card .rsc-bar.violet { background: #8b5cf6; }
-        .report-summary-card .rsc-bar.emerald { background: #10b981; }
+        .report-summary-card:hover {
+            transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,23,42,0.08);
+            background: rgba(255,255,255,0.95); border-color: rgba(59,130,246,0.2);
+        }
+        .report-summary-card .rsc-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 0.4rem; }
+        .report-summary-card .rsc-value { font-size: 1.55rem; font-weight: 800; color: #0f172a; line-height: 1.15; letter-spacing: -0.02em; }
+        .report-summary-card .rsc-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 16px 0 0 16px; }
+        .report-summary-card .rsc-bar.green { background: linear-gradient(180deg, #4ade80, #22c55e); }
+        .report-summary-card .rsc-bar.blue { background: linear-gradient(180deg, #60a5fa, #3b82f6); }
+        .report-summary-card .rsc-bar.amber { background: linear-gradient(180deg, #fbbf24, #f59e0b); }
+        .report-summary-card .rsc-bar.red { background: linear-gradient(180deg, #f87171, #ef4444); }
+        .report-summary-card .rsc-bar.violet { background: linear-gradient(180deg, #a78bfa, #8b5cf6); }
+        .report-summary-card .rsc-bar.emerald { background: linear-gradient(180deg, #34d399, #10b981); }
 
         .report-chart-row {
             display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
         }
         .report-chart-card {
-            background: #fff; border-radius: 14px; border: 1px solid #eef2f6; overflow: hidden;
+            background: rgba(255,255,255,0.85); border-radius: 16px; border: 1px solid rgba(226,232,240,0.5);
+            overflow: hidden; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 12px rgba(15,23,42,0.03); transition: all 0.3s ease;
         }
+        .report-chart-card:hover { box-shadow: 0 8px 28px rgba(15,23,42,0.06); border-color: rgba(59,130,246,0.15); }
         .report-chart-card .rch-head {
-            padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; background: #fcfdfe;
-            font-size: 0.9rem; font-weight: 700; color: #0f172a;
+            padding: 1.1rem 1.5rem; border-bottom: 1px solid rgba(241,245,249,0.6); background: rgba(252,253,254,0.6);
+            font-size: 0.92rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;
         }
-        .report-chart-card .rch-body { padding: 1rem; height: 300px; position: relative; }
+        .report-chart-card .rch-body { padding: 1.25rem; height: 300px; position: relative; }
 
         .report-table-wrap {
-            background: #fff; border-radius: 14px; border: 1px solid #eef2f6; overflow: hidden; margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.85); border-radius: 16px; border: 1px solid rgba(226,232,240,0.5);
+            overflow: hidden; margin-bottom: 1.5rem; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 12px rgba(15,23,42,0.03); transition: all 0.3s ease;
         }
+        .report-table-wrap:hover { box-shadow: 0 8px 28px rgba(15,23,42,0.05); border-color: rgba(59,130,246,0.15); }
         .report-table-wrap .rtw-head {
-            padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; background: #fcfdfe;
+            padding: 1.1rem 1.5rem; border-bottom: 1px solid rgba(241,245,249,0.6); background: rgba(252,253,254,0.6);
             display: flex; align-items: center; justify-content: space-between;
         }
-        .report-table-wrap .rtw-head .rtw-title { font-size: 0.9rem; font-weight: 700; color: #0f172a; }
+        .report-table-wrap .rtw-head .rtw-title { font-size: 0.92rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em; }
         .report-table-wrap .rtw-body { padding: 0; }
         .report-table { width: 100%; border-collapse: collapse; }
         .report-table thead th {
-            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
-            color: #64748b; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #f1f5f9; background: #fafbff;
+            font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+            color: #64748b; padding: 0.85rem 1.25rem; text-align: left; border-bottom: 1px solid rgba(241,245,249,0.6); background: rgba(250,251,255,0.6);
         }
         .report-table tbody td {
-            font-size: 0.82rem; color: #374151; padding: 0.75rem 1rem; border-bottom: 1px solid #f8fafc; vertical-align: middle;
+            font-size: 0.82rem; color: #374151; padding: 0.85rem 1.25rem; border-bottom: 1px solid rgba(248,250,252,0.6); vertical-align: middle;
         }
         .report-table tbody tr:last-child td { border-bottom: none; }
-        .report-table tbody tr:hover td { background: #fafbff; }
+        .report-table tbody tr:hover td { background: rgba(250,251,255,0.8); }
         .report-table .text-right { text-align: right; }
         .report-table .text-center { text-align: center; }
 
@@ -719,22 +748,42 @@
 
         /* ── PDF.js Preview Modal ──────────────────── */
         .pdf-preview-overlay {
-            position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px);
-            z-index: 9999; display: none; align-items: center; justify-content: center; padding: 2rem;
+            position: fixed; inset: 0; background: rgba(15,23,42,0.75); backdrop-filter: blur(8px);
+            z-index: 9999; display: none; align-items: center; justify-content: center; padding: 1rem;
         }
         .pdf-preview-overlay.open { display: flex; }
         .pdf-preview-box {
-            background: #fff; border-radius: 16px; width: 100%; max-width: 900px; height: 90vh;
-            display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+            background: linear-gradient(145deg, #f1f5f9, #e2e8f0); border-radius: 20px;
+            width: 100%; max-width: 960px; height: 92vh;
+            display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 32px 64px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         .pdf-preview-head {
-            padding: 1rem 1.5rem; border-bottom: 1px solid #f1f5f9; display: flex;
-            align-items: center; justify-content: space-between; background: #fcfdfe;
+            padding: 1rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex;
+            align-items: center; justify-content: space-between; background: rgba(255,255,255,0.6); backdrop-filter: blur(12px);
         }
-        .pdf-preview-head h3 { font-size: 1rem; font-weight: 700; color: #0f172a; }
-        .pdf-preview-head button { background: #f1f5f9; border: none; border-radius: 8px; padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600; color: #64748b; cursor: pointer; }
-        .pdf-preview-head button:hover { background: #e2e8f0; }
-        .pdf-preview-frame { flex: 1; width: 100%; border: none; }
+        .pdf-preview-head h3 { font-size: 0.95rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+        .pdf-preview-head .pdf-actions { display: flex; gap: 0.5rem; align-items: center; }
+        .pdf-preview-head button {
+            background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.06); border-radius: 10px;
+            padding: 0.5rem 1rem; font-size: 0.78rem; font-weight: 700; color: #475569; cursor: pointer;
+            transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.35rem;
+        }
+        .pdf-preview-head button:hover { background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+        .pdf-preview-head button.primary { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; }
+        .pdf-preview-head button.primary:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); box-shadow: 0 4px 16px rgba(37,99,235,0.35); }
+        .pdf-preview-body {
+            flex: 1; overflow: auto; padding: 1.5rem; display: flex; justify-content: center; align-items: flex-start;
+            background: repeating-linear-gradient(45deg, #e2e8f0 0, #e2e8f0 1px, #cbd5e1 1px, #cbd5e1 2px);
+            background-size: 20px 20px;
+        }
+        .pdf-preview-frame {
+            width: 210mm; min-height: 297mm; background: #fff;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.05);
+            border-radius: 0; padding: 12mm; transform-origin: top center;
+            transition: transform 0.3s ease;
+        }
 
         @yield('page_styles')
     </style>
@@ -1502,47 +1551,85 @@ document.addEventListener('keydown', e => {
     <div class="pdf-preview-box" onclick="event.stopPropagation()">
         <div class="pdf-preview-head">
             <h3 id="pdfPreviewTitle">Report Preview</h3>
-            <div style="display:flex;gap:0.5rem;">
-                <button onclick="downloadPdf()" style="background:#2563eb;color:#fff;">
+            <div class="pdf-actions">
+                <button onclick="zoomPdf(-0.1)" title="Zoom out">−</button>
+                <span id="pdfZoomLabel" style="font-size:0.75rem;font-weight:700;color:#64748b;min-width:48px;text-align:center;">100%</span>
+                <button onclick="zoomPdf(0.1)" title="Zoom in">+</button>
+                <div style="width:1px;height:20px;background:rgba(0,0,0,0.08);margin:0 0.25rem;"></div>
+                <button onclick="downloadPdf()" class="primary">
                     <svg class="w-4 h-4" style="display:inline;vertical-align:middle;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Download PDF
+                    Print / Save PDF
                 </button>
                 <button onclick="closePdfPreview()">Close</button>
             </div>
         </div>
-        <iframe id="pdfPreviewFrame" class="pdf-preview-frame"></iframe>
+        <div class="pdf-preview-body" id="pdfPreviewBody">
+            <div id="pdfPreviewFrame" class="pdf-preview-frame"></div>
+        </div>
     </div>
 </div>
 
 {{-- Shared Report Export Utilities --}}
 <script>
-/* Print-to-PDF with live preview */
+let _pdfZoom = 1;
+function zoomPdf(delta) {
+    _pdfZoom = Math.max(0.4, Math.min(2.0, _pdfZoom + delta));
+    document.getElementById('pdfZoomLabel').textContent = Math.round(_pdfZoom * 100) + '%';
+    const frame = document.getElementById('pdfPreviewFrame');
+    frame.style.transform = 'scale(' + _pdfZoom + ')';
+}
+/* Print-to-PDF with live A4 preview */
 function openPdfPreview(title) {
     document.getElementById('pdfPreviewTitle').textContent = title || 'Report Preview';
-    const iframe = document.getElementById('pdfPreviewFrame');
-    const doc = document.documentElement.cloneNode(true);
-    // Hide sidebar & header in preview
-    const sidebar = doc.querySelector('.sidebar');
-    const header = doc.querySelector('.header');
-    const overlay = doc.getElementById('pdfPreviewOverlay');
-    if (sidebar) sidebar.style.display = 'none';
-    if (header) header.style.display = 'none';
-    if (overlay) overlay.style.display = 'none';
-    // Fix main content margin
-    const mc = doc.querySelector('.main-content');
-    if (mc) mc.style.marginLeft = '0';
-    const html = '<!DOCTYPE html><html>' + doc.innerHTML + '</html>';
-    iframe.srcdoc = html;
+    _pdfZoom = 1;
+    document.getElementById('pdfZoomLabel').textContent = '100%';
+    const frame = document.getElementById('pdfPreviewFrame');
+    frame.style.transform = 'scale(1)';
+    // Capture report-page HTML only
+    const reportPage = document.querySelector('.report-page');
+    if (!reportPage) {
+        Swal.fire({ icon:'error', title:'Report page not found', timer:2000, showConfirmButton:false, toast:true, position:'top-end' });
+        return;
+    }
+    // Clone and clean
+    const clone = reportPage.cloneNode(true);
+    // Remove no-print elements
+    clone.querySelectorAll('.no-print').forEach(el => el.remove());
+    // Remove AOS attributes
+    clone.querySelectorAll('[data-aos]').forEach(el => { el.removeAttribute('data-aos'); el.removeAttribute('data-aos-delay'); });
+    // Build A4 document
+    const allStyles = Array.from(document.styleSheets)
+        .filter(s => !s.href || s.href.includes(window.location.host))
+        .map(s => {
+            try { return Array.from(s.cssRules).map(r => r.cssText).join('\n'); } catch(e) { return ''; }
+        }).join('\n');
+    const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+@page { size: A4; margin: 12mm; }
+body { background:#fff; margin:0; padding:0; font-family:Inter,ui-sans-serif,system-ui,sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+${allStyles}
+.report-page { max-width:100%; padding:0; }
+.report-header-bar { background: linear-gradient(135deg,#0f172a,#1e3a8a) !important; border-radius:0 !important; margin-bottom:1rem !important; color:#fff; }
+.report-summary-card, .report-chart-card, .report-table-wrap { box-shadow:none !important; border:1px solid #e2e8f0 !important; break-inside:avoid; page-break-inside:avoid; margin-bottom:1rem; }
+.report-chart-card .rch-body { height:220px !important; }
+.report-table tbody tr { break-inside:avoid; }
+.report-table thead { display:table-header-group; }
+.report-summary { grid-template-columns:1fr 1fr !important; gap:0.75rem !important; }
+.report-chart-row { grid-template-columns:1fr !important; gap:1rem !important; }
+.dash-content { padding:0 !important; }
+</style></head>
+<body>${clone.outerHTML}</body></html>`;
+    frame.innerHTML = html;
     document.getElementById('pdfPreviewOverlay').classList.add('open');
 }
 function closePdfPreview(e) {
     if (e && e.target !== e.currentTarget) return;
     document.getElementById('pdfPreviewOverlay').classList.remove('open');
-    document.getElementById('pdfPreviewFrame').srcdoc = '';
+    document.getElementById('pdfPreviewFrame').innerHTML = '';
 }
 function downloadPdf() {
     window.print();
-    Swal.fire({ icon:'success', title:'PDF downloaded!', timer:2000, showConfirmButton:false, toast:true, position:'top-end' });
+    Swal.fire({ icon:'success', title:'PDF saved! Check your downloads.', timer:2500, showConfirmButton:false, toast:true, position:'top-end' });
 }
 
 /* CSV Export */
