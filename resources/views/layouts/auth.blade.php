@@ -635,30 +635,38 @@
                     <span class="brand-name">{{ config('app.name', 'MannaPOS') }}</span>
                 </div>
 
-                <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:2rem 0;">
-                    <div style="font-size:1.6rem;font-weight:800;color:#fff;line-height:1.3;margin-bottom:.75rem;letter-spacing:-.5px;">
-                        Manage your business smarter.
-                    </div>
-                    <div style="font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:2rem;">
-                        MannaPOS gives you real-time sales tracking, smart inventory, customer management and receipts — all in one place.
-                    </div>
-                    @foreach([
-                        ['Sales & profit reports', 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'],
-                        ['Smart inventory management', 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
-                        ['Customer & supplier tools', 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'],
-                        ['Receipt & barcode printing', 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z'],
-                    ] as [$label, $path])
-                    <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.75rem;">
-                        <div style="width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $path }}"/></svg>
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 0;">
+                    <!-- GIF Card -->
+                    <div class="gif-card" style="width:100%;max-width:380px;background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:1.25rem;box-shadow:0 20px 60px rgba(0,0,0,0.25);overflow:hidden;">
+                        <div style="position:relative;border-radius:14px;overflow:hidden;background:#0a192f;">
+                            <img src="{{ asset('MannaPOS.gif') }}" alt="MannaPOS Demo" style="width:100%;height:auto;display:block;object-fit:cover;">
                         </div>
-                        <span style="font-size:.82rem;color:rgba(255,255,255,.75);font-weight:500;">{{ $label }}</span>
+                        <div style="margin-top:1.25rem;text-align:center;">
+                            <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.4rem;">See MannaPOS in Action</div>
+                            <div style="font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.5;">Real-time sales, inventory &amp; customer management — all in one place.</div>
+                        </div>
                     </div>
-                    @endforeach
 
-                    <div style="display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#60a5fa;padding:.45rem .9rem;border-radius:50px;font-size:.72rem;font-weight:600;width:fit-content;">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Free 14-day trial — no credit card needed
+                    <!-- Features list below card -->
+                    <div style="width:100%;max-width:380px;margin-top:1.5rem;">
+                        @foreach([
+                            ['Sales & profit reports', 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'],
+                            ['Smart inventory management', 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
+                            ['Customer & supplier tools', 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'],
+                            ['Receipt & barcode printing', 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z'],
+                        ] as [$label, $path])
+                        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem;">
+                            <div style="width:26px;height:26px;border-radius:6px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $path }}"/></svg>
+                            </div>
+                            <span style="font-size:.8rem;color:rgba(255,255,255,.7);font-weight:500;">{{ $label }}</span>
+                        </div>
+                        @endforeach
+
+                        <div style="display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#60a5fa;padding:.4rem .85rem;border-radius:50px;font-size:.72rem;font-weight:600;width:fit-content;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Free 14-day trial — no credit card needed
+                        </div>
                     </div>
                 </div>
 
