@@ -38,7 +38,9 @@
 <div class="min-h-screen flex flex-col lg:flex-row bg-slate-50">
     
     {{-- Left Pane: Benefits & Logo (Hidden on mobile/tablet) --}}
-    <div class="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 xl:p-20 bg-slate-100/40 border-r border-slate-200">
+    <div class="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 xl:p-20 bg-slate-100/40 border-r border-slate-200 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 1px 1px, #cbd5e1 1px, transparent 0); background-size: 24px 24px;"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-50/60 via-transparent to-blue-50/40"></div>
         {{-- Header Logo --}}
         <div class="flex items-center space-x-3">
             <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="MannaPOS Logo" class="w-10 h-10 object-contain rounded-xl shadow-md shadow-blue-500/20">
@@ -126,7 +128,7 @@
 
         <div class="w-full max-w-[500px]">
             {{-- Form Card Container --}}
-            <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xl p-8 sm:p-10">
+            <div class="bg-white rounded-lg border border-slate-200/80 shadow-lg p-8 sm:p-10">
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight mb-2">Create your Free Account</h2>
                 <p class="text-slate-500 text-sm mb-6">Enjoy a full-featured 14-day free trial. No credit card required.</p>
 
