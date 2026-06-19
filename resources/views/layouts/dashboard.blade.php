@@ -415,6 +415,8 @@
     $isNotifTpl    = request()->routeIs('dashboard.notification-templates');
     $isSettings    = request()->routeIs('dashboard.settings.*');
     $isProfile     = request()->routeIs('dashboard.profile');
+    $isFeedback    = request()->routeIs('dashboard.feedback.*') || request()->routeIs('dashboard.feedback');
+    $isAdminFeedback = request()->routeIs('dashboard.feedback.admin.*');
 
     function sidebarChildActive($route) {
         return request()->routeIs($route) ? 'active' : '';
@@ -642,6 +644,22 @@
                 <div style="font-size:0.6rem;font-weight:700;color:rgba(148,163,184,0.35);text-transform:uppercase;letter-spacing:0.12em;padding:0.6rem 0.6rem 0.2rem;">Suppliers</div>
                 <a href="{{ route('dashboard.reports.suppliers-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.suppliers-report') ? 'active' : '' }}">Suppliers Report</a>
                 <a href="{{ route('dashboard.reports.supplier-price-comparison') }}" class="child-item {{ request()->routeIs('dashboard.reports.supplier-price-comparison') ? 'active' : '' }}">Price Comparison</a>
+            </div>
+        </div>
+
+        <div class="nav-section-label">Support</div>
+
+        {{-- Feedback Dropdown --}}
+        <div class="dropdown {{ $isFeedback ? 'open' : '' }}" id="dropdown-support">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-support')" data-tip="Support">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m0 0V12m0 0h8.485"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="nav-label">Support & Feedback</span>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="{{ route('dashboard.feedback.create') }}" class="child-item {{ request()->routeIs('dashboard.feedback.create') ? 'active' : '' }}">Submit Feedback</a>
+                <a href="{{ route('dashboard.feedback.index') }}" class="child-item {{ request()->routeIs('dashboard.feedback.index') || request()->routeIs('dashboard.feedback.show') ? 'active' : '' }}">My Messages</a>
+                <a href="{{ route('dashboard.feedback.admin.index') }}" class="child-item {{ $isAdminFeedback ? 'active' : '' }}">Admin Inbox</a>
             </div>
         </div>
 
