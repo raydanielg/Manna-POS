@@ -1,5 +1,28 @@
 ﻿@extends('layouts.dashboard')
 @section('page_title','Roles & Permissions')
+@php
+$modules = [
+    'Dashboard' => ['dashboard.view'],
+    'Sales' => ['sales.view','sales.create','sales.edit','sales.delete','sales.approve'],
+    'Purchases' => ['purchases.view','purchases.create','purchases.edit','purchases.delete','purchases.approve'],
+    'Products' => ['products.view','products.create','products.edit','products.delete'],
+    'Stock Transfers' => ['stock_transfers.view','stock_transfers.create','stock_transfers.edit','stock_transfers.delete'],
+    'Stock Adjustment' => ['stock_adjustments.view','stock_adjustments.create','stock_adjustments.edit','stock_adjustments.delete'],
+    'Expenses' => ['expenses.view','expenses.create','expenses.edit','expenses.delete','expenses.approve'],
+    'Contacts' => ['contacts.view','contacts.create','contacts.edit','contacts.delete'],
+    'CRM' => ['crm.view','crm.create','crm.edit','crm.delete'],
+    'Banking' => ['banking.view','banking.create','banking.edit','banking.delete'],
+    'Microfinance' => ['microfinance.view','microfinance.create','microfinance.edit','microfinance.delete'],
+    'SMS Campaigns' => ['sms.view','sms.create','sms.edit','sms.delete'],
+    'File Cabinet' => ['files.view','files.create','files.edit','files.delete'],
+    'Payroll' => ['payroll.view','payroll.create','payroll.edit','payroll.delete'],
+    'Manufacturing' => ['manufacturing.view','manufacturing.create','manufacturing.edit','manufacturing.delete'],
+    'Reports' => ['reports.view','reports.export'],
+    'Settings' => ['settings.view','settings.edit'],
+    'User Management' => ['users.view','users.create','users.edit','users.delete','roles.view','roles.create','roles.edit','roles.delete'],
+    'Approvals' => ['approvals.view','approvals.approve'],
+];
+@endphp
 @section('content')
 <div class="dash-content">
 <div class="page-card">
@@ -25,7 +48,7 @@
 </div>
 </div>
 <div class="modal-overlay" id="modal">
-  <div class="modal modal-lg">
+  <div class="modal modal-lg" style="max-width:900px;">
     <div class="modal-header">
       <div class="modal-title" id="modal-title">Add Role</div>
       <button class="modal-close" onclick="closeModal('modal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
@@ -38,12 +61,19 @@
         </div>
         <div class="form-group">
           <label class="form-label">Permissions</label>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;" id="permGrid">
-            @foreach(['sales.view','sales.create','sales.edit','sales.delete','purchases.view','purchases.create','purchases.edit','purchases.delete','inventory.view','inventory.create','inventory.edit','inventory.delete','customers.view','customers.manage','suppliers.view','suppliers.manage','reports.view','settings.manage','users.manage','expenses.view','expenses.manage'] as $perm)
-            <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;cursor:pointer;">
-              <input type="checkbox" name="permissions[]" value="{{ $perm }}" style="width:14px;height:14px;">
-              {{ $perm }}
-            </label>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;max-height:400px;overflow-y:auto;border:1px solid rgba(148,163,184,0.15);border-radius:8px;padding:1rem;">
+            @foreach($modules as $module => $perms)
+            <div>
+              <div style="font-size:0.75rem;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;padding-bottom:0.3rem;border-bottom:1px solid rgba(148,163,184,0.15);">{{ $module }}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+                @foreach($perms as $perm)
+                <label style="display:flex;align-items:center;gap:0.3rem;font-size:0.75rem;cursor:pointer;padding:0.2rem 0.4rem;border-radius:4px;background:rgba(148,163,184,0.06);white-space:nowrap;">
+                  <input type="checkbox" name="permissions[]" value="{{ $perm }}" style="width:13px;height:13px;">
+                  {{ str_replace('_',' ',explode('.',$perm)[1]) }}
+                </label>
+                @endforeach
+              </div>
+            </div>
             @endforeach
           </div>
           <div class="invalid-feedback"></div>
@@ -89,14 +119,14 @@ async function editItem(id){
   form.querySelector('[name="name"]').value=r.name||'';
   form.querySelector('[name="description"]').value=r.description||'';
   const perms=JSON.parse(r.permissions||'[]');
-  document.querySelectorAll('#permGrid input[type=checkbox]').forEach(c=>{c.checked=perms.includes(c.value);});
+  document.querySelectorAll('[name="permissions[]"]').forEach(c=>{c.checked=perms.includes(c.value);});
   clearFormErrors('itemForm');openModal('modal');}catch(e){showToast('Failed to load','error');}
 }
 async function saveItem(){
   clearFormErrors('itemForm');
   const name=document.querySelector('[name="name"]').value;
   const desc=document.querySelector('[name="description"]').value;
-  const perms=Array.from(document.querySelectorAll('#permGrid input[type=checkbox]:checked')).map(c=>c.value);
+  const perms=Array.from(document.querySelectorAll('[name="permissions[]"]:checked')).map(c=>c.value);
   const data={name,description:desc,permissions:perms};
   const btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving...';
   try{if(editId)await apiFetch(`${API}/${editId}`,{method:'PUT',body:JSON.stringify(data)});
