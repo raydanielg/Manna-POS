@@ -18,15 +18,25 @@
     box-shadow: 0 2px 10px rgba(15,23,42,0.03);
     backdrop-filter: blur(6px);
     transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
 }
 .order-stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(15,23,42,0.06); }
-.order-stat-card .label { font-size: 0.72rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
-.order-stat-card .value { font-size: 1.35rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-.order-stat-card.total { border-left: 3px solid #3b82f6; }
-.order-stat-card.pending { border-left: 3px solid #f59e0b; }
-.order-stat-card.completed { border-left: 3px solid #10b981; }
-.order-stat-card.cancelled { border-left: 3px solid #ef4444; }
-.order-stat-card.revenue { border-left: 3px solid #8b5cf6; }
+.order-stat-card .kpi-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.order-stat-card .kpi-icon svg { width: 20px; height: 20px; }
+.order-stat-card.total .kpi-icon { background: #eff6ff; color: #2563eb; }
+.order-stat-card.pending .kpi-icon { background: #fffbeb; color: #d97706; }
+.order-stat-card.completed .kpi-icon { background: #ecfdf5; color: #059669; }
+.order-stat-card.cancelled .kpi-icon { background: #fef2f2; color: #dc2626; }
+.order-stat-card.revenue .kpi-icon { background: #f5f3ff; color: #7c3aed; }
+.order-stat-card .kpi-body { flex: 1; }
+.order-stat-card .label { font-size: 0.72rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem; }
+.order-stat-card .value { font-size: 1.3rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
 
 .order-table-wrap {
     background: rgba(255,255,255,0.85);
