@@ -44,24 +44,19 @@
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("{{ asset('MannaPOS.png') }}");
-            background-size: cover;
-            background-position: center;
-            opacity: 0.35;
-            z-index: 0;
-            transition: opacity 0.4s ease, transform 6s ease;
-        }
-
-        .auth-brand-side:hover::before {
-            opacity: 0.5;
-            transform: scale(1.05);
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0);
+            background-size: 28px 28px;
+            z-index: 1;
         }
 
         .auth-brand-side::after {
             content: '';
             position: absolute;
-            inset: 0;
-            background: linear-gradient(145deg, rgba(10,25,47,0.92) 0%, rgba(13,45,107,0.85) 40%, rgba(10,61,143,0.75) 70%, rgba(21,101,192,0.65) 100%);
+            width: 420px; height: 420px;
+            border-radius: 50%;
+            background: rgba(37,99,235,0.12);
+            top: -120px; right: -120px;
+            filter: blur(60px);
             z-index: 1;
         }
 
