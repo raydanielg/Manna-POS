@@ -18,8 +18,8 @@
   </div>
   <div style="overflow-x:auto;">
     <table class="tbl">
-      <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Created</th><th>Actions</th></tr></thead>
-      <tbody id="tableBody"><tr><td colspan="6" class="tbl-empty">Loading...</td></tr></tbody>
+      <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Assigned Role</th><th>Created</th><th>Actions</th></tr></thead>
+      <tbody id="tableBody"><tr><td colspan="7" class="tbl-empty">Loading...</td></tr></tbody>
     </table>
   </div>
 </div>
@@ -39,7 +39,7 @@
         <div class="form-row">
           <div class="form-group"><label class="form-label">Password <span id="pwHint" class="text-slate-400 font-normal">(required for new user)</span></label><input name="password" type="password" class="form-control" placeholder="Min 8 characters"><div class="invalid-feedback"></div></div>
           <div class="form-group">
-            <label class="form-label">Role</label>
+            <label class="form-label">System Role</label>
             <select name="role" class="form-control">
               <option value="user">User</option>
               <option value="cashier">Cashier</option>
@@ -48,6 +48,13 @@
             </select>
             <div class="invalid-feedback"></div>
           </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Permission Role</label>
+          <select name="role_id" class="form-control">
+            <option value="">None (use system role)</option>
+          </select>
+          <div class="invalid-feedback"></div>
         </div>
       </form>
     </div>
@@ -60,37 +67,43 @@
 @endsection
 @section('scripts')
 <script>
-const API='/api/dashboard/users'; let editId=null;
+const API='/api/dashboard/users'; const ROLES_API='/api/dashboard/roles'; let editId=null; let rolesCache=[];
 const roleColors={'admin':'badge-danger','manager':'badge-warning','cashier':'badge-info','user':'badge-gray'};
+async function loadRoles(){
+  try{rolesCache=await apiFetch(ROLES_API);const sel=document.querySelector('[name="role_id"]');sel.innerHTML='<option value="">None (use system role)</option>'+rolesCache.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');}catch(e){}
+}
 async function loadList(){
   const s=document.getElementById('searchInput').value; const tbody=document.getElementById('tableBody');
-  tbody.innerHTML='<tr><td colspan="6" class="tbl-empty">Loading...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="7" class="tbl-empty">Loading...</td></tr>';
   try{
     const items=await apiFetch(`${API}?search=${encodeURIComponent(s)}`);
-    if(!items.length){tbody.innerHTML='<tr><td colspan="6" class="tbl-empty">No users found.</td></tr>';return;}
+    if(!items.length){tbody.innerHTML='<tr><td colspan="7" class="tbl-empty">No users found.</td></tr>';return;}
     tbody.innerHTML=items.map((u,i)=>`<tr>
       <td class="text-slate-400">${i+1}</td>
       <td class="font-semibold">${u.name}</td>
       <td>${u.email}</td>
       <td><span class="badge ${roleColors[u.role]||'badge-gray'}">${u.role||'user'}</span></td>
+      <td>${u.role_name?`<span class="badge badge-primary">${u.role_name}</span>`:'<span class="text-slate-400 text-xs">-</span>'}</td>
       <td class="text-slate-400 text-xs">${u.created_at?new Date(u.created_at).toLocaleDateString():''}</td>
       <td><div style="display:flex;gap:0.4rem;">
         <button class="btn btn-sm btn-edit btn-icon" onclick="editItem(${u.id})"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
         <button class="btn btn-sm btn-delete btn-icon" onclick="deleteItem(${u.id},'${u.name}')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
       </div></td>
     </tr>`).join('');
-  }catch(e){tbody.innerHTML='<tr><td colspan="6" class="tbl-empty">Error loading data.</td></tr>';}
+  }catch(e){tbody.innerHTML='<tr><td colspan="7" class="tbl-empty">Error loading data.</td></tr>';}
 }
 function openAddModal(){editId=null;document.getElementById('modal-title').textContent='Add User';document.getElementById('itemForm').reset();document.getElementById('pwHint').textContent='(required)';clearFormErrors('itemForm');openModal('modal');}
 async function editItem(id){
   try{const u=await apiFetch(`${API}/${id}`);editId=id;document.getElementById('modal-title').textContent='Edit User';document.getElementById('pwHint').textContent='(leave blank to keep current)';
-  const form=document.getElementById('itemForm');Object.entries(u).forEach(([k,v])=>{const el=form.querySelector(`[name="${k}"]`);if(el)el.value=v??'';});
+  const form=document.getElementById('itemForm');
+  Object.entries(u).forEach(([k,v])=>{const el=form.querySelector(`[name="${k}"]`);if(el)el.value=v??'';});
   form.querySelector('[name="password"]').value='';
   clearFormErrors('itemForm');openModal('modal');}catch(e){showToast('Failed to load','error');}
 }
 async function saveItem(){
   clearFormErrors('itemForm');const data=Object.fromEntries(new FormData(document.getElementById('itemForm')));
   if(!editId && !data.password){showToast('Password is required for new users','error');return;}
+  if(!data.role_id) delete data.role_id;
   const btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving...';
   try{if(editId)await apiFetch(`${API}/${editId}`,{method:'PUT',body:JSON.stringify(data)});
   else await apiFetch(API,{method:'POST',body:JSON.stringify(data)});
@@ -104,6 +117,6 @@ function deleteItem(id,name){
     catch(e){showToast(e.message||'Delete failed','error');}
   });
 }
-loadList();
+loadRoles();loadList();
 </script>
 @endsection
