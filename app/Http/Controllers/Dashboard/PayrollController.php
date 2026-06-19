@@ -8,10 +8,22 @@ use App\Models\PayrollEntry;
 use App\Models\PayrollDeductionType;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PayrollController extends Controller
 {
     public function __construct() { $this->middleware('auth'); }
+
+    private function jsonSuccess($message, $data = [])
+    {
+        return response()->json(array_merge(['success' => true, 'message' => $message], $data));
+    }
+
+    private function jsonError($message, $code = 422)
+    {
+        return response()->json(['success' => false, 'message' => $message], $code);
+    }
 
     public function index()
     {
@@ -44,7 +56,11 @@ class PayrollController extends Controller
         ]);
         $data['user_id'] = auth()->id();
         $data['status'] = 'open';
-        PayrollPeriod::create($data);
+        $period = PayrollPeriod::create($data);
+        Log::info('Payroll period created', ['user_id' => auth()->id(), 'period_id' => $period->id]);
+        if (request()->ajax() || request()->wantsJson()) {
+            return $this->jsonSuccess('Payroll period created', ['period' => $period]);
+        }
         return redirect()->route('dashboard.payroll.periods')->with('success', 'Payroll period created');
     }
 
@@ -96,14 +112,33 @@ class PayrollController extends Controller
         $data['net_salary'] = $data['gross_salary'] - $totalDed;
         $data['status'] = 'draft';
 
-        PayrollEntry::create($data);
-        return redirect()->route('dashboard.payroll.period.show', $period)->with('success', 'Payroll entry added');
+        try {
+            DB::beginTransaction();
+            $entry = PayrollEntry::create($data);
+            DB::commit();
+            Log::info('Payroll entry added', ['user_id' => auth()->id(), 'entry_id' => $entry->id, 'period_id' => $period->id]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonSuccess('Payroll entry added', ['entry' => $entry]);
+            }
+            return redirect()->route('dashboard.payroll.period.show', $period)->with('success', 'Payroll entry added');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Payroll entry failed', ['error' => $e->getMessage()]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonError('Failed to add entry', 500);
+            }
+            return redirect()->route('dashboard.payroll.period.show', $period)->with('error', 'Failed to add entry');
+        }
     }
 
     public function updateEntryStatus(Request $req, PayrollEntry $entry)
     {
         $this->guardEntry($entry);
         $entry->update(['status' => $req->status]);
+        Log::info('Payroll entry status updated', ['user_id' => auth()->id(), 'entry_id' => $entry->id, 'status' => $req->status]);
+        if ($req->ajax() || $req->wantsJson()) {
+            return $this->jsonSuccess('Entry updated to ' . ucfirst($req->status), ['entry' => $entry]);
+        }
         return redirect()->route('dashboard.payroll.period.show', $entry->payroll_period_id)->with('success', 'Entry updated');
     }
 
@@ -112,6 +147,10 @@ class PayrollController extends Controller
         $this->guardEntry($entry);
         $periodId = $entry->payroll_period_id;
         $entry->delete();
+        Log::info('Payroll entry deleted', ['user_id' => auth()->id(), 'entry_id' => $entry->id]);
+        if (request()->ajax() || request()->wantsJson()) {
+            return $this->jsonSuccess('Entry removed');
+        }
         return redirect()->route('dashboard.payroll.period.show', $periodId)->with('success', 'Entry removed');
     }
 
