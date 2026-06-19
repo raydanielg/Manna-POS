@@ -11,7 +11,9 @@ class BlogSeeder extends Seeder
     public function run()
     {
         // Truncate to avoid duplicate slug errors on re-seed
+        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Blog::truncate();
+        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $posts = [
             [
