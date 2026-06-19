@@ -237,6 +237,7 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $summary = [
             'total_sales' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->count(),
             'total_revenue' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total'),
@@ -248,7 +249,7 @@ class ReportController extends Controller
             ->groupBy('product_name')->orderByDesc('total_revenue')->take(10)->get();
         $sales = Sale::forCurrentUser($this->currentBusinessId())->with('customer')
             ->whereBetween('sale_date',[$from,$to])->orderBy('sale_date','desc')->get();
-        $pdf = Pdf::loadView('dashboard.reports.pdf.sales-report-pdf', compact('summary','topProducts','sales','from','to'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.sales-report-pdf', compact('summary','topProducts','sales','from','to','userCurrency'));
         return $pdf->download('sales-report-'.$from->format('Y-m-d').'.pdf');
     }
 
@@ -256,6 +257,7 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $summary = [
             'total_purchases' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->count(),
             'total_amount' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total'),
@@ -263,12 +265,13 @@ class ReportController extends Controller
         ];
         $purchases = Purchase::forCurrentUser($this->currentBusinessId())->with('supplier')
             ->whereBetween('purchase_date',[$from,$to])->orderBy('purchase_date','desc')->get();
-        $pdf = Pdf::loadView('dashboard.reports.pdf.purchase-report-pdf', compact('summary','purchases','from','to'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.purchase-report-pdf', compact('summary','purchases','from','to','userCurrency'));
         return $pdf->download('purchase-report-'.$from->format('Y-m-d').'.pdf');
     }
 
     public function inventoryReportPdf(Request $request)
     {
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $lowStock = Product::forCurrentUser($this->currentBusinessId())->where(function($q){ $q->whereColumn('stock_quantity','<=','reorder_level')->orWhere('stock_quantity',0); })->count();
         $totalProducts = Product::forCurrentUser($this->currentBusinessId())->count();
         $totalStockValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(stock_quantity * purchase_price) as val')->value('val') ?? 0;
@@ -276,7 +279,7 @@ class ReportController extends Controller
         $products = Product::forCurrentUser($this->currentBusinessId())->with('category')->orderBy('stock_quantity','asc')->get();
         $categories = Product::forCurrentUser($this->currentBusinessId())->selectRaw('product_categories.name as category, COUNT(products.id) as count, SUM(products.stock_quantity) as stock')
             ->join('product_categories','products.category_id','=','product_categories.id')->groupBy('product_categories.name')->get();
-        $pdf = Pdf::loadView('dashboard.reports.pdf.inventory-report-pdf', compact('lowStock','totalProducts','totalStockValue','totalRetailValue','products','categories'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.inventory-report-pdf', compact('lowStock','totalProducts','totalStockValue','totalRetailValue','products','categories','userCurrency'));
         return $pdf->download('inventory-report.pdf');
     }
 
@@ -284,6 +287,7 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $summary = [
             'total_expenses' => Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->count(),
             'total_amount' => Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->sum('amount'),
@@ -293,7 +297,7 @@ class ReportController extends Controller
             ->whereBetween('expense_date',[$from,$to])->groupBy('expense_categories.name')->orderByDesc('total')->get();
         $expenses = Expense::forCurrentUser($this->currentBusinessId())->with('category')
             ->whereBetween('expense_date',[$from,$to])->orderBy('expense_date','desc')->get();
-        $pdf = Pdf::loadView('dashboard.reports.pdf.expense-report-pdf', compact('summary','byCategory','expenses','from','to'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.expense-report-pdf', compact('summary','byCategory','expenses','from','to','userCurrency'));
         return $pdf->download('expense-report-'.$from->format('Y-m-d').'.pdf');
     }
 
@@ -301,6 +305,7 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $totalRevenue = Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total');
         $totalCost = Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total');
         $totalExpenses = Expense::forCurrentUser($this->currentBusinessId())->whereBetween('expense_date',[$from,$to])->sum('amount');
@@ -316,7 +321,7 @@ class ReportController extends Controller
             $monthly[] = ['month' => $current->format('M Y'), 'revenue' => $rev, 'cost' => $cost, 'expenses' => $exp, 'profit' => $rev - $cost - $exp];
             $current->addMonth();
         }
-        $pdf = Pdf::loadView('dashboard.reports.pdf.profit-loss-report-pdf', compact('totalRevenue','totalCost','totalExpenses','grossProfit','netProfit','monthly','from','to'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.profit-loss-report-pdf', compact('totalRevenue','totalCost','totalExpenses','grossProfit','netProfit','monthly','from','to','userCurrency'));
         return $pdf->download('profit-loss-report-'.$from->format('Y-m-d').'.pdf');
     }
 
@@ -324,21 +329,23 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $suppliers = Supplier::forCurrentUser($this->currentBusinessId())->withCount(['purchases as purchases_count'])
             ->withSum(['purchases as purchases_total'], 'total_amount')
             ->withSum(['purchases as paid_total'], 'paid_amount')
             ->get()->map(function($s) { $s->balance = ($s->purchases_total ?? 0) - ($s->paid_total ?? 0); return $s; });
-        $pdf = Pdf::loadView('dashboard.reports.pdf.suppliers-report-pdf', compact('suppliers','from','to'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.suppliers-report-pdf', compact('suppliers','from','to','userCurrency'));
         return $pdf->download('suppliers-report-'.$from->format('Y-m-d').'.pdf');
     }
 
     public function supplierPriceComparisonPdf(Request $request)
     {
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $products = Product::forCurrentUser($this->currentBusinessId())->with(['purchaseItems' => function($q) {
             $q->selectRaw('product_id, supplier_id, AVG(unit_cost) as avg_price, MAX(unit_cost) as max_price, MIN(unit_cost) as min_price, COUNT(*) as purchases_count')
                 ->groupBy('product_id','supplier_id');
         }, 'purchaseItems.supplier'])->take(50)->get();
-        $pdf = Pdf::loadView('dashboard.reports.pdf.supplier-price-comparison-pdf', compact('products'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.supplier-price-comparison-pdf', compact('products','userCurrency'));
         return $pdf->download('supplier-price-comparison.pdf');
     }
 
@@ -346,13 +353,14 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $bizId = $this->currentBusinessId();
         $base = ProductBatch::whereHas('product', fn($q) => $q->forCurrentUser($bizId));
         $expired = (clone $base)->expired()->count();
         $expiringSoon = (clone $base)->expiringSoon(30)->count();
         $batches = (clone $base)->with(['product', 'supplier'])
             ->whereNotNull('expiry_date')->where('expiry_date', '<=', $to)->orderBy('expiry_date')->get();
-        $pdf = Pdf::loadView('dashboard.reports.pdf.expiry-report-pdf', compact('expired','expiringSoon','batches','from','to'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.expiry-report-pdf', compact('expired','expiringSoon','batches','from','to','userCurrency'));
         return $pdf->download('expiry-report-'.$from->format('Y-m-d').'.pdf');
     }
 
@@ -360,10 +368,11 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = auth()->user()->currency ?? 'TZS';
         $trends = SaleItem::selectRaw('product_name, SUM(quantity) as total_qty, SUM(total) as total_revenue, COUNT(DISTINCT sale_id) as sales_count')
             ->whereHas('sale', fn($q) => $q->forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to]))
             ->groupBy('product_name')->orderByDesc('total_revenue')->take(20)->get();
-        $pdf = Pdf::loadView('dashboard.reports.pdf.product-trends-report-pdf', compact('trends','from','to'));
+        $pdf = Pdf::loadView('dashboard.reports.pdf.product-trends-report-pdf', compact('trends','from','to','userCurrency'));
         return $pdf->download('product-trends-report-'.$from->format('Y-m-d').'.pdf');
     }
 }
