@@ -91,6 +91,8 @@
 .empty-plans h3 { font-size:1rem; font-weight:700; color:#475569; margin-bottom:0.35rem; }
 .empty-plans p { font-size:0.82rem; color:#94a3b8; margin-bottom:1.25rem; }
 
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
 .color-preview { width:12px; height:12px; border-radius:3px; display:inline-block; margin-right:4px; }
 .toggle-wrap { display:flex; align-items:center; gap:0.75rem; }
 .toggle { position:relative; width:40px; height:22px; }
