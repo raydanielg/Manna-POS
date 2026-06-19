@@ -123,11 +123,51 @@
 
 {{-- Stats Row --}}
 <div class="stat-row" id="statsRow">
-    <div class="stat-mini"><div class="val" id="st-plans">—</div><div class="lbl">Total Plans</div></div>
-    <div class="stat-mini"><div class="val" id="st-active-plans">—</div><div class="lbl">Active Plans</div></div>
-    <div class="stat-mini"><div class="val" id="st-subscribers">—</div><div class="lbl">Total Subscribers</div></div>
-    <div class="stat-mini"><div class="val" id="st-active-subs">—</div><div class="lbl">Active Subscribers</div></div>
-    <div class="stat-mini"><div class="val" id="st-revenue">—</div><div class="lbl">Est. MRR (TZS)</div></div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#eff6ff; color:#2563eb;">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
+        </div>
+        <div class="stat-body">
+            <div class="stat-val" id="st-plans">—</div>
+            <div class="stat-lbl">Total Plans</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#f0fdf4; color:#16a34a;">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="stat-body">
+            <div class="stat-val" id="st-active-plans">—</div>
+            <div class="stat-lbl">Active Plans</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#fdf4ff; color:#7c3aed;">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <div class="stat-body">
+            <div class="stat-val" id="st-subscribers">—</div>
+            <div class="stat-lbl">Total Subscribers</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#fff7ed; color:#ea580c;">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div class="stat-body">
+            <div class="stat-val" id="st-active-subs">—</div>
+            <div class="stat-lbl">Active Subscribers</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon" style="background:#fff1f2; color:#e03057;">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="stat-body">
+            <div class="stat-val" id="st-revenue">—</div>
+            <div class="stat-lbl">Est. MRR (TZS)</div>
+        </div>
+    </div>
 </div>
 
 {{-- Header --}}
