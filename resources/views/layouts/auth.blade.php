@@ -442,6 +442,15 @@
 
         .btn-link:hover { color: #2563eb; }
 
+        .social-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+            padding: 0.55rem 0.5rem; border-radius: 10px; border: none; color: #fff;
+            font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.15s ease;
+            min-height: 40px;
+        }
+        .social-btn:hover { transform: translateY(-1px); opacity: 0.92; }
+        .social-btn:active { transform: translateY(0); }
+
         .auth-footer {
             text-align: center;
             margin-top: 2rem;
