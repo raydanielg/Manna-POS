@@ -5,56 +5,8 @@
             <p class="section-subtitle animate__animated animate__fadeInUp animate__delay-1s">Built for businesses that want to grow faster and smarter</p>
         </div>
 
-        <!-- First 6 items -->
-        <div class="why-choose-grid" id="whyChooseGrid">
-            <div class="why-choose-item animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-                <div class="why-choose-number">01</div>
-                <div class="why-choose-content">
-                    <h3 class="why-choose-title">Easy to Use</h3>
-                    <p class="why-choose-description">Intuitive interface that requires minimal training. Your team will be up and running in minutes, not days.</p>
-                </div>
-            </div>
-            <div class="why-choose-item animate__animated animate__fadeInUp" data-wow-delay="0.2s">
-                <div class="why-choose-number">02</div>
-                <div class="why-choose-content">
-                    <h3 class="why-choose-title">Affordable Pricing</h3>
-                    <p class="why-choose-description">Competitive pricing with no hidden fees. Choose a plan that fits your business needs and budget.</p>
-                </div>
-            </div>
-            <div class="why-choose-item animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-                <div class="why-choose-number">03</div>
-                <div class="why-choose-content">
-                    <h3 class="why-choose-title">Cloud-Based</h3>
-                    <p class="why-choose-description">Access your business data from anywhere, anytime. No expensive hardware or software installations needed.</p>
-                </div>
-            </div>
-            <div class="why-choose-item animate__animated animate__fadeInUp" data-wow-delay="0.4s">
-                <div class="why-choose-number">04</div>
-                <div class="why-choose-content">
-                    <h3 class="why-choose-title">Multi-Location Support</h3>
-                    <p class="why-choose-description">Manage multiple stores or locations from a single dashboard. Track performance across all your outlets.</p>
-                </div>
-            </div>
-            <div class="why-choose-item animate__animated animate__fadeInUp" data-wow-delay="0.5s">
-                <div class="why-choose-number">05</div>
-                <div class="why-choose-content">
-                    <h3 class="why-choose-title">Integration Ready</h3>
-                    <p class="why-choose-description">Seamlessly integrate with accounting software, e-commerce platforms, and payment gateways.</p>
-                </div>
-            </div>
-            <div class="why-choose-item animate__animated animate__fadeInUp" data-wow-delay="0.6s">
-                <div class="why-choose-number">06</div>
-                <div class="why-choose-content">
-                    <h3 class="why-choose-title">Regular Updates</h3>
-                    <p class="why-choose-description">Continuous improvements and new features added regularly based on customer feedback.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Carousel Section -->
         <div class="carousel-section">
             <div class="carousel-header">
-                <h3 class="carousel-title animate__animated animate__fadeInLeft">More Reasons to Love MannaPOS</h3>
                 <div class="carousel-nav">
                     <button class="carousel-btn prev" id="carouselPrev" aria-label="Previous">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -66,6 +18,36 @@
             </div>
             <div class="carousel-wrapper">
                 <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-card">
+                        <div class="carousel-number">01</div>
+                        <h4 class="carousel-card-title">Easy to Use</h4>
+                        <p class="carousel-card-desc">Intuitive interface that requires minimal training. Your team will be up and running in minutes, not days.</p>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="carousel-number">02</div>
+                        <h4 class="carousel-card-title">Affordable Pricing</h4>
+                        <p class="carousel-card-desc">Competitive pricing with no hidden fees. Choose a plan that fits your business needs and budget.</p>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="carousel-number">03</div>
+                        <h4 class="carousel-card-title">Cloud-Based</h4>
+                        <p class="carousel-card-desc">Access your business data from anywhere, anytime. No expensive hardware or software installations needed.</p>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="carousel-number">04</div>
+                        <h4 class="carousel-card-title">Multi-Location Support</h4>
+                        <p class="carousel-card-desc">Manage multiple stores or locations from a single dashboard. Track performance across all your outlets.</p>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="carousel-number">05</div>
+                        <h4 class="carousel-card-title">Integration Ready</h4>
+                        <p class="carousel-card-desc">Seamlessly integrate with accounting software, e-commerce platforms, and payment gateways.</p>
+                    </div>
+                    <div class="carousel-card">
+                        <div class="carousel-number">06</div>
+                        <h4 class="carousel-card-title">Regular Updates</h4>
+                        <p class="carousel-card-desc">Continuous improvements and new features added regularly based on customer feedback.</p>
+                    </div>
                     <div class="carousel-card">
                         <div class="carousel-number">07</div>
                         <h4 class="carousel-card-title">Offline Mode</h4>
