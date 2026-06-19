@@ -9,11 +9,6 @@ use App\Models\UserSubscription;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use App\Mail\WelcomeEmail;
-use App\Mail\OtpVerificationEmail;
-use App\Services\NextSmsService;
 
 class RegisterController extends Controller
 {
@@ -21,12 +16,9 @@ class RegisterController extends Controller
 
     protected $redirectTo = '/dashboard';
 
-    protected NextSmsService $sms;
-
-    public function __construct(NextSmsService $sms)
+    public function __construct()
     {
         $this->middleware('guest');
-        $this->sms = $sms;
     }
 
     protected function validator(array $data)
