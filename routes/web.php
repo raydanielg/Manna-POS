@@ -208,7 +208,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'blocked', 'user.d
     Route::get('/inventory/selling-price-group', function () { return view('dashboard.inventory.selling-price-group'); })->name('dashboard.inventory.selling-price-group');
     Route::get('/inventory/units', function () { return view('dashboard.inventory.units'); })->name('dashboard.inventory.units');
     Route::get('/inventory/product-categories', function () {
-        $categories = \App\Models\ProductCategory::where('created_by', auth()->user()->currentBusinessId() ?? auth()->id())
+        $categories = \App\Models\ProductCategory::where('created_by', auth()->user()->businessId())
             ->orderBy('name')->get(['id','name']);
         return view('dashboard.inventory.product-categories', compact('categories'));
     })->name('dashboard.inventory.product-categories');
