@@ -2,78 +2,86 @@
 @section('page_title','Product Trends')
 @section('content')
 <div class="dash-content">
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
-    <div style="background:#fff;border:1px solid #e9edf5;border-radius:14px;padding:1.25rem;">
-      <div style="font-size:0.72rem;font-weight:600;color:#2563eb;text-transform:uppercase;">Products Sold</div>
-      <div style="font-size:1.8rem;font-weight:700;color:#1d4ed8;" id="totalProducts">-</div>
-    </div>
-    <div style="background:#fff;border:1px solid #e9edf5;border-radius:14px;padding:1.25rem;">
-      <div style="font-size:0.72rem;font-weight:600;color:#16a34a;text-transform:uppercase;">Total Revenue</div>
-      <div style="font-size:1.8rem;font-weight:700;color:#15803d;" id="totalRevenue">-</div>
-    </div>
-    <div style="background:#fff;border:1px solid #e9edf5;border-radius:14px;padding:1.25rem;">
-      <div style="font-size:0.72rem;font-weight:600;color:#d97706;text-transform:uppercase;">Total Qty Sold</div>
-      <div style="font-size:1.8rem;font-weight:700;color:#b45309;" id="totalQty">-</div>
-    </div>
-  </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
-    <div class="page-card">
-      <div class="card-header"><div class="card-title">Fast Moving Products (Top 20)</div></div>
-      <div style="overflow-x:auto;max-height:500px;overflow-y:auto;">
-        <table class="tbl">
-          <thead><tr><th>#</th><th>Product</th><th>Qty Sold</th><th>Revenue</th><th>Sale Count</th><th>Margin/Unit</th></tr></thead>
-          <tbody id="fastBody"><tr><td colspan="6" class="tbl-empty">Loading...</td></tr></tbody>
-        </table>
-      </div>
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h1 class="text-xl font-bold text-gray-900">Product Trends</h1>
+            <p class="text-sm text-gray-500">{{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }}</p>
+        </div>
+        <div class="flex gap-2 no-print">
+            <button type="button" onclick="window.print()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Print
+            </button>
+        </div>
     </div>
-    <div class="page-card">
-      <div class="card-header"><div class="card-title">Slow Moving Products (Bottom 20)</div></div>
-      <div style="overflow-x:auto;max-height:500px;overflow-y:auto;">
-        <table class="tbl">
-          <thead><tr><th>#</th><th>Product</th><th>Qty Sold</th><th>Revenue</th><th>Sale Count</th><th>Margin/Unit</th></tr></thead>
-          <tbody id="slowBody"><tr><td colspan="6" class="tbl-empty">Loading...</td></tr></tbody>
-        </table>
-      </div>
+
+    <form method="GET" class="flex flex-wrap items-end gap-3 mb-6 p-4 bg-white rounded-lg border border-gray-200 no-print">
+        <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">From Date</label>
+            <input type="date" name="from_date" value="{{ request('from_date',$from->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">To Date</label>
+            <input type="date" name="to_date" value="{{ request('to_date',$to->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
+        </div>
+        <button type="submit" class="h-9 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">Generate</button>
+        <a href="{{ route('dashboard.reports.product-trends-report') }}" class="h-9 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 inline-flex items-center">Reset</a>
+    </form>
+
+    @php
+        $totalProducts = $trends->count();
+        $totalRevenue = $trends->sum('total_revenue');
+        $totalQty = $trends->sum('total_qty');
+    @endphp
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Products Sold</div>
+            <div class="text-2xl font-bold text-blue-600 mt-1">{{ number_format($totalProducts) }}</div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Revenue</div>
+            <div class="text-2xl font-bold text-green-600 mt-1">{{ $userCurrency }} {{ number_format($totalRevenue,2) }}</div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Qty Sold</div>
+            <div class="text-2xl font-bold text-yellow-600 mt-1">{{ number_format($totalQty) }}</div>
+        </div>
     </div>
-  </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200">
+            <h3 class="text-sm font-semibold text-gray-700">Top Selling Products</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Qty Sold</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Revenue</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Sale Count</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($trends as $t)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ $t->product_name }}</td>
+                        <td class="px-4 py-3 text-sm text-right text-gray-700">{{ number_format($t->total_qty) }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-green-600">{{ $userCurrency }} {{ number_format($t->total_revenue,2) }}</td>
+                        <td class="px-4 py-3 text-sm text-right text-gray-600">{{ number_format($t->sales_count) }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-4 py-12 text-center text-sm text-gray-500">No product trends data found for this period.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-@endsection
-@section('scripts')
-<script>
-async function loadReport(){
-  const from=new Date(new Date().setMonth(new Date().getMonth()-3)).toISOString().split('T')[0];
-  const to=new Date().toISOString().split('T')[0];
-  const res=await fetch('/api/dashboard/reports/product-trends?from='+from+'&to='+to+'&limit=20',{headers:{'Accept':'application/json'}});
-  const d=await res.json();
-  document.getElementById('totalProducts').textContent=d.total_products_sold||0;
-  document.getElementById('totalRevenue').textContent=fmtMoney(d.total_revenue||0);
-  document.getElementById('totalQty').textContent=Number(d.total_quantity_sold||0).toLocaleString('en-GB',{maximumFractionDigits:0});
-
-  const fast=document.getElementById('fastBody');
-  if(!d.fast_moving||!d.fast_moving.length){fast.innerHTML='<tr><td colspan="6" class="tbl-empty">No data available.</td></tr>';}
-  else{fast.innerHTML=d.fast_moving.map((p,i)=>`<tr>
-    <td>${i+1}</td>
-    <td><strong>${esc(p.product_name)}</strong></td>
-    <td>${Number(p.total_qty_sold).toLocaleString('en-GB',{maximumFractionDigits:2})}</td>
-    <td>${fmtMoney(p.total_revenue)}</td>
-    <td>${p.sale_count}</td>
-    <td style="color:${(p.margin_per_unit||0)>=0?'#16a34a':'#dc2626'};font-weight:600;">${fmtMoney(p.margin_per_unit)}</td>
-  </tr>`).join('');}
-
-  const slow=document.getElementById('slowBody');
-  if(!d.slow_moving||!d.slow_moving.length){slow.innerHTML='<tr><td colspan="6" class="tbl-empty">No data available.</td></tr>';}
-  else{slow.innerHTML=d.slow_moving.map((p,i)=>`<tr>
-    <td>${i+1}</td>
-    <td><strong>${esc(p.product_name)}</strong></td>
-    <td>${Number(p.total_qty_sold).toLocaleString('en-GB',{maximumFractionDigits:2})}</td>
-    <td>${fmtMoney(p.total_revenue)}</td>
-    <td>${p.sale_count}</td>
-    <td style="color:${(p.margin_per_unit||0)>=0?'#16a34a':'#dc2626'};font-weight:600;">${fmtMoney(p.margin_per_unit)}</td>
-  </tr>`).join('');}
-}
-function fmtMoney(n){return '{{ $userCurrency }} '+Number(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-loadReport();
-</script>
 @endsection

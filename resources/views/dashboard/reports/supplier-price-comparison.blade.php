@@ -2,63 +2,68 @@
 @section('page_title','Supplier Price Comparison')
 @section('content')
 <div class="dash-content">
-<div class="page-card">
-  <div class="card-header">
-    <div class="card-title">Supplier Price Comparison</div>
-    <div class="filters-row">
-      <select id="productFilter" class="form-control" style="width:220px;" onchange="loadReport()"><option value="">All Products</option></select>
-      <input type="date" id="fromDate" class="form-control" style="width:140px;" onchange="loadReport()">
-      <input type="date" id="toDate" class="form-control" style="width:140px;" onchange="loadReport()">
-      <button class="btn btn-primary" onclick="loadReport()">Refresh</button>
+
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h1 class="text-xl font-bold text-gray-900">Supplier Price Comparison</h1>
+            <p class="text-sm text-gray-500">Compare supplier pricing across products</p>
+        </div>
+        <div class="flex gap-2 no-print">
+            <button type="button" onclick="window.print()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Print
+            </button>
+        </div>
     </div>
-  </div>
-  <div style="overflow-x:auto;">
-    <table class="tbl">
-      <thead><tr><th>Product</th><th>SKU</th><th>Supplier</th><th>Avg Cost</th><th>Lowest</th><th>Highest</th><th>Qty Purchased</th><th>Last Purchase</th></tr></thead>
-      <tbody id="tableBody"><tr><td colspan="8" class="tbl-empty">Loading...</td></tr></tbody>
-    </table>
-  </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200">
+            <h3 class="text-sm font-semibold text-gray-700">Product & Supplier Pricing</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Avg Price</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Lowest</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Highest</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Purchases</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($products as $product)
+                        @php $items = $product->purchaseItems ?? collect(); $count = $items->count(); @endphp
+                        @foreach($items as $idx => $pi)
+                        <tr class="hover:bg-gray-50">
+                            @if($idx === 0)
+                            <td class="px-4 py-3 text-sm font-semibold text-gray-900" rowspan="{{ $count ?: 1 }}">{{ $product->name }}</td>
+                            <td class="px-4 py-3 text-sm font-mono text-gray-400" rowspan="{{ $count ?: 1 }}">{{ $product->sku ?? '—' }}</td>
+                            @endif
+                            <td class="px-4 py-3 text-sm text-gray-600">{{ $pi->supplier->name ?? 'N/A' }}</td>
+                            <td class="px-4 py-3 text-sm text-right text-gray-700">{{ $userCurrency }} {{ number_format($pi->avg_price,2) }}</td>
+                            <td class="px-4 py-3 text-sm text-right text-green-600 font-semibold">{{ $userCurrency }} {{ number_format($pi->min_price,2) }}</td>
+                            <td class="px-4 py-3 text-sm text-right text-red-600 font-semibold">{{ $userCurrency }} {{ number_format($pi->max_price,2) }}</td>
+                            <td class="px-4 py-3 text-sm text-right text-gray-600">{{ number_format($pi->purchases_count) }}</td>
+                        </tr>
+                        @endforeach
+                        @if($count === 0)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ $product->name }}</td>
+                            <td class="px-4 py-3 text-sm font-mono text-gray-400">{{ $product->sku ?? '—' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-400" colspan="5">No purchase data</td>
+                        </tr>
+                        @endif
+                    @empty
+                    <tr>
+                        <td colspan="7" class="px-4 py-12 text-center text-sm text-gray-500">No products found.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-</div>
-@endsection
-@section('scripts')
-<script>
-document.getElementById('fromDate').value=new Date(new Date().setMonth(new Date().getMonth()-6)).toISOString().split('T')[0];
-document.getElementById('toDate').value=new Date().toISOString().split('T')[0];
-async function loadProducts(){
-  const res=await fetch('/api/dashboard/products',{headers:{'Accept':'application/json'}});
-  const data=await res.json();
-  const sel=document.getElementById('productFilter');
-  data.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=esc(p.name);sel.appendChild(o);});
-}
-async function loadReport(){
-  const params=new URLSearchParams();
-  params.append('from',document.getElementById('fromDate').value);
-  params.append('to',document.getElementById('toDate').value);
-  const pid=document.getElementById('productFilter').value; if(pid) params.append('product_id',pid);
-  const res=await fetch('/api/dashboard/reports/supplier-price-comparison?'+params,{headers:{'Accept':'application/json'}});
-  const d=await res.json();
-  const tbody=document.getElementById('tableBody');
-  if(!d.comparison||!d.comparison.length){tbody.innerHTML='<tr><td colspan="8" class="tbl-empty">No comparison data found.</td></tr>';return;}
-  let rows='';
-  d.comparison.forEach(p=>{
-    p.suppliers.forEach((s,i)=>{
-      rows+=`<tr>
-        ${i===0?`<td rowspan="${p.suppliers.length}"><strong>${esc(p.product_name)}</strong></td><td rowspan="${p.suppliers.length}">${esc(p.sku||'-')}</td>`:''}
-        <td>${esc(s.supplier_name)}</td>
-        <td>${fmtMoney(s.avg_unit_cost)}</td>
-        <td style="color:#16a34a;font-weight:600;">${fmtMoney(s.lowest_cost)}</td>
-        <td style="color:#dc2626;font-weight:600;">${fmtMoney(s.highest_cost)}</td>
-        <td>${s.total_qty_purchased}</td>
-        <td>${fmtDate(s.last_purchase_date)}</td>
-      </tr>`;
-    });
-  });
-  tbody.innerHTML=rows;
-}
-function fmtMoney(n){return '{{ $userCurrency }} '+Number(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function fmtDate(d){return d?new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'-';}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-loadProducts().then(loadReport);
-</script>
 @endsection

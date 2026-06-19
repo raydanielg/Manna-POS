@@ -13,7 +13,7 @@ class InvoiceController extends Controller
         if ($ref) {
             $sale = Sale::with(['customer', 'items.product'])
                 ->where('reference', $ref)
-                ->where('created_by', auth()->user()->currentBusinessId() ?? auth()->id())
+                ->where('created_by', $this->currentBusinessId() ?? auth()->id())
                 ->first();
 
             if (!$sale) {
@@ -106,7 +106,7 @@ class InvoiceController extends Controller
         if ($ref) {
             $sale = Sale::with(['customer', 'items.product'])
                 ->where('reference', $ref)
-                ->where('created_by', auth()->user()->currentBusinessId() ?? auth()->id())
+                ->where('created_by', $this->currentBusinessId() ?? auth()->id())
                 ->first();
 
             if (!$sale) {

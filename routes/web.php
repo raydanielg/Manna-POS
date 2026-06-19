@@ -162,10 +162,6 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'blocked', 'user.d
     Route::get('/customers/all', function () { return view('dashboard.customers.all'); })->name('dashboard.customers.all');
     Route::get('/customers/loyalty', function () { return view('dashboard.customers.loyalty'); })->name('dashboard.customers.loyalty');
 
-    // Reports Routes
-    Route::get('/reports/sales', function () { return view('dashboard.reports.sales'); })->name('dashboard.reports.sales');
-    Route::get('/reports/inventory', function () { return view('dashboard.reports.inventory'); })->name('dashboard.reports.inventory');
-
     // Settings Routes
     Route::get('/settings', function () { return view('dashboard.settings'); })->name('dashboard.settings');
     Route::get('/settings/general', function () { return view('dashboard.settings.general'); })->name('dashboard.settings.general');
@@ -260,6 +256,17 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'blocked', 'user.d
     Route::get('/reports/supplier-price-comparison', [App\Http\Controllers\Dashboard\ReportController::class, 'supplierPriceComparison'])->name('dashboard.reports.supplier-price-comparison');
     Route::get('/reports/expiry-report', [App\Http\Controllers\Dashboard\ReportController::class, 'expiryReport'])->name('dashboard.reports.expiry-report');
     Route::get('/reports/product-trends-report', [App\Http\Controllers\Dashboard\ReportController::class, 'productTrendsReport'])->name('dashboard.reports.product-trends-report');
+
+    // PDF Download Routes
+    Route::get('/reports/sales-report/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'salesReportPdf'])->name('dashboard.reports.sales-report.pdf');
+    Route::get('/reports/purchase-report/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'purchaseReportPdf'])->name('dashboard.reports.purchase-report.pdf');
+    Route::get('/reports/inventory-report/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'inventoryReportPdf'])->name('dashboard.reports.inventory-report.pdf');
+    Route::get('/reports/expense-report/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'expenseReportPdf'])->name('dashboard.reports.expense-report.pdf');
+    Route::get('/reports/profit-loss-report/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'profitLossReportPdf'])->name('dashboard.reports.profit-loss-report.pdf');
+    Route::get('/reports/suppliers-report/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'suppliersReportPdf'])->name('dashboard.reports.suppliers-report.pdf');
+    Route::get('/reports/supplier-price-comparison/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'supplierPriceComparisonPdf'])->name('dashboard.reports.supplier-price-comparison.pdf');
+    Route::get('/reports/expiry-report/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'expiryReportPdf'])->name('dashboard.reports.expiry-report.pdf');
+    Route::get('/reports/product-trends-report/pdf', [App\Http\Controllers\Dashboard\ReportController::class, 'productTrendsReportPdf'])->name('dashboard.reports.product-trends-report.pdf');
 
     // CRM Routes
     Route::get('/crm/activities', [App\Http\Controllers\Dashboard\CrmController::class, 'activities'])->name('dashboard.crm.activities');

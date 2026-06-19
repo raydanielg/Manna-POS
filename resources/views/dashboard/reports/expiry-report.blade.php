@@ -2,72 +2,90 @@
 @section('page_title','Expiry Date Report')
 @section('content')
 <div class="dash-content">
-<div class="page-card">
-  <div class="card-header">
-    <div class="card-title">Expiry Date Report</div>
-    <div class="filters-row">
-      <select id="statusFilter" class="form-control" style="width:150px;" onchange="loadReport()">
-        <option value="">All</option>
-        <option value="expiring">Expiring Soon</option>
-        <option value="expired">Already Expired</option>
-      </select>
-      <input type="number" id="daysInput" class="form-control" style="width:100px;" value="30" placeholder="Days" onchange="loadReport()">
-      <button class="btn btn-primary" onclick="loadReport()">Refresh</button>
+
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h1 class="text-xl font-bold text-gray-900">Expiry Date Report</h1>
+            <p class="text-sm text-gray-500">Products approaching or past their expiry date</p>
+        </div>
+        <div class="flex gap-2 no-print">
+            <button type="button" onclick="window.print()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Print
+            </button>
+        </div>
     </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.25rem;border-bottom:1px solid #e9edf5;">
-    <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:1rem;"><div style="font-size:0.72rem;font-weight:600;color:#dc2626;text-transform:uppercase;">Expired</div><div style="font-size:1.6rem;font-weight:700;color:#be123c;" id="expiredCount">-</div></div>
-    <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:1rem;"><div style="font-size:0.72rem;font-weight:600;color:#d97706;text-transform:uppercase;">Expiring 7 Days</div><div style="font-size:1.6rem;font-weight:700;color:#b45309;" id="expiring7">-</div></div>
-    <div style="background:#ffedd5;border:1px solid #fed7aa;border-radius:10px;padding:1rem;"><div style="font-size:0.72rem;font-weight:600;color:#ea580c;text-transform:uppercase;">Expiring 30 Days</div><div style="font-size:1.6rem;font-weight:700;color:#c2410c;" id="expiring30">-</div></div>
-    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:1rem;"><div style="font-size:0.72rem;font-weight:600;color:#2563eb;text-transform:uppercase;">Expiring 90 Days</div><div style="font-size:1.6rem;font-weight:700;color:#1d4ed8;" id="expiring90">-</div></div>
-  </div>
-  <div style="overflow-x:auto;">
-    <table class="tbl">
-      <thead><tr><th>#</th><th>Product</th><th>SKU</th><th>Batch #</th><th>Supplier</th><th>Qty</th><th>Unit Cost</th><th>Expiry Date</th><th>Days Left</th><th>Status</th></tr></thead>
-      <tbody id="tableBody"><tr><td colspan="10" class="tbl-empty">Loading...</td></tr></tbody>
-    </table>
-  </div>
+
+    <form method="GET" class="flex flex-wrap items-end gap-3 mb-6 p-4 bg-white rounded-lg border border-gray-200 no-print">
+        <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">From Date</label>
+            <input type="date" name="from_date" value="{{ request('from_date',$from->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">To Date</label>
+            <input type="date" name="to_date" value="{{ request('to_date',$to->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
+        </div>
+        <button type="submit" class="h-9 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">Generate</button>
+        <a href="{{ route('dashboard.reports.expiry-report') }}" class="h-9 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 inline-flex items-center">Reset</a>
+    </form>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-red-200 p-4">
+            <div class="text-xs font-medium text-red-600 uppercase tracking-wider">Already Expired</div>
+            <div class="text-2xl font-bold text-red-600 mt-1">{{ number_format($expired) }}</div>
+        </div>
+        <div class="bg-white rounded-lg border border-yellow-200 p-4">
+            <div class="text-xs font-medium text-yellow-600 uppercase tracking-wider">Expiring Soon (30 days)</div>
+            <div class="text-2xl font-bold text-yellow-600 mt-1">{{ number_format($expiringSoon) }}</div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200">
+            <h3 class="text-sm font-semibold text-gray-700">Products with Expiry Dates</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Stock</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Expiry Date</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($products as $p)
+                    @php
+                        $expiry = $p->expiry_date ? \Carbon\Carbon::parse($p->expiry_date) : null;
+                        $daysLeft = $expiry ? now()->diffInDays($expiry, false) : null;
+                        if ($daysLeft === null) { $badge = 'bg-gray-50 text-gray-600'; $label = 'No Date'; }
+                        elseif ($daysLeft < 0) { $badge = 'bg-red-50 text-red-700'; $label = 'Expired'; }
+                        elseif ($daysLeft <= 7) { $badge = 'bg-red-50 text-red-700'; $label = $daysLeft . ' days'; }
+                        elseif ($daysLeft <= 30) { $badge = 'bg-yellow-50 text-yellow-700'; $label = $daysLeft . ' days'; }
+                        else { $badge = 'bg-green-50 text-green-700'; $label = $daysLeft . ' days'; }
+                    @endphp
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($products->currentPage()-1)*$products->perPage() }}</td>
+                        <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ $p->name }}</td>
+                        <td class="px-4 py-3 text-sm font-mono text-gray-400">{{ $p->sku ?? '—' }}</td>
+                        <td class="px-4 py-3 text-sm text-right text-gray-700">{{ number_format($p->current_stock) }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{{ $expiry ? $expiry->format('M d, Y') : '—' }}</td>
+                        <td class="px-4 py-3 text-sm"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $badge }}">{{ $label }}</span></td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="px-4 py-12 text-center text-sm text-gray-500">No products with expiry dates found.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($products->hasPages())
+        <div class="px-4 py-3 border-t border-gray-200 no-print">{{ $products->links() }}</div>
+        @endif
+    </div>
 </div>
-</div>
-@endsection
-@section('scripts')
-<script>
-async function loadReport(){
-  const params=new URLSearchParams();
-  params.append('days',document.getElementById('daysInput').value);
-  const st=document.getElementById('statusFilter').value; if(st) params.append('status',st);
-  const res=await fetch('/api/dashboard/reports/expiry?'+params,{headers:{'Accept':'application/json'}});
-  const d=await res.json();
-  document.getElementById('expiredCount').textContent=d.summary?.expired_count||0;
-  document.getElementById('expiring7').textContent=d.summary?.expiring_7_days||0;
-  document.getElementById('expiring30').textContent=d.summary?.expiring_30_days||0;
-  document.getElementById('expiring90').textContent=d.summary?.expiring_90_days||0;
-  const tbody=document.getElementById('tableBody');
-  if(!d.batches||!d.batches.length){tbody.innerHTML='<tr><td colspan="10" class="tbl-empty">No expiry data found.</td></tr>';return;}
-  tbody.innerHTML=d.batches.map((b,i)=>{
-    const days=b.expiry_date?Math.ceil((new Date(b.expiry_date)-new Date())/(1000*60*60*24)):null;
-    let badge='badge-success'; let label='Active';
-    if(days===null){badge='badge-gray';label='No Date';}
-    else if(days<0){badge='badge-danger';label='Expired';}
-    else if(days<=7){badge='badge-danger';label=days+' days';}
-    else if(days<=30){badge='badge-warning';label=days+' days';}
-    else{badge='badge-info';label=days+' days';}
-    return `<tr>
-      <td>${i+1}</td>
-      <td><strong>${esc(b.product?.name||'N/A')}</strong></td>
-      <td>${esc(b.product?.sku||'-')}</td>
-      <td>${esc(b.batch_number||'-')}</td>
-      <td>${esc(b.supplier?.name||'-')}</td>
-      <td>${b.quantity}</td>
-      <td>${fmtMoney(b.unit_cost)}</td>
-      <td>${b.expiry_date?new Date(b.expiry_date).toLocaleDateString('en-GB'):'-'}</td>
-      <td>${days!==null?days:''}</td>
-      <td><span class="badge ${badge}">${label}</span></td>
-    </tr>`;
-  }).join('');
-}
-function fmtMoney(n){return '{{ $userCurrency }} '+Number(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-loadReport();
-</script>
 @endsection
