@@ -167,7 +167,7 @@
         </div>
         <div class="stat-body">
             <div class="stat-val" id="st-revenue">—</div>
-            <div class="stat-lbl">Est. MRR (TZS)</div>
+            <div class="stat-lbl">Est. MRR ({{ $userCurrency }})</div>
         </div>
     </div>
 </div>
@@ -237,12 +237,12 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Monthly Price (TZS) *</label>
+                        <label class="form-label">Monthly Price ({{ $userCurrency }}) *</label>
                         <input name="price_monthly" type="number" step="0.01" class="form-control" required placeholder="0">
                         <div class="invalid-feedback"></div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Yearly Price (TZS)</label>
+                        <label class="form-label">Yearly Price ({{ $userCurrency }})</label>
                         <input name="price_yearly" type="number" step="0.01" class="form-control" placeholder="Leave blank for 10× monthly">
                         <div class="invalid-feedback"></div>
                     </div>
@@ -383,11 +383,11 @@ function renderPlanCard(p) {
         </div>
         <div class="plan-price-wrap">
             <div class="plan-price">
-                <span class="plan-currency">TZS</span>
+                <span class="plan-currency">{{ $userCurrency }}</span>
                 <span class="plan-amount">${fmtNum(p.price_monthly)}</span>
                 <span class="plan-period">/mo</span>
             </div>
-            ${p.price_yearly > 0 ? `<div class="plan-yearly">TZS ${fmtNum(p.price_yearly)}/yr · Save ${savePct}%</div>` : ''}
+            ${p.price_yearly > 0 ? `<div class="plan-yearly">{{ $userCurrency }} ${fmtNum(p.price_yearly)}/yr · Save ${savePct}%</div>` : ''}
         </div>
         <div class="plan-limits">
             <div class="plan-limit-row">

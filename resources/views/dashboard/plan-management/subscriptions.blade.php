@@ -52,7 +52,7 @@
         <div class="sub-stat-icon" style="background:#faf5ff;">
             <svg width="22" height="22" fill="none" stroke="#7c3aed" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
-        <div><div class="sub-stat-val" id="st-mrr">—</div><div class="sub-stat-lbl">Est. MRR (TZS)</div></div>
+        <div><div class="sub-stat-val" id="st-mrr">—</div><div class="sub-stat-lbl">Est. MRR ({{ $userCurrency }})</div></div>
     </div>
 </div>
 
@@ -149,7 +149,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Amount Paid (TZS)</label>
+                        <label class="form-label">Amount Paid ({{ $userCurrency }})</label>
                         <input name="amount_paid" type="number" step="0.01" class="form-control" id="amountPaid" placeholder="Auto-filled from plan">
                         <div class="invalid-feedback"></div>
                     </div>
@@ -290,7 +290,7 @@ async function loadList() {
                         ${sub.billing_cycle||'monthly'}
                     </span>
                 </td>
-                <td class="font-semibold" style="font-size:0.82rem;">TZS ${fmtNum(sub.amount_paid)}</td>
+                <td class="font-semibold" style="font-size:0.82rem;">{{ $userCurrency }} ${fmtNum(sub.amount_paid)}</td>
                 <td>
                     <span style="display:inline-flex;align-items:center;gap:0.35rem;font-size:0.7rem;font-weight:700;padding:0.22rem 0.65rem;border-radius:9999px;background:${sc.bg};color:${sc.color};">
                         <span style="width:6px;height:6px;border-radius:50%;background:${sc.color};flex-shrink:0;"></span>
@@ -345,7 +345,7 @@ async function loadFilters() {
         const planSelect = document.getElementById('planSelect');
         allPlans.forEach(p => {
             planFilter.innerHTML += `<option value="${p.id}">${p.name}</option>`;
-            planSelect.innerHTML += `<option value="${p.id}" data-monthly="${p.price_monthly}" data-yearly="${p.price_yearly}">${p.name} — TZS ${Number(p.price_monthly).toLocaleString()}/mo</option>`;
+            planSelect.innerHTML += `<option value="${p.id}" data-monthly="${p.price_monthly}" data-yearly="${p.price_yearly}">${p.name} — {{ $userCurrency }} ${Number(p.price_monthly).toLocaleString()}/mo</option>`;
         });
 
         const users = await apiFetch(`${API_USERS}?limit=200`);
