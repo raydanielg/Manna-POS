@@ -42,7 +42,7 @@
                     $isFeatured = $plan->is_featured;
                     $badgeColor = $plan->badge_color ?? '#10B981';
                 @endphp
-                <div class="flex flex-col bg-white rounded-3xl transition-all duration-300 border relative {{ $isFeatured ? 'border-primary-500 shadow-xl scale-105 z-10 lg:-translate-y-2' : 'border-slate-200 shadow-sm hover:shadow-lg' }}">
+                <div class="flex flex-col bg-white rounded-3xl transition-all duration-300 border relative {{ $isFeatured ? 'border-primary-500 shadow-xl scale-105 z-10 lg:-translate-y-2' : 'border-slate-200 shadow-sm hover:shadow-lg' }} {{ $plan->price_monthly == 0 ? 'pricing-card-free' : '' }}">
                     
                     {{-- Highlight banner for Featured Plan --}}
                     @if($isFeatured)
