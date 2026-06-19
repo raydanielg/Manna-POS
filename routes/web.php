@@ -93,6 +93,12 @@ Route::get('/gdpr', function () {
 
 Auth::routes();
 
+// OTP Verification & Activation
+Route::get('/verify-otp', [App\Http\Controllers\Auth\OtpController::class, 'show'])->middleware('auth')->name('verify.otp');
+Route::post('/verify-otp', [App\Http\Controllers\Auth\OtpController::class, 'verify'])->middleware('auth')->name('verify.otp.post');
+Route::post('/verify-otp/resend', [App\Http\Controllers\Auth\OtpController::class, 'resend'])->middleware('auth')->name('verify.otp.resend');
+Route::get('/activate/{token}', [App\Http\Controllers\Auth\OtpController::class, 'activateByToken'])->name('activate');
+
 // Setup wizard
 Route::get('/setup', [App\Http\Controllers\SetupController::class, 'index'])->middleware('auth');
 Route::post('/setup', [App\Http\Controllers\SetupController::class, 'complete'])->middleware('auth');
