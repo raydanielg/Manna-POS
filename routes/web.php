@@ -116,6 +116,9 @@ Route::get('/activate/{token}', [App\Http\Controllers\Auth\OtpController::class,
 Route::get('/setup', [App\Http\Controllers\SetupController::class, 'index'])->middleware(['auth', 'verify.otp']);
 Route::post('/setup', [App\Http\Controllers\SetupController::class, 'complete'])->middleware(['auth', 'verify.otp']);
 
+// ─── Snippe Payment Webhook (public, CSRF exempt) ─────────────────────
+Route::post('/webhooks/snippe', App\Http\Controllers\Webhook\SnippeWebhookController::class);
+
 // Subscription plans (user-facing)
 Route::get('/subscription/plans', [App\Http\Controllers\UserSubscriptionController::class, 'plans'])->middleware(['auth', 'verify.otp']);
 Route::post('/subscription/choose', [App\Http\Controllers\UserSubscriptionController::class, 'choosePlan'])->middleware(['auth', 'verify.otp']);
