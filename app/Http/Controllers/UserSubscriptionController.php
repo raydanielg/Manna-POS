@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SubscriptionPlan;
 use App\Models\UserSubscription;
+use App\Services\SnippeService;
 use Illuminate\Http\Request;
 
 class UserSubscriptionController extends Controller
@@ -18,7 +19,7 @@ class UserSubscriptionController extends Controller
         return view('subscription.plans');
     }
 
-    public function choosePlan(Request $req)
+    public function choosePlan(Request $req, SnippeService $snippe)
     {
         $req->validate([
             'plan_id'       => 'required|exists:subscription_plans,id',
@@ -35,26 +36,94 @@ class UserSubscriptionController extends Controller
             ->whereIn('status', ['active', 'trial'])
             ->update(['status' => 'cancelled']);
 
-        $status = $amount == 0 ? 'trial' : 'active';
-        $days   = $cycle === 'yearly' ? 365 : 30;
+        if ($amount == 0) {
+            // Free / Trial plan — activate immediately
+            $subscription = UserSubscription::create([
+                'user_id'              => $user->id,
+                'subscription_plan_id' => $plan->id,
+                'billing_cycle'        => $cycle,
+                'amount_paid'          => 0,
+                'currency'             => $user->currency ?? 'TZS',
+                'status'               => 'trial',
+                'starts_at'            => now(),
+                'expires_at'           => now()->addDays(14),
+            ]);
 
-        UserSubscription::create([
+            $message = 'Welcome to ' . $plan->name . '!';
+
+            if ($req->expectsJson() || $req->ajax()) {
+                return response()->json(['message' => $message, 'plan' => $plan->name, 'redirect' => '/dashboard']);
+            }
+
+            return redirect('/dashboard')->with('subscribed', $message);
+        }
+
+        // Paid plan — create pending subscription + Snippe session
+        $subscription = UserSubscription::create([
             'user_id'              => $user->id,
             'subscription_plan_id' => $plan->id,
             'billing_cycle'        => $cycle,
             'amount_paid'          => $amount,
             'currency'             => $user->currency ?? 'TZS',
-            'status'               => $status,
-            'starts_at'            => now(),
-            'expires_at'           => $amount == 0 ? now()->addDays(14) : now()->addDays($days),
+            'status'               => 'pending',
+            'starts_at'            => null,
+            'expires_at'           => null,
         ]);
 
-        $message = 'Welcome to ' . $plan->name . '!';
+        try {
+            $session = $snippe->createSession([
+                'amount'        => (int) ($amount * 100), // convert to smallest unit
+                'currency'      => $user->currency ?? 'TZS',
+                'customer_name' => $user->name,
+                'customer_phone'=> $user->phone ?? '',
+                'customer_email'=> $user->email,
+                'description'   => $plan->name . ' (' . ucfirst($cycle) . ')',
+                'metadata'      => [
+                    'subscription_id' => (string) $subscription->id,
+                    'plan_id'         => (string) $plan->id,
+                    'user_id'         => (string) $user->id,
+                    'billing_cycle'   => $cycle,
+                ],
+                'redirect_url'  => route('dashboard') . '?payment=success',
+                'line_items'    => [
+                    [
+                        'name'       => $plan->name . ' — ' . ucfirst($cycle),
+                        'quantity'   => 1,
+                        'unit_price' => (int) ($amount * 100),
+                    ],
+                ],
+            ]);
 
-        if ($req->expectsJson() || $req->ajax()) {
-            return response()->json(['message' => $message, 'plan' => $plan->name]);
+            $subscription->update([
+                'snippe_session_ref' => $session['reference'] ?? null,
+            ]);
+
+            $checkoutUrl = $session['checkout_url'] ?? null;
+
+            if ($req->expectsJson() || $req->ajax()) {
+                return response()->json([
+                    'message'      => 'Redirecting to payment...',
+                    'plan'         => $plan->name,
+                    'checkout_url' => $checkoutUrl,
+                    'session_ref'  => $session['reference'] ?? null,
+                ]);
+            }
+
+            if ($checkoutUrl) {
+                return redirect()->away($checkoutUrl);
+            }
+
+            throw new \Exception('No checkout URL returned');
+        } catch (\Throwable $e) {
+            $subscription->update(['notes' => 'Payment failed: ' . $e->getMessage()]);
+
+            if ($req->expectsJson() || $req->ajax()) {
+                return response()->json([
+                    'message' => 'Could not initiate payment. Please try again.',
+                ], 422);
+            }
+
+            return back()->with('error', 'Payment initiation failed. Please try again.');
         }
-
-        return redirect('/dashboard')->with('subscribed', $message);
     }
 }
