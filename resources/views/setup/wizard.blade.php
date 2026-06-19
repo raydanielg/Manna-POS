@@ -237,10 +237,23 @@ function goWiz(step){
   }
   currentStep=step;
 }
-function pickCountry(el,name){
+const countryCurrencyMap={
+  'TZ':'TZS','KE':'KES','UG':'UGX','RW':'RWF','BI':'BIF','ET':'ETB','SS':'SSP',
+  'SO':'SOS','DJ':'DJF','ER':'ERN','SC':'SCR','KM':'KMF','MG':'MGA','MU':'MUR',
+  'MW':'MWK','ZM':'ZMW','ZW':'ZWL','MZ':'MZN','BW':'BWP','CD':'CDF'
+};
+function pickCountry(el,name,code){
   document.querySelectorAll('.country-chip').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
   document.getElementById('bizCountry').value=name;
+  // Auto-select currency
+  const currency=countryCurrencyMap[code];
+  if(currency){
+    const sel=document.querySelector('[name="currency"]');
+    if(sel){
+      for(let o of sel.options){if(o.value===currency){sel.value=currency;break;}}
+    }
+  }
 }
 function selectUse(el){
   document.querySelectorAll('.feat-card').forEach(c=>c.classList.remove('on'));
