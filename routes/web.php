@@ -533,6 +533,7 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
     Route::apiResource('purchases',              PurchaseController::class);
     Route::apiResource('sales',                  SaleController::class);
     Route::apiResource('users',                  UserManagementController::class);
+    Route::get('staff',                          [UserManagementController::class, 'staffList'])->name('staff.list');
     Route::apiResource('shipments',              ShipmentController::class);
     Route::apiResource('selling-price-groups',   SellingPriceGroupController::class);
     Route::apiResource('product-variations',     ProductVariationController::class);
