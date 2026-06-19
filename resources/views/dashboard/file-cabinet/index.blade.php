@@ -68,180 +68,162 @@
 </style>
 @endsection
 @section('content')
-<div class="dash-content animate__animated animate__fadeInUp">
+<div class="dash-content">
 <div class="fc-wrap">
 
-    <div class="fc-hero" data-aos="fade-down">
+    <div class="fc-header">
         <div>
             <h1>File Cabinet</h1>
-            <p>Store, organize, and manage your business documents securely</p>
+            <p>{{ number_format($stats['total']) }} files &middot; {{ $stats['folder_count'] }} folders</p>
         </div>
-        <button class="btn btn-primary" style="gap:.4rem;padding:.65rem 1.1rem;font-size:.85rem;" onclick="document.getElementById('uploadModal').classList.add('open')">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-            Upload File
-        </button>
-    </div>
-
-    <div class="fc-stats" data-aos="fade-up" data-aos-delay="50">
-        <div class="fc-stat">
-            <div class="fcs-icon blue"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/></svg></div>
-            <div class="fcs-label">Total Files</div>
-            <div class="fcs-value">{{ number_format($stats['total']) }}</div>
-        </div>
-        <div class="fc-stat">
-            <div class="fcs-icon green"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7V4h3M4 17v3h3M20 7V4h-3M20 17v3h-3M9 9h6v6H9z"/></svg></div>
-            <div class="fcs-label">Storage Used</div>
-            <div class="fcs-value">
-                @if($stats['total_size'] >= 1048576) {{ number_format($stats['total_size']/1048576, 1) }} MB
-                @elseif($stats['total_size'] >= 1024) {{ number_format($stats['total_size']/1024, 1) }} KB
-                @else {{ $stats['total_size'] }} B @endif
-            </div>
-        </div>
-        <div class="fc-stat">
-            <div class="fcs-icon amber"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg></div>
-            <div class="fcs-label">Upload New</div>
-            <div style="padding-top:.35rem;">
-                <button class="btn btn-primary" style="font-size:.78rem;padding:.4rem .85rem;border-radius:10px;" onclick="document.getElementById('uploadModal').classList.add('open')">Choose File</button>
-            </div>
+        <div class="fc-actions">
+            <button class="btn btn-secondary" onclick="document.getElementById('folderModal').classList.add('open')">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                New Folder
+            </button>
+            <button class="btn btn-primary" onclick="triggerFileSelect()">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                Upload
+            </button>
         </div>
     </div>
 
-    <div class="fc-toolbar" data-aos="fade-up" data-aos-delay="100">
-        <div class="fc-search">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input type="text" name="search" id="fcSearch" value="{{ request('search') }}" placeholder="Search files by name..." oninput="debounceSearch()">
-        </div>
-        <div class="fc-categories">
-            <a href="{{ route('dashboard.file-cabinet') }}" class="fc-chip {{ !request('category') ? 'active' : '' }}">All</a>
-            @foreach($categories as $cat)
-            <a href="{{ route('dashboard.file-cabinet', ['category'=>$cat,'search'=>request('search')]) }}" class="fc-chip {{ request('category')==$cat ? 'active' : '' }}">{{ $cat }}</a>
-            @endforeach
+    <div class="fc-breadcrumb">
+        <a href="{{ route('dashboard.file-cabinet') }}">Files</a>
+        @foreach($breadcrumb as $b)
+        <span class="sep">/</span>
+        <a href="{{ route('dashboard.file-cabinet', ['folder'=>$b->id]) }}">{{ $b->name }}</a>
+        @endforeach
+        @if($currentFolder)
+        <span class="sep">/</span>
+        <span class="current">{{ $currentFolder->name }}</span>
+        @endif
+    </div>
+
+    <div class="fc-dropzone" id="dropzone" onclick="triggerFileSelect()"
+        ondragover="event.preventDefault();this.classList.add('dragover')"
+        ondragleave="this.classList.remove('dragover')"
+        ondrop="handleDrop(event)">
+        <svg class="dz-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
+        <div class="dz-title">Drag & drop files here, or click to browse</div>
+        <div class="dz-sub">Max 50MB per file</div>
+        <div class="fc-upload-progress" id="uploadProgress">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-text" id="progressText">Uploading...</div>
         </div>
     </div>
 
-    @if($files->count())
-    <div class="file-grid" data-aos="fade-up" data-aos-delay="150">
-        @foreach($files as $f)
-        <div class="file-card">
-            <img src="{{ asset('images/foldericons.png') }}" class="folder-img" alt="">
-            <div class="file-icon-wrap">
-                <div class="file-icon {{ $f->icon }}">
-                    @if($f->icon === 'image')
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2l1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
-                    @elseif($f->icon === 'pdf')
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
-                    @elseif($f->icon === 'doc')
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
-                    @elseif($f->icon === 'xls')
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M5 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 3v4"/></svg>
-                    @else
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
-                    @endif
-                </div>
-                <span class="file-ext">{{ strtoupper($f->file_extension) }}</span>
+    @if($folders->count())
+    <div class="fc-section-title">Folders</div>
+    <div class="fc-grid">
+        @foreach($folders as $folder)
+        <div class="fc-folder" onclick="location.href='{{ route('dashboard.file-cabinet', ['folder'=>$folder->id]) }}'">
+            <div class="f-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h6l3 3h6a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5z"/></svg>
             </div>
-            <div class="file-title" title="{{ $f->title }}">{{ $f->title }}</div>
-            <div class="file-meta">{{ $f->file_size_formatted }} <span class="dot"></span> {{ $f->created_at->format('M d, Y') }}</div>
-            <div class="file-actions">
-                <a href="{{ route('dashboard.file-cabinet.download', $f) }}" class="btn btn-edit btn-sm">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Download
-                </a>
-                <button type="button" class="btn btn-delete btn-sm" onclick="confirmDelete('{{ route('dashboard.file-cabinet.destroy', $f) }}')">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/></svg>
-                    Delete
-                </button>
+            <div class="f-info">
+                <div class="f-name">{{ $folder->name }}</div>
+                <div class="f-meta">{{ $folder->files_count }} files</div>
+            </div>
+            <div class="f-del" onclick="event.stopPropagation();confirmFolderDelete('{{ route('dashboard.file-cabinet.folders.destroy', $folder) }}')">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/></svg>
             </div>
         </div>
         @endforeach
     </div>
-
-    @if($files->hasPages())
-    <div class="fc-pagination" data-aos="fade-up" data-aos-delay="200">
-        {{ $files->onEachSide(1)->links('pagination::simple-tailwind') }}
-    </div>
     @endif
 
-    @else
-    <div class="fc-empty" data-aos="fade-up" data-aos-delay="150">
-        <svg class="fe-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M9 9l2 2l4-4"/></svg>
-        <div class="fe-title">No files yet</div>
-        <div class="fe-desc">Upload your first document to get started</div>
-    </div>
-    @endif
-
-</div>
-</div>
-
-{{-- Upload Modal --}}
-<div class="modal-overlay" id="uploadModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal-box" style="max-width:520px;border-radius:20px;" onclick="event.stopPropagation()">
-    <div class="modal-header" style="padding:1.25rem 1.5rem;">
-      <h3 class="modal-title" style="font-size:1.05rem;font-weight:800;letter-spacing:-0.02em;">Upload File</h3>
-      <button class="modal-close" style="width:32px;height:32px;border-radius:10px;" onclick="document.getElementById('uploadModal').classList.remove('open')">&times;</button>
-    </div>
-    <form method="POST" action="{{ route('dashboard.file-cabinet.store') }}" enctype="multipart/form-data" id="uploadForm">@csrf
-      <div style="padding:1.25rem 1.5rem;">
-        <div class="form-group"><label class="form-label">Title *</label><input name="title" class="form-control" style="border-radius:12px;" required></div>
-        <div class="form-group"><label class="form-label">Description</label><textarea name="description" class="form-control" style="border-radius:12px;" rows="2"></textarea></div>
-        <div class="form-group"><label class="form-label">Category</label><input name="category" class="form-control" style="border-radius:12px;" placeholder="e.g. Invoice, Receipt, Contract"></div>
-        <div class="form-group">
-          <label class="form-label">File * (max 50MB)</label>
-          <div class="drop-zone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');const dt=event.dataTransfer;document.getElementById('fileInput').files=dt.files;updateFileName()">
-            <svg class="dz-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
-            <div class="dz-title">Click or drag file here</div>
-            <div class="dz-sub" id="fileName">No file selected</div>
-          </div>
-          <input type="file" name="file" id="fileInput" style="display:none;" required onchange="updateFileName()">
+    @if($files->count())
+    <div class="fc-section-title">Files</div>
+    <div class="fc-grid">
+        @foreach($files as $f)
+        <div class="fc-file">
+            <div class="fi-top">
+                <div class="fi-icon {{ $f->icon }}">
+                    @if($f->icon === 'image')
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2l1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
+                    @elseif($f->icon === 'pdf')
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
+                    @elseif($f->icon === 'doc')
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+                    @elseif($f->icon === 'xls')
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M5 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 3v4"/></svg>
+                    @else
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 0 0 2-2V9.414a1 1 0 0 0-.293-.707l-5.414-5.414A1 1 0 0 0 12.586 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
+                    @endif
+                </div>
+                <div class="fi-info">
+                    <div class="fi-name" title="{{ $f->title }}">{{ $f->title }}</div>
+                    <div class="fi-meta">{{ strtoupper($f->file_extension) }} &middot; {{ $f->file_size_formatted }} &middot; {{ $f->created_at->format('M d') }}</div>
+                </div>
+            </div>
+            <div class="fi-actions">
+                <a href="{{ route('dashboard.file-cabinet.download', $f) }}" class="btn btn-edit btn-sm">Download</a>
+                <button type="button" class="btn btn-delete btn-sm" onclick="confirmDelete('{{ route('dashboard.file-cabinet.destroy', $f) }}')">Delete</button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer" style="padding:1rem 1.5rem;">
-        <button type="button" class="btn btn-secondary" style="border-radius:10px;font-weight:700;" onclick="document.getElementById('uploadModal').classList.remove('open')">Cancel</button>
-        <button type="submit" class="btn btn-primary" style="border-radius:10px;font-weight:700;gap:.35rem;">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-          Upload
-        </button>
-      </div>
-    </form>
-  </div>
+        @endforeach
+    </div>
+    @if($files->hasPages())
+    <div class="fc-pagination">{{ $files->onEachSide(1)->links() }}</div>
+    @endif
+    @elseif(!$folders->count())
+    <div class="fc-empty">
+        <svg class="fe-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M9 9l2 2l4-4"/></svg>
+        <div class="fe-title">This folder is empty</div>
+        <div class="fe-desc">Drag files here or click Upload to add documents</div>
+    </div>
+    @endif
+
+</div>
+</div>
+
+<input type="file" id="ajaxFileInput" style="display:none;" multiple onchange="handleFiles(this.files)">
+
+<div class="modal-overlay" id="folderModal" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal-box fc-modal-box" onclick="event.stopPropagation()">
+        <div class="modal-header"><h3 class="modal-title">New Folder</h3><button class="modal-close" onclick="document.getElementById('folderModal').classList.remove('open')">&times;</button></div>
+        <form method="POST" action="{{ route('dashboard.file-cabinet.folders.store') }}">@csrf
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Folder Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. Invoices" required autofocus>
+                </div>
+                <input type="hidden" name="parent_id" value="{{ $currentFolder?->id }}">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('folderModal').classList.remove('open')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <form method="POST" id="deleteForm" style="display:none;">@csrf @method('DELETE')</form>
+<form method="POST" id="folderDeleteForm" style="display:none;">@csrf @method('DELETE')</form>
 
 <script>
-let _fcTimer;
-function debounceSearch() {
-  clearTimeout(_fcTimer);
-  _fcTimer = setTimeout(() => {
-    const s = document.getElementById('fcSearch').value;
-    const url = new URL(window.location.href);
-    if (s) url.searchParams.set('search', s); else url.searchParams.delete('search');
-    window.location.href = url.toString();
-  }, 500);
+function triggerFileSelect() { document.getElementById('ajaxFileInput').click(); }
+function handleDrop(e) { e.preventDefault(); document.getElementById('dropzone').classList.remove('dragover'); handleFiles(e.dataTransfer.files); }
+function handleFiles(files) { if (!files.length) return; Array.from(files).forEach(f => uploadFile(f)); }
+function uploadFile(file) {
+    const p = document.getElementById('uploadProgress'), fill = document.getElementById('progressFill'), txt = document.getElementById('progressText');
+    p.classList.add('active'); fill.style.width = '0%'; txt.textContent = 'Uploading ' + file.name + '...';
+    const fd = new FormData();
+    fd.append('file', file); fd.append('title', file.name.replace(/\.[^/.]+$/, '')); fd.append('_token', '{{ csrf_token() }}'); fd.append('folder_id', '{{ $currentFolder?->id }}');
+    const xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener('progress', e => { if (e.lengthComputable) { const pct = Math.round((e.loaded/e.total)*100); fill.style.width = pct+'%'; txt.textContent = 'Uploading '+file.name+' ('+pct+'%)'; }});
+    xhr.addEventListener('load', () => { if (xhr.status===200) { const r=JSON.parse(xhr.responseText); if(r.success){txt.textContent=file.name+' uploaded!'; setTimeout(()=>{p.classList.remove('active'); fill.style.width='0%'; location.reload();},800);} else {txt.textContent='Error'; Swal.fire({icon:'error',title:'Upload failed',text:r.message});}} else {txt.textContent='Failed'; Swal.fire({icon:'error',title:'Upload failed'});}});
+    xhr.addEventListener('error', () => { txt.textContent='Failed'; Swal.fire({icon:'error',title:'Upload failed'}); });
+    xhr.open('POST','{{ route('dashboard.file-cabinet.store') }}'); xhr.send(fd);
 }
-function updateFileName() {
-  const input = document.getElementById('fileInput');
-  const name = input.files.length ? input.files[0].name : 'No file selected';
-  document.getElementById('fileName').textContent = name;
+function confirmDelete(url) {
+    Swal.fire({title:'Delete file?',text:'This cannot be undone.',icon:'warning',showCancelButton:true,confirmButtonText:'Delete',cancelButtonText:'Cancel',confirmButtonColor:'#ef4444',reverseButtons:true})
+    .then(r=>{if(r.isConfirmed){const f=document.getElementById('deleteForm');f.action=url;f.submit();}});
 }
-function confirmDelete(actionUrl) {
-  Swal.fire({
-    title: 'Delete file?',
-    text: 'This action cannot be undone.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Delete',
-    cancelButtonText: 'Cancel',
-    confirmButtonColor: '#ef4444',
-    cancelButtonColor: '#64748b',
-    reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const form = document.getElementById('deleteForm');
-      form.action = actionUrl;
-      form.submit();
-    }
-  });
+function confirmFolderDelete(url) {
+    Swal.fire({title:'Delete folder?',text:'All files inside will be deleted too.',icon:'warning',showCancelButton:true,confirmButtonText:'Delete',cancelButtonText:'Cancel',confirmButtonColor:'#ef4444',reverseButtons:true})
+    .then(r=>{if(r.isConfirmed){const f=document.getElementById('folderDeleteForm');f.action=url;f.submit();}});
 }
 </script>
 @endsection
