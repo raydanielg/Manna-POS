@@ -100,12 +100,12 @@ Route::post('/verify-otp/resend', [App\Http\Controllers\Auth\OtpController::clas
 Route::get('/activate/{token}', [App\Http\Controllers\Auth\OtpController::class, 'activateByToken'])->name('activate');
 
 // Setup wizard
-Route::get('/setup', [App\Http\Controllers\SetupController::class, 'index'])->middleware('auth');
-Route::post('/setup', [App\Http\Controllers\SetupController::class, 'complete'])->middleware('auth');
+Route::get('/setup', [App\Http\Controllers\SetupController::class, 'index'])->middleware(['auth', 'verify.otp']);
+Route::post('/setup', [App\Http\Controllers\SetupController::class, 'complete'])->middleware(['auth', 'verify.otp']);
 
 // Subscription plans (user-facing)
-Route::get('/subscription/plans', [App\Http\Controllers\UserSubscriptionController::class, 'plans'])->middleware('auth');
-Route::post('/subscription/choose', [App\Http\Controllers\UserSubscriptionController::class, 'choosePlan'])->middleware('auth');
+Route::get('/subscription/plans', [App\Http\Controllers\UserSubscriptionController::class, 'plans'])->middleware(['auth', 'verify.otp']);
+Route::post('/subscription/choose', [App\Http\Controllers\UserSubscriptionController::class, 'choosePlan'])->middleware(['auth', 'verify.otp']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware(['auth', 'user.dashboard'])->name('home');
 
