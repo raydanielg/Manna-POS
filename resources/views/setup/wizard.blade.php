@@ -234,8 +234,10 @@ function goWiz(step){
   if(step===2){
     const bname=document.querySelector('[name="business_name"]').value.trim();
     const bcountry=document.getElementById('bizCountry').value.trim();
+    const bregion=document.getElementById('bizRegion').value.trim();
     if(!bname){Swal.fire({icon:'warning',title:'Business name required',text:'Please enter your business name.',confirmButtonColor:'#1d4ed8'});return;}
     if(!bcountry){Swal.fire({icon:'warning',title:'Country required',text:'Please select your country.',confirmButtonColor:'#1d4ed8'});return;}
+    if(!bregion){Swal.fire({icon:'warning',title:'Region required',text:'Please select your region.',confirmButtonColor:'#1d4ed8'});return;}
   }
   document.getElementById('wp'+currentStep).classList.remove('active');
   document.getElementById('wp'+step).classList.add('active');
@@ -250,24 +252,56 @@ function goWiz(step){
   }
   currentStep=step;
 }
-const countryCurrencyMap={
-  'TZ':'TZS','KE':'KES','UG':'UGX','RW':'RWF','BI':'BIF','ET':'ETB','SS':'SSP',
-  'SO':'SOS','DJ':'DJF','ER':'ERN','SC':'SCR','KM':'KMF','MG':'MGA','MU':'MUR',
-  'MW':'MWK','ZM':'ZMW','ZW':'ZWL','MZ':'MZN','BW':'BWP','CD':'CDF'
+
+const countryData={
+  'Tanzania':{currency:'TZS',regions:['Arusha','Dar es Salaam','Dodoma','Geita','Iringa','Kagera','Katavi','Kigoma','Kilimanjaro','Lindi','Manyara','Mara','Mbeya','Mjini Magharibi','Morogoro','Mtwara','Mwanza','Njombe','Pemba North','Pemba South','Pwani','Rukwa','Ruvuma','Shinyanga','Simiyu','Singida','Songwe','Tabora','Tanga','Unguja North','Unguja South']},
+  'Kenya':{currency:'KES',regions:['Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa','Homa Bay','Isiolo','Kajiado','Kakamega','Kericho','Kiambu','Kilifi','Kirinyaga','Kisii','Kisumu','Kitui','Kwale','Laikipia','Lamu','Machakos','Makueni','Mandera','Marsabit','Meru','Migori','Mombasa','Murang\'a','Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri','Samburu','Siaya','Taita–Taveta','Tana River','Tharaka-Nithi','Trans Nzoia','Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot']},
+  'Uganda':{currency:'UGX',regions:['Arua','Busia','Gulu','Hoima','Jinja','Kabale','Kampala','Kasese','Kigumba','Lira','Masaka','Mbale','Mbarara','Mukono','Soroti','Tororo','Wakiso']},
+  'Rwanda':{currency:'RWF',regions:['Bugesera','Burera','Gakenke','Gasabo','Gatsibo','Huye','Kamonyi','Karongi','Kayonza','Kicukiro','Kirehe','Muhanga','Musanze','Ngoma','Ngororero','Nyabihu','Nyagatare','Nyamagabe','Nyanza','Nyarugenge','Nyaruguru','Rubavu','Ruhango','Rulindo','Rusizi','Rutsiro','Rwamagana']},
+  'Burundi':{currency:'BIF',regions:['Bubanza','Bujumbura Mairie','Bujumbura Rural','Bururi','Cankuzo','Cibitoke','Gitega','Karuzi','Kayanza','Kirundo','Makamba','Muramvya','Muyinga','Mwaro','Ngozi','Rutana','Ruyigi']},
+  'Ethiopia':{currency:'ETB',regions:['Addis Ababa','Afar','Amhara','Benishangul-Gumuz','Dire Dawa','Gambela','Harari','Oromia','Sidama','Somali','Southern Nations','Tigray']},
+  'South Sudan':{currency:'SSP',regions:['Central Equatoria','Eastern Equatoria','Jonglei','Lakes','Northern Bahr el Ghazal','Unity','Upper Nile','Warrap','Western Bahr el Ghazal','Western Equatoria']},
+  'Somalia':{currency:'SOS',regions:['Awdal','Bakool','Banaadir','Bari','Bay','Galguduud','Gedo','Hiiraan','Jubbada Dhexe','Jubbada Hoose','Mudug','Nugaal','Sanaag','Shabeellaha Dhexe','Shabeellaha Hoose','Sool','Togdheer','Woqooyi Galbeed']},
+  'Djibouti':{currency:'DJF',regions:['Ali Sabieh','Arta','Dikhil','Djibouti','Obock','Tadjourah']},
+  'Eritrea':{currency:'ERN',regions:['Anseba','Debub','Gash-Barka','Maekel','Northern Red Sea','Southern Red Sea']},
+  'Seychelles':{currency:'SCR',regions:['Anse aux Pins','Anse Boileau','Anse Etoile','Anse Royale','Au Cap','Baie Lazare','Baie Sainte Anne','Beau Vallon','Bel Air','Bel Ombre','Cascade','English River','Glacis','Grand Anse Mahe','Grand Anse Praslin','La Digue','La Riviere Anglaise','Les Mamelles','Mont Buxton','Mont Fleuri','Plaisance','Pointe La Rue','Port Glaud','Roche Caiman','Saint Louis','Takamaka']},
+  'Comoros':{currency:'KMF',regions:['Anjouan','Grande Comore','Moheli']},
+  'Madagascar':{currency:'MGA',regions:['Antananarivo','Antsiranana','Fianarantsoa','Mahajanga','Toamasina','Toliara']},
+  'Mauritius':{currency:'MUR',regions:['Black River','Flacq','Grand Port','Moka','Pamplemousses','Plaines Wilhems','Port Louis','Riviere du Rempart','Rodrigues','Savanne']},
+  'Malawi':{currency:'MWK',regions:['Balaka','Blantyre','Central','Chikwawa','Chiradzulu','Karonga','Kasungu','Likoma','Lilongwe','Machinga','Mangochi','Mchinji','Mulanje','Mwanza','Mzimba','Neno','Nkhata Bay','Nkhotakota','Northern','Nsanje','Ntcheu','Ntchisi','Phalombe','Rumphi','Salima','Southern','Thyolo','Zomba']},
+  'Zambia':{currency:'ZMW',regions:['Central','Copperbelt','Eastern','Luapula','Lusaka','Muchinga','Northern','North-Western','Southern','Western']},
+  'Zimbabwe':{currency:'ZWL',regions:['Bulawayo','Harare','Manicaland','Mashonaland Central','Mashonaland East','Mashonaland West','Masvingo','Matabeleland North','Matabeleland South','Midlands']},
+  'Mozambique':{currency:'MZN',regions:['Cabo Delgado','Gaza','Inhambane','Manica','Maputo','Nampula','Niassa','Sofala','Tete','Zambezia']},
+  'Botswana':{currency:'BWP',regions:['Central','Francistown','Gaborone','Ghanzi','Jwaneng','Kgalagadi','Kgatleng','Kweneng','Lobatse','North East','North West','Orapa','Selibe Phikwe','South East','Southern','Sowa']},
+  'DR Congo':{currency:'CDF',regions:['Bas-Uele','Equateur','Haut-Katanga','Haut-Lomami','Haut-Uele','Ituri','Kasai','Kasai Central','Kasai Oriental','Kinshasa','Kongo Central','Kwango','Kwilu','Lomami','Lualaba','Mai-Ndombe','Maniema','Mongala','Nord-Kivu','Nord-Ubangi','Sankuru','Sud-Kivu','Sud-Ubangi','Tanganyika','Tshopo','Tshuapa']}
 };
-function pickCountry(el,name,code){
-  document.querySelectorAll('.country-chip').forEach(c=>c.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('bizCountry').value=name;
-  // Auto-select currency
-  const currency=countryCurrencyMap[code];
-  if(currency){
-    const sel=document.querySelector('[name="currency"]');
-    if(sel){
-      for(let o of sel.options){if(o.value===currency){sel.value=currency;break;}}
+
+function onCountryChange(countryName){
+  const regionSel=document.getElementById('bizRegion');
+  const currencySel=document.getElementById('bizCurrency');
+  regionSel.innerHTML='<option value="">Select region</option>';
+  if(!countryName)return;
+  const data=countryData[countryName];
+  if(data){
+    if(data.regions){
+      data.regions.forEach(function(r){
+        const opt=document.createElement('option');
+        opt.value=r;opt.textContent=r;
+        regionSel.appendChild(opt);
+      });
+    }
+    if(data.currency && currencySel){
+      currencySel.value=data.currency;
     }
   }
 }
+
+// Pre-fill regions if country already selected
+(function(){
+  const bc=document.getElementById('bizCountry');
+  if(bc && bc.value){onCountryChange(bc.value);}
+})();
+
 function selectUse(el){
   document.querySelectorAll('.feat-card').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
