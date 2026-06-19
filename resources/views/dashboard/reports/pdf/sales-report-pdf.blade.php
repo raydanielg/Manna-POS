@@ -29,11 +29,11 @@
         @forelse($sales as $i => $s)
         <tr>
             <td>{{ $i+1 }}</td>
-            <td>{{ $s->reference_no ?? $s->id }}</td>
+            <td>{{ $s->reference ?? $s->id }}</td>
             <td>{{ $s->customer->name ?? 'Walk-in' }}</td>
             <td>{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
-            <td class="text-right">{{ $userCurrency }} {{ number_format($s->total_amount,2) }}</td>
-            <td class="text-right text-green">{{ $userCurrency }} {{ number_format($s->paid_amount,2) }}</td>
+            <td class="text-right">{{ $userCurrency }} {{ number_format($s->total,2) }}</td>
+            <td class="text-right text-green">{{ $userCurrency }} {{ number_format($s->paid,2) }}</td>
             <td><span class="badge badge-{{ $s->status == 'completed' ? 'success' : ($s->status == 'pending' ? 'warning' : 'gray') }}">{{ ucfirst($s->status ?? 'Draft') }}</span></td>
         </tr>
         @empty
