@@ -271,6 +271,12 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     Route::get('/sms-campaigns/{campaign}', [\App\Http\Controllers\Dashboard\SmsCampaignController::class, 'show'])->name('dashboard.sms-campaigns.show');
     Route::post('/sms-campaigns/{campaign}/send', [\App\Http\Controllers\Dashboard\SmsCampaignController::class, 'send'])->name('dashboard.sms-campaigns.send');
     Route::delete('/sms-campaigns/{campaign}', [\App\Http\Controllers\Dashboard\SmsCampaignController::class, 'destroy'])->name('dashboard.sms-campaigns.destroy');
+
+    // File Cabinet Routes
+    Route::get('/file-cabinet', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'index'])->name('dashboard.file-cabinet');
+    Route::post('/file-cabinet', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'store'])->name('dashboard.file-cabinet.store');
+    Route::get('/file-cabinet/{file}/download', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'download'])->name('dashboard.file-cabinet.download');
+    Route::delete('/file-cabinet/{file}', [\App\Http\Controllers\Dashboard\FileCabinetController::class, 'destroy'])->name('dashboard.file-cabinet.destroy');
 });
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────

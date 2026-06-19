@@ -804,6 +804,7 @@
     $isBanking     = request()->routeIs('dashboard.banking.*');
     $isMicrofinance = request()->routeIs('dashboard.microfinance.*');
     $isSmsCampaigns = request()->routeIs('dashboard.sms-campaigns.*');
+    $isFileCabinet = request()->routeIs('dashboard.file-cabinet.*');
     $isReports     = request()->routeIs('dashboard.reports.*');
     $isNotifTpl    = request()->routeIs('dashboard.notification-templates');
     $isSettings    = request()->routeIs('dashboard.settings.*');
@@ -1033,6 +1034,12 @@
         <a href="{{ route('dashboard.sms-campaigns') }}" class="nav-item {{ $isSmsCampaigns ? 'active' : '' }}" data-tip="SMS">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8 8 0 0 1-8-8c0-4.418 3.582-8 8-8s8 3.582 8 8z"/><path d="M7 8l10 0"/><path d="M7 16l10 0"/></svg>
             <span class="nav-label">SMS Campaigns</span>
+        </a>
+
+        {{-- File Cabinet --}}
+        <a href="{{ route('dashboard.file-cabinet') }}" class="nav-item {{ $isFileCabinet ? 'active' : '' }}" data-tip="Files">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M9 9l2 2l4-4"/></svg>
+            <span class="nav-label">File Cabinet</span>
         </a>
 
         <div class="nav-section-label">Analytics</div>
