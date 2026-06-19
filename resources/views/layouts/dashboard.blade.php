@@ -787,67 +787,6 @@
         }
 
         @yield('page_styles')
-
-        .ripple-overlay {
-            position: fixed; inset: 0; z-index: 99999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(16px);
-            opacity: 0; pointer-events: none; visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-        }
-        .ripple-overlay.open { opacity: 1; pointer-events: auto; visibility: visible; }
-        .ripple-overlay .ripple-inner {
-            position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .ripple-overlay .spinner-ring {
-            position: absolute; top: -18px; left: -18px;
-            width: 166px; height: 166px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: #60a5fa;
-            border-right-color: #a78bfa;
-            border-bottom-color: #f472b6;
-            animation: ripSpin 1.2s cubic-bezier(0.4,0,0.2,1) infinite;
-            filter: drop-shadow(0 0 12px rgba(96,165,250,0.3));
-        }
-        .ripple-overlay .spinner-ring-2 {
-            position: absolute; top: -10px; left: -10px;
-            width: 150px; height: 150px;
-            border-radius: 50%;
-            border: 2.5px solid transparent;
-            border-left-color: #34d399;
-            border-right-color: #60a5fa;
-            animation: ripSpin 1.8s cubic-bezier(0.4,0,0.2,1) infinite reverse;
-            filter: drop-shadow(0 0 8px rgba(52,211,153,0.2));
-        }
-        @keyframes ripSpin { to { transform: rotate(360deg); } }
-        .ripple-overlay img {
-            width: 120px; height: 120px; border-radius: 50%;
-            position: relative; z-index: 1;
-            filter: drop-shadow(0 0 20px rgba(37,99,235,0.2));
-            animation: ripPulse 2s ease-in-out infinite;
-        }
-        @keyframes ripPulse {
-            0%,100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(37,99,235,0.2)); }
-            50% { transform: scale(1.04); filter: drop-shadow(0 0 30px rgba(37,99,235,0.4)); }
-        }
-        .ripple-overlay .ripple-text {
-            margin-top: 1.2rem; font-size: 0.82rem; font-weight: 700;
-            background: linear-gradient(135deg, #e2e8f0, #94a3b8);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 0.12em; text-transform: uppercase;
-        }
-        .ripple-overlay .ripple-dots::after {
-            content: ''; animation: rippleDots 1.4s infinite steps(4, end);
-            -webkit-text-fill-color: #94a3b8;
-        }
-        @keyframes rippleDots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
-        .ripple-overlay .ripple-sub {
-            margin-top: 0.4rem; font-size: 0.7rem; color: #64748b;
-            letter-spacing: 0.04em; opacity: 0.7;
-        }
     </style>
 </head>
 <body class="font-sans antialiased">
