@@ -109,7 +109,7 @@ Route::post('/subscription/choose', [App\Http\Controllers\UserSubscriptionContro
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware(['auth', 'user.dashboard'])->name('home');
 
-Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'])->group(function () {
+Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'user.dashboard', 'subscription'])->group(function () {
 
     Route::get('/', function () {
         return view('dashboard');

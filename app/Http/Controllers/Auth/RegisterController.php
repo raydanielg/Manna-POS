@@ -18,7 +18,7 @@ class RegisterController extends Controller
 {
     use RegistersUsers;
 
-    protected $redirectTo = '/setup';
+    protected $redirectTo = '/verify-otp';
 
     public function __construct()
     {
