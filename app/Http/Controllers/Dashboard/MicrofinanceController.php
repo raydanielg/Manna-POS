@@ -11,12 +11,30 @@ use App\Models\Guarantor;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class MicrofinanceController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    private function jsonSuccess($message, $data = [])
+    {
+        return response()->json(array_merge(['success' => true, 'message' => $message], $data));
+    }
+
+    private function jsonError($message, $code = 422)
+    {
+        return response()->json(['success' => false, 'message' => $message], $code);
+    }
+
+    private function toastRedirect($route, $message, $type = 'success')
+    {
+        return redirect()->route($route)->with($type, $message);
     }
 
     // ================== DASHBOARD ==================
@@ -61,8 +79,12 @@ class MicrofinanceController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
         $data['user_id'] = auth()->id();
-        LoanProduct::create($data);
-        return redirect()->route('dashboard.microfinance.products')->with('success', 'Loan product created successfully');
+        $product = LoanProduct::create($data);
+        Log::info('Loan product created', ['user_id' => auth()->id(), 'product_id' => $product->id]);
+        if ($req->ajax() || $req->wantsJson()) {
+            return $this->jsonSuccess('Loan product created successfully', ['product' => $product]);
+        }
+        return $this->toastRedirect('dashboard.microfinance.products', 'Loan product created successfully');
     }
 
     public function updateProduct(Request $req, LoanProduct $product)
@@ -80,14 +102,22 @@ class MicrofinanceController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
         $product->update($data);
-        return redirect()->route('dashboard.microfinance.products')->with('success', 'Loan product updated');
+        Log::info('Loan product updated', ['user_id' => auth()->id(), 'product_id' => $product->id]);
+        if ($req->ajax() || $req->wantsJson()) {
+            return $this->jsonSuccess('Loan product updated', ['product' => $product]);
+        }
+        return $this->toastRedirect('dashboard.microfinance.products', 'Loan product updated');
     }
 
     public function destroyProduct(LoanProduct $product)
     {
         $this->authorizeAccess($product);
         $product->delete();
-        return redirect()->route('dashboard.microfinance.products')->with('success', 'Loan product deleted');
+        Log::info('Loan product deleted', ['user_id' => auth()->id(), 'product_id' => $product->id]);
+        if (request()->ajax() || request()->wantsJson()) {
+            return $this->jsonSuccess('Loan product deleted');
+        }
+        return $this->toastRedirect('dashboard.microfinance.products', 'Loan product deleted');
     }
 
     // ================== LOANS ==================
@@ -136,12 +166,24 @@ class MicrofinanceController extends Controller
         $data['total_amount'] = $principal + $data['total_interest'];
         $data['balance'] = $data['total_amount'];
 
-        $loan = Loan::create($data);
-
-        // Generate schedule
-        $this->generateSchedule($loan);
-
-        return redirect()->route('dashboard.microfinance.loans')->with('success', 'Loan application submitted');
+        try {
+            DB::beginTransaction();
+            $loan = Loan::create($data);
+            $this->generateSchedule($loan);
+            DB::commit();
+            Log::info('Loan created', ['user_id' => auth()->id(), 'loan_id' => $loan->id, 'loan_number' => $loan->loan_number]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonSuccess('Loan application submitted', ['loan' => $loan->load('schedules')]);
+            }
+            return $this->toastRedirect('dashboard.microfinance.loans', 'Loan application submitted');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Loan creation failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonError('Failed to create loan: ' . $e->getMessage(), 500);
+            }
+            return $this->toastRedirect('dashboard.microfinance.loans', 'Failed to create loan. Please try again.', 'error');
+        }
     }
 
     public function showLoan(Loan $loan)
@@ -163,12 +205,17 @@ class MicrofinanceController extends Controller
                 'end_date' => now()->addMonths($loan->duration_months),
                 'status' => 'active'
             ]);
+            // Update schedule dates now that start_date is known
+            $this->regenerateScheduleDates($loan);
         }
         if ($req->status === 'approved') {
             $loan->update(['approved_by' => auth()->id(), 'approved_at' => now()]);
         }
-
-        return redirect()->route('dashboard.microfinance.loans')->with('success', 'Loan status updated');
+        Log::info('Loan status updated', ['user_id' => auth()->id(), 'loan_id' => $loan->id, 'status' => $req->status]);
+        if ($req->ajax() || $req->wantsJson()) {
+            return $this->jsonSuccess('Loan status updated to ' . ucfirst($req->status), ['loan' => $loan]);
+        }
+        return $this->toastRedirect('dashboard.microfinance.loans', 'Loan status updated to ' . ucfirst($req->status));
     }
 
     // ================== REPAYMENTS ==================
@@ -201,15 +248,29 @@ class MicrofinanceController extends Controller
             $schedule->save();
         }
 
-        LoanRepayment::create($data);
-
-        // Update loan totals
-        $loan->paid_amount = $loan->repayments()->sum('amount');
-        $loan->balance = max(0, $loan->total_amount - $loan->paid_amount);
-        if ($loan->balance <= 0) $loan->status = 'completed';
-        $loan->save();
-
-        return redirect()->route('dashboard.microfinance.loans')->with('success', 'Repayment recorded');
+        try {
+            DB::beginTransaction();
+            LoanRepayment::create($data);
+            $loan->paid_amount = $loan->repayments()->sum('amount');
+            $loan->balance = max(0, $loan->total_amount - $loan->paid_amount);
+            if ($loan->balance <= 0) {
+                $loan->status = 'completed';
+            }
+            $loan->save();
+            DB::commit();
+            Log::info('Repayment recorded', ['user_id' => auth()->id(), 'loan_id' => $loan->id, 'amount' => $data['amount']]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonSuccess('Repayment recorded successfully', ['loan' => $loan->fresh()]);
+            }
+            return $this->toastRedirect('dashboard.microfinance.loans', 'Repayment recorded successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Repayment failed', ['error' => $e->getMessage()]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonError('Failed to record repayment', 500);
+            }
+            return $this->toastRedirect('dashboard.microfinance.loans', 'Failed to record repayment', 'error');
+        }
     }
 
     // ================== GUARANTORS ==================
@@ -272,39 +333,51 @@ class MicrofinanceController extends Controller
 
     private function generateSchedule(Loan $loan)
     {
-        $principal = $loan->principal_amount;
-        $months = $loan->duration_months;
+        $principal = (float) $loan->principal_amount;
+        $months = (int) $loan->duration_months;
         $monthlyPrincipal = $principal / $months;
+        $startDate = $loan->start_date ? Carbon::parse($loan->start_date) : now();
 
         if ($loan->interest_type === 'flat') {
-            $totalInterest = $loan->total_interest;
+            $totalInterest = (float) $loan->total_interest;
             $monthlyInterest = $totalInterest / $months;
-        } else {
-            $monthlyInterest = 0; // Will be calculated per installment
         }
 
-        $balance = $loan->total_amount;
+        $balance = (float) $loan->total_amount;
         $remainingPrincipal = $principal;
+        $schedules = [];
 
         for ($i = 1; $i <= $months; $i++) {
             if ($loan->interest_type === 'reducing_balance') {
-                $monthlyInterest = $remainingPrincipal * ($loan->interest_rate / 100 / 12);
-                $monthlyPrincipal = $principal / $months;
+                $monthlyInterest = $remainingPrincipal * ((float)$loan->interest_rate / 100 / 12);
             }
 
             $total = $monthlyPrincipal + $monthlyInterest;
             $balance -= $total;
             $remainingPrincipal -= $monthlyPrincipal;
 
-            LoanSchedule::create([
+            $schedules[] = [
                 'loan_id' => $loan->id,
                 'installment_number' => $i,
-                'due_date' => $loan->start_date ? $loan->start_date->copy()->addMonths($i) : now()->addMonths($i),
+                'due_date' => $startDate->copy()->addMonths($i)->format('Y-m-d'),
                 'principal_amount' => round($monthlyPrincipal, 2),
                 'interest_amount' => round($monthlyInterest, 2),
                 'total_amount' => round($total, 2),
                 'balance' => round(max(0, $balance), 2),
-            ]);
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        LoanSchedule::insert($schedules);
+    }
+
+    private function regenerateScheduleDates(Loan $loan)
+    {
+        if (!$loan->start_date) return;
+        $startDate = Carbon::parse($loan->start_date);
+        foreach ($loan->schedules()->orderBy('installment_number')->get() as $schedule) {
+            $schedule->update(['due_date' => $startDate->copy()->addMonths($schedule->installment_number)]);
         }
     }
 }
