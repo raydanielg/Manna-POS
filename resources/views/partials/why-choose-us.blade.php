@@ -118,61 +118,6 @@
         margin: 0 auto;
     }
 
-    .why-choose-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-        margin-bottom: 5rem;
-    }
-
-    .why-choose-item {
-        display: flex;
-        gap: 1.25rem;
-        background: white;
-        padding: 1.75rem;
-        border-radius: 16px;
-        border: 1px solid #e5e7eb;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        opacity: 0;
-        animation-fill-mode: forwards;
-    }
-
-    .why-choose-item.animated {
-        opacity: 1;
-    }
-
-    .why-choose-item:hover {
-        transform: translateY(-6px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(16, 185, 129, 0.12);
-        border-color: #10B981;
-    }
-
-    .why-choose-number {
-        font-size: 2.25rem;
-        font-weight: 800;
-        color: #10B981;
-        line-height: 1;
-        min-width: 52px;
-        opacity: 0.9;
-    }
-
-    .why-choose-content {
-        flex: 1;
-    }
-
-    .why-choose-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #1e1e1e;
-        margin-bottom: 0.5rem;
-    }
-
-    .why-choose-description {
-        font-size: 0.95rem;
-        color: #6b7280;
-        line-height: 1.6;
-    }
-
     /* Carousel Styles */
     .carousel-section {
         margin-top: 2rem;
