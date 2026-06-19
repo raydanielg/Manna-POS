@@ -571,7 +571,79 @@
 
         /* ── Responsive ─────────────────────────────── */
         @media (max-width:1280px) { .sidebar { width:240px; min-width:240px; } .main-wrap { margin-left:240px; } }
-        @media (max-width:768px)  { .sidebar { transform:translateX(-100%); transition:transform 0.3s; } .sidebar.open { transform:translateX(0); } .main-wrap { margin-left:0; } .form-row { grid-template-columns:1fr; } }
+
+        @media (max-width:768px) {
+            /* Sidebar as mobile drawer */
+            .sidebar { transform:translateX(-100%); transition:transform 0.3s ease; z-index:9999; }
+            .sidebar.open { transform:translateX(0); }
+            .main-wrap { margin-left:0; }
+            .form-row { grid-template-columns:1fr; }
+
+            /* Mobile sidebar overlay backdrop */
+            .sidebar-backdrop {
+                display: none; position: fixed; inset: 0;
+                background: rgba(15,23,42,0.45); backdrop-filter: blur(3px);
+                z-index: 9998; opacity: 0; transition: opacity 0.3s ease;
+            }
+            .sidebar-backdrop.show { display: block; opacity: 1; }
+
+            /* Header */
+            .top-header { padding: 0 1rem; height: 54px; }
+            .page-title { font-size: 1rem; }
+            .user-chip { gap: 0.4rem; padding: 0.25rem; }
+
+            /* Content */
+            .dash-content { padding: 1rem 1rem 2rem; }
+
+            /* KPI Cards - force 2 columns on mobile */
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+            .kpi-grid-2 { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+            .kpi-card { padding: 0.85rem; gap: 0.6rem; }
+            .kpi-icon { width: 36px; height: 36px; }
+            .kpi-icon img { width: 18px; height: 18px; }
+            .kpi-val { font-size: 0.95rem; }
+            .kpi-label { font-size: 0.65rem; }
+
+            /* Charts - stack vertically */
+            .charts-row { grid-template-columns: 1fr; gap: 1rem; }
+            .chart-card { padding: 1rem; }
+            .chart-title { font-size: 0.85rem; }
+            .chart-container { height: 220px; }
+
+            /* Tables - stack & horizontal scroll */
+            .tables-row { grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem !important; }
+            .table-card { padding: 1rem; }
+            .table-head { padding-bottom: 0.75rem; margin-bottom: 0.75rem; }
+            .table-title { font-size: 0.85rem; }
+            .tbl-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .tbl { min-width: 500px; }
+            .tbl th, .tbl td { padding: 0.6rem 0.75rem; font-size: 0.75rem; }
+
+            /* Sections */
+            .dash-section { padding: 1rem; }
+            .dash-section-header { padding: 0.75rem 1rem; font-size: 0.85rem; }
+
+            /* Empty states */
+            .empty-state { padding: 2rem 1rem; }
+            .empty-icon { width: 36px; height: 36px; }
+            .empty-title { font-size: 0.85rem; }
+            .empty-desc { font-size: 0.72rem; }
+
+            /* Modals */
+            .modal { max-width: calc(100vw - 2rem); margin: 1rem; }
+
+            /* Search bar */
+            .search-bar { min-width: auto; width: 100%; max-width: 200px; }
+        }
+
+        /* Extra small screens */
+        @media (max-width:480px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+            .kpi-grid-2 { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+            .kpi-card { padding: 0.7rem; }
+            .chart-container { height: 180px; }
+            .top-header { padding: 0 0.75rem; }
+        }
 
         /* ── Sidebar collapse ───────────────────── */
         .sidebar { transition: width 0.25s ease; }
@@ -1164,6 +1236,9 @@
         </form>
     </div>
 </aside>
+
+{{-- Mobile Sidebar Backdrop --}}
+<div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeSidebar()"></div>
 
 {{-- ═══════════════════════════  MAIN  ═══════════════════════════ --}}
 <div class="main-wrap" id="main-wrap">
