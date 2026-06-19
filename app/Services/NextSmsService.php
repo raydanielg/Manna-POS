@@ -74,7 +74,16 @@ class NextSmsService
      */
     public function sendOtp(string $to, string $otp, string $appName = 'MannaPOS'): array
     {
-        $text = "Your {$appName} verification code is: {$otp}. It expires in 30 minutes. Do not share this code with anyone.";
+        $text = "Welcome to {$appName}! Your verification code is: {$otp}. It expires in 30 minutes. Do not share this code with anyone.";
+        return $this->send($to, $text);
+    }
+
+    /**
+     * Send welcome SMS.
+     */
+    public function sendWelcome(string $to, string $name, string $appName = 'MannaPOS'): array
+    {
+        $text = "Hi {$name}, welcome to {$appName}! Your account has been created successfully. Enjoy your 14-day free trial. Login to get started.";
         return $this->send($to, $text);
     }
 
