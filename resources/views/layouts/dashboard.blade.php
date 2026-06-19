@@ -220,10 +220,21 @@
         }
         .user-chip:hover { background: #f1f5f9; }
         .user-avatar {
-            width: 30px; height: 30px; border-radius: 8px;
-            background: linear-gradient(135deg,#2563eb,#7c3aed);
+            width: 32px; height: 32px; border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 0.8rem; color: #fff; flex-shrink: 0;
+            font-weight: 700; font-size: 0.75rem; color: #fff; flex-shrink: 0;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(37,99,235,0.15), 0 2px 6px rgba(37,99,235,0.12);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .user-avatar img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .user-chip:hover .user-avatar {
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(37,99,235,0.3), 0 4px 10px rgba(37,99,235,0.18);
+            transform: scale(1.05);
         }
         .user-name { font-size: 0.8rem; font-weight: 600; color: #0f172a; }
         .user-role { font-size: 0.68rem; color: #94a3b8; }

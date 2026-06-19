@@ -5,7 +5,7 @@
 .profile-wrap{max-width:720px;margin:0 auto;}
 .profile-card{background:#fff;border-radius:16px;border:1.5px solid #eef2f6;overflow:hidden;margin-bottom:1.5rem;}
 .profile-header{padding:1.25rem 1.5rem;background:linear-gradient(135deg,#fafbff,#f8fafc);border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:1rem;}
-.profile-avatar{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.4rem;font-weight:800;flex-shrink:0;}
+.profile-avatar{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.4rem;font-weight:800;flex-shrink:0;position:relative;overflow:hidden;box-shadow:0 0 0 3px #fff,0 0 0 5px rgba(37,99,235,0.12),0 4px 12px rgba(37,99,235,0.15);}.profile-avatar img{width:100%;height:100%;object-fit:cover;}
 .profile-header h2{font-size:1rem;font-weight:800;color:#0f172a;letter-spacing:-0.01em;}
 .profile-header p{font-size:0.75rem;color:#64748b;margin-top:0.15rem;}
 .profile-body{padding:1.5rem;}
@@ -19,7 +19,7 @@
 
 .avatar-upload-wrap{display:flex;align-items:center;gap:1.25rem;padding:1rem 1.5rem;background:linear-gradient(135deg,#f0f4ff,#f5f3ff);border-radius:14px;border:1.5px dashed #c7d2fe;margin-bottom:1.5rem;position:relative;}
 .avatar-preview-wrap{position:relative;flex-shrink:0;}
-.avatar-preview{width:72px;height:72px;border-radius:16px;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 12px rgba(37,99,235,0.15);background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.8rem;font-weight:800;}
+.avatar-preview{width:80px;height:80px;border-radius:18px;object-fit:cover;border:4px solid #fff;box-shadow:0 0 0 2px rgba(37,99,235,0.1),0 6px 20px rgba(37,99,235,0.18);background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;font-weight:800;position:relative;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease;}.avatar-preview:hover{transform:scale(1.03);box-shadow:0 0 0 2px rgba(37,99,235,0.2),0 8px 24px rgba(37,99,235,0.22);}
 .avatar-preview img{width:100%;height:100%;border-radius:13px;object-fit:cover;}
 .avatar-upload-btn{position:absolute;bottom:-4px;right:-4px;width:28px;height:28px;border-radius:50%;background:#2563eb;border:2px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(37,99,235,0.3);transition:all 0.2s;}
 .avatar-upload-btn:hover{transform:scale(1.1);background:#1d4ed8;}
@@ -36,7 +36,13 @@
 
   <div class="profile-card">
     <div class="profile-header">
-      <div class="profile-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
+      <div class="profile-avatar">
+        @if($user->avatar)
+          <img src="{{ $user->avatar_url }}" alt="Avatar">
+        @else
+          {{ strtoupper(substr($user->name, 0, 1)) }}
+        @endif
+      </div>
       <div>
         <h2>{{ $user->name }}</h2>
         <p>{{ ucfirst($user->role) }} &middot; {{ $user->email }}</p>
