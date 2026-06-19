@@ -7,76 +7,50 @@
 <title>Setup Your Business — MannaPOS</title>
 <link rel="icon" type="image/png" href="{{ asset('icons8-dynamics-365-100.png') }}">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f0f4ff 0%,#e8f5e9 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
-.setup-wrap{background:#fff;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.1);width:100%;max-width:680px;overflow:hidden;}
-.setup-header{background:linear-gradient(135deg,#1e3a5f,#0f2748);padding:2rem 2.5rem;color:#fff;}
-.setup-brand{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;}
-.setup-brand-icon{width:38px;height:38px;background:linear-gradient(135deg,#10b981,#059669);border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.setup-brand-icon svg{width:22px;height:22px;color:#fff;}
-.setup-brand-name{font-size:1.2rem;font-weight:800;color:#fff;}
-.welcome-text h1{font-size:1.5rem;font-weight:800;margin-bottom:.35rem;}
-.welcome-text p{color:#94b3d4;font-size:.9rem;}
-/* Steps bar */
-.steps-bar{display:flex;justify-content:center;gap:0;padding:1.5rem 2.5rem 0;}
-.wiz-step{display:flex;flex-direction:column;align-items:center;flex:1;}
-.wiz-step-line{height:2px;flex:1;background:#e2e8f0;margin-top:15px;}
-.wiz-step-line.done{background:#10b981;}
-.wiz-circle{width:32px;height:32px;border-radius:50%;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#94a3b8;background:#fff;transition:all .3s;margin-bottom:.35rem;}
-.wiz-circle.active{border-color:#2563eb;background:#2563eb;color:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.15);}
-.wiz-circle.done{border-color:#10b981;background:#10b981;color:#fff;}
-.wiz-step-label{font-size:.72rem;font-weight:600;color:#94a3b8;text-align:center;}
-.wiz-step-label.active{color:#2563eb;}
-.wiz-step-label.done{color:#10b981;}
-.step-row{display:flex;align-items:center;width:100%;}
-/* Content */
-.setup-body{padding:2rem 2.5rem;}
-.panel{display:none;}
-.panel.active{display:block;}
-.panel-title{font-size:1.2rem;font-weight:800;color:#0f172a;margin-bottom:.35rem;}
-.panel-desc{font-size:.875rem;color:#64748b;margin-bottom:1.5rem;}
-.form-group{margin-bottom:1rem;}
-.form-label{display:block;font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.4rem;}
-.input-wrap{position:relative;}
-.input-wrap svg.ico{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);width:17px;height:17px;color:#94a3b8;pointer-events:none;}
-.form-control{width:100%;padding:.65rem .85rem .65rem 2.5rem;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.875rem;color:#0f172a;background:#f8fafc;transition:all .2s;outline:none;font-family:inherit;}
-.form-control:focus{border-color:#2563eb;background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.1);}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
-.feature-cards{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem;}
-.feat-card{border:1.5px solid #e9edf5;border-radius:12px;padding:1rem;display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;transition:all .2s;}
-.feat-card:hover,.feat-card.selected{border-color:#2563eb;background:#eff6ff;}
-.feat-card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.feat-card h4{font-size:.85rem;font-weight:700;color:#1e293b;margin-bottom:.2rem;}
-.feat-card p{font-size:.75rem;color:#64748b;}
-.btn-row{display:flex;gap:.75rem;margin-top:1.5rem;}
-.btn{padding:.7rem 1.5rem;border-radius:10px;font-size:.875rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:inherit;}
-.btn-primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;flex:1;box-shadow:0 4px 12px rgba(37,99,235,.3);}
-.btn-primary:hover{background:linear-gradient(135deg,#1d4ed8,#1e40af);transform:translateY(-1px);}
-.btn-secondary{background:#f1f5f9;color:#475569;min-width:90px;}
-.btn-secondary:hover{background:#e2e8f0;}
-/* Done screen */
-.done-screen{text-align:center;padding:2rem 0 1rem;}
-.done-icon{width:80px;height:80px;background:linear-gradient(135deg,#10b981,#059669);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;box-shadow:0 8px 24px rgba(16,185,129,.3);}
-.done-icon svg{width:40px;height:40px;color:#fff;}
-.done-screen h2{font-size:1.5rem;font-weight:800;color:#0f172a;margin-bottom:.5rem;}
-.done-screen p{color:#64748b;font-size:.9rem;line-height:1.6;max-width:420px;margin:0 auto 2rem;}
-.done-btn{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:.875rem 2rem;border-radius:12px;font-size:.95rem;font-weight:700;border:none;cursor:pointer;box-shadow:0 8px 20px rgba(37,99,235,.3);text-decoration:none;transition:all .2s;}
-.done-btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(37,99,235,.4);}
+body{font-family:'Inter',sans-serif;background:#f1f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.setup-wrap{background:#fff;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.07);width:100%;max-width:700px;overflow:hidden}
+.setup-header{background:linear-gradient(145deg,#0f2748,#1e3a5f,#1d4ed8);padding:2rem 2.25rem;color:#fff;position:relative;overflow:hidden}
+.setup-header::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.07) 1px,transparent 0);background-size:22px 22px}
+.wiz-circle{width:34px;height:34px;border-radius:50%;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:#94a3b8;background:#fff;transition:all .3s}
+.wiz-circle.active{border-color:#1d4ed8;background:#1d4ed8;color:#fff;box-shadow:0 0 0 4px rgba(29,78,216,.15)}
+.wiz-circle.done{border-color:#16a34a;background:#16a34a;color:#fff}
+.wiz-step-label{font-size:.72rem;font-weight:700;color:#94a3b8;text-align:center;margin-top:.35rem}
+.wiz-step-label.active{color:#1d4ed8}
+.wiz-step-label.done{color:#16a34a}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.inp{width:100%;padding:.7rem .8rem .7rem 2.4rem;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.88rem;color:#0f172a;background:#f8fafc;transition:all .2s;outline:none;font-family:inherit}
+.inp:focus{border-color:#1d4ed8;background:#fff;box-shadow:0 0 0 3px rgba(29,78,216,.1)}
+.inp:hover{border-color:#cbd5e1}
+sel.inp{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right .5rem center;background-repeat:no-repeat;background-size:1.4em 1.4em;padding-right:2.3rem;-webkit-appearance:none;appearance:none}
+.country-chip{border:1.5px solid #e2e8f0;border-radius:8px;padding:.5rem .7rem;display:flex;align-items:center;gap:.5rem;cursor:pointer;transition:all .15s;background:#fff;font-size:.82rem;font-weight:600;color:#374151}
+.country-chip:hover{border-color:#93c5fd;background:#eff6ff}
+.country-chip.on{border-color:#1d4ed8;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 0 3px rgba(29,78,216,.08)}
+.country-chip .flag{font-size:1.1rem}
+.feat-card{border:1.5px solid #e2e8f0;border-radius:10px;padding:.9rem;display:flex;align-items:flex-start;gap:.65rem;cursor:pointer;transition:all .15s;background:#fff}
+.feat-card:hover,.feat-card.on{border-color:#1d4ed8;background:#eff6ff}
+.feat-card-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-p{background:linear-gradient(135deg,#1d4ed8,#1e3a8a);color:#fff;flex:1;box-shadow:0 3px 10px rgba(29,78,216,.25)}
+.btn-p:hover{box-shadow:0 5px 14px rgba(29,78,216,.35);transform:translateY(-1px)}
+.btn-s{background:#f1f5f9;color:#475569}
+.btn-s:hover{background:#e2e8f0}
+.done-icon{width:64px;height:64px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;box-shadow:0 6px 20px rgba(22,163,74,.2)}
 </style>
 </head>
 <body>
 <div class="setup-wrap">
   <div class="setup-header">
-    <div class="setup-brand">
-      <div class="setup-brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <div style="position:relative;z-index:2;">
+      <div class="flex items-center gap-2.5 mb-4">
+        <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="Logo" class="w-9 h-9 object-contain rounded-lg">
+        <span class="text-lg font-extrabold tracking-tight">MannaPOS</span>
       </div>
-      <span class="setup-brand-name">MannaPOS</span>
-    </div>
-    <div class="welcome-text">
-      <h1>Welcome, {{ explode(' ', $user->name)[0] }}! 👋</h1>
-      <p>Let's set up your business in 2 quick steps</p>
+      <h1 class="text-xl font-extrabold mb-1">Welcome, {{ explode(' ', $user->name)[0] }}! 👋</h1>
+      <p class="text-blue-200/70 text-sm">Let's set up your business in a few quick steps.</p>
     </div>
   </div>
 
