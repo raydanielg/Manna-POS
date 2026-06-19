@@ -1050,6 +1050,20 @@
             <span class="nav-label">Payroll</span>
         </a>
 
+        {{-- Manufacturing / Production --}}
+        <div class="dropdown {{ $isManufacturing ? 'open' : '' }}" id="dropdown-manufacturing">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-manufacturing')" data-tip="Production">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20v-6h4v6"/><path d="M14 14v-4h4v4"/><path d="M6 20v-10h4v10"/><path d="M4 21h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
+                <span class="nav-label">Manufacturing</span>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="{{ route('dashboard.manufacturing') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing') ? 'active' : '' }}">Dashboard</a>
+                <a href="{{ route('dashboard.manufacturing.recipes') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing.recipes') ? 'active' : '' }}">Recipes & BOM</a>
+                <a href="{{ route('dashboard.manufacturing.production') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing.production') ? 'active' : '' }}">Production Runs</a>
+            </div>
+        </div>
+
         <div class="nav-section-label">Analytics</div>
 
         {{-- Reports --}}
