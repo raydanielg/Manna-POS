@@ -162,13 +162,14 @@ class ReportController extends Controller
             $current->addMonth();
         }
 
-        return view('dashboard.reports.profit-loss-report', compact('totalRevenue','totalCost','totalExpenses','grossProfit','netProfit','monthly','from','to'));
+        return view('dashboard.reports.profit-loss-report', compact('totalRevenue','totalCost','totalExpenses','grossProfit','netProfit','monthly','from','to','userCurrency'));
     }
 
     public function suppliersReport(Request $request)
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = $this->userCurrency();
 
         $suppliers = Supplier::forCurrentUser($this->currentBusinessId())->withCount(['purchases as purchases_count'])
             ->withSum(['purchases as purchases_total'], 'total_amount')
@@ -179,7 +180,7 @@ class ReportController extends Controller
                 return $s;
             });
 
-        return view('dashboard.reports.suppliers-report', compact('suppliers','from','to'));
+        return view('dashboard.reports.suppliers-report', compact('suppliers','from','to','userCurrency'));
     }
 
     public function supplierPriceComparison(Request $request)
