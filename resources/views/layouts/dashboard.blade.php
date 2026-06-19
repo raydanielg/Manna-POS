@@ -884,6 +884,7 @@
 @php
     $userCurrency = Auth::user()->currency ?? 'TZS';
     $isHome        = request()->routeIs('dashboard');
+    $isOnlineOrders = request()->routeIs('dashboard.online-orders');
     $isUserMgmt    = request()->routeIs('dashboard.user-management.*');
     $isStaff       = request()->routeIs('dashboard.staff.*');
     $isPlanMgmt    = request()->routeIs('dashboard.plan-management.*');
