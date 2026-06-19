@@ -890,6 +890,12 @@
 
         <div class="nav-section-label">System</div>
 
+        {{-- Calendar & Tasks --}}
+        <a href="{{ route('dashboard.calendar') }}" class="nav-item {{ request()->routeIs('dashboard.calendar') ? 'active' : '' }}" data-tip="Calendar">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span class="nav-label">Calendar & Tasks</span>
+        </a>
+
         {{-- My Subscription --}}
         <a href="/subscription/plans" class="nav-item {{ request()->is('subscription/plans') ? 'active' : '' }}" data-tip="My Plan">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
