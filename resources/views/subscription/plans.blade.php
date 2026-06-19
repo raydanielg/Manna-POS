@@ -338,9 +338,22 @@ $__badgeColors = [
 
 @section('scripts')
 <script>
+/* ── SweetAlert2 Toast Config ─────────────────────────── */
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3500,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  }
+});
+
+/* ── Billing Toggle ───────────────────────────────────── */
 (function(){
   const track = document.getElementById('billTrack');
-  const knob  = document.getElementById('billKnob');
   const lblM  = document.getElementById('lbl-m');
   const lblY  = document.getElementById('lbl-y');
   let yearly  = false;
@@ -362,5 +375,57 @@ $__badgeColors = [
     if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBilling(); }
   });
 })();
+
+/* ── AJAX Plan Selection ──────────────────────────────── */
+async function choosePlan(planId, cycle, actionLabel) {
+  const result = await Swal.fire({
+    title: actionLabel + '?',
+    text: 'You will be subscribed to this plan immediately.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#2563eb',
+    cancelButtonColor: '#94a3b8',
+    confirmButtonText: 'Yes, subscribe',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    backdrop: 'rgba(15,23,42,.35)',
+    customClass: { popup: 'rounded-2xl' }
+  });
+
+  if (!result.isConfirmed) return;
+
+  Swal.fire({
+    title: 'Subscribing…',
+    text: 'Please wait a moment',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => Swal.showLoading()
+  });
+
+  try {
+    const resp = await fetch('/subscription/choose', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+      },
+      body: JSON.stringify({ plan_id: planId, billing_cycle: cycle })
+    });
+
+    const data = await resp.json();
+
+    if (resp.ok) {
+      Swal.close();
+      Toast.fire({ icon: 'success', title: data.message || 'Subscribed successfully!' });
+      setTimeout(() => window.location.reload(), 1200);
+    } else {
+      Swal.close();
+      Toast.fire({ icon: 'error', title: data.message || 'Subscription failed. Please try again.' });
+    }
+  } catch (err) {
+    Swal.close();
+    Toast.fire({ icon: 'error', title: 'Network error. Please check your connection.' });
+  }
+}
 </script>
 @endsection
