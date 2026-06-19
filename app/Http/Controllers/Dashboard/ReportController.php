@@ -33,12 +33,12 @@ class ReportController extends Controller
 
         $summary = [
             'total_sales' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->count(),
-            'total_revenue' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total_amount'),
-            'total_paid' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('paid_amount'),
-            'total_outstanding' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('balance'),
+            'total_revenue' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('total'),
+            'total_paid' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->sum('paid'),
+            'total_outstanding' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->selectRaw('COALESCE(SUM(total - paid),0) as balance')->value('balance'),
         ];
 
-        $dailySales = Sale::forCurrentUser($this->currentBusinessId())->selectRaw('DATE(sale_date) as date, COUNT(*) as count, SUM(total_amount) as revenue')
+        $dailySales = Sale::forCurrentUser($this->currentBusinessId())->selectRaw('DATE(sale_date) as date, COUNT(*) as count, SUM(total) as revenue')
             ->whereBetween('sale_date',[$from,$to])
             ->groupBy('date')
             ->orderBy('date')
@@ -63,11 +63,11 @@ class ReportController extends Controller
 
         $summary = [
             'total_purchases' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->count(),
-            'total_amount' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total_amount'),
-            'total_paid' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('paid_amount'),
+            'total_amount' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total'),
+            'total_paid' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->selectRaw('COALESCE(SUM(total),0) as total_paid')->value('total_paid'),
         ];
 
-        $dailyPurchases = Purchase::forCurrentUser($this->currentBusinessId())->selectRaw('DATE(purchase_date) as date, COUNT(*) as count, SUM(total_amount) as amount')
+        $dailyPurchases = Purchase::forCurrentUser($this->currentBusinessId())->selectRaw('DATE(purchase_date) as date, COUNT(*) as count, SUM(total) as amount')
             ->whereBetween('purchase_date',[$from,$to])
             ->groupBy('date')
             ->orderBy('date')
