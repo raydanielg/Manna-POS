@@ -34,6 +34,7 @@ class SetupController extends Controller
             'business_city'    => 'nullable|string|max:100',
             'business_address' => 'nullable|string|max:255',
             'business_country' => 'nullable|string|max:100',
+            'business_region'  => 'nullable|string|max:100',
             'business_type'    => 'nullable|string|max:100',
             'currency'         => 'required|string|max:10',
             'fiscal_year_start'=> 'nullable|string|max:20',
