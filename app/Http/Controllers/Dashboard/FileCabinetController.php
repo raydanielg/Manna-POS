@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\FileCabinet;
+use App\Models\FileCabinetFolder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -25,16 +26,60 @@ class FileCabinetController extends Controller
 
     public function index(Request $req)
     {
-        $query = FileCabinet::where('user_id', auth()->id());
-        if ($req->category) $query->where('category', $req->category);
-        if ($req->search) $query->where('title', 'like', '%' . $req->search . '%');
-        $files = $query->latest()->paginate(24)->withQueryString();
-        $categories = FileCabinet::where('user_id', auth()->id())->distinct()->pluck('category')->filter();
+        $folderId = $req->folder;
+        $currentFolder = $folderId ? FileCabinetFolder::where('user_id', auth()->id())->find($folderId) : null;
+
+        // Folders in current directory
+        $folders = FileCabinetFolder::where('user_id', auth()->id())
+            ->where('parent_id', $folderId ?: null)
+            ->withCount('files')
+            ->orderBy('name')
+            ->get();
+
+        // Files in current directory
+        $fileQuery = FileCabinet::where('user_id', auth()->id())->where('folder_id', $folderId ?: null);
+        if ($req->search) $fileQuery->where('title', 'like', '%' . $req->search . '%');
+        $files = $fileQuery->latest()->paginate(24)->withQueryString();
+
         $stats = [
             'total' => FileCabinet::where('user_id', auth()->id())->count(),
             'total_size' => FileCabinet::where('user_id', auth()->id())->sum('file_size'),
+            'folder_count' => FileCabinetFolder::where('user_id', auth()->id())->count(),
         ];
-        return view('dashboard.file-cabinet.index', compact('files', 'categories', 'stats'));
+
+        // Breadcrumb
+        $breadcrumb = [];
+        if ($currentFolder) {
+            $f = $currentFolder;
+            while ($f) {
+                $breadcrumb[] = $f;
+                $f = $f->parent;
+            }
+            $breadcrumb = array_reverse($breadcrumb);
+        }
+
+        return view('dashboard.file-cabinet.index', compact('folders', 'files', 'stats', 'currentFolder', 'breadcrumb'));
+    }
+
+    public function storeFolder(Request $req)
+    {
+        $data = $req->validate([
+            'name' => 'required|string|max:100',
+            'parent_id' => 'nullable|exists:file_cabinet_folders,id',
+        ]);
+        $data['user_id'] = auth()->id();
+        $folder = FileCabinetFolder::create($data);
+        return redirect()->route('dashboard.file-cabinet', ['folder' => $folder->parent_id])->with('success', 'Folder created');
+    }
+
+    public function destroyFolder(FileCabinetFolder $folder)
+    {
+        if ($folder->user_id !== auth()->id()) abort(403);
+        $parentId = $folder->parent_id;
+        $folder->files()->delete();
+        $folder->children()->delete();
+        $folder->delete();
+        return redirect()->route('dashboard.file-cabinet', ['folder' => $parentId])->with('success', 'Folder deleted');
     }
 
     public function store(Request $req)
@@ -42,8 +87,8 @@ class FileCabinetController extends Controller
         $data = $req->validate([
             'title' => 'required|string|max:200',
             'description' => 'nullable|string',
-            'category' => 'nullable|string|max:50',
-            'file' => 'required|file|max:51200|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,gif,webp,zip,rar,7z,txt,csv', // 50MB
+            'folder_id' => 'nullable|exists:file_cabinet_folders,id',
+            'file' => 'required|file|max:51200|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,gif,webp,zip,rar,7z,txt,csv',
         ]);
 
         try {
@@ -52,9 +97,10 @@ class FileCabinetController extends Controller
 
             $file = FileCabinet::create([
                 'user_id' => auth()->id(),
+                'folder_id' => $data['folder_id'] ?? null,
                 'title' => $data['title'],
                 'description' => $data['description'] ?? null,
-                'category' => $data['category'] ?? 'General',
+                'category' => 'General',
                 'file_path' => $path,
                 'file_name' => $uploaded->getClientOriginalName(),
                 'file_type' => $uploaded->getMimeType(),
@@ -62,11 +108,11 @@ class FileCabinetController extends Controller
                 'file_size' => $uploaded->getSize(),
             ]);
 
-            Log::info('File uploaded', ['user_id' => auth()->id(), 'file_id' => $file->id, 'size' => $uploaded->getSize()]);
+            Log::info('File uploaded', ['user_id' => auth()->id(), 'file_id' => $file->id]);
             if ($req->ajax() || $req->wantsJson()) {
-                return $this->jsonSuccess('File uploaded successfully', ['file' => $file]);
+                return $this->jsonSuccess('File uploaded', ['file' => $file->load('folder')]);
             }
-            return redirect()->route('dashboard.file-cabinet')->with('success', 'File uploaded successfully');
+            return redirect()->route('dashboard.file-cabinet', ['folder' => $data['folder_id'] ?? null])->with('success', 'File uploaded');
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -74,7 +120,7 @@ class FileCabinetController extends Controller
             if ($req->ajax() || $req->wantsJson()) {
                 return $this->jsonError('Upload failed: ' . $e->getMessage(), 500);
             }
-            return redirect()->route('dashboard.file-cabinet')->with('error', 'Upload failed');
+            return redirect()->back()->with('error', 'Upload failed');
         }
     }
 
