@@ -180,9 +180,9 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'blocked', 'user.d
 
     // Approval Routes
     Route::get('/approvals', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'index'])->name('dashboard.approvals.index');
-    Route::post('/approvals', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'store'])->name('dashboard.approvals.store')->withoutMiddleware(['verify.otp', 'blocked', 'subscription']);
-    Route::post('/approvals/{approval}/approve', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'approve'])->name('dashboard.approvals.approve')->withoutMiddleware(['verify.otp', 'blocked', 'subscription']);
-    Route::post('/approvals/{approval}/reject', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'reject'])->name('dashboard.approvals.reject')->withoutMiddleware(['verify.otp', 'blocked', 'subscription']);
+    Route::post('/approvals', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'store'])->name('dashboard.approvals.store');
+    Route::post('/approvals/{approval}/approve', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'approve'])->name('dashboard.approvals.approve');
+    Route::post('/approvals/{approval}/reject', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'reject'])->name('dashboard.approvals.reject');
     Route::get('/approvals/pending-count', [\App\Http\Controllers\Dashboard\ApprovalRequestController::class, 'pendingCount'])->name('dashboard.approvals.pending-count');
 
     // Profile Routes (controllers)
