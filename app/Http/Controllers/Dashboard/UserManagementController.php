@@ -2,38 +2,59 @@
 namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 class UserManagementController extends Controller {
     public function index(Request $req) {
         $bizId = $this->currentBusinessId();
-        $q = User::where(function($sq) use ($bizId) { $sq->where('id', $bizId)->orWhere('owner_id', $bizId); });
+        $q = User::with('roleRelation')->where(function($sq) use ($bizId) { $sq->where('id', $bizId)->orWhere('owner_id', $bizId); });
         if ($req->search) $q->where(function($sq) use($req){ $sq->where("name","like","%{$req->search}%")->orWhere("email","like","%{$req->search}%"); });
         if ($req->role) $q->where("role",$req->role);
         if ($req->status) $q->where("status",$req->status);
-        return response()->json($q->latest()->get()->map(fn($u) => ["id"=>$u->id,"name"=>$u->name,"email"=>$u->email,"role"=>$u->role,"status"=>$u->status,"created_at"=>$u->created_at]));
+        return response()->json($q->latest()->get()->map(fn($u) => [
+            "id"=>$u->id,"name"=>$u->name,"email"=>$u->email,
+            "role"=>$u->role,"role_id"=>$u->role_id,
+            "role_name"=>$u->roleRelation?->name,
+            "status"=>$u->status,"created_at"=>$u->created_at,
+        ]));
     }
     public function store(Request $req) {
-        $data = $req->validate(["name"=>"required|string|max:191","email"=>"required|email|unique:users,email","password"=>"required|string|min:8","role"=>"in:admin,manager,cashier,user"]);
+        $data = $req->validate([
+            "name"=>"required|string|max:191",
+            "email"=>"required|email|unique:users,email",
+            "password"=>"required|string|min:8",
+            "role"=>"in:admin,manager,cashier,user",
+            "role_id"=>"nullable|exists:roles,id",
+        ]);
         $data["password"] = Hash::make($data["password"]);
         $data["owner_id"] = auth()->user()->owner_id ?? auth()->id();
         $u = User::create($data);
-        return response()->json(["success"=>true,"user"=>["id"=>$u->id,"name"=>$u->name,"email"=>$u->email,"role"=>$u->role]], 201);
+        return response()->json(["success"=>true,"user"=>["id"=>$u->id,"name"=>$u->name,"email"=>$u->email,"role"=>$u->role,"role_id"=>$u->role_id]], 201);
     }
     public function show(User $user) {
         $bizId = $this->currentBusinessId();
         if ($user->id != $bizId && $user->owner_id != $bizId) abort(403);
-        return response()->json(["id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"role"=>$user->role]);
+        return response()->json([
+            "id"=>$user->id,"name"=>$user->name,"email"=>$user->email,
+            "role"=>$user->role,"role_id"=>$user->role_id,
+        ]);
     }
     public function update(Request $req, User $user) {
         $bizId = $this->currentBusinessId();
         if ($user->id != $bizId && $user->owner_id != $bizId) abort(403);
-        $data = $req->validate(["name"=>"required|string|max:191","email"=>"required|email|unique:users,email,{$user->id}","role"=>"in:admin,manager,cashier,user","password"=>"nullable|string|min:8"]);
+        $data = $req->validate([
+            "name"=>"required|string|max:191",
+            "email"=>"required|email|unique:users,email,{$user->id}",
+            "role"=>"in:admin,manager,cashier,user",
+            "role_id"=>"nullable|exists:roles,id",
+            "password"=>"nullable|string|min:8"
+        ]);
         if (!empty($data["password"])) $data["password"] = Hash::make($data["password"]);
         else unset($data["password"]);
         $user->update($data);
-        return response()->json(["success"=>true,"user"=>["id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"role"=>$user->role]]);
+        return response()->json(["success"=>true,"user"=>["id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"role"=>$user->role,"role_id"=>$user->role_id]]);
     }
     public function destroy(User $user) {
         $bizId = $this->currentBusinessId();
@@ -63,20 +84,34 @@ class UserManagementController extends Controller {
     public function uploadAvatar(Request $req) {
         $user = auth()->user();
         $req->validate(["avatar" => "required|image|mimes:jpeg,png,jpg,gif,webp|max:2048"]);
-
-        // Delete old avatar
         if ($user->avatar && Storage::disk('public')->exists('avatars/'.$user->avatar)) {
             Storage::disk('public')->delete('avatars/'.$user->avatar);
         }
-
         $filename = 'avatar_'.$user->id.'_'.time().'.'.$req->avatar->extension();
         $req->avatar->storeAs('avatars', $filename, 'public');
         $user->update(['avatar' => $filename]);
-
         return response()->json([
             "success" => true,
             "avatar_url" => $user->avatar_url,
             "message" => "Avatar updated successfully!"
         ]);
+    }
+
+    // --- Staff Management ---
+    public function staffIndex() {
+        $roles = Role::forCurrentUser($this->currentBusinessId())->get(['id','name','description']);
+        return view('dashboard.user-management.staff', compact('roles'));
+    }
+
+    public function staffList(Request $req) {
+        $bizId = $this->currentBusinessId();
+        $q = User::with('roleRelation')->where('owner_id', $bizId);
+        if ($req->search) $q->where(function($sq) use($req){ $sq->where("name","like","%{$req->search}%")->orWhere("email","like","%{$req->search}%"); });
+        return response()->json($q->latest()->get()->map(fn($u) => [
+            "id"=>$u->id,"name"=>$u->name,"email"=>$u->email,
+            "role"=>$u->role,"role_id"=>$u->role_id,
+            "role_name"=>$u->roleRelation?->name,
+            "status"=>$u->status,"created_at"=>$u->created_at,
+        ]));
     }
 }
