@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             CurrencySeeder::class,
             AdminSeeder::class,
+            ProductDataSeeder::class,
             DemoSeeder::class,
             AdminDemoSeeder::class,
             BlogSeeder::class,

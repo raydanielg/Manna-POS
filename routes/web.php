@@ -138,7 +138,7 @@ Route::get('/subscription/expired', function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware(['auth', 'user.dashboard'])->name('home');
 
-Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'user.dashboard', 'subscription'])->group(function () {
+Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'blocked', 'user.dashboard', 'subscription'])->group(function () {
 
     Route::get('/', function () {
         return view('dashboard');
