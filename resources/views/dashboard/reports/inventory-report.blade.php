@@ -85,9 +85,9 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($products as $p)
                     @php
-                        $isLow = $p->current_stock <= $p->reorder_level && $p->current_stock > 0;
-                        $isOut = $p->current_stock <= 0;
-                        $stockVal = $p->current_stock * $p->purchase_price;
+                        $isLow = $p->stock_quantity <= $p->reorder_level && $p->stock_quantity > 0;
+                        $isOut = $p->stock_quantity <= 0;
+                        $stockVal = $p->stock_quantity * $p->purchase_price;
                     @endphp
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($products->currentPage()-1)*$products->perPage() }}</td>
@@ -97,7 +97,7 @@
                         <td class="px-4 py-3 text-sm text-right">
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium 
                                 {{ $isOut ? 'bg-red-50 text-red-700' : ($isLow ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700') }}">
-                                {{ number_format($p->current_stock) }}
+                                {{ number_format($p->stock_quantity) }}
                             </span>
                         </td>
                         <td class="px-4 py-3 text-sm text-right text-gray-500">{{ $p->reorder_level ?? 0 }}</td>

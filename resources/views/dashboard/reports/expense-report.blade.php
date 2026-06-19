@@ -88,7 +88,7 @@
                     @forelse($expenses as $e)
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($expenses->currentPage()-1)*$expenses->perPage() }}</td>
-                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $e->reference_no ?? $e->id }}</td>
+                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $e->reference ?? $e->id }}</td>
                         <td class="px-4 py-3 text-sm text-gray-900">{{ $e->category->name ?? 'N/A' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $e->expense_date ? \Carbon\Carbon::parse($e->expense_date)->format('M d, Y') : '—' }}</td>
                         <td class="px-4 py-3 text-sm text-right font-semibold text-red-600">{{ $userCurrency }} {{ number_format($e->amount,2) }}</td>
