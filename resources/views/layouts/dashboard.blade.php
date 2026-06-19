@@ -659,9 +659,8 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="{{ route('dashboard.feedback.create') }}" class="child-item {{ request()->routeIs('dashboard.feedback.create') ? 'active' : '' }}">Submit Feedback</a>
-                <a href="{{ route('dashboard.feedback.index') }}" class="child-item {{ request()->routeIs('dashboard.feedback.index') || request()->routeIs('dashboard.feedback.show') ? 'active' : '' }}">My Messages</a>
-                <a href="{{ route('dashboard.feedback.admin.index') }}" class="child-item {{ $isAdminFeedback ? 'active' : '' }}">Admin Inbox</a>
+                <a href="{{ route('dashboard.feedback.index') }}" class="child-item {{ $isFeedback ? 'active' : '' }}">My Feedback</a>
+                <a href="{{ route('dashboard.feedback.admin.index') }}" class="child-item {{ $isAdminFeedback ? 'active' : '' }}">Support Inbox</a>
             </div>
         </div>
 
@@ -1143,6 +1142,9 @@ document.addEventListener('keydown', e => {
 });
 </script>
 @yield('scripts')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>AOS.init({ once: true, offset: 40, duration: 700, easing: 'ease-out-cubic' });</script>
 
 </body>
 </html>
