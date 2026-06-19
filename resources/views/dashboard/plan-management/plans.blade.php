@@ -358,13 +358,19 @@ async function loadPlans() {
 function renderPlanCard(p) {
     const c = colors[p.badge_color] || colors.blue;
     const feats = Array.isArray(p.features) ? p.features : [];
+    const savePct = p.price_yearly > 0 && p.price_monthly > 0
+        ? Math.round(100 - (p.price_yearly / (p.price_monthly * 12)) * 100)
+        : 0;
     return `
-    <div class="plan-card ${p.is_featured ? 'featured' : ''}" id="plan-${p.id}">
-        ${p.is_featured ? `<span class="plan-badge" style="background:${c.bg};color:${c.text};">Featured</span>` : ''}
-        ${!p.is_active ? `<span class="plan-badge" style="background:#f1f5f9;color:#94a3b8;top:${p.is_featured?'2.5rem':'1rem'}">Inactive</span>` : ''}
+    <div class="plan-card ${p.is_featured ? 'featured' : ''} ${!p.is_active ? 'inactive' : ''}" id="plan-${p.id}">
+        <div class="plan-accent" style="background:${p.is_featured ? 'linear-gradient(90deg,'+c.text+','+c.light+')' : (p.is_active ? c.light : '#e2e8f0')};"></div>
+        <div class="plan-badge-wrap">
+            ${p.is_featured ? `<span class="plan-badge" style="background:${c.bg};color:${c.text};">★ Featured</span>` : ''}
+            ${!p.is_active ? `<span class="plan-badge" style="background:#f1f5f9;color:#94a3b8;">Inactive</span>` : ''}
+        </div>
         <div class="plan-header">
-            <div class="plan-icon" style="background:${c.bg};">
-                <svg width="26" height="26" fill="none" stroke="${c.text}" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
+            <div class="plan-icon" style="background:${c.bg};color:${c.text};">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
             </div>
             <div class="plan-name">${p.name}</div>
             ${p.description ? `<div class="plan-desc">${p.description}</div>` : ''}
@@ -375,23 +381,23 @@ function renderPlanCard(p) {
                 <span class="plan-amount">${fmtNum(p.price_monthly)}</span>
                 <span class="plan-period">/mo</span>
             </div>
-            ${p.price_yearly > 0 ? `<div class="plan-yearly">TZS ${fmtNum(p.price_yearly)}/yr — save ${Math.round(100-(p.price_yearly/(p.price_monthly*12))*100)}%</div>` : ''}
+            ${p.price_yearly > 0 ? `<div class="plan-yearly">TZS ${fmtNum(p.price_yearly)}/yr · Save ${savePct}%</div>` : ''}
         </div>
         <div class="plan-limits">
             <div class="plan-limit-row">
                 <span class="plan-limit-label">👥 Users</span>
-                <span class="plan-limit-val">${p.max_users === -1 ? '∞ Unlimited' : p.max_users}</span>
+                <span class="plan-limit-val">${p.max_users === -1 ? '∞' : p.max_users}</span>
             </div>
             <div class="plan-limit-row">
                 <span class="plan-limit-label">📦 Products</span>
-                <span class="plan-limit-val">${p.max_products === -1 ? '∞ Unlimited' : fmtNum(p.max_products)}</span>
+                <span class="plan-limit-val">${p.max_products === -1 ? '∞' : fmtNum(p.max_products)}</span>
             </div>
             <div class="plan-limit-row">
                 <span class="plan-limit-label">🏪 Locations</span>
-                <span class="plan-limit-val">${p.max_locations === -1 ? '∞ Unlimited' : p.max_locations}</span>
+                <span class="plan-limit-val">${p.max_locations === -1 ? '∞' : p.max_locations}</span>
             </div>
             <div class="plan-limit-row">
-                <span class="plan-limit-label">📊 Active Subs</span>
+                <span class="plan-limit-label">📊 Subscribers</span>
                 <span class="plan-limit-val" style="color:${c.text}">${p.active_subscriptions_count || 0}</span>
             </div>
         </div>
@@ -401,7 +407,7 @@ function renderPlanCard(p) {
                 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 ${f}
             </div>`).join('')}
-            ${feats.length > 5 ? `<div style="font-size:0.72rem;color:#94a3b8;margin-top:0.25rem;">+${feats.length-5} more features</div>` : ''}
+            ${feats.length > 5 ? `<div style="font-size:0.72rem;color:#94a3b8;margin-top:0.35rem;font-weight:500;">+${feats.length-5} more features</div>` : ''}
         </div>` : ''}
         <div class="plan-footer">
             <button class="btn btn-edit btn-sm" style="flex:1;" onclick="editPlan(${p.id})">
