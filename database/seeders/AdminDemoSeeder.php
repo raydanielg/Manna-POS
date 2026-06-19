@@ -37,8 +37,12 @@ class AdminDemoSeeder extends Seeder
     {
         $this->command->info('Seeding admin demo data...');
 
-        // Disable FK checks for all truncates
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        // Disable FK checks for all truncates (SQLite-safe)
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        }
         Business::truncate();
         BusinessVerification::truncate();
         Staff::truncate();
@@ -64,7 +68,11 @@ class AdminDemoSeeder extends Seeder
         StockTransfer::truncate();
         TaxRate::truncate();
         Warranty::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        }
 
         // ── Ensure extra users exist ──
         $extraUsers = [
