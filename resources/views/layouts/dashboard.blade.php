@@ -1278,7 +1278,10 @@
                             {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                         @endif
                     </div>
-                    <span class="hidden md:block text-xs font-semibold text-slate-700">{{ Auth::user()->name ?? 'Admin' }}</span>
+                    <div class="hidden md:flex flex-col items-end">
+                        <span class="text-xs font-semibold text-slate-700">{{ Auth::user()->name ?? 'Admin' }}</span>
+                        <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{{ $userCurrency }}</span>
+                    </div>
                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                 </div>
                 <div class="header-dropdown-menu" style="min-width:200px;">
