@@ -36,7 +36,15 @@ class FeedbackController extends Controller
         $data['priority']  = 'medium';
         $data['status']    = 'open';
 
-        Feedback::create($data);
+        $feedback = Feedback::create($data);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Your message has been submitted successfully.',
+                'feedback' => $feedback
+            ]);
+        }
 
         return redirect()->route('dashboard.feedback.index')
             ->with('success', 'Your message has been submitted successfully.');
