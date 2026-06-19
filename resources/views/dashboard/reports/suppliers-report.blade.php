@@ -2,59 +2,86 @@
 @section('page_title','Suppliers Report')
 @section('content')
 <div class="dash-content">
-<div class="page-card">
-  <div class="card-header">
-    <div class="card-title">Suppliers Report</div>
-    <div class="filters-row">
-      <input type="date" id="fromDate" class="form-control" style="width:140px;" onchange="loadReport()">
-      <input type="date" id="toDate" class="form-control" style="width:140px;" onchange="loadReport()">
-      <button class="btn btn-primary" onclick="loadReport()">Refresh</button>
+
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h1 class="text-xl font-bold text-gray-900">Suppliers Report</h1>
+            <p class="text-sm text-gray-500">{{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }}</p>
+        </div>
+        <div class="flex gap-2 no-print">
+            <button type="button" onclick="window.print()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Print
+            </button>
+        </div>
     </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.25rem;border-bottom:1px solid #e9edf5;">
-    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:1rem;"><div style="font-size:0.72rem;font-weight:600;color:#2563eb;text-transform:uppercase;">Total Suppliers</div><div style="font-size:1.6rem;font-weight:700;color:#1d4ed8;" id="totalSuppliers">-</div></div>
-    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:1rem;"><div style="font-size:0.72rem;font-weight:600;color:#16a34a;text-transform:uppercase;">Active Suppliers</div><div style="font-size:1.6rem;font-weight:700;color:#15803d;" id="activeSuppliers">-</div></div>
-    <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:1rem;"><div style="font-size:0.72rem;font-weight:600;color:#d97706;text-transform:uppercase;">Purchase Value</div><div style="font-size:1.6rem;font-weight:700;color:#b45309;" id="totalPurchaseValue">-</div></div>
-    <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:1rem;"><div style="font-size:0.72rem;font-weight:600;color:#e03057;text-transform:uppercase;">Total Orders</div><div style="font-size:1.6rem;font-weight:700;color:#be123c;" id="totalOrders">-</div></div>
-  </div>
-  <div style="overflow-x:auto;">
-    <table class="tbl">
-      <thead><tr><th>#</th><th>Supplier</th><th>Company</th><th>Total Purchases</th><th>Total Amount</th><th>Balance</th><th>Credit Limit</th><th>Status</th></tr></thead>
-      <tbody id="tableBody"><tr><td colspan="8" class="tbl-empty">Loading...</td></tr></tbody>
-    </table>
-  </div>
+
+    @php
+        $totalSuppliers = $suppliers->count();
+        $activeSuppliers = $suppliers->where('status','active')->count();
+        $totalPurchaseValue = $suppliers->sum('purchases_total');
+        $totalOrders = $suppliers->sum('purchases_count');
+    @endphp
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Suppliers</div>
+            <div class="text-2xl font-bold text-blue-600 mt-1">{{ number_format($totalSuppliers) }}</div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Active Suppliers</div>
+            <div class="text-2xl font-bold text-green-600 mt-1">{{ number_format($activeSuppliers) }}</div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Purchase Value</div>
+            <div class="text-2xl font-bold text-yellow-600 mt-1">{{ $userCurrency }} {{ number_format($totalPurchaseValue,2) }}</div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Orders</div>
+            <div class="text-2xl font-bold text-red-600 mt-1">{{ number_format($totalOrders) }}</div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200">
+            <h3 class="text-sm font-semibold text-gray-700">Supplier Details</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Company</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Orders</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total Amount</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Balance</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($suppliers as $s)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-3 text-sm font-semibold text-gray-900">{{ $s->name }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">{{ $s->company ?? '—' }}</td>
+                        <td class="px-4 py-3 text-sm text-right text-gray-700">{{ number_format($s->purchases_count ?? 0) }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-gray-900">{{ $userCurrency }} {{ number_format($s->purchases_total ?? 0,2) }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold {{ ($s->balance ?? 0) > 0 ? 'text-red-600' : 'text-green-600' }}">{{ $userCurrency }} {{ number_format($s->balance ?? 0,2) }}</td>
+                        <td class="px-4 py-3 text-sm">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $s->status === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-600' }}">
+                                {{ ucfirst($s->status ?? 'active') }}
+                            </span>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="px-4 py-12 text-center text-sm text-gray-500">No suppliers found.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-</div>
-@endsection
-@section('scripts')
-<script>
-document.getElementById('fromDate').value=new Date(new Date().setMonth(new Date().getMonth()-3)).toISOString().split('T')[0];
-document.getElementById('toDate').value=new Date().toISOString().split('T')[0];
-async function loadReport(){
-  const params=new URLSearchParams();
-  params.append('from',document.getElementById('fromDate').value);
-  params.append('to',document.getElementById('toDate').value);
-  const res=await fetch('/api/dashboard/reports/suppliers?'+params,{headers:{'Accept':'application/json'}});
-  const d=await res.json();
-  document.getElementById('totalSuppliers').textContent=d.total_suppliers||0;
-  document.getElementById('activeSuppliers').textContent=d.active_suppliers||0;
-  document.getElementById('totalPurchaseValue').textContent=fmtMoney(d.total_purchase_value||0);
-  document.getElementById('totalOrders').textContent=d.suppliers?.reduce((a,s)=>a+(s.total_purchases||0),0)||0;
-  const tbody=document.getElementById('tableBody');
-  if(!d.suppliers||!d.suppliers.length){tbody.innerHTML='<tr><td colspan="8" class="tbl-empty">No suppliers found.</td></tr>';return;}
-  tbody.innerHTML=d.suppliers.map((s,i)=>`<tr>
-    <td>${i+1}</td>
-    <td><strong>${esc(s.name)}</strong></td>
-    <td>${esc(s.company||'-')}</td>
-    <td>${s.total_purchases}</td>
-    <td>${fmtMoney(s.total_amount)}</td>
-    <td>${fmtMoney(s.balance)}</td>
-    <td>${fmtMoney(s.credit_limit)}</td>
-    <td><span class="badge ${s.status==='active'?'badge-success':'badge-gray'}">${s.status}</span></td>
-  </tr>`).join('');
-}
-function fmtMoney(n){return '{{ $userCurrency }} '+Number(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-loadReport();
-</script>
 @endsection
