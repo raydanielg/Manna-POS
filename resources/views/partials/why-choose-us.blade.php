@@ -132,13 +132,6 @@
         margin-bottom: 2rem;
     }
 
-    .carousel-title {
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: #1e1e1e;
-        letter-spacing: -0.01em;
-    }
-
     .carousel-nav {
         display: flex;
         gap: 0.75rem;
@@ -279,16 +272,6 @@
         .section-title {
             font-size: 2rem;
         }
-        .carousel-title {
-            font-size: 1.4rem;
-        }
-        .why-choose-grid {
-            grid-template-columns: 1fr;
-        }
-        .why-choose-item {
-            flex-direction: column;
-            gap: 1rem;
-        }
         .carousel-card {
             min-width: calc(100% - 0rem);
         }
@@ -412,17 +395,6 @@
                 updateCarousel();
             }, 5000);
         });
-
-        // Intersection Observer for entrance animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.why-choose-item').forEach(el => observer.observe(el));
 
         createDots();
         updateCarousel();
