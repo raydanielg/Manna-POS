@@ -30,4 +30,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'nextsms' => [
+        'url'      => env('NEXTSMS_URL', 'https://messaging-service.co.tz/api/sms/v1/text/single'),
+        'username' => env('NEXTSMS_USERNAME'),
+        'password' => env('NEXTSMS_PASSWORD'),
+        'from'     => env('NEXTSMS_FROM', 'UZAZICLINIC'),
+    ],
+
 ];
