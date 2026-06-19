@@ -162,6 +162,8 @@
 <script>
 let reviewId = null;
 let reviewAction = null;
+const APPROVE_URL = '{{ route("dashboard.approvals.approve", 0) }}';
+const REJECT_URL = '{{ route("dashboard.approvals.reject", 0) }}';
 
 function filterTable(val) {
   document.querySelectorAll('#tableBody tr[data-status]').forEach(row => {
@@ -225,7 +227,7 @@ async function confirmApprove() {
   const btn = document.getElementById('approveBtn');
   btn.disabled = true; btn.textContent = 'Approving...';
   try {
-    await apiFetch('{{ route("dashboard.approvals.approve", "") }}/' + reviewId, { method: 'POST', body: JSON.stringify({ notes }) });
+    await apiFetch(APPROVE_URL.replace('/0/', '/' + reviewId + '/'), { method: 'POST', body: JSON.stringify({ notes }) });
     closeModal('reviewModal');
     showToast('Approved!');
     setTimeout(() => location.reload(), 1000);
@@ -241,7 +243,7 @@ async function confirmReject() {
   const btn = document.getElementById('rejectBtn');
   btn.disabled = true; btn.textContent = 'Rejecting...';
   try {
-    await apiFetch('{{ route("dashboard.approvals.reject", "") }}/' + reviewId, { method: 'POST', body: JSON.stringify({ notes }) });
+    await apiFetch(REJECT_URL.replace('/0/', '/' + reviewId + '/'), { method: 'POST', body: JSON.stringify({ notes }) });
     closeModal('reviewModal');
     showToast('Rejected!');
     setTimeout(() => location.reload(), 1000);

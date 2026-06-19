@@ -19,7 +19,7 @@ class PublicStoreController extends Controller
         $settings = $user->store_settings ? json_decode($user->store_settings, true) : [];
         $showImages = $settings['show_images'] ?? true;
 
-        $products = Product::where('user_id', $user->id)
+        $products = Product::where('created_by', $user->id)
             ->where('status', 'active')
             ->select(['id', 'name', 'description', 'selling_price', 'image', 'sku', 'stock_quantity'])
             ->orderBy('name')
