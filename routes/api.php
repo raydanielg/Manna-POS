@@ -127,4 +127,15 @@ Route::middleware('auth:sanctum')->name('mapi.')->group(function () {
     Route::get('staff/{id}',      [App\Http\Controllers\Api\StaffApiController::class, 'show']);
     Route::put('staff/{id}',      [App\Http\Controllers\Api\StaffApiController::class, 'update']);
     Route::delete('staff/{id}',   [App\Http\Controllers\Api\StaffApiController::class, 'destroy']);
+
+    // Payroll
+    Route::get('payroll/dashboard',        [App\Http\Controllers\Api\PayrollApiController::class, 'dashboard'])->name('payroll.dashboard');
+    Route::get('payroll/periods',         [App\Http\Controllers\Api\PayrollApiController::class, 'periods'])->name('payroll.periods');
+    Route::post('payroll/periods',        [App\Http\Controllers\Api\PayrollApiController::class, 'storePeriod'])->name('payroll.periods.store');
+    Route::get('payroll/periods/{id}',    [App\Http\Controllers\Api\PayrollApiController::class, 'showPeriod'])->name('payroll.periods.show');
+    Route::post('payroll/periods/{id}/entries', [App\Http\Controllers\Api\PayrollApiController::class, 'storeEntry'])->name('payroll.entries.store');
+    Route::put('payroll/entries/{id}',    [App\Http\Controllers\Api\PayrollApiController::class, 'updateEntry'])->name('payroll.entries.update');
+    Route::delete('payroll/entries/{id}', [App\Http\Controllers\Api\PayrollApiController::class, 'destroyEntry'])->name('payroll.entries.destroy');
+    Route::post('payroll/entries/{id}/status', [App\Http\Controllers\Api\PayrollApiController::class, 'updateEntryStatus'])->name('payroll.entries.status');
+    Route::get('payroll/deductions',      [App\Http\Controllers\Api\PayrollApiController::class, 'deductions'])->name('payroll.deductions');
 });
