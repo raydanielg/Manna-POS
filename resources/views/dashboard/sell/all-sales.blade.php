@@ -108,12 +108,24 @@
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
         <span class="modal-title" style="color:#fff;">Sale Receipt</span>
       </div>
-      <div style="display:flex;gap:0.5rem;align-items:center;">
-        <button onclick="printReceipt()" style="background:#2563eb;border:none;color:#fff;padding:0.35rem 0.9rem;border-radius:7px;font-size:0.78rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.4rem;">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+      <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+        <button onclick="printReceipt()" style="background:#2563eb;border:none;color:#fff;padding:0.35rem 0.7rem;border-radius:7px;font-size:0.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.3rem;">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
           Print
         </button>
-        <button class="modal-close" style="color:#94a3b8;" onclick="closeModal('receipt-modal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        <a id="receiptInvoiceLink" href="/invoice" target="_blank" style="background:#7c3aed;border:none;color:#fff;padding:0.35rem 0.7rem;border-radius:7px;font-size:0.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.3rem;text-decoration:none;">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Invoice
+        </a>
+        <a id="receiptWaLink" href="#" target="_blank" style="background:#22c55e;border:none;color:#fff;padding:0.35rem 0.7rem;border-radius:7px;font-size:0.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.3rem;text-decoration:none;">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          WhatsApp
+        </a>
+        <a id="receiptEmailLink" href="#" target="_blank" style="background:#2563eb;border:none;color:#fff;padding:0.35rem 0.7rem;border-radius:7px;font-size:0.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.3rem;text-decoration:none;">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Email
+        </a>
+        <button class="modal-close" style="color:#94a3b8;background:none;border:none;cursor:pointer;" onclick="closeModal('receipt-modal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
       </div>
     </div>
     <div class="modal-body" style="padding:0;" id="receipt-content">
@@ -230,12 +242,23 @@ async function saveSale(){
   clearFormErrors('itemForm');
   const form=document.getElementById('itemForm');
   const data=Object.fromEntries(new FormData(form));
-  data.items=Array.from(document.querySelectorAll('#saleItemsBody tr')).map(tr=>({
-    product_id:tr.querySelector('.sale-product')?.value,
-    unit_price:tr.querySelector('.sale-price')?.value,
-    quantity:tr.querySelector('.sale-qty')?.value,
-    discount:tr.querySelector('.sale-disc')?.value
-  })).filter(i=>i.product_id);
+  data.items=Array.from(document.querySelectorAll('#saleItemsBody tr')).map(tr=>{
+    const qty=parseFloat(tr.querySelector('.sale-qty')?.value||0);
+    const price=parseFloat(tr.querySelector('.sale-price')?.value||0);
+    const disc=parseFloat(tr.querySelector('.sale-disc')?.value||0);
+    const sel=tr.querySelector('.sale-product');
+    const productId=sel?.value;
+    const productName=sel?.selectedOptions[0]?.text||'';
+    return{
+      product_id:productId||null,
+      product_name:productName||'Manual Item',
+      unit_price:price,
+      quantity:qty,
+      discount:disc,
+      total:(qty*price)-disc
+    };
+  }).filter(i=>i.quantity>0);
+  if(!data.items.length){showToast('Please add at least one item','error');return;}
   const btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving...';
   try{if(editId)await apiFetch(`${API}/${editId}`,{method:'PUT',body:JSON.stringify(data)});
   else await apiFetch(API,{method:'POST',body:JSON.stringify(data)});
@@ -258,6 +281,13 @@ async function viewReceipt(id) {
     const fmt = n => parseFloat(n||0).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
     const payBadge = {'cash':'💵 Cash','card':'💳 Card','mobile_money':'📱 Mobile Money','credit':'🕐 Credit'};
     const statusBadge = {'completed':'✅ Completed','draft':'📝 Draft','quotation':'📄 Quotation','cancelled':'❌ Cancelled'};
+
+    // Update header action links
+    const invUrl = '/invoice/' + s.reference;
+    document.getElementById('receiptInvoiceLink').href = invUrl;
+    document.getElementById('receiptWaLink').href = 'https://wa.me/?text=' + encodeURIComponent('Invoice: ' + s.reference + ' - View: ' + window.location.origin + invUrl);
+    document.getElementById('receiptEmailLink').href = 'mailto:?subject=Invoice ' + s.reference + '&body=Please find your invoice here: ' + encodeURIComponent(window.location.origin + invUrl);
+
     document.getElementById('receipt-body').innerHTML = `
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1rem;font-size:0.8rem;">
         <div><span style="color:#64748b;">Invoice #</span><br><strong style="font-family:monospace;color:#2563eb;">${s.reference}</strong></div>

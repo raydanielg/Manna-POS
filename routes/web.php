@@ -558,7 +558,8 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
             'country'          => $u->business_country,
             'currency'         => $u->currency,
             'fy_start'         => $u->fiscal_year_start,
-            'tax_number'       => $u->tax_percentage,
+            'tax_number'       => $u->tax_number,
+            'tax_percentage'   => $u->tax_percentage,
         ], $pos));
     });
     // Store API
@@ -575,7 +576,8 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
         if ($req->has('country'))        $fill['business_country']   = $req->country;
         if ($req->has('currency'))       $fill['currency']           = $req->currency;
         if ($req->filled('fy_start'))    $fill['fiscal_year_start']  = $req->fy_start;
-        if ($req->has('tax_number'))     $fill['tax_percentage']     = $req->tax_number;
+        if ($req->has('tax_number'))     $fill['tax_number']         = $req->tax_number;
+        if ($req->has('tax_percentage'))  $fill['tax_percentage']     = $req->tax_percentage;
         // POS-specific settings (invoice + barcode) stored as JSON
         $posKeys = ['invoice_title','invoice_prefix','invoice_header','invoice_footer','payment_terms',
                     'show_logo','show_tax_number','barcode_type','barcode_height','label_size',
@@ -830,6 +832,10 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::post('file-manager/delete',     [AdminFileManagerController::class, 'delete'])->name('file-manager.delete');
     Route::get('file-manager/download',    [AdminFileManagerController::class, 'download'])->name('file-manager.download');
 });
+
+// ── Invoice / Receipt Routes ──
+Route::get('/invoice/{ref?}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('invoice.show');
+Route::get('/invoice/pdf/{ref?}', [App\Http\Controllers\InvoiceController::class, 'pdf'])->name('invoice.pdf');
 
 // ── Emergency Cache Clear (no auth required) ──
 Route::get('/clear-all-caches', function () {

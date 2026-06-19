@@ -148,10 +148,16 @@
 .rt-row.total{font-size:1rem;font-weight:800;color:#0f172a;border-top:1px solid #e2e8f0;padding-top:.4rem;margin-top:.3rem;}
 .receipt-footer{text-align:center;margin-top:1rem;padding-top:1rem;border-top:2px dashed #e2e8f0;}
 .receipt-footer p{font-size:.7rem;color:#94a3b8;}
-.receipt-actions{display:flex;gap:.5rem;margin-top:1rem;}
-.receipt-actions button{flex:1;padding:.5rem;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .15s;}
+.receipt-actions{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap;}
+.receipt-actions button,.receipt-actions a{flex:1;min-width:90px;padding:.5rem;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .15s;text-align:center;display:inline-flex;align-items:center;justify-content:center;}
 .receipt-actions .btn-print{background:var(--pos-primary);color:#fff;}
 .receipt-actions .btn-print:hover{background:#1d4ed8;}
+.receipt-actions .btn-invoice{background:#7c3aed;color:#fff;}
+.receipt-actions .btn-invoice:hover{background:#6d28d9;}
+.receipt-actions .btn-whatsapp{background:#22c55e;color:#fff;}
+.receipt-actions .btn-whatsapp:hover{background:#16a34a;}
+.receipt-actions .btn-email{background:#2563eb;color:#fff;}
+.receipt-actions .btn-email:hover{background:#1d4ed8;}
 .receipt-actions .btn-new{background:#f1f5f9;color:#475569;}
 .receipt-actions .btn-new:hover{background:#e2e8f0;}
 
@@ -667,10 +673,11 @@ async function doCompleteSale(txnRef = null){
     notes: txnRef ? 'Mobile Money Ref: ' + txnRef : '',
     items: keys.map(id => ({
       product_id: id,
+      product_name: cart[id].product?.name || 'Unknown',
       unit_price: cart[id].price,
       quantity: cart[id].qty,
       discount: 0,
-      product_name: cart[id].product.name
+      total: (cart[id].qty * cart[id].price)
     }))
   };
 
@@ -704,12 +711,18 @@ async function doCompleteSale(txnRef = null){
 }
 
 function clearCart(){
+  if(Object.keys(cart).length === 0){
+    showToast('Cart is already empty','info');
+    return;
+  }
   cart = {};
   document.getElementById('posDiscount').value = 0;
   document.getElementById('posPaid').value = '';
+  document.getElementById('posCustomer').value = '';
   document.getElementById('changeRow').style.display = 'none';
   updateCart();
   searchProducts();
+  showToast('Cart cleared','success');
 }
 
 // ── Receipt ──────────────────────────────────────────
@@ -749,6 +762,9 @@ function showReceipt(data, res, txnRef){
     </div>
     <div class="receipt-actions">
       <button class="btn-print" onclick="printReceipt()">🖨 Print</button>
+      <a class="btn-invoice" href="/invoice/${invoiceNo}" target="_blank" style="text-decoration:none;">📄 Full Invoice</a>
+      <a class="btn-whatsapp" href="https://wa.me/?text=${encodeURIComponent('Invoice: ' + invoiceNo + ' - View: ' + window.location.origin + '/invoice/' + invoiceNo)}" target="_blank" style="text-decoration:none;">💬 WhatsApp</a>
+      <a class="btn-email" href="mailto:?subject=Invoice ${invoiceNo}&body=Please find your invoice here: ${encodeURIComponent(window.location.origin + '/invoice/' + invoiceNo)}" target="_blank" style="text-decoration:none;">✉ Email</a>
       <button class="btn-new" onclick="closeReceipt()">New Sale</button>
     </div>`;
 

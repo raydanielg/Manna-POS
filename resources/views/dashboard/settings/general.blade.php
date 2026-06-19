@@ -174,6 +174,29 @@
             <input name="fy_start" type="date" class="form-control">
           </div>
         </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" style="display:block;margin-bottom:0.4rem;">Tax Application</label>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <label class="toggle-wrap" style="cursor:pointer;">
+                <label class="toggle">
+                  <input type="checkbox" id="enableTaxToggle" name="enable_tax" checked onchange="toggleTaxRate()">
+                  <span class="toggle-slider"></span>
+                </label>
+                <span id="taxToggleLabel" style="font-size:0.85rem;font-weight:600;color:#475569;">Tax Enabled</span>
+              </label>
+            </div>
+            <div class="field-hint">Turn off to disable tax on all sales</div>
+          </div>
+          <div class="form-group" id="taxRateWrap">
+            <label class="form-label">Tax Rate (%)</label>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <input name="tax_percentage" id="taxPercentageInput" type="number" step="0.01" min="0" max="100" class="form-control" placeholder="18" value="18" style="width:120px;">
+              <span style="font-size:0.85rem;color:#64748b;font-weight:600;">%</span>
+            </div>
+            <div class="field-hint">Percentage applied to taxable sales</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -325,6 +348,25 @@ function checkCompleteness() {
   }
 }
 
+/* ── Tax Toggle ──────────────────────────────────────── */
+function toggleTaxRate(){
+  const enabled = document.getElementById('enableTaxToggle').checked;
+  const wrap = document.getElementById('taxRateWrap');
+  const label = document.getElementById('taxToggleLabel');
+  const input = document.getElementById('taxPercentageInput');
+  if (enabled) {
+    wrap.style.opacity = '1';
+    wrap.style.pointerEvents = 'auto';
+    label.textContent = 'Tax Enabled';
+    if (!input.value || input.value === '0') input.value = '18';
+  } else {
+    wrap.style.opacity = '0.5';
+    wrap.style.pointerEvents = 'none';
+    label.textContent = 'No Tax';
+    input.value = '0';
+  }
+}
+
 /* ── Load Settings ────────────────────────────────────── */
 async function loadSettings(){
   try{
@@ -334,6 +376,12 @@ async function loadSettings(){
       const el = form.querySelector(`[name="${k}"]`);
       if (el && v != null) el.value = v;
     });
+
+    // Tax toggle
+    const taxPct = parseFloat(d.tax_percentage) || 0;
+    document.getElementById('enableTaxToggle').checked = taxPct > 0;
+    document.getElementById('taxPercentageInput').value = taxPct > 0 ? taxPct : '18';
+    toggleTaxRate();
 
     // Load store settings
     if (d.store_slug) updateStoreLinkUI(d.store_slug);

@@ -24,12 +24,24 @@
         </select>
       </div>
 
-      <div id="uploadZone" style="border:2px dashed #cbd5e1;border-radius:12px;padding:3rem;text-align:center;cursor:pointer;transition:all 0.2s;" ondragover="event.preventDefault();this.style.borderColor='#2563eb';this.style.background='#eff6ff'" ondragleave="this.style.borderColor='#cbd5e1';this.style.background=''" ondrop="handleDrop(event)">
-        <svg width="48" height="48" fill="none" stroke="#94a3b8" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 1rem;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
-        <div style="font-size:0.95rem;font-weight:600;color:#1e293b;margin-bottom:0.5rem;">Drop CSV file here or click to browse</div>
-        <div style="font-size:0.8rem;color:#94a3b8;" id="fileLabel">No file selected</div>
-        <input type="file" name="csv_file" id="csvFile" accept=".csv" style="display:none;" onchange="handleFile(this.files[0])" required>
-        <button type="button" onclick="document.getElementById('csvFile').click()" class="btn btn-primary" style="margin-top:1rem;">Browse File</button>
+      {{-- PC File Upload --}}
+      <div class="form-group" style="margin-bottom:1.25rem;">
+        <label class="form-label" style="font-size:0.78rem;font-weight:700;color:#475569;margin-bottom:0.4rem;display:block;text-transform:uppercase;letter-spacing:0.05em;">Upload CSV from Computer</label>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <label class="btn btn-primary" style="cursor:pointer;padding:0.55rem 1.1rem;font-size:0.85rem;font-weight:600;display:inline-flex;align-items:center;gap:0.4rem;margin:0;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l-3 3m3-3l3 3M6.75 19.5h10.5a2.25 2.25 0 002.25-2.25v-5.25a2.25 2.25 0 00-2.25-2.25h-1.5a2.25 2.25 0 00-2.25 2.25v.75m-3 0V5.25A2.25 2.25 0 0111.25 3h1.5a2.25 2.25 0 012.25 2.25v1.5"/></svg>
+            Choose File
+            <input type="file" name="csv_file" id="csvFile" accept=".csv" style="display:none;" onchange="handleFile(this.files[0])" required>
+          </label>
+          <span id="fileLabel" style="font-size:0.82rem;color:#64748b;">No file selected</span>
+        </div>
+        <div style="font-size:0.75rem;color:#94a3b8;margin-top:0.4rem;">Supported: .csv files only</div>
+      </div>
+
+      {{-- Drag & Drop Zone --}}
+      <div id="uploadZone" style="border:2px dashed #cbd5e1;border-radius:12px;padding:2rem;text-align:center;cursor:pointer;transition:all 0.2s;background:#f8fafc;" ondragover="event.preventDefault();this.style.borderColor='#2563eb';this.style.background='#eff6ff'" ondragleave="this.style.borderColor='#cbd5e1';this.style.background='#f8fafc'" ondrop="handleDrop(event)">
+        <svg width="36" height="36" fill="none" stroke="#94a3b8" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 0.75rem;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+        <div style="font-size:0.85rem;font-weight:600;color:#64748b;">Or drag & drop your CSV file here</div>
       </div>
 
       <div id="previewSection" style="display:none;margin-top:1.5rem;">
