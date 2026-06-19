@@ -173,18 +173,23 @@
 </div>
 
 {{-- Header --}}
-<div class="page-card" style="margin-bottom:1.25rem;">
-    <div class="card-header">
-        <div>
-            <div class="card-title">Subscription Plans</div>
-            <div style="font-size:0.75rem;color:#64748b;margin-top:0.2rem;">Manage pricing tiers for MannaPOS customers</div>
-        </div>
-        <div class="filters-row">
-            <div class="search-wrap">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input type="text" id="searchInput" placeholder="Search plans..." oninput="loadPlans()">
+<div class="page-card" style="margin-bottom:1.5rem;border-radius:18px;">
+    <div class="card-header" style="padding:1.35rem 1.5rem;">
+        <div class="flex items-center gap-3">
+            <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(37,99,235,.25);">
+                <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
             </div>
-            <button class="btn btn-primary" onclick="openAddPlan()">
+            <div>
+                <div class="card-title" style="font-size:1.15rem;">Subscription Plans</div>
+                <div style="font-size:0.78rem;color:#64748b;margin-top:0.15rem;">Manage pricing tiers and features for MannaPOS customers</div>
+            </div>
+        </div>
+        <div class="filters-row" style="gap:0.75rem;">
+            <div class="search-wrap" style="min-width:220px;">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:#94a3b8;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" id="searchInput" placeholder="Search plans..." oninput="loadPlans()" style="font-size:0.85rem;">
+            </div>
+            <button class="btn btn-primary" onclick="openAddPlan()" style="gap:0.5rem;padding:0.6rem 1.1rem;font-size:0.85rem;">
                 <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                 New Plan
             </button>
@@ -193,12 +198,7 @@
 </div>
 
 {{-- Plan Cards Grid --}}
-<div id="planGrid" class="plan-grid">
-    <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#94a3b8;">
-        <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 0.75rem;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 20h16M4 4h16M9 4v16M15 4v16"/></svg>
-        Loading plans...
-    </div>
-</div>
+<div id="planGrid" class="plan-grid"></div>
 
 </div>
 
