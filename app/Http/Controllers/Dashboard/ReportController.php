@@ -175,7 +175,7 @@ class ReportController extends Controller
     public function supplierPriceComparison(Request $request)
     {
         $products = Product::forCurrentUser($this->currentBusinessId())->with(['purchaseItems' => function($q) {
-            $q->selectRaw('product_id, supplier_id, AVG(unit_price) as avg_price, MAX(unit_price) as max_price, MIN(unit_price) as min_price, COUNT(*) as purchases_count')
+            $q->selectRaw('product_id, supplier_id, AVG(unit_cost) as avg_price, MAX(unit_cost) as max_price, MIN(unit_cost) as min_price, COUNT(*) as purchases_count')
                 ->groupBy('product_id','supplier_id');
         }, 'purchaseItems.supplier'])->take(50)->get();
 
@@ -321,7 +321,7 @@ class ReportController extends Controller
     public function supplierPriceComparisonPdf(Request $request)
     {
         $products = Product::forCurrentUser($this->currentBusinessId())->with(['purchaseItems' => function($q) {
-            $q->selectRaw('product_id, supplier_id, AVG(unit_price) as avg_price, MAX(unit_price) as max_price, MIN(unit_price) as min_price, COUNT(*) as purchases_count')
+            $q->selectRaw('product_id, supplier_id, AVG(unit_cost) as avg_price, MAX(unit_cost) as max_price, MIN(unit_cost) as min_price, COUNT(*) as purchases_count')
                 ->groupBy('product_id','supplier_id');
         }, 'purchaseItems.supplier'])->take(50)->get();
         $pdf = Pdf::loadView('dashboard.reports.pdf.supplier-price-comparison-pdf', compact('products'));
