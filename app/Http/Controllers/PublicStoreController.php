@@ -125,14 +125,18 @@ class PublicStoreController extends Controller
         $user = auth()->user();
         $settings = $user->store_settings ? json_decode($user->store_settings, true) : [];
 
-        if ($request->has('show_images')) {
-            $settings['show_images'] = (bool) $request->show_images;
-        }
-        if ($request->has('store_title')) {
-            $settings['store_title'] = $request->store_title;
-        }
-        if ($request->has('store_description')) {
-            $settings['store_description'] = $request->store_description;
+        $fields = [
+            'show_images', 'store_title', 'store_description',
+            'primary_color', 'accent_color', 'bg_color', 'logo_url',
+        ];
+        foreach ($fields as $field) {
+            if ($request->has($field)) {
+                if ($field === 'show_images') {
+                    $settings[$field] = (bool) $request->input($field);
+                } else {
+                    $settings[$field] = $request->input($field);
+                }
+            }
         }
 
         $user->store_settings = json_encode($settings);
