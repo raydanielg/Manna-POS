@@ -4,7 +4,7 @@ import '../dashboard/home_page.dart';
 import '../products/products_page.dart';
 import '../customers/customers_page.dart';
 import '../sales/sales_page.dart';
-import '../more/more_page.dart';
+import '../payroll/payroll_page.dart';
 
 class MainScreen extends StatefulWidget {
   final int initialIndex;
