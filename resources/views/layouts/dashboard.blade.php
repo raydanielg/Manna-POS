@@ -1857,6 +1857,13 @@ function exportTableToCSV(tableSelector, filename) {
 </nav>
 
 <style>
+/* ── Floating Action Button (Mobile) ──────────────────────────── */
+.mob-fab{display:none;position:fixed;bottom:78px;right:16px;z-index:998;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1d4ed8);border:none;color:#fff;box-shadow:0 6px 24px rgba(37,99,235,.4);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;align-items:center;justify-content:center;}
+.mob-fab:active{transform:scale(.9);}
+.mob-fab svg{width:24px;height:24px;}
+.mob-fab .fab-badge{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+@media(max-width:767px){.mob-fab{display:flex;}}
+
 /* ── Mobile Bottom Navigation ──────────────────────────────────── */
 .mobile-bottom-nav {
     display: none;
@@ -1974,6 +1981,11 @@ document.addEventListener('touchmove', (e) => {
     }
 }, { passive: true });
 </script>
+
+{{-- Floating Action Button (Mobile) --}}
+<button class="mob-fab" onclick="window.location.href='{{ route('dashboard.sell.pos') }}'" title="New Sale" id="mobFab">
+    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+</button>
 
 {{-- PWA Install Banner --}}
 <div id="pwaInstallBanner" style="display:none;position:fixed;bottom:80px;left:12px;right:12px;z-index:9998;background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:16px;padding:14px 18px;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,0.3);align-items:center;gap:12px;backdrop-filter:blur(12px);max-width:400px;margin:0 auto;">
