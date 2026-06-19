@@ -1043,6 +1043,12 @@
             <span class="nav-label">File Cabinet</span>
         </a>
 
+        {{-- Payroll --}}
+        <a href="{{ route('dashboard.payroll') }}" class="nav-item {{ $isPayroll ? 'active' : '' }}" data-tip="Payroll">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M17.657 16.657l-4.243-4.243"/><path d="M12 12m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/></svg>
+            <span class="nav-label">Payroll</span>
+        </a>
+
         <div class="nav-section-label">Analytics</div>
 
         {{-- Reports --}}
