@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PublicStoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,10 @@ Route::get('/', function () {
         ->get();
     return view('landing', compact('latestBlogs', 'plans'));
 });
+
+// Public Store Routes (no auth required)
+Route::get('/store/{slug}', [PublicStoreController::class, 'show'])->name('store.public');
+Route::post('/store/{slug}/order', [PublicStoreController::class, 'storeOrder'])->name('store.order');
 
 // Product pages
 Route::get('/features', function () {
