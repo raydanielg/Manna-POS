@@ -2,7 +2,7 @@
 
 @section('form-header')
     <h2 class="auth-form-title">Verify Your Account</h2>
-    <p class="auth-form-subtitle">Enter the 6-digit code sent to <strong id="targetLabel">{{ $user->email }}</strong></p>
+    <p class="auth-form-subtitle">Enter the 6-digit code sent to <strong>{{ $user->phone ? substr($user->phone,0,3) . '****' . substr($user->phone,-4) : 'your phone' }}</strong></p>
 @endsection
 
 @section('form-content')
@@ -85,36 +85,11 @@
         font-weight: 600;
         text-decoration: none;
     }
-    .method-chips {
-        display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1.25rem;
-    }
-    .method-chip {
-        display: inline-flex; align-items: center; gap: 0.35rem;
-        padding: 0.4rem 0.85rem; border-radius: 9999px; border: 1.5px solid #e2e8f0;
-        background: #fff; font-size: 0.82rem; font-weight: 600; color: #475569;
-        cursor: pointer; transition: all 0.15s ease; user-select: none;
-    }
-    .method-chip.on {
-        border-color: #1d4ed8; background: #eff6ff; color: #1d4ed8;
-        box-shadow: 0 0 0 3px rgba(29,78,216,0.1);
-    }
-    .method-chip svg { width: 14px; height: 14px; }
 </style>
 
-<div class="method-chips" id="methodChips">
-    <div class="method-chip on" data-method="email" onclick="pickMethod(this,'email')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        <span>Email</span>
-    </div>
-    <div class="method-chip {{ $user->phone ? '' : 'opacity-50 pointer-events-none' }}" data-method="sms" onclick="pickMethod(this,'sms')">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-        <span>SMS {{ $user->phone ? '('.substr($user->phone,-4).')' : '(No phone)' }}</span>
-    </div>
-</div>
-
 <div class="activation-card">
-    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-    <p id="methodHint">We sent a code to your email. Can't find it? Check your spam folder or <a href="{{ url('/activate/' . $user->activation_token) }}">click here to activate instantly</a>.</p>
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    <p>We sent a code to your phone via SMS. Make sure your phone has signal or <a href="{{ url('/activate/' . $user->activation_token) }}">click here to activate instantly</a>.</p>
 </div>
 
 <div class="otp-inputs" id="otpInputs">
