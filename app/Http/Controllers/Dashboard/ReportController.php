@@ -36,6 +36,7 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = $this->userCurrency();
 
         $summary = [
             'total_sales' => Sale::forCurrentUser($this->currentBusinessId())->whereBetween('sale_date',[$from,$to])->count(),
@@ -59,13 +60,14 @@ class ReportController extends Controller
 
         $sales = Sale::forCurrentUser($this->currentBusinessId())->with('customer')->whereBetween('sale_date',[$from,$to])->orderBy('sale_date','desc')->paginate(25);
 
-        return view('dashboard.reports.sales-report', compact('summary','dailySales','topProducts','sales','from','to'));
+        return view('dashboard.reports.sales-report', compact('summary','dailySales','topProducts','sales','from','to','userCurrency'));
     }
 
     public function purchaseReport(Request $request)
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $userCurrency = $this->userCurrency();
 
         $summary = [
             'total_purchases' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->count(),
