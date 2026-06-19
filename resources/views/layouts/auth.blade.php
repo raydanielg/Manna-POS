@@ -850,5 +850,31 @@
             window.location.reload();
         });
     </script>
+
+    {{-- Ripple Loading Overlay --}}
+    <div id="rippleOverlay" class="ripple-overlay">
+        <img src="{{ asset('Ripple@1x-1.0s-200px-200px (1).svg') }}" alt="Loading">
+        <div class="ripple-text">Loading<span class="ripple-dots"></span></div>
+    </div>
+    <script>
+        window.showRipple = function(text) {
+            const el = document.getElementById('rippleOverlay');
+            if (text) el.querySelector('.ripple-text').innerHTML = text + '<span class="ripple-dots"></span>';
+            el.classList.add('open');
+        };
+        window.hideRipple = function() {
+            document.getElementById('rippleOverlay').classList.remove('open');
+        };
+        // Auto-show on form submissions that cause navigation
+        document.querySelectorAll('form').forEach(function(f) {
+            f.addEventListener('submit', function() {
+                if (!f.dataset.noRipple) showRipple();
+            });
+        });
+        // Show on link clicks with ripple
+        document.querySelectorAll('a[data-ripple]').forEach(function(a) {
+            a.addEventListener('click', function() { showRipple(); });
+        });
+    </script>
 </body>
 </html>

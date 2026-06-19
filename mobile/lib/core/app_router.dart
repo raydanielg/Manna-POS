@@ -33,6 +33,7 @@ import '../features/warranties/warranties_page.dart';
 import '../features/expense_categories/expense_categories_page.dart';
 import '../features/customer_groups/customer_groups_page.dart';
 import '../features/business_locations/business_locations_page.dart';
+import '../features/payroll/payroll_page.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
