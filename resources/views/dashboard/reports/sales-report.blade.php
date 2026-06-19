@@ -47,17 +47,17 @@
         <div class="report-summary-card">
             <div class="rsc-bar blue"></div>
             <div class="rsc-label">Total Revenue</div>
-            <div class="rsc-value">TZS {{ number_format($summary['total_revenue'],2) }}</div>
+            <div class="rsc-value">{{ $userCurrency }} {{ number_format($summary['total_revenue'],2) }}</div>
         </div>
         <div class="report-summary-card">
             <div class="rsc-bar amber"></div>
             <div class="rsc-label">Total Paid</div>
-            <div class="rsc-value">TZS {{ number_format($summary['total_paid'],2) }}</div>
+            <div class="rsc-value">{{ $userCurrency }} {{ number_format($summary['total_paid'],2) }}</div>
         </div>
         <div class="report-summary-card">
             <div class="rsc-bar red"></div>
             <div class="rsc-label">Outstanding</div>
-            <div class="rsc-value">TZS {{ number_format($summary['total_outstanding'],2) }}</div>
+            <div class="rsc-value">{{ $userCurrency }} {{ number_format($summary['total_outstanding'],2) }}</div>
         </div>
     </div>
 
@@ -93,8 +93,8 @@
                         <td class="font-mono text-xs" style="color:#2563eb;font-weight:600;">{{ $s->reference_no ?? $s->id }}</td>
                         <td>{{ $s->customer->name ?? 'Walk-in' }}</td>
                         <td style="white-space:nowrap;color:#64748b;font-size:0.82rem;">{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
-                        <td class="text-right" style="font-weight:700;">TZS {{ number_format($s->total_amount,2) }}</td>
-                        <td class="text-right" style="color:#16a34a;font-weight:600;">TZS {{ number_format($s->paid_amount,2) }}</td>
+                        <td class="text-right" style="font-weight:700;">{{ $userCurrency }} {{ number_format($s->total_amount,2) }}</td>
+                        <td class="text-right" style="color:#16a34a;font-weight:600;">{{ $userCurrency }} {{ number_format($s->paid_amount,2) }}</td>
                         <td><span class="badge badge-info">{{ $s->payment_method ?? '—' }}</span></td>
                         <td>
                             @if($s->status=='completed')
@@ -148,7 +148,7 @@ new Chart(salesCtx, {
         plugins: { legend: { position:'top', labels:{ usePointStyle:true, boxWidth:8 } } },
         scales: {
             x: { grid:{ display:false }, ticks:{ font:{size:10} } },
-            y: { beginAtZero:true, grid:{ color:'#f1f5f9' }, ticks:{ callback:v=>'TZS '+Number(v).toLocaleString() } },
+            y: { beginAtZero:true, grid:{ color:'#f1f5f9' }, ticks:{ callback:v=>window.__USER_CURRENCY+' '+Number(v).toLocaleString() } },
             y1: { position:'right', beginAtZero:true, grid:{ display:false }, ticks:{ stepSize:1 } }
         }
     }
