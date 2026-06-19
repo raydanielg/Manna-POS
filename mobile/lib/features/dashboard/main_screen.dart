@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     ProductsPage(),
     CustomersPage(),
     SalesPage(),
-    MorePage(),
+    PayrollPage(),
   ];
 
   @override
@@ -45,7 +45,7 @@ class _BottomNav extends StatelessWidget {
     _NavDef(Icons.inventory_2_outlined, Icons.inventory_2_rounded, 'Products'),
     _NavDef(Icons.people_outline_rounded, Icons.people_rounded, 'Customers'),
     _NavDef(Icons.receipt_long_outlined, Icons.receipt_long_rounded, 'Sales'),
-    _NavDef(Icons.grid_view_outlined, Icons.grid_view_rounded, 'More'),
+    _NavDef(Icons.account_balance_wallet_outlined, Icons.account_balance_wallet_rounded, 'Payroll'),
   ];
 
   @override

@@ -1742,5 +1742,25 @@ function exportTableToCSV(tableSelector, filename) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script>AOS.init({ once: true, offset: 40, duration: 700, easing: 'ease-out-cubic' });</script>
 
+{{-- Ripple Loading Overlay --}}
+<div id="rippleOverlay" class="ripple-overlay">
+    <img src="{{ asset('Ripple@1x-1.0s-200px-200px (1).svg') }}" alt="Loading">
+    <div class="ripple-text">Loading<span class="ripple-dots"></span></div>
+</div>
+<script>
+    window.showRipple = function(text) {
+        const el = document.getElementById('rippleOverlay');
+        if (text) el.querySelector('.ripple-text').innerHTML = text + '<span class="ripple-dots"></span>';
+        el.classList.add('open');
+    };
+    window.hideRipple = function() {
+        document.getElementById('rippleOverlay').classList.remove('open');
+    };
+    // Auto-show on link clicks with data-ripple attribute
+    document.querySelectorAll('a[data-ripple]').forEach(function(a) {
+        a.addEventListener('click', function() { showRipple(); });
+    });
+</script>
+
 </body>
 </html>
