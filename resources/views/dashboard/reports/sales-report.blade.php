@@ -1,88 +1,126 @@
 ﻿@extends('layouts.dashboard')
 @section('page_title','Sales Report')
 @section('content')
-<div class="dash-content">
-    <div class="page-header">
+<div class="dash-content animate__animated animate__fadeInUp report-page">
+
+    {{-- Header --}}
+    <div class="report-header-bar" data-aos="fade-down">
         <div>
-            <h1 class="page-title">Sales Report</h1>
-            <p class="page-subtitle">Analyze sales performance, revenue trends, and top products</p>
+            <h1>Sales Report</h1>
+            <p>{{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }} &middot; Analyze sales performance, revenue trends, and top products</p>
         </div>
-        <div class="page-actions">
-            <a href="?from_date={{ $from->copy()->subMonth()->format('Y-m-d') }}&to_date={{ $to->copy()->subMonth()->format('Y-m-d') }}" class="btn btn-outline btn-sm">Last Month</a>
-            <a href="?from_date={{ now()->startOfMonth()->format('Y-m-d') }}&to_date={{ now()->format('Y-m-d') }}" class="btn btn-outline btn-sm">This Month</a>
+        <div class="report-actions no-print">
+            <a href="?from_date={{ $from->copy()->subMonth()->format('Y-m-d') }}&to_date={{ $to->copy()->subMonth()->format('Y-m-d') }}" class="btn btn-secondary">Last Month</a>
+            <a href="?from_date={{ now()->startOfMonth()->format('Y-m-d') }}&to_date={{ now()->format('Y-m-d') }}" class="btn btn-secondary">This Month</a>
+            <button type="button" class="btn btn-primary" onclick="openPdfPreview('Sales Report')">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Preview PDF
+            </button>
+            <button type="button" class="btn btn-success" onclick="exportTableToCSV('#salesTable', 'sales-report-{{ $from->format('Y-m-d') }}.csv')">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Export Excel
+            </button>
         </div>
     </div>
 
     {{-- Date Filter --}}
-    <form method="GET" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1.5rem;background:#fff;padding:1rem;border-radius:12px;border:1px solid #e2e8f0;">
-        <div class="form-group" style="margin:0;"><label class="form-label" style="font-size:0.72rem;">From</label><input type="date" name="from_date" class="form-control" value="{{ request('from_date',$from->format('Y-m-d')) }}" style="width:150px;"></div>
-        <div class="form-group" style="margin:0;"><label class="form-label" style="font-size:0.72rem;">To</label><input type="date" name="to_date" class="form-control" value="{{ request('to_date',$to->format('Y-m-d')) }}" style="width:150px;"></div>
+    <form method="GET" class="report-filters no-print" data-aos="fade-up" data-aos-delay="50">
+        <div>
+            <label>From Date</label>
+            <input type="date" name="from_date" value="{{ request('from_date',$from->format('Y-m-d')) }}">
+        </div>
+        <div>
+            <label>To Date</label>
+            <input type="date" name="to_date" value="{{ request('to_date',$to->format('Y-m-d')) }}">
+        </div>
         <button type="submit" class="btn btn-primary" style="height:40px;">Generate Report</button>
-        <a href="{{ route('dashboard.reports.sales-report') }}" class="btn btn-outline" style="height:40px;">Reset</a>
+        <a href="{{ route('dashboard.reports.sales-report') }}" class="btn btn-secondary" style="height:40px;">Reset</a>
     </form>
 
     {{-- Summary Cards --}}
-    <div class="summary-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;">
-        <div class="summary-card" style="border-left:4px solid #16a34a;">
-            <div class="summary-label" style="color:#16a34a;">Total Sales</div>
-            <div class="summary-value" style="font-size:1.6rem;color:#15803d;">{{ number_format($summary['total_sales']) }}</div>
+    <div class="report-summary" data-aos="fade-up" data-aos-delay="100">
+        <div class="report-summary-card">
+            <div class="rsc-bar green"></div>
+            <div class="rsc-label">Total Sales</div>
+            <div class="rsc-value">{{ number_format($summary['total_sales']) }}</div>
         </div>
-        <div class="summary-card" style="border-left:4px solid #2563eb;">
-            <div class="summary-label" style="color:#2563eb;">Total Revenue</div>
-            <div class="summary-value" style="font-size:1.6rem;color:#1d4ed8;">TZS {{ number_format($summary['total_revenue'],2) }}</div>
+        <div class="report-summary-card">
+            <div class="rsc-bar blue"></div>
+            <div class="rsc-label">Total Revenue</div>
+            <div class="rsc-value">TZS {{ number_format($summary['total_revenue'],2) }}</div>
         </div>
-        <div class="summary-card" style="border-left:4px solid #d97706;">
-            <div class="summary-label" style="color:#d97706;">Total Paid</div>
-            <div class="summary-value" style="font-size:1.6rem;color:#b45309;">TZS {{ number_format($summary['total_paid'],2) }}</div>
+        <div class="report-summary-card">
+            <div class="rsc-bar amber"></div>
+            <div class="rsc-label">Total Paid</div>
+            <div class="rsc-value">TZS {{ number_format($summary['total_paid'],2) }}</div>
         </div>
-        <div class="summary-card" style="border-left:4px solid #e11d48;">
-            <div class="summary-label" style="color:#e11d48;">Outstanding</div>
-            <div class="summary-value" style="font-size:1.6rem;color:#be123c;">TZS {{ number_format($summary['total_outstanding'],2) }}</div>
+        <div class="report-summary-card">
+            <div class="rsc-bar red"></div>
+            <div class="rsc-label">Outstanding</div>
+            <div class="rsc-value">TZS {{ number_format($summary['total_outstanding'],2) }}</div>
         </div>
     </div>
 
     {{-- Charts Row --}}
-    <div class="page-grid" style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
-        <div class="page-card">
-            <div class="card-header"><div class="card-title">Daily Sales Trend</div></div>
-            <div style="padding:1rem;height:280px;"><canvas id="salesChart"></canvas></div>
+    <div class="report-chart-row" data-aos="fade-up" data-aos-delay="150">
+        <div class="report-chart-card">
+            <div class="rch-head">Daily Sales Trend</div>
+            <div class="rch-body"><canvas id="salesChart"></canvas></div>
         </div>
-        <div class="page-card">
-            <div class="card-header"><div class="card-title">Top Products</div></div>
-            <div style="padding:1rem;height:280px;"><canvas id="productsChart"></canvas></div>
+        <div class="report-chart-card">
+            <div class="rch-head">Top Products by Revenue</div>
+            <div class="rch-body"><canvas id="productsChart"></canvas></div>
         </div>
     </div>
 
     {{-- Sales Table --}}
-    <div class="page-card">
-        <div class="card-header">
-            <div class="card-title">Sales Details</div>
+    <div class="report-table-wrap" data-aos="fade-up" data-aos-delay="200">
+        <div class="rtw-head">
+            <div class="rtw-title">Sales Details</div>
             <div style="font-size:0.8rem;color:#64748b;">{{ $sales->firstItem() ?? 0 }}–{{ $sales->lastItem() ?? 0 }} of {{ $sales->total() }}</div>
         </div>
-        <div class="table-container">
-            <table class="data-table">
+        <div class="rtw-body tbl-responsive">
+            <table class="report-table" id="salesTable">
                 <thead>
-                    <tr><th>#</th><th>Reference</th><th>Customer</th><th>Date</th><th class="text-right">Total</th><th class="text-right">Paid</th><th>Method</th><th>Status</th></tr>
+                    <tr>
+                        <th>#</th><th>Reference</th><th>Customer</th><th>Date</th><th class="text-right">Total</th><th class="text-right">Paid</th><th>Method</th><th>Status</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @forelse($sales as $s)
-                    <tr>
+                    <tr data-aos="fade-up" data-aos-delay="{{ 250 + $loop->iteration * 40 }}">
                         <td class="text-slate-400">{{ $loop->iteration + ($sales->currentPage()-1)*$sales->perPage() }}</td>
                         <td class="font-mono text-xs" style="color:#2563eb;font-weight:600;">{{ $s->reference_no ?? $s->id }}</td>
                         <td>{{ $s->customer->name ?? 'Walk-in' }}</td>
                         <td style="white-space:nowrap;color:#64748b;font-size:0.82rem;">{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
                         <td class="text-right" style="font-weight:700;">TZS {{ number_format($s->total_amount,2) }}</td>
                         <td class="text-right" style="color:#16a34a;font-weight:600;">TZS {{ number_format($s->paid_amount,2) }}</td>
-                        <td><span class="badge badge-blue">{{ $s->payment_method ?? '—' }}</span></td>
-                        <td><span class="badge {{ $s->status=='completed' ? 'badge-green' : ($s->status=='pending' ? 'badge-yellow' : 'badge-gray') }}">{{ ucfirst($s->status ?? 'Draft') }}</span></td>
+                        <td><span class="badge badge-info">{{ $s->payment_method ?? '—' }}</span></td>
+                        <td>
+                            @if($s->status=='completed')
+                                <span class="badge badge-success">Completed</span>
+                            @elseif($s->status=='pending')
+                                <span class="badge badge-warning">Pending</span>
+                            @else
+                                <span class="badge badge-gray">{{ ucfirst($s->status ?? 'Draft') }}</span>
+                            @endif
+                        </td>
                     </tr>
                     @empty
-                    <tr><td colspan="8" class="text-center" style="padding:2.5rem;color:#94a3b8;">No sales found for the selected period.</td></tr>
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <div class="empty-title">No sales found</div>
+                                <div class="empty-desc">Adjust the date range or wait for new transactions.</div>
+                            </div>
+                        </td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div style="padding:1rem;">{{ $sales->links() }}</div>
+        <div style="padding:1rem;" class="no-print">{{ $sales->links() }}</div>
     </div>
 </div>
 @endsection
