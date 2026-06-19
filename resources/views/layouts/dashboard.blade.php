@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -28,6 +29,29 @@
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+
+        /* ── Global Links ──────────────────────────────── */
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+            position: relative;
+        }
+        a:hover { color: #1e40af; }
+        /* Animated underline for inline links (excludes nav/buttons) */
+        a:not(.nav-item):not(.child-item):not(.btn):not(.sign-out-btn):not(.header-dropdown-item):not(.notif-btn):not(.user-chip):not([onclick])::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
+        }
+        a:not(.nav-item):not(.child-item):not(.btn):not(.sign-out-btn):not(.header-dropdown-item):not(.notif-btn):not(.user-chip):not([onclick]):hover::after {
+            width: 100%;
+        }
+        a:active { transform: translateY(1px); }
 
         /* ── Sidebar ──────────────────────────────────── */
         .sidebar {
