@@ -455,6 +455,7 @@
             font-weight: 500;
         }
 
+        a.auth-footer-link,
         .auth-footer-link a {
             color: #2563eb;
             text-decoration: none;
@@ -464,7 +465,8 @@
             margin-left: 0.5rem;
         }
 
-        .auth-footer-link a:hover { color: #1d4ed8; text-decoration: underline; }
+        a.auth-footer-link:hover,
+        .auth-footer-link a:hover { color: #1d4ed8; }
 
         .divider {
             display: flex;
