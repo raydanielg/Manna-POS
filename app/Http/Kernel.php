@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'user.dashboard' => \App\Http\Middleware\CheckUserDashboard::class,
         'subscription' => \App\Http\Middleware\CheckSubscription::class,
         'blocked' => \App\Http\Middleware\CheckUserBlocked::class,
+        'permission' => \App\Http\Middleware\CheckPermission::class,
     ];
 }
