@@ -1,126 +1,118 @@
 ﻿@extends('layouts.dashboard')
 @section('page_title','Sales Report')
 @section('content')
-<div class="dash-content animate__animated animate__fadeInUp report-page">
+<div class="dash-content">
 
-    {{-- Header --}}
-    <div class="report-header-bar" data-aos="fade-down">
+    <div class="flex items-center justify-between mb-4">
         <div>
-            <h1>Sales Report</h1>
-            <p>{{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }} &middot; Analyze sales performance, revenue trends, and top products</p>
+            <h1 class="text-xl font-bold text-gray-900">Sales Report</h1>
+            <p class="text-sm text-gray-500">{{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }}</p>
         </div>
-        <div class="report-actions no-print">
-            <a href="?from_date={{ $from->copy()->subMonth()->format('Y-m-d') }}&to_date={{ $to->copy()->subMonth()->format('Y-m-d') }}" class="btn btn-secondary">Last Month</a>
-            <a href="?from_date={{ now()->startOfMonth()->format('Y-m-d') }}&to_date={{ now()->format('Y-m-d') }}" class="btn btn-secondary">This Month</a>
-            <button type="button" class="btn btn-primary" onclick="openPdfPreview('Sales Report')">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                Preview PDF
-            </button>
-            <button type="button" class="btn btn-success" onclick="exportTableToCSV('#salesTable', 'sales-report-{{ $from->format('Y-m-d') }}.csv')">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                Export Excel
+        <div class="flex gap-2 no-print">
+            <a href="{{ route('dashboard.reports.sales-report.pdf', ['from_date' => request('from_date'), 'to_date' => request('to_date')]) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Download PDF
+            </a>
+            <button type="button" onclick="window.print()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Print
             </button>
         </div>
     </div>
 
-    {{-- Date Filter --}}
-    <form method="GET" class="report-filters no-print" data-aos="fade-up" data-aos-delay="50">
+    <form method="GET" class="flex flex-wrap items-end gap-3 mb-6 p-4 bg-white rounded-lg border border-gray-200 no-print">
         <div>
-            <label>From Date</label>
-            <input type="date" name="from_date" value="{{ request('from_date',$from->format('Y-m-d')) }}">
+            <label class="block text-xs font-medium text-gray-600 mb-1">From Date</label>
+            <input type="date" name="from_date" value="{{ request('from_date',$from->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
         </div>
         <div>
-            <label>To Date</label>
-            <input type="date" name="to_date" value="{{ request('to_date',$to->format('Y-m-d')) }}">
+            <label class="block text-xs font-medium text-gray-600 mb-1">To Date</label>
+            <input type="date" name="to_date" value="{{ request('to_date',$to->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
         </div>
-        <button type="submit" class="btn btn-primary" style="height:40px;">Generate Report</button>
-        <a href="{{ route('dashboard.reports.sales-report') }}" class="btn btn-secondary" style="height:40px;">Reset</a>
+        <button type="submit" class="h-9 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">Generate</button>
+        <a href="{{ route('dashboard.reports.sales-report') }}" class="h-9 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 inline-flex items-center">Reset</a>
     </form>
 
-    {{-- Summary Cards --}}
-    <div class="report-summary" data-aos="fade-up" data-aos-delay="100">
-        <div class="report-summary-card">
-            <div class="rsc-bar green"></div>
-            <div class="rsc-label">Total Sales</div>
-            <div class="rsc-value">{{ number_format($summary['total_sales']) }}</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Sales</div>
+            <div class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($summary['total_sales']) }}</div>
         </div>
-        <div class="report-summary-card">
-            <div class="rsc-bar blue"></div>
-            <div class="rsc-label">Total Revenue</div>
-            <div class="rsc-value">{{ $userCurrency }} {{ number_format($summary['total_revenue'],2) }}</div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Revenue</div>
+            <div class="text-2xl font-bold text-gray-900 mt-1">{{ $userCurrency }} {{ number_format($summary['total_revenue'],2) }}</div>
         </div>
-        <div class="report-summary-card">
-            <div class="rsc-bar amber"></div>
-            <div class="rsc-label">Total Paid</div>
-            <div class="rsc-value">{{ $userCurrency }} {{ number_format($summary['total_paid'],2) }}</div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Paid</div>
+            <div class="text-2xl font-bold text-green-600 mt-1">{{ $userCurrency }} {{ number_format($summary['total_paid'],2) }}</div>
         </div>
-        <div class="report-summary-card">
-            <div class="rsc-bar red"></div>
-            <div class="rsc-label">Outstanding</div>
-            <div class="rsc-value">{{ $userCurrency }} {{ number_format($summary['total_outstanding'],2) }}</div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Outstanding</div>
+            <div class="text-2xl font-bold text-red-600 mt-1">{{ $userCurrency }} {{ number_format($summary['total_outstanding'],2) }}</div>
         </div>
     </div>
 
-    {{-- Charts Row --}}
-    <div class="report-chart-row" data-aos="fade-up" data-aos-delay="150">
-        <div class="report-chart-card">
-            <div class="rch-head">Daily Sales Trend</div>
-            <div class="rch-body"><canvas id="salesChart"></canvas></div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Daily Sales Trend</h3>
+            <div class="h-64"><canvas id="salesChart"></canvas></div>
         </div>
-        <div class="report-chart-card">
-            <div class="rch-head">Top Products by Revenue</div>
-            <div class="rch-body"><canvas id="productsChart"></canvas></div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Top Products by Revenue</h3>
+            <div class="h-64"><canvas id="productsChart"></canvas></div>
         </div>
     </div>
 
-    {{-- Sales Table --}}
-    <div class="report-table-wrap" data-aos="fade-up" data-aos-delay="200">
-        <div class="rtw-head">
-            <div class="rtw-title">Sales Details</div>
-            <div style="font-size:0.8rem;color:#64748b;">{{ $sales->firstItem() ?? 0 }}–{{ $sales->lastItem() ?? 0 }} of {{ $sales->total() }}</div>
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-gray-700">Sales Details</h3>
+            <span class="text-xs text-gray-500">{{ $sales->firstItem() ?? 0 }}–{{ $sales->lastItem() ?? 0 }} of {{ $sales->total() }}</span>
         </div>
-        <div class="rtw-body tbl-responsive">
-            <table class="report-table" id="salesTable">
-                <thead>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200" id="salesTable">
+                <thead class="bg-gray-50">
                     <tr>
-                        <th>#</th><th>Reference</th><th>Customer</th><th>Date</th><th class="text-right">Total</th><th class="text-right">Paid</th><th>Method</th><th>Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Paid</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Method</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($sales as $s)
-                    <tr data-aos="fade-up" data-aos-delay="{{ 250 + $loop->iteration * 40 }}">
-                        <td class="text-slate-400">{{ $loop->iteration + ($sales->currentPage()-1)*$sales->perPage() }}</td>
-                        <td class="font-mono text-xs" style="color:#2563eb;font-weight:600;">{{ $s->reference_no ?? $s->id }}</td>
-                        <td>{{ $s->customer->name ?? 'Walk-in' }}</td>
-                        <td style="white-space:nowrap;color:#64748b;font-size:0.82rem;">{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
-                        <td class="text-right" style="font-weight:700;">{{ $userCurrency }} {{ number_format($s->total_amount,2) }}</td>
-                        <td class="text-right" style="color:#16a34a;font-weight:600;">{{ $userCurrency }} {{ number_format($s->paid_amount,2) }}</td>
-                        <td><span class="badge badge-info">{{ $s->payment_method ?? '—' }}</span></td>
-                        <td>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($sales->currentPage()-1)*$sales->perPage() }}</td>
+                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $s->reference_no ?? $s->id }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">{{ $s->customer->name ?? 'Walk-in' }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-gray-900">{{ $userCurrency }} {{ number_format($s->total_amount,2) }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-green-600">{{ $userCurrency }} {{ number_format($s->paid_amount,2) }}</td>
+                        <td class="px-4 py-3 text-sm"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">{{ $s->payment_method ?? '—' }}</span></td>
+                        <td class="px-4 py-3 text-sm">
                             @if($s->status=='completed')
-                                <span class="badge badge-success">Completed</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700">Completed</span>
                             @elseif($s->status=='pending')
-                                <span class="badge badge-warning">Pending</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-50 text-yellow-700">Pending</span>
                             @else
-                                <span class="badge badge-gray">{{ ucfirst($s->status ?? 'Draft') }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-50 text-gray-600">{{ ucfirst($s->status ?? 'Draft') }}</span>
                             @endif
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8">
-                            <div class="empty-state">
-                                <svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                <div class="empty-title">No sales found</div>
-                                <div class="empty-desc">Adjust the date range or wait for new transactions.</div>
-                            </div>
-                        </td>
+                        <td colspan="8" class="px-4 py-12 text-center text-sm text-gray-500">No sales found for this period.</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div style="padding:1rem;" class="no-print">{{ $sales->links() }}</div>
+        @if($sales->hasPages())
+        <div class="px-4 py-3 border-t border-gray-200 no-print">{{ $sales->links() }}</div>
+        @endif
     </div>
 </div>
 @endsection
@@ -128,12 +120,11 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const salesCtx = document.getElementById('salesChart').getContext('2d');
 const salesLabels = {!! json_encode($dailySales->pluck('date')) !!};
 const salesRevenue = {!! json_encode($dailySales->pluck('revenue')) !!};
 const salesCount = {!! json_encode($dailySales->pluck('count')) !!};
 
-new Chart(salesCtx, {
+new Chart(document.getElementById('salesChart'), {
     type: 'line',
     data: {
         labels: salesLabels,
@@ -154,8 +145,7 @@ new Chart(salesCtx, {
     }
 });
 
-const prodCtx = document.getElementById('productsChart').getContext('2d');
-new Chart(prodCtx, {
+new Chart(document.getElementById('productsChart'), {
     type: 'doughnut',
     data: {
         labels: {!! json_encode($topProducts->pluck('product_name')->take(6)) !!},
