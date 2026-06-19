@@ -50,7 +50,7 @@ class PayrollController extends Controller
 
     public function showPeriod(PayrollPeriod $period)
     {
-        $this->authorize($period);
+        $this->guardPeriod($period);
         $period->load('entries.staff');
         $staffList = Staff::where('user_id', auth()->id())->get();
         $deductions = PayrollDeductionType::where('user_id', auth()->id())->where('is_active', true)->get();
@@ -68,7 +68,7 @@ class PayrollController extends Controller
 
     public function storeEntry(Request $req, PayrollPeriod $period)
     {
-        $this->authorize($period);
+        $this->guardPeriod($period);
         $data = $req->validate([
             'staff_id' => 'required|exists:staff,id',
             'basic_salary' => 'required|numeric|min:0',
@@ -102,14 +102,14 @@ class PayrollController extends Controller
 
     public function updateEntryStatus(Request $req, PayrollEntry $entry)
     {
-        $this->authorizeEntry($entry);
+        $this->guardEntry($entry);
         $entry->update(['status' => $req->status]);
         return redirect()->route('dashboard.payroll.period.show', $entry->payroll_period_id)->with('success', 'Entry updated');
     }
 
     public function destroyEntry(PayrollEntry $entry)
     {
-        $this->authorizeEntry($entry);
+        $this->guardEntry($entry);
         $periodId = $entry->payroll_period_id;
         $entry->delete();
         return redirect()->route('dashboard.payroll.period.show', $periodId)->with('success', 'Entry removed');
@@ -136,7 +136,7 @@ class PayrollController extends Controller
 
     public function updateDeductionType(Request $req, PayrollDeductionType $type)
     {
-        $this->authorizeType($type);
+        $this->guardType($type);
         $data = $req->validate([
             'name' => 'required|string|max:100',
             'type' => 'required|in:fixed,percentage',
@@ -149,14 +149,14 @@ class PayrollController extends Controller
 
     public function destroyDeductionType(PayrollDeductionType $type)
     {
-        $this->authorizeType($type);
+        $this->guardType($type);
         $type->delete();
         return redirect()->route('dashboard.payroll.deductions')->with('success', 'Deduction type removed');
     }
 
     public function payslip(PayrollEntry $entry)
     {
-        $this->authorizeEntry($entry);
+        $this->guardEntry($entry);
         $entry->load('staff', 'period');
         return view('dashboard.payroll.payslip', compact('entry'));
     }
