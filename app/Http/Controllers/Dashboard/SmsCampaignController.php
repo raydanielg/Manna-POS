@@ -8,10 +8,22 @@ use App\Models\SmsCampaignRecipient;
 use App\Models\Customer;
 use App\Models\SmsTemplate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SmsCampaignController extends Controller
 {
     public function __construct() { $this->middleware('auth'); }
+
+    private function jsonSuccess($message, $data = [])
+    {
+        return response()->json(array_merge(['success' => true, 'message' => $message], $data));
+    }
+
+    private function jsonError($message, $code = 422)
+    {
+        return response()->json(['success' => false, 'message' => $message], $code);
+    }
 
     public function index()
     {
@@ -33,24 +45,43 @@ class SmsCampaignController extends Controller
         ]);
 
         $customers = Customer::whereIn('id', $data['customer_ids'])->get();
-        $campaign = SmsCampaign::create([
-            'user_id' => auth()->id(),
-            'name' => $data['name'],
-            'message' => $data['message'],
-            'status' => 'draft',
-            'recipient_count' => $customers->count(),
-        ]);
-
-        foreach ($customers as $c) {
-            SmsCampaignRecipient::create([
-                'sms_campaign_id' => $campaign->id,
-                'customer_id' => $c->id,
-                'phone' => $c->mobile,
-                'name' => $c->name,
+        try {
+            DB::beginTransaction();
+            $campaign = SmsCampaign::create([
+                'user_id' => auth()->id(),
+                'name' => $data['name'],
+                'message' => $data['message'],
+                'status' => 'draft',
+                'recipient_count' => $customers->count(),
             ]);
-        }
 
-        return redirect()->route('dashboard.sms-campaigns')->with('success', 'Campaign created with ' . $customers->count() . ' recipients');
+            $recipients = [];
+            foreach ($customers as $c) {
+                $recipients[] = [
+                    'sms_campaign_id' => $campaign->id,
+                    'customer_id' => $c->id,
+                    'phone' => $c->mobile,
+                    'name' => $c->name,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            SmsCampaignRecipient::insert($recipients);
+            DB::commit();
+
+            Log::info('SMS campaign created', ['user_id' => auth()->id(), 'campaign_id' => $campaign->id, 'recipients' => count($recipients)]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonSuccess('Campaign created with ' . count($recipients) . ' recipients', ['campaign' => $campaign]);
+            }
+            return redirect()->route('dashboard.sms-campaigns')->with('success', 'Campaign created with ' . count($recipients) . ' recipients');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('SMS campaign creation failed', ['error' => $e->getMessage()]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonError('Failed to create campaign: ' . $e->getMessage(), 500);
+            }
+            return redirect()->route('dashboard.sms-campaigns')->with('error', 'Failed to create campaign');
+        }
     }
 
     public function show(SmsCampaign $campaign)
