@@ -198,14 +198,14 @@ sel.inp{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org
 
     <!-- PANEL 3: Done -->
     <div class="panel" id="wp3">
-      <div class="done-screen">
+      <div class="text-center py-6">
         <div class="done-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
-        <h2>You're all set, {{ explode(' ', $user->name)[0] }}!</h2>
-        <p>Your business is configured. You have a <strong>14-day free trial</strong> active. Choose a plan to continue after the trial ends.</p>
-        <button type="submit" class="done-btn" id="completeBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <h2 class="text-xl font-extrabold text-slate-900 mb-2">You're all set, {{ explode(' ', $user->name)[0] }}!</h2>
+        <p class="text-sm text-slate-500 leading-relaxed max-w-sm mx-auto mb-6">Your business is configured. You have a <strong class="text-slate-700">14-day free trial</strong> active. Choose a plan to continue after the trial ends.</p>
+        <button type="submit" class="btn-p py-3 px-7 rounded-xl font-bold text-sm inline-flex items-center gap-2" id="completeBtn">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           View Plans & Go to Dashboard
         </button>
       </div>
@@ -220,11 +220,12 @@ let currentStep=1;
 function goWiz(step){
   if(step===2){
     const bname=document.querySelector('[name="business_name"]').value.trim();
-    if(!bname){alert('Business name is required.');return;}
+    const bcountry=document.getElementById('bizCountry').value.trim();
+    if(!bname){Swal.fire({icon:'warning',title:'Business name required',text:'Please enter your business name.',confirmButtonColor:'#1d4ed8'});return;}
+    if(!bcountry){Swal.fire({icon:'warning',title:'Country required',text:'Please select your country.',confirmButtonColor:'#1d4ed8'});return;}
   }
   document.getElementById('wp'+currentStep).classList.remove('active');
   document.getElementById('wp'+step).classList.add('active');
-  // Update circles
   for(let i=1;i<=3;i++){
     const c=document.getElementById('wc'+i);
     const l=document.getElementById('wl'+i);
@@ -232,18 +233,24 @@ function goWiz(step){
     if(i<step){c.className='wiz-circle done';c.innerHTML='✓';l.className='wiz-step-label done';}
     else if(i===step){c.className='wiz-circle active';c.innerHTML=i;l.className='wiz-step-label active';}
     else{c.className='wiz-circle';c.innerHTML=i;l.className='wiz-step-label';}
-    if(i<3){const ln=document.getElementById('wline'+i);if(ln)ln.style.background=i<step?'#10b981':'#e2e8f0';}
+    if(i<3){const ln=document.getElementById('wline'+i);if(ln)ln.style.background=i<step?'#16a34a':'#e2e8f0';}
   }
   currentStep=step;
 }
+function pickCountry(el,name){
+  document.querySelectorAll('.country-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('bizCountry').value=name;
+}
 function selectUse(el){
-  document.querySelectorAll('.feat-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
+  document.querySelectorAll('.feat-card').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
 }
 document.getElementById('setupForm').addEventListener('submit',function(){
-  const btn=document.getElementById('completeBtn');btn.disabled=true;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Setting up...';
+  const btn=document.getElementById('completeBtn');
+  btn.disabled=true;
+  btn.innerHTML='<svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Setting up...';
 });
 </script>
-<style>@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}</style>
 </body>
 </html>
