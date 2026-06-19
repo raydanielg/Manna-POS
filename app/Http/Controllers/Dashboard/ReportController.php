@@ -186,16 +186,20 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
+        $bizId = $this->currentBusinessId();
 
-        $expired = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')->where('expiry_date','<',now())->count();
-        $expiringSoon = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')->whereBetween('expiry_date',[now(),now()->addDays(30)])->count();
+        $base = ProductBatch::whereHas('product', fn($q) => $q->forCurrentUser($bizId));
 
-        $products = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')
-            ->where('expiry_date','<=',$to)
+        $expired = (clone $base)->expired()->count();
+        $expiringSoon = (clone $base)->expiringSoon(30)->count();
+
+        $batches = (clone $base)->with(['product', 'supplier'])
+            ->whereNotNull('expiry_date')
+            ->where('expiry_date', '<=', $to)
             ->orderBy('expiry_date')
             ->paginate(25);
 
-        return view('dashboard.reports.expiry-report', compact('expired','expiringSoon','products','from','to'));
+        return view('dashboard.reports.expiry-report', compact('expired','expiringSoon','batches','from','to'));
     }
 
     public function productTrendsReport(Request $request)
@@ -328,11 +332,13 @@ class ReportController extends Controller
     {
         $dates = $this->resolveDates($request);
         $from = $dates['from']; $to = $dates['to'];
-        $expired = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')->where('expiry_date','<',now())->count();
-        $expiringSoon = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')->whereBetween('expiry_date',[now(),now()->addDays(30)])->count();
-        $products = Product::forCurrentUser($this->currentBusinessId())->whereNotNull('expiry_date')
-            ->where('expiry_date','<=',$to)->orderBy('expiry_date')->get();
-        $pdf = Pdf::loadView('dashboard.reports.pdf.expiry-report-pdf', compact('expired','expiringSoon','products','from','to'));
+        $bizId = $this->currentBusinessId();
+        $base = ProductBatch::whereHas('product', fn($q) => $q->forCurrentUser($bizId));
+        $expired = (clone $base)->expired()->count();
+        $expiringSoon = (clone $base)->expiringSoon(30)->count();
+        $batches = (clone $base)->with(['product', 'supplier'])
+            ->whereNotNull('expiry_date')->where('expiry_date', '<=', $to)->orderBy('expiry_date')->get();
+        $pdf = Pdf::loadView('dashboard.reports.pdf.expiry-report-pdf', compact('expired','expiringSoon','batches','from','to'));
         return $pdf->download('expiry-report-'.$from->format('Y-m-d').'.pdf');
     }
 
