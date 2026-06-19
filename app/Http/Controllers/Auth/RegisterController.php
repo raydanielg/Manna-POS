@@ -100,14 +100,7 @@ class RegisterController extends Controller
             'notes'                => '14-day free trial on registration',
         ]);
 
-        // Send welcome and OTP via email + SMS
-        try {
-            Mail::to($user->email)->send(new WelcomeEmail($user));
-            Mail::to($user->email)->send(new OtpVerificationEmail($user, $otp));
-        } catch (\Exception $e) {
-            \Log::error('Registration email failed: ' . $e->getMessage());
-        }
-
+        // Send OTP via SMS only (email OTP disabled)
         if ($user->phone) {
             $this->sms->sendWelcome($user->phone, explode(' ', $user->name)[0]);
             $this->sms->sendOtp($user->phone, $otp);
