@@ -791,6 +791,7 @@
 <body class="font-sans antialiased">
 
 @php
+    $userCurrency = Auth::user()->currency ?? 'TZS';
     $isHome        = request()->routeIs('dashboard');
     $isUserMgmt    = request()->routeIs('dashboard.user-management.*');
     $isPlanMgmt    = request()->routeIs('dashboard.plan-management.*');
