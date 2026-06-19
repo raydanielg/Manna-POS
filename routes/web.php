@@ -167,7 +167,9 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'user.dashboard', 
 
     // Contacts Routes
     Route::get('/contacts/suppliers', function () { return view('dashboard.contacts.suppliers'); })->name('dashboard.contacts.suppliers');
-    Route::get('/contacts/customers', [App\Http\Controllers\Dashboard\CustomerController::class, 'index'])->name('dashboard.contacts.customers');
+    Route::get('/contacts/customers', function () {
+        return view('dashboard.contacts.customers');
+    })->name('dashboard.contacts.customers');
     Route::get('/contacts/customers/{customer}', function (\App\Models\Customer $customer) {
         $customer->load('group');
         return view('dashboard.contacts.customer-view', compact('customer'));
