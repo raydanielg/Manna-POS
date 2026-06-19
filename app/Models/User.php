@@ -6,14 +6,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable {
+class User extends Authenticatable implements MustVerifyEmail {
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
         'name','email','password','role','status','phone','avatar',
         'business_name','business_type','business_address','business_city','business_country',
         'currency','tax_percentage','fiscal_year_start','owner_id','block_reason','blocked_at',
-        'pos_settings','setup_completed',
+        'pos_settings','setup_completed','email_verified_at',
+        'otp_code','otp_expires_at','activation_token','activation_token_expires_at',
     ];
 
     public function getAvatarUrlAttribute()
@@ -25,6 +26,8 @@ class User extends Authenticatable {
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'otp_expires_at' => 'datetime',
+        'activation_token_expires_at' => 'datetime',
         'tax_percentage'    => 'decimal:2',
         'setup_completed'   => 'boolean',
     ];

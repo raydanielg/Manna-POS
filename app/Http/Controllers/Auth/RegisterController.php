@@ -9,6 +9,10 @@ use App\Models\UserSubscription;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use App\Mail\WelcomeEmail;
+use App\Mail\OtpVerificationEmail;
 
 class RegisterController extends Controller
 {
