@@ -1247,7 +1247,7 @@
     <header class="top-header">
         <div class="flex items-center gap-3">
             {{-- Mobile Sidebar Toggle --}}
-            <button class="md:hidden p-1.5 rounded-lg hover:bg-slate-100" onclick="document.getElementById('sidebar').classList.toggle('open')">
+            <button class="md:hidden p-1.5 rounded-lg hover:bg-slate-100" onclick="toggleMobileSidebar()">
                 <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
             
@@ -1490,6 +1490,18 @@
 </div>
 
 <script>
+// ── Mobile Sidebar ────────────────────────────────────
+function toggleMobileSidebar() {
+    const sb = document.getElementById('sidebar');
+    const bd = document.getElementById('sidebarBackdrop');
+    const isOpen = sb.classList.toggle('open');
+    bd.classList.toggle('show', isOpen);
+}
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarBackdrop').classList.remove('show');
+}
+
 // ── Sidebar collapse ──────────────────────────────────
 function toggleSidebar() {
     const sb = document.getElementById('sidebar');
