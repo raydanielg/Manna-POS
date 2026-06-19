@@ -642,20 +642,14 @@
                     <span class="brand-name">{{ config('app.name', 'MannaPOS') }}</span>
                 </div>
 
-                <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 0;">
-                    <!-- GIF Card -->
-                    <div class="gif-card" style="width:100%;max-width:380px;background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:1.25rem;box-shadow:0 20px 60px rgba(0,0,0,0.25);overflow:hidden;">
-                        <div style="position:relative;border-radius:14px;overflow:hidden;background:#0a192f;">
-                            <img src="{{ asset('MannaPOS.gif') }}" alt="MannaPOS Demo" style="width:100%;height:auto;display:block;object-fit:cover;">
-                        </div>
-                        <div style="margin-top:1.25rem;text-align:center;">
-                            <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.4rem;">See MannaPOS in Action</div>
-                            <div style="font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.5;">Real-time sales, inventory &amp; customer management — all in one place.</div>
-                        </div>
+                <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:2rem 0;">
+                    <div style="font-size:1.6rem;font-weight:800;color:#fff;line-height:1.3;margin-bottom:.75rem;letter-spacing:-.5px;">
+                        Manage your business smarter.
                     </div>
-
-                    <!-- Features list below card -->
-                    <div style="width:100%;max-width:380px;margin-top:1.5rem;">
+                    <div style="font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:2rem;">
+                        MannaPOS gives you real-time sales tracking, smart inventory, customer management and receipts — all in one place.
+                    </div>
+                    <div style="width:100%;">
                         @foreach([
                             ['Sales & profit reports', 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'],
                             ['Smart inventory management', 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
