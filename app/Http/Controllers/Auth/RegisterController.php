@@ -19,7 +19,7 @@ class RegisterController extends Controller
 {
     use RegistersUsers;
 
-    protected $redirectTo = '/verify-otp';
+    protected $redirectTo = '/dashboard';
 
     protected NextSmsService $sms;
 
