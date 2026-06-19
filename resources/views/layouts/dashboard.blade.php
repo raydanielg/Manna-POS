@@ -802,6 +802,7 @@
     $isStockAdj    = request()->routeIs('dashboard.stock-adjustment.*');
     $isExpenses    = request()->routeIs('dashboard.expenses.*');
     $isBanking     = request()->routeIs('dashboard.banking.*');
+    $isMicrofinance = request()->routeIs('dashboard.microfinance.*');
     $isReports     = request()->routeIs('dashboard.reports.*');
     $isNotifTpl    = request()->routeIs('dashboard.notification-templates');
     $isSettings    = request()->routeIs('dashboard.settings.*');
