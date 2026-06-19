@@ -291,6 +291,21 @@ Route::prefix('dashboard')->middleware(['auth', 'user.dashboard', 'subscription'
     Route::put('/payroll/deductions/{type}', [\App\Http\Controllers\Dashboard\PayrollController::class, 'updateDeductionType'])->name('dashboard.payroll.deductions.update');
     Route::delete('/payroll/deductions/{type}', [\App\Http\Controllers\Dashboard\PayrollController::class, 'destroyDeductionType'])->name('dashboard.payroll.deductions.destroy');
     Route::get('/payroll/payslip/{entry}', [\App\Http\Controllers\Dashboard\PayrollController::class, 'payslip'])->name('dashboard.payroll.payslip');
+
+    // Manufacturing Routes
+    Route::get('/manufacturing', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'index'])->name('dashboard.manufacturing');
+    Route::get('/manufacturing/recipes', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'recipes'])->name('dashboard.manufacturing.recipes');
+    Route::get('/manufacturing/recipes/create', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'createRecipe'])->name('dashboard.manufacturing.recipe.create');
+    Route::post('/manufacturing/recipes', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'storeRecipe'])->name('dashboard.manufacturing.recipe.store');
+    Route::get('/manufacturing/recipes/{recipe}', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'showRecipe'])->name('dashboard.manufacturing.recipe.show');
+    Route::post('/manufacturing/recipes/{recipe}/items', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'storeRecipeItem'])->name('dashboard.manufacturing.recipe.item.store');
+    Route::delete('/manufacturing/recipe-items/{item}', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'destroyRecipeItem'])->name('dashboard.manufacturing.recipe.item.destroy');
+    Route::get('/manufacturing/production', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'production'])->name('dashboard.manufacturing.production');
+    Route::get('/manufacturing/production/create', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'createProduction'])->name('dashboard.manufacturing.production.create');
+    Route::post('/manufacturing/production', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'storeProduction'])->name('dashboard.manufacturing.production.store');
+    Route::get('/manufacturing/production/{run}', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'showProduction'])->name('dashboard.manufacturing.production.show');
+    Route::post('/manufacturing/production/{run}/status', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'updateProductionStatus'])->name('dashboard.manufacturing.production.status');
+    Route::post('/manufacturing/production/{run}/usage', [\App\Http\Controllers\Dashboard\ManufacturingController::class, 'recordUsage'])->name('dashboard.manufacturing.production.usage');
 });
 
 // ─── Admin Routes ──────────────────────────────────────────────────────────
