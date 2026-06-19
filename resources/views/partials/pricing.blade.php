@@ -36,7 +36,7 @@
         </div>
 
         {{-- Pricing Cards Grid --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch pricing-grid" id="pricingGrid">
             @foreach($plans as $plan)
                 @php
                     $isFeatured = $plan->is_featured;
