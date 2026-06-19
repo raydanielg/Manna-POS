@@ -2,49 +2,94 @@
 @section('page_title','Subscription Plans')
 @section('page_styles')
 <style>
-.plan-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.25rem; margin-bottom:1.5rem; }
+/* ── Stats Row ───────────────────────────────────────── */
+.stat-row { display:grid; grid-template-columns:repeat(5,1fr); gap:1rem; margin-bottom:1.75rem; }
+.stat-card {
+    background:#fff; border-radius:16px; border:1.5px solid #eef2f6;
+    padding:1.25rem 1.25rem 1.1rem; display:flex; align-items:center; gap:1rem;
+    transition:all 0.25s ease;
+}
+.stat-card:hover { box-shadow:0 8px 24px rgba(15,23,42,0.06); transform:translateY(-2px); border-color:#e2e8f0; }
+.stat-icon {
+    width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.stat-icon svg { width:22px; height:22px; }
+.stat-body { min-width:0; }
+.stat-val { font-size:1.5rem; font-weight:800; color:#0f172a; line-height:1; letter-spacing:-0.02em; }
+.stat-lbl { font-size:0.72rem; color:#94a3b8; margin-top:0.2rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+
+/* ── Plan Cards ───────────────────────────────────────── */
+.plan-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem; margin-bottom:1.5rem; }
 .plan-card {
-    background:#fff; border-radius:16px; border:2px solid #e9edf5;
-    overflow:hidden; transition:all 0.22s ease; position:relative;
+    background:#fff; border-radius:20px; border:1.5px solid #eef2f6;
+    overflow:hidden; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); position:relative;
     display:flex; flex-direction:column;
 }
-.plan-card:hover { box-shadow:0 12px 36px rgba(15,23,42,0.1); transform:translateY(-3px); border-color:#d1d9e6; }
-.plan-card.featured { border-color:#2563eb; box-shadow:0 4px 20px rgba(37,99,235,0.15); }
-.plan-badge {
-    position:absolute; top:1rem; right:1rem;
-    font-size:0.6rem; font-weight:800; padding:0.25rem 0.6rem;
-    border-radius:9999px; letter-spacing:0.1em; text-transform:uppercase;
-}
-.plan-header { padding:1.5rem 1.5rem 1rem; border-bottom:1px solid #f1f5f9; }
-.plan-icon {
-    width:48px; height:48px; border-radius:14px;
-    display:flex; align-items:center; justify-content:center;
-    margin-bottom:0.85rem;
-}
-.plan-name { font-size:1.05rem; font-weight:800; color:#0f172a; letter-spacing:-0.01em; }
-.plan-desc { font-size:0.78rem; color:#64748b; margin-top:0.3rem; line-height:1.5; }
-.plan-price-wrap { padding:1rem 1.5rem; background:#fafbff; }
-.plan-price { display:flex; align-items:baseline; gap:0.25rem; }
-.plan-currency { font-size:0.85rem; font-weight:700; color:#94a3b8; }
-.plan-amount { font-size:2rem; font-weight:900; color:#0f172a; letter-spacing:-0.04em; line-height:1; }
-.plan-period { font-size:0.78rem; color:#94a3b8; }
-.plan-yearly { font-size:0.72rem; color:#16a34a; font-weight:600; margin-top:0.25rem; }
-.plan-features { padding:1rem 1.5rem; flex:1; }
-.plan-feature { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; color:#475569; margin-bottom:0.5rem; }
-.plan-feature svg { width:15px; height:15px; flex-shrink:0; }
-.plan-feature.has { color:#16a34a; }
-.plan-feature.no  { color:#94a3b8; text-decoration:line-through; }
-.plan-limits { padding:0.75rem 1.5rem; background:#f8fafc; border-top:1px solid #f1f5f9; }
-.plan-limit-row { display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; margin-bottom:0.3rem; }
-.plan-limit-row:last-child { margin-bottom:0; }
-.plan-limit-label { color:#64748b; }
-.plan-limit-val { font-weight:700; color:#0f172a; }
-.plan-footer { padding:1rem 1.5rem; display:flex; gap:0.5rem; border-top:1px solid #f1f5f9; }
+.plan-card:hover { box-shadow:0 20px 40px rgba(15,23,42,0.1); transform:translateY(-5px); border-color:#dbeafe; }
+.plan-card.featured { border-color:#2563eb; box-shadow:0 8px 24px rgba(37,99,235,0.12); }
+.plan-card.featured:hover { box-shadow:0 24px 48px rgba(37,99,235,0.18); }
+.plan-card.inactive { opacity:0.75; border-color:#e2e8f0; }
 
-.stat-row { display:grid; grid-template-columns:repeat(5,1fr); gap:1rem; margin-bottom:1.5rem; }
-.stat-mini { background:#fff; border-radius:12px; border:1px solid #e9edf5; padding:1rem 1.25rem; text-align:center; }
-.stat-mini .val { font-size:1.5rem; font-weight:800; color:#0f172a; line-height:1; }
-.stat-mini .lbl { font-size:0.7rem; color:#94a3b8; margin-top:0.25rem; font-weight:500; }
+/* Top accent bar */
+.plan-accent { height:4px; width:100%; }
+
+/* Badges */
+.plan-badge-wrap { position:absolute; top:1.1rem; right:1.1rem; display:flex; flex-direction:column; gap:0.35rem; align-items:flex-end; }
+.plan-badge {
+    font-size:0.62rem; font-weight:800; padding:0.3rem 0.75rem;
+    border-radius:9999px; letter-spacing:0.1em; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:0.3rem;
+}
+
+/* Header */
+.plan-header { padding:1.5rem 1.5rem 1.1rem; }
+.plan-icon {
+    width:52px; height:52px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:0.9rem;
+}
+.plan-icon svg { width:26px; height:26px; }
+.plan-name { font-size:1.1rem; font-weight:800; color:#0f172a; letter-spacing:-0.02em; }
+.plan-desc { font-size:0.8rem; color:#64748b; margin-top:0.35rem; line-height:1.5; }
+
+/* Price area */
+.plan-price-wrap { padding:1.1rem 1.5rem; background:linear-gradient(180deg,#fafbff 0%,#f8fafc 100%); border-top:1px solid #f1f5f9; border-bottom:1px solid #f1f5f9; }
+.plan-price { display:flex; align-items:baseline; gap:0.3rem; }
+.plan-currency { font-size:0.9rem; font-weight:700; color:#94a3b8; }
+.plan-amount { font-size:2.2rem; font-weight:900; color:#0f172a; letter-spacing:-0.04em; line-height:1; }
+.plan-period { font-size:0.8rem; color:#94a3b8; font-weight:500; }
+.plan-yearly { font-size:0.75rem; color:#16a34a; font-weight:700; margin-top:0.4rem; display:flex; align-items:center; gap:0.35rem; }
+.plan-yearly::before { content:'↓'; font-size:0.65rem; }
+
+/* Limits */
+.plan-limits { padding:1rem 1.5rem; display:grid; grid-template-columns:1fr 1fr; gap:0.5rem 1rem; }
+.plan-limit-row { display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; }
+.plan-limit-label { color:#64748b; display:flex; align-items:center; gap:0.35rem; }
+.plan-limit-val { font-weight:700; color:#0f172a; }
+
+/* Features */
+.plan-features { padding:1rem 1.5rem; flex:1; border-bottom:1px solid #f1f5f9; }
+.plan-feature { display:flex; align-items:center; gap:0.6rem; font-size:0.82rem; color:#374151; margin-bottom:0.55rem; }
+.plan-feature svg { width:16px; height:16px; flex-shrink:0; }
+.plan-feature.has { color:#15803d; }
+.plan-feature.no  { color:#cbd5e1; text-decoration:line-through; }
+
+/* Footer */
+.plan-footer { padding:1.1rem 1.5rem; display:flex; gap:0.6rem; }
+.plan-footer .btn { border-radius:10px; font-weight:600; font-size:0.82rem; }
+
+/* Subscribers pill */
+.sub-pill {
+    display:inline-flex; align-items:center; gap:0.35rem;
+    font-size:0.72rem; font-weight:700; padding:0.25rem 0.6rem;
+    border-radius:9999px; background:#f1f5f9; color:#475569;
+}
+
+/* Empty state */
+.empty-plans { grid-column:1/-1; text-align:center; padding:4rem 2rem; background:#fff; border-radius:20px; border:1.5px solid #eef2f6; }
+.empty-plans svg { margin:0 auto 1rem; display:block; color:#cbd5e1; }
+.empty-plans h3 { font-size:1rem; font-weight:700; color:#475569; margin-bottom:0.35rem; }
+.empty-plans p { font-size:0.82rem; color:#94a3b8; margin-bottom:1.25rem; }
 
 .color-preview { width:12px; height:12px; border-radius:3px; display:inline-block; margin-right:4px; }
 .toggle-wrap { display:flex; align-items:center; gap:0.75rem; }
