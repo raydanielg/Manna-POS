@@ -618,6 +618,124 @@
         .profit-popup { display:none; position:absolute; top:calc(100% + 12px); right:0; min-width:240px; background:#fff; border-radius:14px; border:1px solid #e9edf5; box-shadow:0 8px 30px rgba(15,23,42,0.12); z-index:60; overflow:hidden; animation:hdSlideDown 0.2s ease; }
         .profit-popup.open { display:block; }
 
+        /* ── Report Print / A4 PDF Styles ───────────── */
+        .report-page { max-width: 100%; }
+        .report-header-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem 1.5rem; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            border-radius: 14px; margin-bottom: 1.5rem; color: #fff;
+        }
+        .report-header-bar h1 { font-size: 1.25rem; font-weight: 800; margin: 0; }
+        .report-header-bar p { font-size: 0.8rem; opacity: 0.85; margin: 0.25rem 0 0; }
+        .report-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .report-actions .btn { border-radius: 10px; padding: 0.55rem 1rem; font-size: 0.8rem; }
+        .report-filters {
+            background: #fff; border-radius: 14px; border: 1px solid #eef2f6;
+            padding: 1.25rem; margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;
+        }
+        .report-filters label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; margin-bottom: 0.35rem; display: block; }
+        .report-filters input, .report-filters select {
+            border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.55rem 0.85rem;
+            font-size: 0.85rem; color: #0f172a; background: #f8fafc; outline: none;
+        }
+        .report-filters input:focus, .report-filters select:focus { border-color: #2563eb; background: #fff; }
+        .report-summary {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;
+        }
+        .report-summary-card {
+            background: #fff; border-radius: 14px; padding: 1.25rem 1.5rem;
+            border: 1px solid #eef2f6; position: relative; overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .report-summary-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,23,42,0.06); }
+        .report-summary-card .rsc-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; margin-bottom: 0.4rem; }
+        .report-summary-card .rsc-value { font-size: 1.5rem; font-weight: 800; color: #0f172a; line-height: 1.2; }
+        .report-summary-card .rsc-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 14px 0 0 14px; }
+        .report-summary-card .rsc-bar.green { background: #22c55e; }
+        .report-summary-card .rsc-bar.blue { background: #3b82f6; }
+        .report-summary-card .rsc-bar.amber { background: #f59e0b; }
+        .report-summary-card .rsc-bar.red { background: #ef4444; }
+        .report-summary-card .rsc-bar.violet { background: #8b5cf6; }
+        .report-summary-card .rsc-bar.emerald { background: #10b981; }
+
+        .report-chart-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
+        }
+        .report-chart-card {
+            background: #fff; border-radius: 14px; border: 1px solid #eef2f6; overflow: hidden;
+        }
+        .report-chart-card .rch-head {
+            padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; background: #fcfdfe;
+            font-size: 0.9rem; font-weight: 700; color: #0f172a;
+        }
+        .report-chart-card .rch-body { padding: 1rem; height: 300px; position: relative; }
+
+        .report-table-wrap {
+            background: #fff; border-radius: 14px; border: 1px solid #eef2f6; overflow: hidden; margin-bottom: 1.5rem;
+        }
+        .report-table-wrap .rtw-head {
+            padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; background: #fcfdfe;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .report-table-wrap .rtw-head .rtw-title { font-size: 0.9rem; font-weight: 700; color: #0f172a; }
+        .report-table-wrap .rtw-body { padding: 0; }
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table thead th {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+            color: #64748b; padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #f1f5f9; background: #fafbff;
+        }
+        .report-table tbody td {
+            font-size: 0.82rem; color: #374151; padding: 0.75rem 1rem; border-bottom: 1px solid #f8fafc; vertical-align: middle;
+        }
+        .report-table tbody tr:last-child td { border-bottom: none; }
+        .report-table tbody tr:hover td { background: #fafbff; }
+        .report-table .text-right { text-align: right; }
+        .report-table .text-center { text-align: center; }
+
+        /* ── Print / A4 PDF Styles ──────────────────── */
+        @media print {
+            @page { size: A4; margin: 12mm; }
+            body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .sidebar, .header, .report-actions, .report-filters, .no-print { display: none !important; }
+            .main-content { margin-left: 0 !important; padding: 0 !important; }
+            .dash-content { padding: 0 !important; }
+            .report-page { max-width: 100%; }
+            .report-header-bar {
+                background: #1e3a8a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                border-radius: 0 !important; margin-bottom: 1rem !important;
+            }
+            .report-summary-card, .report-chart-card, .report-table-wrap {
+                box-shadow: none !important; border: 1px solid #e2e8f0 !important;
+                break-inside: avoid; page-break-inside: avoid;
+            }
+            .report-chart-card .rch-body { height: 220px !important; }
+            .report-table tbody tr { break-inside: avoid; }
+            .report-table thead { display: table-header-group; }
+            .report-summary { grid-template-columns: 1fr 1fr !important; gap: 0.75rem !important; }
+            .report-chart-row { grid-template-columns: 1fr !important; gap: 1rem !important; }
+            h1, h2, h3 { break-after: avoid; }
+            .page-break { page-break-before: always; }
+        }
+
+        /* ── PDF.js Preview Modal ──────────────────── */
+        .pdf-preview-overlay {
+            position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px);
+            z-index: 9999; display: none; align-items: center; justify-content: center; padding: 2rem;
+        }
+        .pdf-preview-overlay.open { display: flex; }
+        .pdf-preview-box {
+            background: #fff; border-radius: 16px; width: 100%; max-width: 900px; height: 90vh;
+            display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+        }
+        .pdf-preview-head {
+            padding: 1rem 1.5rem; border-bottom: 1px solid #f1f5f9; display: flex;
+            align-items: center; justify-content: space-between; background: #fcfdfe;
+        }
+        .pdf-preview-head h3 { font-size: 1rem; font-weight: 700; color: #0f172a; }
+        .pdf-preview-head button { background: #f1f5f9; border: none; border-radius: 8px; padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 600; color: #64748b; cursor: pointer; }
+        .pdf-preview-head button:hover { background: #e2e8f0; }
+        .pdf-preview-frame { flex: 1; width: 100%; border: none; }
+
         @yield('page_styles')
     </style>
 </head>
