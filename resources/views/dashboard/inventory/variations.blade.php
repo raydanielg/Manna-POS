@@ -89,6 +89,35 @@
     </div>
   </div>
 </div>
+<div class="modal-overlay" id="importModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div class="modal-title">Import Variation Templates</div>
+      <button class="modal-close" onclick="closeModal('importModal')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label class="form-label">Target Product *</label>
+        <select id="importProductSel" class="form-control"><option value="">Select product...</option></select>
+        <div class="invalid-feedback"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500;">
+          <input type="checkbox" id="selectAllImport" onchange="toggleSelectAll()" style="width:16px;height:16px;cursor:pointer;">
+          Select All
+        </label>
+        <span id="importCount" class="text-sm text-slate-500">0 selected</span>
+      </div>
+      <div id="importList" style="max-height:340px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;padding:0.5rem;">
+        <div class="tbl-empty">Loading...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('importModal')">Cancel</button>
+      <button class="btn btn-success" id="importBtn" onclick="importSelected()">Import Selected</button>
+    </div>
+  </div>
+</div>
 @endsection
 @section('scripts')
 <script>
