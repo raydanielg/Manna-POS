@@ -427,6 +427,10 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
             'tax_number'       => $u->tax_percentage,
         ], $pos));
     });
+    // Store API
+    Route::post('store/generate-slug',   [PublicStoreController::class, 'generateSlug']);
+    Route::put('store/settings',         [PublicStoreController::class, 'updateSettings']);
+
     Route::put('settings', function(\Illuminate\Http\Request $req) {
         $u = auth()->user();
         $fill = [];
