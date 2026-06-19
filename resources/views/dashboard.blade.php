@@ -27,32 +27,10 @@
         100% { transform: scale(0.9); opacity: 1; }
     }
 
-    /* Content hidden until overlay clears */
-    .dash-content {
-        opacity: 0;
-        transform: translateY(12px);
-        transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .dash-content.revealed {
-        opacity: 1;
-        transform: translateY(0);
-    }
 @endsection
 
 @section('content')
-
-{{-- Ripple Loading Overlay --}}
-<div id="rippleOverlay" class="ripple-overlay open">
-    <div class="ripple-inner">
-        <div class="spinner-ring"></div>
-        <div class="spinner-ring-2"></div>
-        <img src="{{ asset('favicon.ico') }}" alt="Loading" onerror="this.style.display='none'">
-    </div>
-    <div class="ripple-text">Loading<span class="ripple-dots"></span></div>
-    <div class="ripple-sub">Preparing your dashboard</div>
-</div>
-
-<div id="dashContent" class="dash-content">
+<div class="dash-content animate__animated animate__fadeInUp stagger-1">
 
     {{-- ── KPI Section ─────────────────────────────── --}}
     <div class="dash-section" id="kpi-section">
@@ -600,14 +578,6 @@ function toggleSection(id) {
         }
     } catch (e) {
         console.error('Dashboard stats failed', e);
-    } finally {
-        const overlay = document.getElementById('rippleOverlay');
-        const content = document.getElementById('dashContent');
-        if (overlay) overlay.classList.remove('open');
-        // Small delay so overlay fade-out plays before content reveals
-        setTimeout(function() {
-            if (content) content.classList.add('revealed');
-        }, 300);
     }
 })();
 </script>
