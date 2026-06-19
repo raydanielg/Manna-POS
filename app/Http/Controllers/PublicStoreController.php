@@ -50,15 +50,15 @@ class PublicStoreController extends Controller
         $total = 0;
         foreach ($data['items'] as $item) {
             $product = Product::where('id', $item['id'])
-                ->where('user_id', $user->id)
+                ->where('created_by', $user->id)
                 ->first();
             if (!$product) continue;
 
-            $subtotal = $product->price * $item['qty'];
+            $subtotal = $product->selling_price * $item['qty'];
             $total += $subtotal;
             $items[] = [
                 'name'     => $product->name,
-                'price'    => $product->price,
+                'price'    => $product->selling_price,
                 'qty'      => $item['qty'],
                 'subtotal' => $subtotal,
             ];
