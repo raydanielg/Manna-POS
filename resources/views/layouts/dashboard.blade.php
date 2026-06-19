@@ -1795,9 +1795,14 @@ function exportTableToCSV(tableSelector, filename) {
     <div class="ripple-sub">Please wait a moment</div>
 </div>
 <script>
-    window.showRipple = function(text) {
+    window.showRipple = function(text, sub) {
         const el = document.getElementById('rippleOverlay');
         if (text) el.querySelector('.ripple-text').innerHTML = text + '<span class="ripple-dots"></span>';
+        else el.querySelector('.ripple-text').innerHTML = 'Loading<span class="ripple-dots"></span>';
+        if (sub !== undefined) {
+            el.querySelector('.ripple-sub').textContent = sub;
+            el.querySelector('.ripple-sub').style.display = sub ? '' : 'none';
+        }
         el.classList.add('open');
     };
     window.hideRipple = function() {
