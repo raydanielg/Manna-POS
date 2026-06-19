@@ -84,7 +84,7 @@
 
 <main class="product-grid" id="productGrid">
   @forelse($products as $product)
-  <div class="product-card animate__animated animate__fadeInUp" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}">
+  <div class="product-card animate__animated animate__fadeInUp" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->selling_price }}">
     @if($showImages)
     <div class="product-img">
       @if($product->image)
