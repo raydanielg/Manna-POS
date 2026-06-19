@@ -70,12 +70,12 @@
 @endsection
 @section('scripts')
 <script>
-const API='/api/dashboard/staff'; let editId=null;
+const API='/api/dashboard/users'; const STAFF_LIST='/api/dashboard/staff'; let editId=null;
 async function loadList(){
   const s=document.getElementById('searchInput').value; const tbody=document.getElementById('tableBody');
   tbody.innerHTML='<tr><td colspan="8" class="tbl-empty">Loading...</td></tr>';
   try{
-    const items=await apiFetch(`${API}?search=${encodeURIComponent(s)}`);
+    const items=await apiFetch(`${STAFF_LIST}?search=${encodeURIComponent(s)}`);
     if(!items.length){tbody.innerHTML='<tr><td colspan="8" class="tbl-empty">No staff registered yet.</td></tr>';return;}
     tbody.innerHTML=items.map((u,i)=>`<tr>
       <td class="text-slate-400">${i+1}</td>
