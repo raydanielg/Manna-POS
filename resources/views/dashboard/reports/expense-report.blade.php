@@ -1,72 +1,110 @@
 ﻿@extends('layouts.dashboard')
 @section('page_title','Expense Report')
 @section('content')
-<div class="dash-content animate__animated animate__fadeInUp report-page">
+<div class="dash-content">
 
-    <div class="report-header-bar" data-aos="fade-down">
+    <div class="flex items-center justify-between mb-4">
         <div>
-            <h1>Expense Report</h1>
-            <p>Monitor spending by category and payment method over time</p>
+            <h1 class="text-xl font-bold text-gray-900">Expense Report</h1>
+            <p class="text-sm text-gray-500">{{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }}</p>
         </div>
-        <div class="report-actions no-print">
-            <button type="button" class="btn btn-primary" onclick="openPdfPreview('Expense Report')">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                Preview PDF
-            </button>
-            <button type="button" class="btn btn-success" onclick="exportTableToCSV('#expenseTable', 'expense-report.csv')">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                Export Excel
+        <div class="flex gap-2 no-print">
+            <button type="button" onclick="window.print()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Print
             </button>
         </div>
     </div>
 
-    <div class="report-filters no-print" data-aos="fade-up" data-aos-delay="50">
-        <div><label>From</label><input type="date" id="fromDate" onchange="loadReport()"></div>
-        <div><label>To</label><input type="date" id="toDate" onchange="loadReport()"></div>
-        <button class="btn btn-primary" style="height:40px;" onclick="loadReport()">Generate</button>
+    <form method="GET" class="flex flex-wrap items-end gap-3 mb-6 p-4 bg-white rounded-lg border border-gray-200 no-print">
+        <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">From Date</label>
+            <input type="date" name="from_date" value="{{ request('from_date',$from->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">To Date</label>
+            <input type="date" name="to_date" value="{{ request('to_date',$to->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
+        </div>
+        <button type="submit" class="h-9 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">Generate</button>
+        <a href="{{ route('dashboard.reports.expense-report') }}" class="h-9 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 inline-flex items-center">Reset</a>
+    </form>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Expenses</div>
+            <div class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($summary['total_expenses']) }}</div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</div>
+            <div class="text-2xl font-bold text-red-600 mt-1">{{ $userCurrency }} {{ number_format($summary['total_amount'],2) }}</div>
+        </div>
     </div>
 
-    <div class="report-summary" data-aos="fade-up" data-aos-delay="100">
-        <div class="report-summary-card"><div class="rsc-bar red"></div><div class="rsc-label">Total Expenses</div><div class="rsc-value" id="totalExpenses">-</div></div>
-        <div class="report-summary-card"><div class="rsc-bar blue"></div><div class="rsc-label">Total Amount</div><div class="rsc-value" id="totalAmount">-</div></div>
-    </div>
-
-    <div class="report-table-wrap" data-aos="fade-up" data-aos-delay="150">
-        <div class="rtw-head"><div class="rtw-title">Expense Details</div></div>
-        <div class="rtw-body tbl-responsive">
-            <table class="report-table" id="expenseTable">
-                <thead><tr><th>#</th><th>Reference</th><th>Category</th><th>Date</th><th class="text-right">Amount</th><th>Payment</th></tr></thead>
-                <tbody id="tableBody"><tr><td colspan="6"><div class="empty-state"><div class="empty-title">Select date range</div></div></td></tr></tbody>
+    @if($byCategory->count())
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-6">
+        <div class="px-4 py-3 border-b border-gray-200">
+            <h3 class="text-sm font-semibold text-gray-700">Expenses by Category</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Count</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach($byCategory as $cat)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-900">{{ $cat->category }}</td>
+                        <td class="px-4 py-3 text-sm text-right text-gray-600">{{ $cat->count }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-red-600">{{ $userCurrency }} {{ number_format($cat->total,2) }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
             </table>
         </div>
     </div>
+    @endif
+
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200">
+            <h3 class="text-sm font-semibold text-gray-700">Expense Details</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200" id="expenseTable">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amount</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($expenses as $e)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($expenses->currentPage()-1)*$expenses->perPage() }}</td>
+                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $e->reference_no ?? $e->id }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">{{ $e->category->name ?? 'N/A' }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $e->expense_date ? \Carbon\Carbon::parse($e->expense_date)->format('M d, Y') : '—' }}</td>
+                        <td class="px-4 py-3 text-sm text-right font-semibold text-red-600">{{ $userCurrency }} {{ number_format($e->amount,2) }}</td>
+                        <td class="px-4 py-3 text-sm"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">{{ $e->payment_method ?? '—' }}</span></td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="px-4 py-12 text-center text-sm text-gray-500">No expenses found for this period.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($expenses->hasPages())
+        <div class="px-4 py-3 border-t border-gray-200 no-print">{{ $expenses->links() }}</div>
+        @endif
+    </div>
 </div>
-@endsection
-@section('scripts')
-<script>
-const today=new Date().toISOString().split('T')[0];
-const firstDay=new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString().split('T')[0];
-document.getElementById('fromDate').value=firstDay;
-document.getElementById('toDate').value=today;
-async function loadReport(){
-  const from=document.getElementById('fromDate').value;const to=document.getElementById('toDate').value;
-  const tbody=document.getElementById('tableBody');
-  tbody.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="empty-title">Loading...</div></div></td></tr>';
-  try{
-    const items=await apiFetch(`/api/dashboard/expenses?from=${from}&to=${to}&per_page=500`);
-    document.getElementById('totalExpenses').textContent=items.length.toLocaleString();
-    document.getElementById('totalAmount').textContent='{{ $userCurrency }} ' + items.reduce((a,e)=>a+parseFloat(e.amount||0),0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
-    if(!items.length){tbody.innerHTML='<tr><td colspan="6"><div class="empty-state"><svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><div class="empty-title">No expenses found</div><div class="empty-desc">Adjust the date range to see results.</div></div></td></tr>';return;}
-    tbody.innerHTML=items.map((e,i)=>`<tr>
-      <td class="text-slate-400">${i+1}</td>
-      <td class="font-mono text-xs" style="color:#2563eb;font-weight:600;">${e.reference}</td>
-      <td>${e.category?e.category.name:'N/A'}</td>
-      <td style="white-space:nowrap;color:#64748b;font-size:0.82rem;">${e.expense_date}</td>
-      <td class="text-right" style="font-weight:700;color:#e11d48;">${parseFloat(e.amount).toFixed(2)}</td>
-      <td><span class="badge badge-info">${e.payment_method||'-'}</span></td>
-    </tr>`).join('');
-  }catch(e){tbody.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="empty-title">Error loading report</div></div></td></tr>';}
-}
-loadReport();
-</script>
 @endsection
