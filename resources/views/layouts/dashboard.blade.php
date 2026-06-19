@@ -803,6 +803,7 @@
     $isExpenses    = request()->routeIs('dashboard.expenses.*');
     $isBanking     = request()->routeIs('dashboard.banking.*');
     $isMicrofinance = request()->routeIs('dashboard.microfinance.*');
+    $isSmsCampaigns = request()->routeIs('dashboard.sms-campaigns.*');
     $isReports     = request()->routeIs('dashboard.reports.*');
     $isNotifTpl    = request()->routeIs('dashboard.notification-templates');
     $isSettings    = request()->routeIs('dashboard.settings.*');
