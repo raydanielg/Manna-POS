@@ -1029,6 +1029,12 @@
             </div>
         </div>
 
+        {{-- SMS Campaigns --}}
+        <a href="{{ route('dashboard.sms-campaigns') }}" class="nav-item {{ $isSmsCampaigns ? 'active' : '' }}" data-tip="SMS">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8 8 0 0 1-8-8c0-4.418 3.582-8 8-8s8 3.582 8 8z"/><path d="M7 8l10 0"/><path d="M7 16l10 0"/></svg>
+            <span class="nav-label">SMS Campaigns</span>
+        </a>
+
         <div class="nav-section-label">Analytics</div>
 
         {{-- Reports --}}
