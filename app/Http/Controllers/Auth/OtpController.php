@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\NextSmsService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\OtpVerificationEmail;
 use Illuminate\Support\Str;
 
 class OtpController extends Controller
