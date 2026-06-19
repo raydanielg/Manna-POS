@@ -239,8 +239,8 @@ class ReportController extends Controller
         $from = $dates['from']; $to = $dates['to'];
         $summary = [
             'total_purchases' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->count(),
-            'total_amount' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total_amount'),
-            'total_paid' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('paid_amount'),
+            'total_amount' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->sum('total'),
+            'total_paid' => Purchase::forCurrentUser($this->currentBusinessId())->whereBetween('purchase_date',[$from,$to])->selectRaw('COALESCE(SUM(total),0) as total_paid')->value('total_paid'),
         ];
         $purchases = Purchase::forCurrentUser($this->currentBusinessId())->with('supplier')
             ->whereBetween('purchase_date',[$from,$to])->orderBy('purchase_date','desc')->get();
@@ -250,12 +250,12 @@ class ReportController extends Controller
 
     public function inventoryReportPdf(Request $request)
     {
-        $lowStock = Product::forCurrentUser($this->currentBusinessId())->where(function($q){ $q->whereColumn('current_stock','<=','reorder_level')->orWhere('current_stock',0); })->count();
+        $lowStock = Product::forCurrentUser($this->currentBusinessId())->where(function($q){ $q->whereColumn('stock_quantity','<=','reorder_level')->orWhere('stock_quantity',0); })->count();
         $totalProducts = Product::forCurrentUser($this->currentBusinessId())->count();
-        $totalStockValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(current_stock * purchase_price) as val')->value('val') ?? 0;
-        $totalRetailValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(current_stock * selling_price) as val')->value('val') ?? 0;
-        $products = Product::forCurrentUser($this->currentBusinessId())->with('category')->orderBy('current_stock','asc')->get();
-        $categories = Product::forCurrentUser($this->currentBusinessId())->selectRaw('product_categories.name as category, COUNT(products.id) as count, SUM(products.current_stock) as stock')
+        $totalStockValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(stock_quantity * purchase_price) as val')->value('val') ?? 0;
+        $totalRetailValue = Product::forCurrentUser($this->currentBusinessId())->selectRaw('SUM(stock_quantity * selling_price) as val')->value('val') ?? 0;
+        $products = Product::forCurrentUser($this->currentBusinessId())->with('category')->orderBy('stock_quantity','asc')->get();
+        $categories = Product::forCurrentUser($this->currentBusinessId())->selectRaw('product_categories.name as category, COUNT(products.id) as count, SUM(products.stock_quantity) as stock')
             ->join('product_categories','products.category_id','=','product_categories.id')->groupBy('product_categories.name')->get();
         $pdf = Pdf::loadView('dashboard.reports.pdf.inventory-report-pdf', compact('lowStock','totalProducts','totalStockValue','totalRetailValue','products','categories'));
         return $pdf->download('inventory-report.pdf');
