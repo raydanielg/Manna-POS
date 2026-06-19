@@ -10,10 +10,18 @@ class BlogSeeder extends Seeder
 {
     public function run()
     {
-        // Truncate to avoid duplicate slug errors on re-seed
-        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // Truncate to avoid duplicate slug errors on re-seed (SQLite-safe)
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        }
         Blog::truncate();
-        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        }
 
         $posts = [
             [

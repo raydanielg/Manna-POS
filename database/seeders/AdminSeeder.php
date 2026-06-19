@@ -30,12 +30,20 @@ class AdminSeeder extends Seeder
             ]
         );
 
-        // Truncate and re-seed system data
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        // Truncate and re-seed system data (SQLite-safe)
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        }
         SystemConfig::truncate();
         BusinessCategory::truncate();
         PaymentGateway::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        }
 
         SystemConfig::insert([
             ['key' => 'app_name', 'value' => 'mannaPOS', 'group' => 'general', 'type' => 'text'],
