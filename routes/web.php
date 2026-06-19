@@ -191,7 +191,11 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'user.dashboard', 
     Route::get('/inventory/import-opening-stock', function () { return view('dashboard.inventory.import-opening-stock'); })->name('dashboard.inventory.import-opening-stock');
     Route::get('/inventory/selling-price-group', function () { return view('dashboard.inventory.selling-price-group'); })->name('dashboard.inventory.selling-price-group');
     Route::get('/inventory/units', function () { return view('dashboard.inventory.units'); })->name('dashboard.inventory.units');
-    Route::get('/inventory/product-categories', function () { return view('dashboard.inventory.product-categories'); })->name('dashboard.inventory.product-categories');
+    Route::get('/inventory/product-categories', function () {
+        $categories = \App\Models\ProductCategory::where('created_by', auth()->user()->currentBusinessId() ?? auth()->id())
+            ->orderBy('name')->get(['id','name']);
+        return view('dashboard.inventory.product-categories', compact('categories'));
+    })->name('dashboard.inventory.product-categories');
     Route::get('/inventory/brands', function () { return view('dashboard.inventory.brands'); })->name('dashboard.inventory.brands');
     Route::get('/inventory/warranties', function () { return view('dashboard.inventory.warranties'); })->name('dashboard.inventory.warranties');
 
