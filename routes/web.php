@@ -443,7 +443,7 @@ Route::middleware('auth')->prefix('api/dashboard')->group(function () {
         if ($req->has('city'))           $fill['business_city']      = $req->city;
         if ($req->has('country'))        $fill['business_country']   = $req->country;
         if ($req->has('currency'))       $fill['currency']           = $req->currency;
-        if ($req->has('fy_start'))       $fill['fiscal_year_start']  = $req->fy_start;
+        if ($req->filled('fy_start'))    $fill['fiscal_year_start']  = $req->fy_start;
         if ($req->has('tax_number'))     $fill['tax_percentage']     = $req->tax_number;
         // POS-specific settings (invoice + barcode) stored as JSON
         $posKeys = ['invoice_title','invoice_prefix','invoice_header','invoice_footer','payment_terms',
