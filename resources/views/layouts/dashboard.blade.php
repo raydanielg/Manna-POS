@@ -1810,35 +1810,5 @@ function exportTableToCSV(tableSelector, filename) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script>AOS.init({ once: true, offset: 40, duration: 700, easing: 'ease-out-cubic' });</script>
 
-{{-- Ripple Loading Overlay --}}
-<div id="rippleOverlay" class="ripple-overlay">
-    <div class="ripple-inner">
-        <div class="spinner-ring"></div>
-        <div class="spinner-ring-2"></div>
-        <img src="{{ asset('Ripple@1x-1.0s-200px-200px (1).svg') }}" alt="Loading">
-    </div>
-    <div class="ripple-text">Loading<span class="ripple-dots"></span></div>
-    <div class="ripple-sub">Please wait a moment</div>
-</div>
-<script>
-    window.showRipple = function(text, sub) {
-        const el = document.getElementById('rippleOverlay');
-        if (text) el.querySelector('.ripple-text').innerHTML = text + '<span class="ripple-dots"></span>';
-        else el.querySelector('.ripple-text').innerHTML = 'Loading<span class="ripple-dots"></span>';
-        if (sub !== undefined) {
-            el.querySelector('.ripple-sub').textContent = sub;
-            el.querySelector('.ripple-sub').style.display = sub ? '' : 'none';
-        }
-        el.classList.add('open');
-    };
-    window.hideRipple = function() {
-        document.getElementById('rippleOverlay').classList.remove('open');
-    };
-    // Auto-show on link clicks with data-ripple attribute
-    document.querySelectorAll('a[data-ripple]').forEach(function(a) {
-        a.addEventListener('click', function() { showRipple(); });
-    });
-</script>
-
 </body>
 </html>
