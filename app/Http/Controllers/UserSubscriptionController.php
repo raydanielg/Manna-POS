@@ -49,6 +49,12 @@ class UserSubscriptionController extends Controller
             'expires_at'           => $amount == 0 ? now()->addDays(14) : now()->addDays($days),
         ]);
 
-        return redirect('/dashboard')->with('subscribed', 'Welcome to ' . $plan->name . '!');
+        $message = 'Welcome to ' . $plan->name . '!';
+
+        if ($req->expectsJson() || $req->ajax()) {
+            return response()->json(['message' => $message, 'plan' => $plan->name]);
+        }
+
+        return redirect('/dashboard')->with('subscribed', $message);
     }
 }
