@@ -100,13 +100,13 @@
       <div class="product-desc">{{ Str::limit($product->description, 60) }}</div>
       @endif
       <div style="display:flex;align-items:baseline;gap:.3rem;">
-        <span class="product-price">{{ number_format($product->price, 0) }}</span>
+        <span class="product-price">{{ number_format($product->selling_price, 0) }}</span>
         <span class="product-currency">{{ $user->currency ?? 'TZS' }}</span>
       </div>
       @if($product->sku)
       <div style="font-size:.68rem;color:#94a3b8;margin-top:.2rem;">SKU: {{ $product->sku }}</div>
       @endif
-      <button class="add-btn" onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }})">
+      <button class="add-btn" onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->selling_price }})">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
         Add to Cart
       </button>
