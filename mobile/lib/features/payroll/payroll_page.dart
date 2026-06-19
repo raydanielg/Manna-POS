@@ -230,7 +230,7 @@ class _PayrollPageState extends State<PayrollPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(Formatters.money(e['net_salary'] ?? 0), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                    Text(fmt.fmtCurrency((e['net_salary'] ?? 0).toDouble()), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
                     const SizedBox(height: 2),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
@@ -280,7 +280,7 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayValue = item.isMoney
-        ? Formatters.money(item.value)
+        ? fmt.fmtCurrency((item.value as num).toDouble())
         : item.value.toString();
 
     return Container(
