@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Blog;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BlogSeeder extends Seeder
 {
