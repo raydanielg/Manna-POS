@@ -285,6 +285,11 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'blocked', 'user.d
     // Calendar & Todo Routes
     Route::get('/calendar', [App\Http\Controllers\Dashboard\TodoController::class, 'index'])->name('dashboard.calendar');
 
+    // Online Orders Routes
+    Route::get('/online-orders', [App\Http\Controllers\Dashboard\OnlineOrderController::class, 'index'])->name('dashboard.online-orders');
+    Route::post('/online-orders/{orderId}/status', [App\Http\Controllers\Dashboard\OnlineOrderController::class, 'updateStatus']);
+    Route::delete('/online-orders/{orderId}', [App\Http\Controllers\Dashboard\OnlineOrderController::class, 'destroy']);
+
     // ─── Mobile Optimized Pages ────────────────────────────────────
     Route::get('/m/products', function () { return view('dashboard.mobile.products'); })->name('dashboard.mobile.products');
     Route::get('/m/customers', function () { return view('dashboard.mobile.customers'); })->name('dashboard.mobile.customers');
