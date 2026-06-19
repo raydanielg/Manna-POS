@@ -1838,17 +1838,17 @@ function exportTableToCSV(tableSelector, filename) {
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
         <span>POS</span>
     </a>
-    <a href="{{ route('dashboard.inventory.products') }}" class="mb-item" data-route="inventory" data-ripple onclick="hideRipple()">
+    <a href="{{ route('dashboard.mobile.products') }}" class="mb-item" data-route="products" data-ripple onclick="hideRipple()">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
         <span>Stock</span>
     </a>
-    <a href="{{ route('dashboard.contacts.customers') }}" class="mb-item" data-route="customers" data-ripple onclick="hideRipple()">
+    <a href="{{ route('dashboard.mobile.customers') }}" class="mb-item" data-route="customers" data-ripple onclick="hideRipple()">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>
         <span>Clients</span>
     </a>
-    <a href="{{ route('dashboard.reports.sales-report') }}" class="mb-item" data-route="reports" data-ripple onclick="hideRipple()">
+    <a href="{{ route('dashboard.mobile.sales') }}" class="mb-item" data-route="sales" data-ripple onclick="hideRipple()">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        <span>Reports</span>
+        <span>Sales</span>
     </a>
     <a href="{{ route('dashboard.profile') }}" class="mb-item" data-route="profile" data-ripple onclick="hideRipple()">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
