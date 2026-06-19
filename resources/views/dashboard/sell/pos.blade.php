@@ -173,7 +173,7 @@
 @section('content')
 @php
 $user = auth()->user();
-$currency = $userCurrency;
+$currency = $user->currency ?? 'TZS';
 @endphp
 
 <div class="pos-layout">
