@@ -69,6 +69,7 @@ class AppRouter {
       GoRoute(path: '/expense-categories', builder: (_, __) => const ExpenseCategoriesPage()),
       GoRoute(path: '/customer-groups', builder: (_, __) => const CustomerGroupsPage()),
       GoRoute(path: '/business-locations', builder: (_, __) => const BusinessLocationsPage()),
+      GoRoute(path: '/payroll', builder: (_, __) => const PayrollPage()),
     ],
     errorBuilder: (_, __) => Scaffold(
       body: Center(

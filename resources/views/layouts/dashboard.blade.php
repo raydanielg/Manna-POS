@@ -787,6 +787,25 @@
         }
 
         @yield('page_styles')
+
+        .ripple-overlay {
+            position: fixed; inset: 0; z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            opacity: 0; pointer-events: none; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .ripple-overlay.open { opacity: 1; pointer-events: auto; visibility: visible; }
+        .ripple-overlay img { width: 130px; height: 130px; }
+        .ripple-overlay .ripple-text {
+            margin-top: 1rem; font-size: 0.88rem; font-weight: 700; color: #e2e8f0;
+            letter-spacing: 0.08em; text-transform: uppercase;
+        }
+        .ripple-overlay .ripple-dots::after {
+            content: ''; animation: rippleDots 1.4s infinite steps(4, end);
+        }
+        @keyframes rippleDots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%{content:'...'} }
     </style>
 </head>
 <body class="font-sans antialiased">
