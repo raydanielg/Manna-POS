@@ -109,6 +109,7 @@ class RegisterController extends Controller
         }
 
         if ($user->phone) {
+            $this->sms->sendWelcome($user->phone, explode(' ', $user->name)[0]);
             $this->sms->sendOtp($user->phone, $otp);
         }
 
