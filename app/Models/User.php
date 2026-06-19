@@ -11,7 +11,7 @@ class User extends Authenticatable implements MustVerifyEmail {
 
     protected $fillable = [
         'name','email','password','role','status','phone','avatar',
-        'business_name','business_type','business_address','business_city','business_country',
+        'business_name','business_type','business_address','business_city','business_country','business_region',
         'currency','tax_percentage','fiscal_year_start','owner_id','block_reason','blocked_at',
         'pos_settings','setup_completed','email_verified_at',
         'otp_code','otp_expires_at','activation_token','activation_token_expires_at',
