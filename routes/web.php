@@ -168,7 +168,9 @@ Route::prefix('dashboard')->middleware(['auth', 'verify.otp', 'user.dashboard', 
     // Contacts Routes
     Route::get('/contacts/suppliers', function () { return view('dashboard.contacts.suppliers'); })->name('dashboard.contacts.suppliers');
     Route::get('/contacts/customers', function () {
-        return view('dashboard.contacts.customers');
+        $groups = \App\Models\CustomerGroup::where('created_by', auth()->user()->currentBusinessId() ?? auth()->id())
+            ->orderBy('name')->get(['id','name']);
+        return view('dashboard.contacts.customers', compact('groups'));
     })->name('dashboard.contacts.customers');
     Route::get('/contacts/customers/{customer}', function (\App\Models\Customer $customer) {
         $customer->load('group');
