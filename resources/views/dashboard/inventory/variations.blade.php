@@ -127,19 +127,22 @@ async function init(){
     const products=await apiFetch('/api/dashboard/products');
     const sel1=document.getElementById('productFilter');
     const sel2=document.getElementById('productSel');
+    const sel3=document.getElementById('importProductSel');
     const opts=products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
     sel1.innerHTML='<option value="">All Products</option>'+opts;
     sel2.innerHTML='<option value="">Select product...</option>'+opts;
+    if(sel3) sel3.innerHTML='<option value="">Select product...</option>'+opts;
   }catch(e){}
   loadList();
 }
 async function loadList(){
   const s=document.getElementById('searchInput').value;
   const pid=document.getElementById('productFilter').value;
+  const st=document.getElementById('statusFilter').value;
   const tbody=document.getElementById('tableBody');
   tbody.innerHTML='<tr><td colspan="9" class="tbl-empty">Loading...</td></tr>';
   try{
-    const items=await apiFetch(`${API}?search=${encodeURIComponent(s)}&product_id=${pid}`);
+    const items=await apiFetch(`${API}?search=${encodeURIComponent(s)}&product_id=${pid}${st?'&status='+st:''}`);
     if(!items.length){tbody.innerHTML='<tr><td colspan="9" class="tbl-empty">No variations found.</td></tr>';return;}
     tbody.innerHTML=items.map((v,i)=>`<tr>
       <td class="text-slate-400">${i+1}</td>
@@ -177,6 +180,44 @@ function deleteItem(id,val){
     try{await apiFetch(`${API}/${id}`,{method:'DELETE'});showToast('Variation deleted!');loadList();}
     catch(e){showToast(e.message||'Delete failed','error');}
   });
+}
+async function openImportModal(){
+  document.getElementById('selectAllImport').checked=false;
+  document.getElementById('importCount').textContent='0 selected';
+  const list=document.getElementById('importList');
+  list.innerHTML='<div class="tbl-empty">Loading...</div>';
+  openModal('importModal');
+  try{
+    const items=await apiFetch(`${API}/library`);
+    if(!items.length){list.innerHTML='<div class="tbl-empty">No library items available.</div>';return;}
+    list.innerHTML=items.map((it)=>`<label style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem;border-radius:6px;cursor:pointer;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+      <input type="checkbox" class="import-checkbox" data-item='${JSON.stringify(it).replace(/'/g,"&#39;")}' onchange="updateImportCount()" style="width:16px;height:16px;cursor:pointer;">
+      <div style="flex:1;"><div class="font-semibold">${it.attribute_name}: ${it.attribute_value}</div><div class="text-xs text-slate-500">Extra price: ${parseFloat(it.additional_price||0).toFixed(2)}</div></div>
+    </label>`).join('');
+  }catch(e){list.innerHTML='<div class="tbl-empty">Failed to load library.</div>';}
+}
+function toggleSelectAll(){
+  const checked=document.getElementById('selectAllImport').checked;
+  document.querySelectorAll('.import-checkbox').forEach(cb=>cb.checked=checked);
+  updateImportCount();
+}
+function updateImportCount(){
+  const count=document.querySelectorAll('.import-checkbox:checked').length;
+  document.getElementById('importCount').textContent=count+' selected';
+}
+async function importSelected(){
+  const productId=document.getElementById('importProductSel').value;
+  if(!productId){showToast('Please select a target product','warning');return;}
+  const checked=document.querySelectorAll('.import-checkbox:checked');
+  if(!checked.length){showToast('Please select at least one variation','warning');return;}
+  const items=Array.from(checked).map(cb=>JSON.parse(cb.dataset.item));
+  const btn=document.getElementById('importBtn');btn.disabled=true;btn.textContent='Importing...';
+  try{
+    const res=await apiFetch(`${API}/import`,{method:'POST',body:JSON.stringify({product_id:productId,items})});
+    closeModal('importModal');showToast(res.message||`Imported ${res.imported} variations`);
+    loadList();
+  }catch(e){showToast(e.message||'Import failed','error');}
+  finally{btn.disabled=false;btn.textContent='Import Selected';}
 }
 init();
 </script>
