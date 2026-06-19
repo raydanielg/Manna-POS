@@ -1087,21 +1087,27 @@
                 <div class="notif-btn" onclick="toggleHeaderDropdown('hdr-quick')">
                     <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M9 12h6"/><path d="M12 9v6"/></svg>
                 </div>
-                <div class="header-dropdown-menu" style="min-width:180px;">
-                    <a href="#" class="header-dropdown-item">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M16 3l0 4"/><path d="M8 3l0 4"/><path d="M4 11l16 0"/><path d="M11 15l0 3"/><path d="M12 15l0 3"/></svg>
-                        Calendar
+                <div class="header-dropdown-menu" style="min-width:200px;">
+                    <a href="{{ route('dashboard.calendar') }}" class="header-dropdown-item">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <div><div style="font-weight:600;">Calendar & Tasks</div><div style="font-size:.68rem;color:#94a3b8;margin-top:1px;">View your schedule</div></div>
                     </a>
-                    <a href="#" class="header-dropdown-item">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/><path d="M9 12l2 2l4 -4"/></svg>
-                        Add To Do
+                    <a href="{{ route('dashboard.calendar') }}?add=1" class="header-dropdown-item" id="quickAddTodo">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                        <div><div style="font-weight:600;">Quick Add Task</div><div style="font-size:.68rem;color:#94a3b8;margin-top:1px;">Create a new to-do item</div></div>
                     </a>
-                    <a href="#" class="header-dropdown-item">
-                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 17l0 .01"/><path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"/></svg>
-                        Application Tour
+                    <div class="header-dropdown-divider"></div>
+                    <a href="{{ route('dashboard.crm.activities') }}" class="header-dropdown-item">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h-11a3 3 0 0 1 -3-3v-11a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3z"/><path d="M9 9l2 2l4-4"/></svg>
+                        <div><div style="font-weight:600;">CRM Activities</div><div style="font-size:.68rem;color:#94a3b8;margin-top:1px;">Track customer interactions</div></div>
                     </a>
                 </div>
             </div>
+
+            {{-- Calendar Button --}}
+            <a href="{{ route('dashboard.calendar') }}" class="notif-btn" title="Calendar & Tasks">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </a>
 
             {{-- Calculator Button --}}
             <button class="notif-btn" title="Calculator (Alt+C)" onclick="openCalc()">
@@ -1490,6 +1496,78 @@ document.addEventListener('keydown', e => {
 });
 </script>
 @yield('scripts')
+
+{{-- PDF Preview Modal --}}
+<div id="pdfPreviewOverlay" class="pdf-preview-overlay" onclick="closePdfPreview(event)">
+    <div class="pdf-preview-box" onclick="event.stopPropagation()">
+        <div class="pdf-preview-head">
+            <h3 id="pdfPreviewTitle">Report Preview</h3>
+            <div style="display:flex;gap:0.5rem;">
+                <button onclick="downloadPdf()" style="background:#2563eb;color:#fff;">
+                    <svg class="w-4 h-4" style="display:inline;vertical-align:middle;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Download PDF
+                </button>
+                <button onclick="closePdfPreview()">Close</button>
+            </div>
+        </div>
+        <iframe id="pdfPreviewFrame" class="pdf-preview-frame"></iframe>
+    </div>
+</div>
+
+{{-- Shared Report Export Utilities --}}
+<script>
+/* Print-to-PDF with live preview */
+function openPdfPreview(title) {
+    document.getElementById('pdfPreviewTitle').textContent = title || 'Report Preview';
+    const iframe = document.getElementById('pdfPreviewFrame');
+    const doc = document.documentElement.cloneNode(true);
+    // Hide sidebar & header in preview
+    const sidebar = doc.querySelector('.sidebar');
+    const header = doc.querySelector('.header');
+    const overlay = doc.getElementById('pdfPreviewOverlay');
+    if (sidebar) sidebar.style.display = 'none';
+    if (header) header.style.display = 'none';
+    if (overlay) overlay.style.display = 'none';
+    // Fix main content margin
+    const mc = doc.querySelector('.main-content');
+    if (mc) mc.style.marginLeft = '0';
+    const html = '<!DOCTYPE html><html>' + doc.innerHTML + '</html>';
+    iframe.srcdoc = html;
+    document.getElementById('pdfPreviewOverlay').classList.add('open');
+}
+function closePdfPreview(e) {
+    if (e && e.target !== e.currentTarget) return;
+    document.getElementById('pdfPreviewOverlay').classList.remove('open');
+    document.getElementById('pdfPreviewFrame').srcdoc = '';
+}
+function downloadPdf() {
+    window.print();
+    Swal.fire({ icon:'success', title:'PDF downloaded!', timer:2000, showConfirmButton:false, toast:true, position:'top-end' });
+}
+
+/* CSV Export */
+function exportTableToCSV(tableSelector, filename) {
+    const table = document.querySelector(tableSelector);
+    if (!table) { Swal.fire({icon:'error',title:'Table not found'}); return; }
+    let csv = [];
+    const rows = table.querySelectorAll('tr');
+    rows.forEach(row => {
+        let cols = [];
+        row.querySelectorAll('th, td').forEach(cell => {
+            let text = cell.innerText.replace(/"/g, '""').trim();
+            if (text.includes(',') || text.includes('"') || text.includes('\n')) text = '"' + text + '"';
+            cols.push(text);
+        });
+        csv.push(cols.join(','));
+    });
+    const blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    Swal.fire({ icon:'success', title:'Excel (CSV) exported!', timer:2000, showConfirmButton:false, toast:true, position:'top-end' });
+}
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script>AOS.init({ once: true, offset: 40, duration: 700, easing: 'ease-out-cubic' });</script>
