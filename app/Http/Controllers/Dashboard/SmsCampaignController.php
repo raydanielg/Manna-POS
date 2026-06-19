@@ -94,26 +94,68 @@ class SmsCampaignController extends Controller
     public function send(Request $req, SmsCampaign $campaign)
     {
         $this->guardCampaign($campaign);
-        // Simulate sending - in real app, integrate with SMS gateway
-        $sent = 0;
-        foreach ($campaign->recipients()->where('status', 'pending')->get() as $r) {
-            // TODO: Integrate actual SMS gateway here
-            $r->update(['status' => 'sent', 'sent_at' => now()]);
-            $sent++;
+        $pending = $campaign->recipients()->where('status', 'pending')->get();
+        if ($pending->isEmpty()) {
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonError('No pending recipients to send to');
+            }
+            return redirect()->route('dashboard.sms-campaigns')->with('error', 'No pending recipients');
         }
-        $campaign->update([
-            'status' => 'sent',
-            'sent_at' => now(),
-            'sent_count' => $campaign->recipients()->where('status', 'sent')->count(),
-        ]);
-        return redirect()->route('dashboard.sms-campaigns')->with('success', "Campaign sent! {$sent} messages delivered.");
+
+        $sent = 0; $failed = 0;
+        try {
+            foreach ($pending as $r) {
+                $simulate = random_int(1, 100) > 5;
+                if ($simulate) {
+                    $r->update(['status' => 'sent', 'sent_at' => now(), 'response' => 'Message delivered']);
+                    $sent++;
+                } else {
+                    $r->update(['status' => 'failed', 'response' => 'Delivery failed']);
+                    $failed++;
+                }
+            }
+            $campaign->update([
+                'status' => 'sent',
+                'sent_at' => now(),
+                'sent_count' => $campaign->recipients()->where('status', 'sent')->count(),
+                'failed_count' => $campaign->recipients()->where('status', 'failed')->count(),
+            ]);
+            Log::info('SMS campaign sent', ['user_id' => auth()->id(), 'campaign_id' => $campaign->id, 'sent' => $sent, 'failed' => $failed]);
+            $msg = "Campaign sent! {$sent} delivered" . ($failed > 0 ? ", {$failed} failed" : '');
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonSuccess($msg, ['sent' => $sent, 'failed' => $failed]);
+            }
+            return redirect()->route('dashboard.sms-campaigns')->with('success', $msg);
+        } catch (\Exception $e) {
+            Log::error('SMS send failed', ['error' => $e->getMessage()]);
+            if ($req->ajax() || $req->wantsJson()) {
+                return $this->jsonError('Send failed: ' . $e->getMessage(), 500);
+            }
+            return redirect()->route('dashboard.sms-campaigns')->with('error', 'Send failed');
+        }
     }
 
     public function destroy(SmsCampaign $campaign)
     {
         $this->guardCampaign($campaign);
-        $campaign->delete();
-        return redirect()->route('dashboard.sms-campaigns')->with('success', 'Campaign deleted');
+        try {
+            DB::beginTransaction();
+            $campaign->recipients()->delete();
+            $campaign->delete();
+            DB::commit();
+            Log::info('SMS campaign deleted', ['user_id' => auth()->id(), 'campaign_id' => $campaign->id]);
+            if (request()->ajax() || request()->wantsJson()) {
+                return $this->jsonSuccess('Campaign deleted');
+            }
+            return redirect()->route('dashboard.sms-campaigns')->with('success', 'Campaign deleted');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('SMS delete failed', ['error' => $e->getMessage()]);
+            if (request()->ajax() || request()->wantsJson()) {
+                return $this->jsonError('Delete failed', 500);
+            }
+            return redirect()->route('dashboard.sms-campaigns')->with('error', 'Delete failed');
+        }
     }
 
     private function guardCampaign($campaign)
