@@ -794,3 +794,30 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
     Route::post('file-manager/delete',     [AdminFileManagerController::class, 'delete'])->name('file-manager.delete');
     Route::get('file-manager/download',    [AdminFileManagerController::class, 'download'])->name('file-manager.download');
 });
+
+// ── Emergency Cache Clear (no auth required) ──
+Route::get('/clear-all-caches', function () {
+    $commands = [
+        'config:clear',
+        'cache:clear',
+        'view:clear',
+        'route:clear',
+        'clear-compiled',
+        'event:clear',
+        'optimize:clear',
+    ];
+    $results = [];
+    foreach ($commands as $cmd) {
+        try {
+            \Artisan::call($cmd);
+            $results[] = "✅ {$cmd}";
+        } catch (\Exception $e) {
+            $results[] = "❌ {$cmd}: " . $e->getMessage();
+        }
+    }
+    return response()->json([
+        'message' => 'All caches cleared!',
+        'results' => $results,
+        'timestamp' => now()->toDateTimeString(),
+    ]);
+});
