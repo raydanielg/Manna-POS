@@ -93,6 +93,19 @@ Route::get('/gdpr', function () {
 
 Auth::routes();
 
+// Laravel email verification route redirects → our custom OTP system
+Route::get('/email/verify', function () {
+    return redirect()->route('verify.otp');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function () {
+    return redirect()->route('verify.otp');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function () {
+    return redirect()->route('verify.otp');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+
 // OTP Verification & Activation
 Route::get('/verify-otp', [App\Http\Controllers\Auth\OtpController::class, 'show'])->middleware('auth')->name('verify.otp');
 Route::post('/verify-otp', [App\Http\Controllers\Auth\OtpController::class, 'verify'])->middleware('auth')->name('verify.otp.post');
