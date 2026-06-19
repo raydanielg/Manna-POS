@@ -55,14 +55,14 @@ class SmsCampaignController extends Controller
 
     public function show(SmsCampaign $campaign)
     {
-        $this->authorize($campaign);
+        $this->guardCampaign($campaign);
         $campaign->load('recipients.customer');
         return view('dashboard.sms-campaigns.show', compact('campaign'));
     }
 
     public function send(Request $req, SmsCampaign $campaign)
     {
-        $this->authorize($campaign);
+        $this->guardCampaign($campaign);
         // Simulate sending - in real app, integrate with SMS gateway
         $sent = 0;
         foreach ($campaign->recipients()->where('status', 'pending')->get() as $r) {
@@ -80,12 +80,12 @@ class SmsCampaignController extends Controller
 
     public function destroy(SmsCampaign $campaign)
     {
-        $this->authorize($campaign);
+        $this->guardCampaign($campaign);
         $campaign->delete();
         return redirect()->route('dashboard.sms-campaigns')->with('success', 'Campaign deleted');
     }
 
-    private function authorize($campaign)
+    private function guardCampaign($campaign)
     {
         if ($campaign->user_id !== auth()->id()) abort(403);
     }

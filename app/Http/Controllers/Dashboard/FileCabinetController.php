@@ -54,19 +54,19 @@ class FileCabinetController extends Controller
 
     public function download(FileCabinet $file)
     {
-        $this->authorize($file);
+        $this->guardFile($file);
         return Storage::disk('public')->download($file->file_path, $file->file_name);
     }
 
     public function destroy(FileCabinet $file)
     {
-        $this->authorize($file);
+        $this->guardFile($file);
         Storage::disk('public')->delete($file->file_path);
         $file->delete();
         return redirect()->route('dashboard.file-cabinet')->with('success', 'File deleted');
     }
 
-    private function authorize($file)
+    private function guardFile($file)
     {
         if ($file->user_id !== auth()->id()) abort(403);
     }
