@@ -12,6 +12,7 @@ use App\Models\Customer;
 use App\Models\SaleItem;
 use App\Models\PurchaseItem;
 use App\Models\StockAdjustment;
+use App\Models\ProductBatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
