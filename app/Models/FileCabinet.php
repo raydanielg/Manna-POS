@@ -17,6 +17,11 @@ class FileCabinet extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function folder()
+    {
+        return $this->belongsTo(FileCabinetFolder::class, 'folder_id');
+    }
+
     public function getFileSizeFormattedAttribute()
     {
         $bytes = $this->file_size;
