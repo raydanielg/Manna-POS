@@ -72,7 +72,7 @@ async function loadReport(){
     <td style="color:${(p.margin_per_unit||0)>=0?'#16a34a':'#dc2626'};font-weight:600;">${fmtMoney(p.margin_per_unit)}</td>
   </tr>`).join('');}
 }
-function fmtMoney(n){return 'TZS '+Number(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtMoney(n){return '{{ $userCurrency }} '+Number(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 loadReport();
 </script>
