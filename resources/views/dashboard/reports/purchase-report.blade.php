@@ -58,9 +58,9 @@ async function loadReport(){
   try{
     const items=await apiFetch(`/api/dashboard/purchases?from=${from}&to=${to}&per_page=500`);
     document.getElementById('totalOrders').textContent=items.length.toLocaleString();
-    document.getElementById('totalCost').textContent='TZS ' + items.reduce((a,p)=>a+parseFloat(p.total||0),0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('totalCost').textContent='{{ $userCurrency }} ' + items.reduce((a,p)=>a+parseFloat(p.total||0),0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
     const unpaid=items.filter(p=>p.payment_status==='unpaid').reduce((a,p)=>a+parseFloat(p.total||0),0);
-    document.getElementById('totalUnpaid').textContent='TZS ' + unpaid.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('totalUnpaid').textContent='{{ $userCurrency }} ' + unpaid.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
     if(!items.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><div class="empty-title">No purchases found</div><div class="empty-desc">Adjust the date range to see results.</div></div></td></tr>';return;}
     tbody.innerHTML=items.map((p,i)=>`<tr>
       <td class="text-slate-400">${i+1}</td>

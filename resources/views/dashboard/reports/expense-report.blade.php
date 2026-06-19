@@ -55,7 +55,7 @@ async function loadReport(){
   try{
     const items=await apiFetch(`/api/dashboard/expenses?from=${from}&to=${to}&per_page=500`);
     document.getElementById('totalExpenses').textContent=items.length.toLocaleString();
-    document.getElementById('totalAmount').textContent='TZS ' + items.reduce((a,e)=>a+parseFloat(e.amount||0),0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('totalAmount').textContent='{{ $userCurrency }} ' + items.reduce((a,e)=>a+parseFloat(e.amount||0),0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
     if(!items.length){tbody.innerHTML='<tr><td colspan="6"><div class="empty-state"><svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><div class="empty-title">No expenses found</div><div class="empty-desc">Adjust the date range to see results.</div></div></td></tr>';return;}
     tbody.innerHTML=items.map((e,i)=>`<tr>
       <td class="text-slate-400">${i+1}</td>

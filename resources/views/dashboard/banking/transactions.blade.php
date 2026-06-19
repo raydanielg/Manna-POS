@@ -50,15 +50,15 @@
     <div class="summary-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1rem;">
         <div class="summary-card" style="border-left:4px solid #16a34a;">
             <div class="summary-label" style="color:#16a34a;">Total In</div>
-            <div class="summary-value" style="font-size:1.5rem;color:#15803d;">TZS {{ number_format($summary['total_in'] ?? 0,2) }}</div>
+            <div class="summary-value" style="font-size:1.5rem;color:#15803d;">{{ $userCurrency }} {{ number_format($summary['total_in'] ?? 0,2) }}</div>
         </div>
         <div class="summary-card" style="border-left:4px solid #e11d48;">
             <div class="summary-label" style="color:#e11d48;">Total Out</div>
-            <div class="summary-value" style="font-size:1.5rem;color:#be123c;">TZS {{ number_format($summary['total_out'] ?? 0,2) }}</div>
+            <div class="summary-value" style="font-size:1.5rem;color:#be123c;">{{ $userCurrency }} {{ number_format($summary['total_out'] ?? 0,2) }}</div>
         </div>
         <div class="summary-card" style="border-left:4px solid #2563eb;">
             <div class="summary-label" style="color:#2563eb;">Net Flow</div>
-            <div class="summary-value" style="font-size:1.5rem;color:#1d4ed8;">TZS {{ number_format(($summary['total_in'] ?? 0) - ($summary['total_out'] ?? 0),2) }}</div>
+            <div class="summary-value" style="font-size:1.5rem;color:#1d4ed8;">{{ $userCurrency }} {{ number_format(($summary['total_in'] ?? 0) - ($summary['total_out'] ?? 0),2) }}</div>
         </div>
     </div>
 
@@ -89,9 +89,9 @@
                         <td>{{ $tx->description ?: '—' }}</td>
                         <td>{{ $tx->reference_number ?: '—' }}</td>
                         <td class="text-right" style="font-weight:700;{{ in_array($tx->type,['deposit','transfer_in','payment','refund']) ? 'color:#16a34a;' : 'color:#e11d48;' }}">
-                            {{ in_array($tx->type,['deposit','transfer_in','payment','refund']) ? '+' : '-' }} TZS {{ number_format($tx->amount,2) }}
+                            {{ in_array($tx->type,['deposit','transfer_in','payment','refund']) ? '+' : '-' }} {{ $userCurrency }} {{ number_format($tx->amount,2) }}
                         </td>
-                        <td class="text-right" style="font-weight:600;color:#0f172a;">TZS {{ number_format($tx->balance_after,2) }}</td>
+                        <td class="text-right" style="font-weight:600;color:#0f172a;">{{ $userCurrency }} {{ number_format($tx->balance_after,2) }}</td>
                     </tr>
                     @empty
                     <tr><td colspan="7" class="text-center" style="padding:2.5rem;color:#94a3b8;">No transactions found.</td></tr>
@@ -119,7 +119,7 @@
                         <label class="form-label">Account *</label>
                         <select name="bank_account_id" class="form-control" required>
                             @foreach($accounts as $acc)
-                            <option value="{{ $acc->id }}">{{ $acc->account_name }} ({{ ucfirst($acc->account_type) }} — TZS {{ number_format($acc->current_balance,2) }})</option>
+                            <option value="{{ $acc->id }}">{{ $acc->account_name }} ({{ ucfirst($acc->account_type) }} — {{ $userCurrency }} {{ number_format($acc->current_balance,2) }})</option>
                             @endforeach
                         </select>
                     </div>

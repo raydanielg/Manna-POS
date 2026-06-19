@@ -32,8 +32,8 @@
                         <td><span class="badge badge-blue">{{ ucfirst(str_replace('_',' ',$acc->account_type)) }}</span></td>
                         <td>{{ $acc->bank_name }}</td>
                         <td>{{ $acc->account_number ?: '—' }}</td>
-                        <td class="text-right">TZS {{ number_format($acc->opening_balance,2) }}</td>
-                        <td class="text-right" style="font-weight:700;color:#0f172a;">TZS {{ number_format($acc->current_balance,2) }}</td>
+                        <td class="text-right">{{ $userCurrency }} {{ number_format($acc->opening_balance,2) }}</td>
+                        <td class="text-right" style="font-weight:700;color:#0f172a;">{{ $userCurrency }} {{ number_format($acc->current_balance,2) }}</td>
                         <td>
                             @if($acc->is_active)
                                 <span class="badge badge-green">Active</span>

@@ -16,7 +16,7 @@
     <div class="summary-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem;">
         <div class="summary-card" style="background:linear-gradient(135deg,#0a192f,#1e3a8a);color:#fff;">
             <div class="summary-label" style="color:#93c5fd;">Total Balance</div>
-            <div class="summary-value" style="font-size:1.8rem;">TZS {{ number_format($totalBalance,2) }}</div>
+            <div class="summary-value" style="font-size:1.8rem;">{{ $userCurrency }} {{ number_format($totalBalance,2) }}</div>
         </div>
         <div class="summary-card" style="border-left:4px solid #16a34a;">
             <div class="summary-label" style="color:#16a34a;">Active Accounts</div>
@@ -49,7 +49,7 @@
                             </td>
                             <td><span class="badge badge-blue">{{ ucfirst(str_replace('_',' ',$acc->account_type)) }}</span></td>
                             <td>{{ $acc->bank_name }}</td>
-                            <td class="text-right" style="font-weight:700;color:#0f172a;">TZS {{ number_format($acc->current_balance,2) }}</td>
+                            <td class="text-right" style="font-weight:700;color:#0f172a;">{{ $userCurrency }} {{ number_format($acc->current_balance,2) }}</td>
                         </tr>
                         @empty
                         <tr><td colspan="4" class="text-center" style="padding:2rem;color:#94a3b8;">No accounts yet. <a href="{{ route('dashboard.banking.accounts') }}">Create one</a>.</td></tr>
@@ -73,7 +73,7 @@
                         <div style="font-size:0.72rem;color:#94a3b8;">{{ $tx->bankAccount->account_name ?? '—' }} &middot; {{ $tx->transaction_date->format('M d, Y') }}</div>
                     </div>
                     <div style="font-weight:700;font-size:0.9rem;{{ in_array($tx->type,['deposit','transfer_in','payment','refund']) ? 'color:#16a34a;' : 'color:#e11d48;' }}">
-                        {{ in_array($tx->type,['deposit','transfer_in','payment','refund']) ? '+' : '-' }} TZS {{ number_format($tx->amount,2) }}
+                        {{ in_array($tx->type,['deposit','transfer_in','payment','refund']) ? '+' : '-' }} {{ $userCurrency }} {{ number_format($tx->amount,2) }}
                     </div>
                 </div>
                 @empty

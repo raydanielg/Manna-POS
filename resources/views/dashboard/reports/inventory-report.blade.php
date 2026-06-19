@@ -66,7 +66,7 @@ async function loadReport(){
     else if(sf==='out')items=items.filter(p=>p.stock_quantity<=0);
     document.getElementById('totalProducts').textContent=items.length.toLocaleString();
     const sv=items.reduce((a,p)=>a+(parseFloat(p.purchase_price||0)*parseFloat(p.stock_quantity||0)),0);
-    document.getElementById('stockValue').textContent='TZS ' + sv.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('stockValue').textContent='{{ $userCurrency }} ' + sv.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
     document.getElementById('lowStockCount').textContent=items.filter(p=>p.stock_quantity<=p.reorder_level&&p.stock_quantity>0).length.toLocaleString();
     document.getElementById('outOfStockCount').textContent=items.filter(p=>p.stock_quantity<=0).length.toLocaleString();
     if(!items.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty-state"><svg class="empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><div class="empty-title">No products found</div></div></td></tr>';return;}
