@@ -85,38 +85,47 @@ sel.inp{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org
         </div>
       </div>
 
-      <div class="mb-4">
-        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Country <span class="text-rose-500">*</span></label>
-        <div class="grid grid-cols-3 gap-2 mb-2" id="countryGrid">
-          @foreach($countries as $country)
-          <div class="country-chip {{ $user->business_country == $country->name ? 'on' : '' }}" onclick="pickCountry(this,'{{ $country->name }}','{{ $country->code }}')">
-            <span class="flag">{{ $country->flag_emoji }}</span>
-            <span>{{ $country->name }}</span>
-          </div>
-          @endforeach
-        </div>
-        <input type="hidden" name="business_country" id="bizCountry" value="{{ $user->business_country }}">
-        <p class="text-[10px] text-slate-400 mt-1">Click your country. Showing East African countries.</p>
-      </div>
-
       <div class="grid grid-cols-2 gap-3 mb-4">
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">City / Town</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Country <span class="text-rose-500">*</span></label>
           <div class="relative">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            <input type="text" name="business_city" class="inp" value="{{ $user->business_city }}" placeholder="e.g. Dar es Salaam">
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Currency <span class="text-rose-500">*</span></label>
-          <div class="relative">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <select name="currency" class="inp sel" required>
-              @foreach($currencies as $c)
-              <option value="{{ $c->code }}" {{ $user->currency==$c->code?'selected':'' }}>{{ $c->code }} — {{ $c->name }}</option>
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <select name="business_country" id="bizCountry" class="inp sel" required onchange="onCountryChange(this.value)">
+              <option value="">Select country</option>
+              @foreach($countries as $country)
+              <option value="{{ $country->name }}" data-code="{{ $country->code }}" {{ $user->business_country == $country->name ? 'selected' : '' }}>{{ $country->flag_emoji }} {{ $country->name }}</option>
               @endforeach
             </select>
           </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Region / Mkoa <span class="text-rose-500">*</span></label>
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <select name="business_region" id="bizRegion" class="inp sel" required>
+              <option value="">Select region</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">City / Town</label>
+        <div class="relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <input type="text" name="business_city" class="inp" value="{{ $user->business_city }}" placeholder="e.g. Dar es Salaam">
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Currency <span class="text-rose-500">*</span></label>
+        <div class="relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <select name="currency" id="bizCurrency" class="inp sel" required>
+            @foreach($currencies as $c)
+            <option value="{{ $c->code }}" {{ $user->currency==$c->code?'selected':'' }}>{{ $c->code }} — {{ $c->name }}</option>
+            @endforeach
+          </select>
         </div>
       </div>
 
