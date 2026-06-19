@@ -7,6 +7,7 @@ class UnitController extends Controller {
     public function index(Request $req) {
         $q = Unit::withCount("products")->forCurrentUser($this->currentBusinessId());
         if ($req->search) $q->where(function($sq) use($req){ $sq->where("name","like","%{$req->search}%")->orWhere("short_name","like","%{$req->search}%"); });
+        if ($req->allow_decimal !== null && $req->allow_decimal !== '') $q->where('allow_decimal', $req->allow_decimal);
         return response()->json($q->latest()->get());
     }
     public function store(Request $req) {
