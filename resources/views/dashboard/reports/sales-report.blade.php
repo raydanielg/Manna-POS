@@ -167,5 +167,17 @@ new Chart(document.getElementById('productsChart'), {
         plugins: { legend: { position:'right', labels:{ boxWidth:10, font:{size:10} } } }
     }
 });
+
+function setPreset(p) {
+    const now = new Date(), f = document.getElementById('f_from'), t = document.getElementById('f_to');
+    const fmt = d => d.toISOString().split('T')[0];
+    t.value = fmt(now);
+    if (p === 'today') { f.value = fmt(now); }
+    else if (p === 'week') { const d = new Date(now); d.setDate(d.getDate() - d.getDay()); f.value = fmt(d); }
+    else if (p === 'month') { f.value = fmt(new Date(now.getFullYear(), now.getMonth(), 1)); }
+    else if (p === 'year') { f.value = fmt(new Date(now.getFullYear(), 0, 1)); }
+    document.querySelectorAll('.rpt-preset').forEach(el => el.classList.remove('active'));
+    event.target.classList.add('active');
+}
 </script>
 @endsection
