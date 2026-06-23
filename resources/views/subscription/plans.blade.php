@@ -151,6 +151,13 @@ $__badgeColors = [
   </div>
   @endif
 
+  @if(request('payment') === 'success')
+  <div id="paymentReturnBanner" class="alert-custom" style="background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe;">
+    <svg width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <span id="paymentReturnMsg">Verifying your payment… please wait.</span>
+  </div>
+  @endif
+
   {{-- Current Plan Banner --}}
   @if($__current)
   <div class="current-banner">
