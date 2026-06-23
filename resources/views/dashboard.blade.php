@@ -6,6 +6,7 @@
 @endsection
 
 @section('page_styles')
+<style>
     /* Pulser for stock alert */
     .stock-badge {
         position: relative;
@@ -21,12 +22,12 @@
         border-radius: 50%;
         animation: pulseBadge 1.5s infinite;
     }
-    @keyframes pulseBadge {
+    @@keyframes pulseBadge {
         0% { transform: scale(0.9); opacity: 1; }
         50% { transform: scale(1.5); opacity: 0.4; }
         100% { transform: scale(0.9); opacity: 1; }
     }
-
+</style>
 @endsection
 
 @section('content')
