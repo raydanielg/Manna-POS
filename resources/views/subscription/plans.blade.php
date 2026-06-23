@@ -347,20 +347,17 @@ $__badgeColors = [
 
 @section('scripts')
 <script>
-/* ── SweetAlert2 Toast Config ─────────────────────────── */
+/* ── SweetAlert2 Toast ──────────────────────────────────── */
 const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 3500,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  toast: true, position: 'top-end', showConfirmButton: false,
+  timer: 4000, timerProgressBar: true,
+  didOpen: t => {
+    t.addEventListener('mouseenter', Swal.stopTimer);
+    t.addEventListener('mouseleave', Swal.resumeTimer);
   }
 });
 
-/* ── Billing Toggle ───────────────────────────────────── */
+/* ── Billing Toggle ─────────────────────────────────────── */
 (function(){
   const track = document.getElementById('billTrack');
   const lblM  = document.getElementById('lbl-m');
@@ -373,39 +370,93 @@ const Toast = Swal.mixin({
     track.setAttribute('aria-checked', yearly);
     lblM.classList.toggle('active', !yearly);
     lblY.classList.toggle('active', yearly);
-
     document.querySelectorAll('.m-amt').forEach(el => el.style.display = yearly ? 'none' : '');
     document.querySelectorAll('.y-amt').forEach(el => el.style.display = yearly ? '' : 'none');
     document.querySelectorAll('.y-note').forEach(el => el.style.display = yearly ? '' : 'none');
     document.querySelectorAll('.bill-input').forEach(el => el.value = yearly ? 'yearly' : 'monthly');
   };
 
-  track.addEventListener('keydown', function(e){
-    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBilling(); }
+  track.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBilling(); }
   });
 })();
 
-/* ── AJAX Plan Selection ──────────────────────────────── */
+/* ── Auto-poll on return from Snippe checkout ───────────── */
+@if(request('payment') === 'success')
+(function pollPaymentStatus() {
+  let attempts = 0;
+  const max    = 12; // poll up to 12 times (60 seconds)
+  const banner = document.getElementById('paymentReturnBanner');
+  const msg    = document.getElementById('paymentReturnMsg');
+
+  async function check() {
+    attempts++;
+    try {
+      const r = await fetch('/subscription/payment-status', {
+        headers: { 'Accept': 'application/json' }
+      });
+      const d = await r.json();
+
+      if (d.status === 'completed') {
+        if (banner) {
+          banner.style.background = '#dcfce7';
+          banner.style.color      = '#166534';
+          banner.style.border     = '1px solid #bbf7d0';
+          msg.textContent = '✓ Payment confirmed! Your ' + (d.plan || 'subscription') + ' plan is now active.';
+        }
+        Toast.fire({ icon: 'success', title: 'Subscription activated!' });
+        setTimeout(() => window.location.href = '/subscription/plans', 2000);
+        return;
+      }
+
+      if (d.status === 'expired' || d.status === 'cancelled') {
+        if (banner) {
+          banner.style.background = '#fff1f2';
+          banner.style.color      = '#be123c';
+          banner.style.border     = '1px solid #fecdd3';
+          msg.textContent = 'Payment was ' + d.status + '. Please try again.';
+        }
+        return;
+      }
+    } catch (_) {}
+
+    if (attempts < max) {
+      setTimeout(check, 5000);
+    } else {
+      if (msg) msg.textContent = 'Could not verify payment automatically. Please refresh the page or contact support.';
+    }
+  }
+
+  setTimeout(check, 2000); // first check after 2s
+})();
+@endif
+
+/* ── Plan Selection ─────────────────────────────────────── */
 async function choosePlan(planId, cycle, actionLabel) {
+  // Read actual billing cycle from hidden input if available
+  const input = document.querySelector(`.bill-input[data-plan="${planId}"]`);
+  if (input) cycle = input.value;
+
   const result = await Swal.fire({
     title: actionLabel + '?',
-    text: 'You will be subscribed to this plan immediately.',
+    text: cycle === 'monthly'
+      ? 'Billed monthly. You can cancel anytime.'
+      : 'Billed yearly. Best value!',
     icon: 'question',
     showCancelButton: true,
     confirmButtonColor: '#2563eb',
-    cancelButtonColor: '#94a3b8',
+    cancelButtonColor:  '#94a3b8',
     confirmButtonText: 'Yes, subscribe',
-    cancelButtonText: 'Cancel',
+    cancelButtonText:  'Cancel',
     reverseButtons: true,
     backdrop: 'rgba(15,23,42,.35)',
-    customClass: { popup: 'rounded-2xl' }
   });
 
   if (!result.isConfirmed) return;
 
   Swal.fire({
-    title: 'Subscribing…',
-    text: 'Please wait a moment',
+    title: 'Setting up your subscription…',
+    text: 'Please wait',
     allowOutsideClick: false,
     allowEscapeKey: false,
     didOpen: () => Swal.showLoading()
@@ -425,40 +476,24 @@ async function choosePlan(planId, cycle, actionLabel) {
 
     if (resp.ok) {
       if (data.checkout_url) {
-        // Paid plan — redirect to Snippe checkout
+        // Paid plan — redirect to Snippe hosted checkout
         Swal.fire({
-          title: 'Redirecting to payment...',
+          title: 'Redirecting to secure payment…',
           html: `
-            <div style="text-align:center;">
-              <div style="width:60px;height:60px;border-radius:50%;border:4px solid #e2e8f0;border-top-color:#2563eb;animation:spin 0.8s linear infinite;margin:0 auto 1rem;"></div>
-              <p style="color:#64748b;font-size:.88rem;margin-bottom:.5rem;">You will be redirected to Snippe secure checkout to complete payment.</p>
-              <p style="color:#94a3b8;font-size:.78rem;">After payment, your subscription will be activated automatically.</p>
+            <div style="text-align:center;padding:.5rem 0;">
+              <div style="width:56px;height:56px;border-radius:50%;border:4px solid #e2e8f0;border-top-color:#2563eb;animation:spin .8s linear infinite;margin:0 auto 1rem;"></div>
+              <p style="color:#64748b;font-size:.88rem;">You are being taken to <strong>Snippe</strong> secure checkout.</p>
+              <p style="color:#94a3b8;font-size:.76rem;margin-top:.4rem;">Supports Airtel Money, M-Pesa, Mixx, Halotel &amp; QR.</p>
             </div>
           `,
           allowOutsideClick: false,
           allowEscapeKey: false,
           showConfirmButton: false,
-          didOpen: () => {
-            window.open(data.checkout_url, '_blank');
-            setTimeout(() => {
-              Swal.fire({
-                title: 'Payment Started',
-                html: `
-                  <p style="color:#64748b;font-size:.88rem;">Checkout opened in a new tab.</p>
-                  <p style="color:#94a3b8;font-size:.78rem;margin-top:.3rem;">Complete payment there, then refresh this page.</p>
-                `,
-                icon: 'info',
-                confirmButtonColor: '#2563eb',
-                confirmText: 'I\'ve completed payment',
-                showCancelButton: true,
-                cancelButtonText: 'Cancel',
-                reverseButtons: true,
-              }).then((r) => {
-                if (r.isConfirmed) window.location.reload();
-              });
-            }, 1500);
-          }
         });
+
+        // Redirect in same tab so return URL works correctly
+        setTimeout(() => { window.location.href = data.checkout_url; }, 800);
+
       } else {
         // Free / Trial — activated immediately
         Swal.close();
@@ -468,10 +503,6 @@ async function choosePlan(planId, cycle, actionLabel) {
     } else {
       Swal.close();
       Toast.fire({ icon: 'error', title: data.message || 'Subscription failed. Please try again.' });
-      if (data.checkout_url) {
-        // Fallback: still provide checkout link
-        window.open(data.checkout_url, '_blank');
-      }
     }
   } catch (err) {
     Swal.close();
