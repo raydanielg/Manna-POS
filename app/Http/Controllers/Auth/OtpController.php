@@ -84,6 +84,22 @@ class OtpController extends Controller
         return response()->json(['success' => false, 'message' => 'No phone number on file.'], 500);
     }
 
+    public function skip()
+    {
+        $user = auth()->user();
+
+        if (!$user->email_verified_at) {
+            $user->update([
+                'email_verified_at' => now(),
+                'status' => 'active',
+                'otp_code' => null,
+                'otp_expires_at' => null,
+            ]);
+        }
+
+        return redirect('/dashboard');
+    }
+
     public function activateByToken($token)
     {
         $user = User::where('activation_token', $token)

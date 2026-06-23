@@ -114,6 +114,12 @@
     <button type="button" id="resendBtn" disabled>Resend Code <span id="resendTimer">(60s)</span></button>
 </div>
 
+<div style="text-align:center;margin-top:1.25rem;">
+    <a href="{{ route('verify.otp.skip') }}" style="font-size:0.85rem;color:#6b7280;text-decoration:underline;text-underline-offset:2px;">
+        Skip for now, verify later
+    </a>
+</div>
+
 <div class="auth-footer" style="margin-top:1.5rem;">
     <span>Not your email?</span>
     <a href="{{ route('logout') }}" class="auth-footer-link" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Log out</a>
