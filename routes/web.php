@@ -111,6 +111,7 @@ Route::get('/verify-otp', [App\Http\Controllers\Auth\OtpController::class, 'show
 Route::post('/verify-otp', [App\Http\Controllers\Auth\OtpController::class, 'verify'])->middleware('auth')->name('verify.otp.post');
 Route::post('/verify-otp/resend', [App\Http\Controllers\Auth\OtpController::class, 'resend'])->middleware('auth')->name('verify.otp.resend');
 Route::get('/activate/{token}', [App\Http\Controllers\Auth\OtpController::class, 'activateByToken'])->name('activate');
+Route::get('/verify-otp/skip', [App\Http\Controllers\Auth\OtpController::class, 'skip'])->middleware('auth')->name('verify.otp.skip');
 
 // Setup wizard
 Route::get('/setup', [App\Http\Controllers\SetupController::class, 'index'])->middleware(['auth', 'verify.otp']);
