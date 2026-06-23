@@ -34,6 +34,7 @@
         }
     </script>
     @yield('head_scripts')
+    @yield('page_styles')
     <style>
         body { background: #f1f4fb; }
         ::-webkit-scrollbar { width: 4px; }
