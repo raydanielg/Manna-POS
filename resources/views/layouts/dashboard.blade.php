@@ -183,6 +183,17 @@
         .dropdown-children .child-item:hover::before { background: #2563eb; }
         .dropdown-children .child-item.active { color: #2563eb; font-weight: 600; background: #eff6ff; }
         .dropdown-children .child-item.active::before { background: #2563eb; }
+        .dd-group-label {
+            font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;
+            color: rgba(148,163,184,0.55); padding: 0.55rem 0.6rem 0.15rem;
+            pointer-events: none; user-select: none;
+        }
+        .soon-badge {
+            margin-left: auto; font-size: 0.55rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.06em; background: #f1f5f9; color: #94a3b8;
+            padding: 0.1rem 0.4rem; border-radius: 99px; flex-shrink: 0;
+        }
+        .child-soon { opacity: 0.6; cursor: default; pointer-events: none; }
 
         /* Sign out */
         .sidebar-bottom {
@@ -883,29 +894,33 @@
 
 @php
     $userCurrency = Auth::user()->currency ?? 'TZS';
-    $isHome        = request()->routeIs('dashboard');
-    $isOnlineOrders = request()->routeIs('dashboard.online-orders');
-    $isUserMgmt    = request()->routeIs('dashboard.user-management.*');
-    $isStaff       = request()->routeIs('dashboard.staff.*');
-    $isPlanMgmt    = request()->routeIs('dashboard.plan-management.*');
-    $isContacts    = request()->routeIs('dashboard.contacts.*');
-    $isInventory   = request()->routeIs('dashboard.inventory.*');
-    $isPurchases   = request()->routeIs('dashboard.purchases.*');
-    $isSell        = request()->routeIs('dashboard.sell.*');
-    $isStockTrans  = request()->routeIs('dashboard.stock-transfer.*');
-    $isStockAdj    = request()->routeIs('dashboard.stock-adjustment.*');
-    $isExpenses    = request()->routeIs('dashboard.expenses.*');
-    $isBanking     = request()->routeIs('dashboard.banking.*');
-    $isMicrofinance = request()->routeIs('dashboard.microfinance.*');
-    $isSmsCampaigns = request()->routeIs('dashboard.sms-campaigns.*');
-    $isFileCabinet = request()->routeIs('dashboard.file-cabinet.*');
-    $isPayroll     = request()->routeIs('dashboard.payroll.*');
+    $isHome          = request()->routeIs('dashboard');
+    $isOnlineOrders  = request()->routeIs('dashboard.online-orders');
+    $isUserMgmt      = request()->routeIs('dashboard.user-management.*');
+    $isStaff         = request()->routeIs('dashboard.staff.*');
+    $isPlanMgmt      = request()->routeIs('dashboard.plan-management.*');
+    $isContacts      = request()->routeIs('dashboard.contacts.*');
+    $isInventory     = request()->routeIs('dashboard.inventory.*');
+    $isPurchases     = request()->routeIs('dashboard.purchases.*');
+    $isSell          = request()->routeIs('dashboard.sell.*');
+    $isStockTrans    = request()->routeIs('dashboard.stock-transfer.*');
+    $isStockAdj      = request()->routeIs('dashboard.stock-adjustment.*');
+    $isInventoryMgmt = $isStockTrans || $isStockAdj;
+    $isExpenses      = request()->routeIs('dashboard.expenses.*');
+    $isBanking       = request()->routeIs('dashboard.banking.*');
+    $isMicrofinance  = request()->routeIs('dashboard.microfinance.*');
+    $isFinance       = $isExpenses || $isBanking || $isMicrofinance;
+    $isSmsCampaigns  = request()->routeIs('dashboard.sms-campaigns.*');
+    $isCrm           = request()->routeIs('dashboard.crm.*') || $isContacts || $isSmsCampaigns;
+    $isFileCabinet   = request()->routeIs('dashboard.file-cabinet.*');
+    $isPayroll       = request()->routeIs('dashboard.payroll.*');
     $isManufacturing = request()->routeIs('dashboard.manufacturing.*');
-    $isReports     = request()->routeIs('dashboard.reports.*');
-    $isNotifTpl    = request()->routeIs('dashboard.notification-templates');
-    $isSettings    = request()->routeIs('dashboard.settings.*');
-    $isProfile     = request()->routeIs('dashboard.profile');
-    $isFeedback    = request()->routeIs('dashboard.feedback.*') || request()->routeIs('dashboard.feedback');
+    $isMgmt          = $isUserMgmt || $isStaff || $isPlanMgmt || $isPayroll || $isManufacturing;
+    $isReports       = request()->routeIs('dashboard.reports.*');
+    $isNotifTpl      = request()->routeIs('dashboard.notification-templates');
+    $isSettings      = request()->routeIs('dashboard.settings.*');
+    $isProfile       = request()->routeIs('dashboard.profile');
+    $isFeedback      = request()->routeIs('dashboard.feedback.*') || request()->routeIs('dashboard.feedback');
     $isAdminFeedback = request()->routeIs('dashboard.feedback.admin.*');
 
     function sidebarChildActive($route) {
@@ -930,6 +945,7 @@
     {{-- Nav --}}
     <div class="sidebar-content">
 
+        {{-- ── MAIN ──────────────────────────────────────── --}}
         <div class="nav-section-label">Main</div>
 
         @can('dashboard.view')
@@ -939,92 +955,70 @@
         </a>
         @endcan
 
-        {{-- Online Orders --}}
-        <a href="{{ route('dashboard.online-orders') }}" class="nav-item {{ $isOnlineOrders ? 'active' : '' }}" data-tip="Online Orders">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/><path d="M15 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>
-            <span class="nav-label">Online Orders</span>
-            @php
-                $pendingCount = collect(json_decode(Auth::user()->store_settings, true)['orders'] ?? [])->where('status', 'pending')->count();
-            @endphp
-            @if($pendingCount > 0)
-            <span style="margin-left:auto;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;padding:0.15rem 0.45rem;border-radius:99px;">{{ $pendingCount }}</span>
-            @endif
-        </a>
+        {{-- ── CRM ──────────────────────────────────────── --}}
+        <div class="nav-section-label">CRM</div>
 
-        <div class="nav-section-label">Management</div>
-
-        @canany(['users.view','roles.view'])
-        {{-- User Management --}}
-        <div class="dropdown {{ $isUserMgmt ? 'open' : '' }}" id="dropdown-user">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-user')" data-tip="User Management">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
-                <span class="nav-label">User Management</span>
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                @can('users.view')<a href="{{ route('dashboard.user-management.users') }}" class="child-item {{ request()->routeIs('dashboard.user-management.users') ? 'active' : '' }}">Users</a>@endcan
-                @can('roles.view')<a href="{{ route('dashboard.user-management.roles') }}" class="child-item {{ request()->routeIs('dashboard.user-management.roles') ? 'active' : '' }}">Roles</a>@endcan
-                <a href="{{ route('dashboard.user-management.sales-commission-agents') }}" class="child-item {{ request()->routeIs('dashboard.user-management.sales-commission-agents') ? 'active' : '' }}">Sales Commission Agents</a>
-            </div>
-        </div>
-        @endcanany
-
-        @if(Auth::user()->isOwner())
-        {{-- Staff Management --}}
-        <a href="{{ route('dashboard.staff.index') }}" class="nav-item {{ $isStaff ? 'active' : '' }}" data-tip="Staff">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197"/><path d="M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-            <span class="nav-label">Staff Management</span>
-        </a>
-
-        {{-- Plan Management --}}
-        <div class="dropdown {{ $isPlanMgmt ? 'open' : '' }}" id="dropdown-plan-mgmt">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-plan-mgmt')" data-tip="Plan Management">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
-                <span class="nav-label">Plan Management</span>
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                <a href="{{ route('dashboard.plan-management.plans') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.plans') ? 'active' : '' }}">Subscription Plans</a>
-                <a href="{{ route('dashboard.plan-management.subscriptions') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.subscriptions') ? 'active' : '' }}">Subscriptions</a>
-            </div>
-        </div>
-        @endif
-
-        @can('contacts.view')
-        {{-- Contacts --}}
-        <div class="dropdown {{ $isContacts ? 'open' : '' }}" id="dropdown-contacts">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-contacts')" data-tip="Contacts">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 6v12a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/><path d="M10 16h6"/><path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M4 8h3"/><path d="M4 12h3"/><path d="M4 16h3"/></svg>
-                <span class="nav-label">Contacts</span>
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                @can('contacts.view')<a href="{{ route('dashboard.contacts.suppliers') }}" class="child-item {{ request()->routeIs('dashboard.contacts.suppliers') ? 'active' : '' }}">Suppliers</a>@endcan
-                @can('contacts.view')<a href="{{ route('dashboard.contacts.customers') }}" class="child-item {{ request()->routeIs('dashboard.contacts.customers') ? 'active' : '' }}">Customers</a>@endcan
-                @can('contacts.view')<a href="{{ route('dashboard.contacts.customer-groups') }}" class="child-item {{ request()->routeIs('dashboard.contacts.customer-groups') ? 'active' : '' }}">Customer Groups</a>@endcan
-                @can('contacts.create')<a href="{{ route('dashboard.contacts.import-contacts') }}" class="child-item {{ request()->routeIs('dashboard.contacts.import-contacts') ? 'active' : '' }}">Import Contacts</a>@endcan
-            </div>
-        </div>
-        @endcan
-
-        @can('crm.view')
-        {{-- CRM --}}
-        @php $isCrm = request()->routeIs('dashboard.crm.*'); @endphp
         <div class="dropdown {{ $isCrm ? 'open' : '' }}" id="dropdown-crm">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-crm')" data-tip="CRM">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h-11a3 3 0 0 1 -3-3v-11a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3z"/><path d="M9 9l2 2l4-4"/></svg>
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
                 <span class="nav-label">CRM</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="{{ route('dashboard.crm.activities') }}" class="child-item {{ request()->routeIs('dashboard.crm.activities') ? 'active' : '' }}">Activities</a>
-                <a href="{{ route('dashboard.crm.dashboard') }}" class="child-item {{ request()->routeIs('dashboard.crm.dashboard') ? 'active' : '' }}">CRM Dashboard</a>
+                <div class="dd-group-label">Customers</div>
+                @can('contacts.view')<a href="{{ route('dashboard.contacts.customers') }}" class="child-item {{ request()->routeIs('dashboard.contacts.customers') ? 'active' : '' }}">Customers</a>@endcan
+                @can('contacts.view')<a href="{{ route('dashboard.contacts.customer-groups') }}" class="child-item {{ request()->routeIs('dashboard.contacts.customer-groups') ? 'active' : '' }}">Customer Groups</a>@endcan
+                @can('contacts.create')<a href="{{ route('dashboard.contacts.import-contacts') }}" class="child-item {{ request()->routeIs('dashboard.contacts.import-contacts') ? 'active' : '' }}">Import Contacts</a>@endcan
+                <div class="dd-group-label">Sales & Loyalty</div>
+                @can('sales.view')<a href="{{ route('dashboard.sell.all-sales') }}?payment_status=credit" class="child-item">Credit Sales</a>@endcan
+                <a href="#" class="child-item child-soon">Customer Payments <span class="soon-badge">Soon</span></a>
+                <a href="#" class="child-item child-soon">Loyalty Points <span class="soon-badge">Soon</span></a>
+                <div class="dd-group-label">Communication</div>
+                @can('crm.view')<a href="{{ route('dashboard.crm.activities') }}" class="child-item {{ request()->routeIs('dashboard.crm.activities') ? 'active' : '' }}">Activities</a>@endcan
+                @can('crm.view')<a href="{{ route('dashboard.crm.dashboard') }}" class="child-item {{ request()->routeIs('dashboard.crm.dashboard') ? 'active' : '' }}">CRM Dashboard</a>@endcan
+                @can('sms.view')<a href="{{ route('dashboard.sms-campaigns') }}" class="child-item {{ $isSmsCampaigns ? 'active' : '' }}">SMS Campaigns</a>@endcan
+                <a href="#" class="child-item child-soon">Customer Reports <span class="soon-badge">Soon</span></a>
+            </div>
+        </div>
+
+        {{-- ── SALES ────────────────────────────────────── --}}
+        <div class="nav-section-label">Sales</div>
+
+        @can('sales.view')
+        <div class="dropdown {{ $isSell || $isOnlineOrders ? 'open' : '' }}" id="dropdown-sell">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-sell')" data-tip="Sales">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                <span class="nav-label">Sales</span>
+                @php $pendingCount = collect(json_decode(Auth::user()->store_settings ?? '{}', true)['orders'] ?? [])->where('status', 'pending')->count(); @endphp
+                @if($pendingCount > 0)<span style="margin-left:auto;margin-right:0.3rem;background:#ef4444;color:#fff;font-size:0.6rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:99px;">{{ $pendingCount }}</span>@endif
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <div class="dd-group-label">Transactions</div>
+                @can('sales.view')<a href="{{ route('dashboard.sell.all-sales') }}" class="child-item {{ request()->routeIs('dashboard.sell.all-sales') ? 'active' : '' }}">All Sales</a>@endcan
+                @can('sales.create')<a href="{{ route('dashboard.sell.add-sale') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-sale') ? 'active' : '' }}">Add Sale</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.list-sell-return') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-sell-return') ? 'active' : '' }}">Sell Returns</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.discounts') }}" class="child-item {{ request()->routeIs('dashboard.sell.discounts') ? 'active' : '' }}">Discounts</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.shipments') }}" class="child-item {{ request()->routeIs('dashboard.sell.shipments') ? 'active' : '' }}">Shipments</a>@endcan
+                @can('sales.create')<a href="{{ route('dashboard.sell.import-sales') }}" class="child-item {{ request()->routeIs('dashboard.sell.import-sales') ? 'active' : '' }}">Import Sales</a>@endcan
+                <div class="dd-group-label">POS</div>
+                @can('sales.create')<a href="{{ route('dashboard.sell.pos') }}" class="child-item {{ request()->routeIs('dashboard.sell.pos') ? 'active' : '' }}">POS Terminal</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.list-pos') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-pos') ? 'active' : '' }}">List POS</a>@endcan
+                <div class="dd-group-label">Drafts & Quotations</div>
+                @can('sales.create')<a href="{{ route('dashboard.sell.add-draft') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-draft') ? 'active' : '' }}">Add Draft</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.list-drafts') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-drafts') ? 'active' : '' }}">List Drafts</a>@endcan
+                @can('sales.create')<a href="{{ route('dashboard.sell.add-quotation') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-quotation') ? 'active' : '' }}">Add Quotation</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.list-quotations') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-quotations') ? 'active' : '' }}">List Quotations</a>@endcan
+                <div class="dd-group-label">Online</div>
+                <a href="{{ route('dashboard.online-orders') }}" class="child-item {{ $isOnlineOrders ? 'active' : '' }}">Online Orders @if($pendingCount > 0)<span style="background:#ef4444;color:#fff;font-size:0.6rem;font-weight:700;padding:0.1rem 0.35rem;border-radius:99px;margin-left:4px;">{{ $pendingCount }}</span>@endif</a>
             </div>
         </div>
         @endcan
 
+        {{-- ── PRODUCTS ─────────────────────────────────── --}}
+        <div class="nav-section-label">Products</div>
+
         @can('products.view')
-        {{-- Products --}}
         <div class="dropdown {{ $isInventory ? 'open' : '' }}" id="dropdown-products">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-products')" data-tip="Products">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4.5v9l-8 4.5l-8-4.5v-9l8-4.5"/><path d="M12 12l8-4.5"/><path d="M8.2 9.8l7.6-4.6"/><path d="M12 12v9"/><path d="M12 12l-8-4.5"/></svg>
@@ -1032,24 +1026,34 @@
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
+                <div class="dd-group-label">Management</div>
                 @can('products.view')<a href="{{ route('dashboard.inventory.list-products') }}" class="child-item {{ request()->routeIs('dashboard.inventory.list-products') ? 'active' : '' }}">List Products</a>@endcan
                 @can('products.create')<a href="{{ route('dashboard.inventory.add-product') }}" class="child-item {{ request()->routeIs('dashboard.inventory.add-product') ? 'active' : '' }}">Add Product</a>@endcan
                 @can('products.edit')<a href="{{ route('dashboard.inventory.update-price') }}" class="child-item {{ request()->routeIs('dashboard.inventory.update-price') ? 'active' : '' }}">Update Price</a>@endcan
                 @can('products.view')<a href="{{ route('dashboard.inventory.print-labels') }}" class="child-item {{ request()->routeIs('dashboard.inventory.print-labels') ? 'active' : '' }}">Print Labels</a>@endcan
                 @can('products.view')<a href="{{ route('dashboard.inventory.variations') }}" class="child-item {{ request()->routeIs('dashboard.inventory.variations') ? 'active' : '' }}">Variations</a>@endcan
+                @can('products.view')<a href="{{ route('dashboard.inventory.selling-price-group') }}" class="child-item {{ request()->routeIs('dashboard.inventory.selling-price-group') ? 'active' : '' }}">Selling Price Group</a>@endcan
+                <div class="dd-group-label">Import</div>
                 @can('products.create')<a href="{{ route('dashboard.inventory.import-products') }}" class="child-item {{ request()->routeIs('dashboard.inventory.import-products') ? 'active' : '' }}">Import Products</a>@endcan
                 @can('products.create')<a href="{{ route('dashboard.inventory.import-opening-stock') }}" class="child-item {{ request()->routeIs('dashboard.inventory.import-opening-stock') ? 'active' : '' }}">Import Opening Stock</a>@endcan
-                @can('products.view')<a href="{{ route('dashboard.inventory.selling-price-group') }}" class="child-item {{ request()->routeIs('dashboard.inventory.selling-price-group') ? 'active' : '' }}">Selling Price Group</a>@endcan
+                <div class="dd-group-label">Classification</div>
                 @can('products.view')<a href="{{ route('dashboard.inventory.units') }}" class="child-item {{ request()->routeIs('dashboard.inventory.units') ? 'active' : '' }}">Units</a>@endcan
                 @can('products.view')<a href="{{ route('dashboard.inventory.product-categories') }}" class="child-item {{ request()->routeIs('dashboard.inventory.product-categories') ? 'active' : '' }}">Categories</a>@endcan
+                <a href="#" class="child-item child-soon">Subcategories <span class="soon-badge">Soon</span></a>
                 @can('products.view')<a href="{{ route('dashboard.inventory.brands') }}" class="child-item {{ request()->routeIs('dashboard.inventory.brands') ? 'active' : '' }}">Brands</a>@endcan
+                <a href="#" class="child-item child-soon">Sub Brands <span class="soon-badge">Soon</span></a>
                 @can('products.view')<a href="{{ route('dashboard.inventory.warranties') }}" class="child-item {{ request()->routeIs('dashboard.inventory.warranties') ? 'active' : '' }}">Warranties</a>@endcan
+                <div class="dd-group-label">Expiry</div>
+                <a href="{{ route('dashboard.reports.expiry-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expiry-report') ? 'active' : '' }}">MFG & EXP Register</a>
+                <a href="{{ route('dashboard.reports.expiry-report') }}?alert=1" class="child-item">MFG & EXP Alert</a>
             </div>
         </div>
         @endcan
 
+        {{-- ── PURCHASES ────────────────────────────────── --}}
+        <div class="nav-section-label">Purchases</div>
+
         @can('purchases.view')
-        {{-- Purchases --}}
         <div class="dropdown {{ $isPurchases ? 'open' : '' }}" id="dropdown-purchases">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-purchases')" data-tip="Purchases">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12"/><path d="M16 11l-4 4l-4-4"/><path d="M3 12a9 9 0 0 0 18 0"/></svg>
@@ -1060,67 +1064,39 @@
                 @can('purchases.view')<a href="{{ route('dashboard.purchases.list-purchases') }}" class="child-item {{ request()->routeIs('dashboard.purchases.list-purchases') ? 'active' : '' }}">List Purchases</a>@endcan
                 @can('purchases.create')<a href="{{ route('dashboard.purchases.add-purchase') }}" class="child-item {{ request()->routeIs('dashboard.purchases.add-purchase') ? 'active' : '' }}">Add Purchase</a>@endcan
                 @can('purchases.view')<a href="{{ route('dashboard.purchases.list-purchase-return') }}" class="child-item {{ request()->routeIs('dashboard.purchases.list-purchase-return') ? 'active' : '' }}">List Purchase Return</a>@endcan
+                @can('contacts.view')<a href="{{ route('dashboard.contacts.suppliers') }}" class="child-item {{ request()->routeIs('dashboard.contacts.suppliers') ? 'active' : '' }}">Suppliers</a>@endcan
             </div>
         </div>
         @endcan
 
-        @can('sales.view')
-        {{-- Sell --}}
-        <div class="dropdown {{ $isSell ? 'open' : '' }}" id="dropdown-sell">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-sell')" data-tip="Sell">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v-12"/><path d="M16 7l-4-4l-4 4"/><path d="M3 12a9 9 0 0 0 18 0"/></svg>
-                <span class="nav-label">Sell</span>
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                @can('sales.view')<a href="{{ route('dashboard.sell.all-sales') }}" class="child-item {{ request()->routeIs('dashboard.sell.all-sales') ? 'active' : '' }}">All Sales</a>@endcan
-                @can('sales.create')<a href="{{ route('dashboard.sell.add-sale') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-sale') ? 'active' : '' }}">Add Sale</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.list-pos') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-pos') ? 'active' : '' }}">List POS</a>@endcan
-                @can('sales.create')<a href="{{ route('dashboard.sell.pos') }}" class="child-item {{ request()->routeIs('dashboard.sell.pos') ? 'active' : '' }}">POS</a>@endcan
-                @can('sales.create')<a href="{{ route('dashboard.sell.add-draft') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-draft') ? 'active' : '' }}">Add Draft</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.list-drafts') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-drafts') ? 'active' : '' }}">List Drafts</a>@endcan
-                @can('sales.create')<a href="{{ route('dashboard.sell.add-quotation') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-quotation') ? 'active' : '' }}">Add Quotation</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.list-quotations') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-quotations') ? 'active' : '' }}">List Quotations</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.list-sell-return') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-sell-return') ? 'active' : '' }}">List Sell Return</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.shipments') }}" class="child-item {{ request()->routeIs('dashboard.sell.shipments') ? 'active' : '' }}">Shipments</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.discounts') }}" class="child-item {{ request()->routeIs('dashboard.sell.discounts') ? 'active' : '' }}">Discounts</a>@endcan
-                @can('sales.create')<a href="{{ route('dashboard.sell.import-sales') }}" class="child-item {{ request()->routeIs('dashboard.sell.import-sales') ? 'active' : '' }}">Import Sales</a>@endcan
-            </div>
-        </div>
-        @endcan
+        {{-- ── INVENTORY ────────────────────────────────── --}}
+        <div class="nav-section-label">Inventory</div>
 
-        @can('stock_transfers.view')
-        {{-- Stock Transfers --}}
-        <div class="dropdown {{ $isStockTrans ? 'open' : '' }}" id="dropdown-stock-transfers">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-stock-transfers')" data-tip="Stock Transfers">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M5 17h-2v-4m-1-8h11v12m-4 0h6m4 0h2v-6h-8m0-5h5l3 5"/><path d="M3 9l4 0"/></svg>
-                <span class="nav-label">Stock Transfers</span>
+        <div class="dropdown {{ $isInventoryMgmt ? 'open' : '' }}" id="dropdown-inventory">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-inventory')" data-tip="Inventory">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h7"/><path d="M15 15l2 2 4-4"/></svg>
+                <span class="nav-label">Inventory</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="{{ route('dashboard.stock-transfer.list-stock-transfer') }}" class="child-item {{ request()->routeIs('dashboard.stock-transfer.list-stock-transfer') ? 'active' : '' }}">List Stock Transfers</a>
-                <a href="{{ route('dashboard.stock-transfer.add-stock-transfer') }}" class="child-item {{ request()->routeIs('dashboard.stock-transfer.add-stock-transfer') ? 'active' : '' }}">Add Stock Transfer</a>
+                <div class="dd-group-label">Stock Levels</div>
+                @can('products.view')<a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">Stock Levels</a>@endcan
+                <a href="#" class="child-item child-soon">Count by Category <span class="soon-badge">Soon</span></a>
+                <a href="#" class="child-item child-soon">Count by Location <span class="soon-badge">Soon</span></a>
+                <a href="#" class="child-item child-soon">Record Physical Qty <span class="soon-badge">Soon</span></a>
+                <div class="dd-group-label">Adjustment</div>
+                @can('stock_adjustments.view')<a href="{{ route('dashboard.stock-adjustment.list-stock-adjustment') }}" class="child-item {{ request()->routeIs('dashboard.stock-adjustment.list-stock-adjustment') ? 'active' : '' }}">List Adjustments</a>@endcan
+                @can('stock_adjustments.view')<a href="{{ route('dashboard.stock-adjustment.add-stock-adjustment') }}" class="child-item {{ request()->routeIs('dashboard.stock-adjustment.add-stock-adjustment') ? 'active' : '' }}">Add Adjustment</a>@endcan
+                <div class="dd-group-label">Transfer</div>
+                @can('stock_transfers.view')<a href="{{ route('dashboard.stock-transfer.list-stock-transfer') }}" class="child-item {{ request()->routeIs('dashboard.stock-transfer.list-stock-transfer') ? 'active' : '' }}">List Transfers</a>@endcan
+                @can('stock_transfers.view')<a href="{{ route('dashboard.stock-transfer.add-stock-transfer') }}" class="child-item {{ request()->routeIs('dashboard.stock-transfer.add-stock-transfer') ? 'active' : '' }}">Add Transfer</a>@endcan
             </div>
         </div>
-        @endcan
 
-        @can('stock_adjustments.view')
-        {{-- Stock Adjustment --}}
-        <div class="dropdown {{ $isStockAdj ? 'open' : '' }}" id="dropdown-stock-adjustment">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-stock-adjustment')" data-tip="Stock Adj.">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0-16 0"/><path d="M4 6v6a8 3 0 0 0 16 0v-6"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/></svg>
-                <span class="nav-label">Stock Adjustment</span>
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                <a href="{{ route('dashboard.stock-adjustment.list-stock-adjustment') }}" class="child-item {{ request()->routeIs('dashboard.stock-adjustment.list-stock-adjustment') ? 'active' : '' }}">List Stock Adjustments</a>
-                <a href="{{ route('dashboard.stock-adjustment.add-stock-adjustment') }}" class="child-item {{ request()->routeIs('dashboard.stock-adjustment.add-stock-adjustment') ? 'active' : '' }}">Add Stock Adjustment</a>
-            </div>
-        </div>
-        @endcan
+        {{-- ── FINANCE ──────────────────────────────────── --}}
+        <div class="nav-section-label">Finance</div>
 
         @can('expenses.view')
-        {{-- Expenses --}}
         <div class="dropdown {{ $isExpenses ? 'open' : '' }}" id="dropdown-expenses">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-expenses')" data-tip="Expenses">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v10"/></svg>
@@ -1136,7 +1112,6 @@
         @endcan
 
         @can('banking.view')
-        {{-- Banking / Cashflow --}}
         <div class="dropdown {{ $isBanking ? 'open' : '' }}" id="dropdown-banking">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-banking')" data-tip="Banking">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4l8 4v14"/><path d="M5 11h14"/><path d="M10 11v10"/><path d="M14 11v10"/></svg>
@@ -1152,10 +1127,9 @@
         @endcan
 
         @can('microfinance.view')
-        {{-- Microfinance / Loans --}}
         <div class="dropdown {{ $isMicrofinance ? 'open' : '' }}" id="dropdown-microfinance">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-microfinance')" data-tip="Loans">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 <span class="nav-label">Microfinance</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
@@ -1168,127 +1142,93 @@
         </div>
         @endcan
 
-        @can('sms.view')
-        {{-- SMS Campaigns --}}
-        <a href="{{ route('dashboard.sms-campaigns') }}" class="nav-item {{ $isSmsCampaigns ? 'active' : '' }}" data-tip="SMS">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8 8 0 0 1-8-8c0-4.418 3.582-8 8-8s8 3.582 8 8z"/><path d="M7 8l10 0"/><path d="M7 16l10 0"/></svg>
-            <span class="nav-label">SMS Campaigns</span>
-        </a>
-        @endcan
+        {{-- ── MANAGEMENT ───────────────────────────────── --}}
+        <div class="nav-section-label">Management</div>
 
-        @can('files.view')
-        {{-- File Cabinet --}}
-        <a href="{{ route('dashboard.file-cabinet') }}" class="nav-item {{ $isFileCabinet ? 'active' : '' }}" data-tip="Files">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M9 9l2 2l4-4"/></svg>
-            <span class="nav-label">File Cabinet</span>
-        </a>
-        @endcan
-
-        @can('payroll.view')
-        {{-- Payroll --}}
-        <a href="{{ route('dashboard.payroll') }}" class="nav-item {{ $isPayroll ? 'active' : '' }}" data-tip="Payroll">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M17.657 16.657l-4.243-4.243"/><path d="M12 12m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/></svg>
-            <span class="nav-label">Payroll</span>
-        </a>
-        @endcan
-
-        @can('manufacturing.view')
-        {{-- Manufacturing / Production --}}
-        <div class="dropdown {{ $isManufacturing ? 'open' : '' }}" id="dropdown-manufacturing">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-manufacturing')" data-tip="Production">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20v-6h4v6"/><path d="M14 14v-4h4v4"/><path d="M6 20v-10h4v10"/><path d="M4 21h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
-                <span class="nav-label">Manufacturing</span>
+        <div class="dropdown {{ $isMgmt ? 'open' : '' }}" id="dropdown-mgmt">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-mgmt')" data-tip="Management">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+                <span class="nav-label">Management</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="{{ route('dashboard.manufacturing') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing') ? 'active' : '' }}">Dashboard</a>
+                <div class="dd-group-label">Users</div>
+                @can('users.view')<a href="{{ route('dashboard.user-management.users') }}" class="child-item {{ request()->routeIs('dashboard.user-management.users') ? 'active' : '' }}">Users</a>@endcan
+                @can('roles.view')<a href="{{ route('dashboard.user-management.roles') }}" class="child-item {{ request()->routeIs('dashboard.user-management.roles') ? 'active' : '' }}">Roles & Permissions</a>@endcan
+                <a href="{{ route('dashboard.user-management.sales-commission-agents') }}" class="child-item {{ request()->routeIs('dashboard.user-management.sales-commission-agents') ? 'active' : '' }}">Commission Agents</a>
+                @if(Auth::user()->isOwner())
+                <a href="{{ route('dashboard.staff.index') }}" class="child-item {{ $isStaff ? 'active' : '' }}">Staff Management</a>
+                <div class="dd-group-label">Subscription</div>
+                <a href="{{ route('dashboard.plan-management.plans') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.plans') ? 'active' : '' }}">Subscription Plans</a>
+                <a href="{{ route('dashboard.plan-management.subscriptions') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.subscriptions') ? 'active' : '' }}">Subscriptions</a>
+                @endif
+                <div class="dd-group-label">HR & Operations</div>
+                @can('payroll.view')<a href="{{ route('dashboard.payroll') }}" class="child-item {{ $isPayroll ? 'active' : '' }}">Payroll</a>@endcan
+                <a href="#" class="child-item child-soon">KPI <span class="soon-badge">Soon</span></a>
+                <a href="#" class="child-item child-soon">Job Descriptions <span class="soon-badge">Soon</span></a>
+                @can('manufacturing.view')
+                <div class="dd-group-label">Production</div>
+                <a href="{{ route('dashboard.manufacturing') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing') ? 'active' : '' }}">Manufacturing</a>
                 <a href="{{ route('dashboard.manufacturing.recipes') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing.recipes') ? 'active' : '' }}">Recipes & BOM</a>
                 <a href="{{ route('dashboard.manufacturing.production') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing.production') ? 'active' : '' }}">Production Runs</a>
+                @endcan
+                <div class="dd-group-label">Files & Docs</div>
+                @can('files.view')<a href="{{ route('dashboard.file-cabinet') }}" class="child-item {{ $isFileCabinet ? 'active' : '' }}">File Cabinet</a>@endcan
+                @canany(['approvals.view','approvals.approve'])<a href="{{ route('dashboard.approvals.index') }}" class="child-item {{ request()->routeIs('dashboard.approvals.*') ? 'active' : '' }}">Approval Requests</a>@endcanany
             </div>
         </div>
-        @endcan
 
+        {{-- ── ANALYTICS ────────────────────────────────── --}}
         <div class="nav-section-label">Analytics</div>
 
         @can('reports.view')
-        {{-- Reports --}}
         <div class="dropdown {{ $isReports ? 'open' : '' }}" id="dropdown-reports">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-reports')" data-tip="Reports">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M5 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M13 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 17v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 3v4"/></svg>
                 <span class="nav-label">Reports</span>
-                <span style="margin-left:auto;margin-right:0.4rem;font-size:0.6rem;font-weight:700;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:0.15rem 0.5rem;border-radius:9999px;">8</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <div style="font-size:0.6rem;font-weight:700;color:rgba(148,163,184,0.35);text-transform:uppercase;letter-spacing:0.12em;padding:0.5rem 0.6rem 0.2rem;">Financial</div>
-                @can('reports.view')<a href="{{ route('dashboard.reports.profit-loss-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.profit-loss-report') ? 'active' : '' }}">Profit / Loss Report</a>@endcan
-                @can('reports.view')<a href="{{ route('dashboard.reports.sales-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.sales-report') ? 'active' : '' }}">Sales Report</a>@endcan
-                @can('reports.view')<a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.purchase-report') ? 'active' : '' }}">Purchase Report</a>@endcan
-                @can('reports.view')<a href="{{ route('dashboard.reports.expense-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expense-report') ? 'active' : '' }}">Expense Report</a>@endcan
-
-                <div style="font-size:0.6rem;font-weight:700;color:rgba(148,163,184,0.35);text-transform:uppercase;letter-spacing:0.12em;padding:0.6rem 0.6rem 0.2rem;">Inventory</div>
-                @can('reports.view')<a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">Stock Report</a>@endcan
-                @can('reports.view')<a href="{{ route('dashboard.reports.expiry-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expiry-report') ? 'active' : '' }}">Expiry Date Report</a>@endcan
-                @can('reports.view')<a href="{{ route('dashboard.reports.product-trends-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.product-trends-report') ? 'active' : '' }}">Product Trends</a>@endcan
-
-                <div style="font-size:0.6rem;font-weight:700;color:rgba(148,163,184,0.35);text-transform:uppercase;letter-spacing:0.12em;padding:0.6rem 0.6rem 0.2rem;">Suppliers</div>
-                @can('reports.view')<a href="{{ route('dashboard.reports.suppliers-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.suppliers-report') ? 'active' : '' }}">Suppliers Report</a>@endcan
-                @can('reports.view')<a href="{{ route('dashboard.reports.supplier-price-comparison') }}" class="child-item {{ request()->routeIs('dashboard.reports.supplier-price-comparison') ? 'active' : '' }}">Price Comparison</a>@endcan
+                <div class="dd-group-label">Financial</div>
+                <a href="{{ route('dashboard.reports.profit-loss-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.profit-loss-report') ? 'active' : '' }}">Profit / Loss</a>
+                <a href="{{ route('dashboard.reports.sales-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.sales-report') ? 'active' : '' }}">Sales Report</a>
+                <a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.purchase-report') ? 'active' : '' }}">Purchase Report</a>
+                <a href="{{ route('dashboard.reports.expense-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expense-report') ? 'active' : '' }}">Expense Report</a>
+                <div class="dd-group-label">Inventory</div>
+                <a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">Stock Report</a>
+                <a href="{{ route('dashboard.reports.expiry-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expiry-report') ? 'active' : '' }}">Expiry Report</a>
+                <a href="{{ route('dashboard.reports.product-trends-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.product-trends-report') ? 'active' : '' }}">Product Trends</a>
+                <div class="dd-group-label">Suppliers</div>
+                <a href="{{ route('dashboard.reports.suppliers-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.suppliers-report') ? 'active' : '' }}">Suppliers Report</a>
+                <a href="{{ route('dashboard.reports.supplier-price-comparison') }}" class="child-item {{ request()->routeIs('dashboard.reports.supplier-price-comparison') ? 'active' : '' }}">Price Comparison</a>
             </div>
         </div>
         @endcan
 
-        <div class="nav-section-label">Support</div>
-
-        {{-- Feedback Dropdown --}}
-        <div class="dropdown {{ $isFeedback ? 'open' : '' }}" id="dropdown-support">
-            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-support')" data-tip="Support">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m0 0V12m0 0h8.485"/><circle cx="12" cy="12" r="3"/></svg>
-                <span class="nav-label">Support & Feedback</span>
-                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
-            </div>
-            <div class="dropdown-children">
-                <a href="{{ route('dashboard.feedback.index') }}" class="child-item {{ $isFeedback ? 'active' : '' }}">My Feedback</a>
-                <a href="{{ route('dashboard.feedback.admin.index') }}" class="child-item {{ $isAdminFeedback ? 'active' : '' }}">Support Inbox</a>
-            </div>
-        </div>
-
+        {{-- ── SYSTEM ───────────────────────────────────── --}}
         <div class="nav-section-label">System</div>
 
-        {{-- Calendar & Tasks --}}
         <a href="{{ route('dashboard.calendar') }}" class="nav-item {{ request()->routeIs('dashboard.calendar') ? 'active' : '' }}" data-tip="Calendar">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             <span class="nav-label">Calendar & Tasks</span>
         </a>
 
-        {{-- My Subscription --}}
-        <a href="/subscription/plans" class="nav-item {{ request()->is('subscription/plans') ? 'active' : '' }}" data-tip="My Plan">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14h6m-3-3v6m-7 4v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v1m0 10v1"/></svg>
-            <span class="nav-label">My Subscription</span>
-        </a>
-
-        {{-- Profile --}}
-        <a href="{{ route('dashboard.profile') }}" class="nav-item {{ $isProfile ? 'active' : '' }}" data-tip="Profile">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/><path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4"/></svg>
-            <span class="nav-label">My Profile</span>
-        </a>
-
-        {{-- Notification Templates --}}
         <a href="{{ route('dashboard.notification-templates') }}" class="nav-item {{ $isNotifTpl ? 'active' : '' }}" data-tip="Notifications">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-14a2 2 0 0 1-2-2v-10z"/><path d="M3 7l9 6l9-6"/></svg>
             <span class="nav-label">Notification Templates</span>
         </a>
 
-        @canany(['approvals.view','approvals.approve'])
-        {{-- Approval Requests --}}
-        <a href="{{ route('dashboard.approvals.index') }}" class="nav-item {{ request()->routeIs('dashboard.approvals.*') ? 'active' : '' }}" data-tip="Approvals">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span class="nav-label">Approval Requests</span>
+        <a href="/subscription/plans" class="nav-item {{ request()->is('subscription/plans') ? 'active' : '' }}" data-tip="My Plan">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+            <span class="nav-label">My Subscription</span>
         </a>
-        @endcanany
+
+        <a href="{{ route('dashboard.profile') }}" class="nav-item {{ $isProfile ? 'active' : '' }}" data-tip="Profile">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/><path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4"/></svg>
+            <span class="nav-label">My Profile</span>
+        </a>
 
         @can('settings.view')
-        {{-- Settings --}}
         <div class="dropdown {{ $isSettings ? 'open' : '' }}" id="dropdown-settings">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-settings')" data-tip="Settings">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/></svg>
@@ -1304,6 +1244,21 @@
             </div>
         </div>
         @endcan
+
+        {{-- ── SUPPORT ──────────────────────────────────── --}}
+        <div class="nav-section-label">Support</div>
+
+        <div class="dropdown {{ $isFeedback ? 'open' : '' }}" id="dropdown-support">
+            <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-support')" data-tip="Support">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m0 0V12m0 0h8.485"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="nav-label">Support & Feedback</span>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
+            </div>
+            <div class="dropdown-children">
+                <a href="{{ route('dashboard.feedback.index') }}" class="child-item {{ $isFeedback && !$isAdminFeedback ? 'active' : '' }}">My Feedback</a>
+                <a href="{{ route('dashboard.feedback.admin.index') }}" class="child-item {{ $isAdminFeedback ? 'active' : '' }}">Support Inbox</a>
+            </div>
+        </div>
 
     </div>{{-- /sidebar-content --}}
 

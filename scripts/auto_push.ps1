@@ -10,7 +10,7 @@ $ErrorActionPreference = 'Stop'
 function Test-LocalChanges {
   $status = git status --porcelain
   return -not [string]::IsNullOrWhiteSpace($status)
-}
+}5
 
 function Invoke-AutoCommitPush {
   if (-not (Test-LocalChanges)) {
