@@ -122,6 +122,7 @@ Route::post('/webhooks/snippe', App\Http\Controllers\Webhook\SnippeWebhookContro
 // Subscription plans (user-facing)
 Route::get('/subscription/plans', [App\Http\Controllers\UserSubscriptionController::class, 'plans'])->middleware(['auth', 'verify.otp']);
 Route::post('/subscription/choose', [App\Http\Controllers\UserSubscriptionController::class, 'choosePlan'])->middleware(['auth', 'verify.otp']);
+Route::get('/subscription/payment-status', [App\Http\Controllers\UserSubscriptionController::class, 'checkPaymentStatus'])->middleware(['auth']);
 
 // Blocked / Expired pages
 Route::get('/blocked', function () {
