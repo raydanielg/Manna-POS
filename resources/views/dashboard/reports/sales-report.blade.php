@@ -1,119 +1,130 @@
 ﻿@extends('layouts.dashboard')
 @section('page_title','Sales Report')
+
+@section('page_styles')
+@include('dashboard.reports._styles')
+@endsection
+
 @section('content')
-<div class="dash-content">
+<div class="dash-content rpt-page">
 
-    <div class="flex items-center justify-between mb-4">
-        <div>
-            <h1 class="text-xl font-bold text-gray-900">Sales Report</h1>
-            <p class="text-sm text-gray-500">{{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }}</p>
-        </div>
-        <div class="flex gap-2 no-print">
-            <a href="{{ route('dashboard.reports.sales-report.pdf', ['from_date' => request('from_date'), 'to_date' => request('to_date')]) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                Download PDF
-            </a>
-            <button type="button" onclick="window.print()" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                Print
-            </button>
-        </div>
+  <div class="rpt-header no-print">
+    <div class="rpt-header-left">
+      <div class="rpt-header-tag">
+        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        Sales Analytics
+      </div>
+      <h1>Sales Report</h1>
+      <div class="rpt-header-sub">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        {{ $from->format('M d, Y') }} — {{ $to->format('M d, Y') }}
+        <span>&bull; Generated {{ now()->format('M d, Y H:i') }}</span>
+      </div>
     </div>
-
-    <form method="GET" class="flex flex-wrap items-end gap-3 mb-6 p-4 bg-white rounded-lg border border-gray-200 no-print">
-        <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1">From Date</label>
-            <input type="date" name="from_date" value="{{ request('from_date',$from->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
-        </div>
-        <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1">To Date</label>
-            <input type="date" name="to_date" value="{{ request('to_date',$to->format('Y-m-d')) }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm h-9 px-3 border">
-        </div>
-        <button type="submit" class="h-9 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">Generate</button>
-        <a href="{{ route('dashboard.reports.sales-report') }}" class="h-9 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 inline-flex items-center">Reset</a>
-    </form>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white rounded-lg border border-gray-200 p-4">
-            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Sales</div>
-            <div class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($summary['total_sales']) }}</div>
-        </div>
-        <div class="bg-white rounded-lg border border-gray-200 p-4">
-            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Revenue</div>
-            <div class="text-2xl font-bold text-gray-900 mt-1">{{ $userCurrency }} {{ number_format($summary['total_revenue'],2) }}</div>
-        </div>
-        <div class="bg-white rounded-lg border border-gray-200 p-4">
-            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Paid</div>
-            <div class="text-2xl font-bold text-green-600 mt-1">{{ $userCurrency }} {{ number_format($summary['total_paid'],2) }}</div>
-        </div>
-        <div class="bg-white rounded-lg border border-gray-200 p-4">
-            <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Outstanding</div>
-            <div class="text-2xl font-bold text-red-600 mt-1">{{ $userCurrency }} {{ number_format($summary['total_outstanding'],2) }}</div>
-        </div>
+    <div class="rpt-header-right">
+      <a href="{{ route('dashboard.reports.sales-report.pdf', ['from_date'=>request('from_date'),'to_date'=>request('to_date')]) }}" class="rpt-btn rpt-btn-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Download PDF
+      </a>
+      <button onclick="window.print()" class="rpt-btn rpt-btn-ghost">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        Print
+      </button>
     </div>
+  </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div class="bg-white rounded-lg border border-gray-200 p-4">
-            <h3 class="text-sm font-semibold text-gray-700 mb-3">Daily Sales Trend</h3>
-            <div class="h-64"><canvas id="salesChart"></canvas></div>
-        </div>
-        <div class="bg-white rounded-lg border border-gray-200 p-4">
-            <h3 class="text-sm font-semibold text-gray-700 mb-3">Top Products by Revenue</h3>
-            <div class="h-64"><canvas id="productsChart"></canvas></div>
-        </div>
+  <form method="GET" class="rpt-filter no-print">
+    <div class="rpt-filter-group">
+      <span class="rpt-filter-label">From Date</span>
+      <input type="date" name="from_date" id="f_from" value="{{ request('from_date',$from->format('Y-m-d')) }}">
     </div>
+    <div class="rpt-filter-group">
+      <span class="rpt-filter-label">To Date</span>
+      <input type="date" name="to_date" id="f_to" value="{{ request('to_date',$to->format('Y-m-d')) }}">
+    </div>
+    <div class="rpt-filter-actions">
+      <button type="submit" class="rpt-filter-btn rpt-filter-btn-primary">Generate</button>
+      <a href="{{ route('dashboard.reports.sales-report') }}" class="rpt-filter-btn rpt-filter-btn-reset">Reset</a>
+    </div>
+    <div class="rpt-presets">
+      <button type="button" class="rpt-preset" onclick="setPreset('today')">Today</button>
+      <button type="button" class="rpt-preset" onclick="setPreset('week')">This Week</button>
+      <button type="button" class="rpt-preset" onclick="setPreset('month')">This Month</button>
+      <button type="button" class="rpt-preset" onclick="setPreset('year')">This Year</button>
+    </div>
+  </form>
 
-    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-gray-700">Sales Details</h3>
-            <span class="text-xs text-gray-500">{{ $sales->firstItem() ?? 0 }}–{{ $sales->lastItem() ?? 0 }} of {{ $sales->total() }}</span>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200" id="salesTable">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
-                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Paid</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Method</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($sales as $s)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3 text-sm text-gray-400">{{ $loop->iteration + ($sales->currentPage()-1)*$sales->perPage() }}</td>
-                        <td class="px-4 py-3 text-sm font-mono text-blue-600 font-semibold">{{ $s->reference ?? $s->id }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-900">{{ $s->customer->name ?? 'Walk-in' }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
-                        <td class="px-4 py-3 text-sm text-right font-semibold text-gray-900">{{ $userCurrency }} {{ number_format($s->total,2) }}</td>
-                        <td class="px-4 py-3 text-sm text-right font-semibold text-green-600">{{ $userCurrency }} {{ number_format($s->paid,2) }}</td>
-                        <td class="px-4 py-3 text-sm"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">{{ $s->payment_method ?? '—' }}</span></td>
-                        <td class="px-4 py-3 text-sm">
-                            @if($s->status=='completed')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700">Completed</span>
-                            @elseif($s->status=='pending')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-50 text-yellow-700">Pending</span>
-                            @else
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-50 text-gray-600">{{ ucfirst($s->status ?? 'Draft') }}</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="8" class="px-4 py-12 text-center text-sm text-gray-500">No sales found for this period.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        @if($sales->hasPages())
-        <div class="px-4 py-3 border-t border-gray-200 no-print">{{ $sales->links() }}</div>
-        @endif
+  <div class="rpt-kpis cols-4">
+    <div class="rpt-kpi">
+      <div class="rpt-kpi-icon blue"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+      <div class="rpt-kpi-body"><div class="rpt-kpi-label">Total Orders</div><div class="rpt-kpi-value">{{ number_format($summary['total_sales']) }}</div><div class="rpt-kpi-sub">All transactions</div></div>
     </div>
+    <div class="rpt-kpi">
+      <div class="rpt-kpi-icon indigo"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div class="rpt-kpi-body"><div class="rpt-kpi-label">Total Revenue</div><div class="rpt-kpi-value">{{ $userCurrency }} {{ number_format($summary['total_revenue'],2) }}</div><div class="rpt-kpi-sub">Gross sales</div></div>
+    </div>
+    <div class="rpt-kpi">
+      <div class="rpt-kpi-icon green"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+      <div class="rpt-kpi-body"><div class="rpt-kpi-label">Total Paid</div><div class="rpt-kpi-value green">{{ $userCurrency }} {{ number_format($summary['total_paid'],2) }}</div><div class="rpt-kpi-sub">Collected payments</div></div>
+    </div>
+    <div class="rpt-kpi">
+      <div class="rpt-kpi-icon red"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div class="rpt-kpi-body"><div class="rpt-kpi-label">Outstanding</div><div class="rpt-kpi-value red">{{ $userCurrency }} {{ number_format($summary['total_outstanding'],2) }}</div><div class="rpt-kpi-sub">Pending collection</div></div>
+    </div>
+  </div>
+
+  <div class="rpt-chart-grid cols-2">
+    <div class="rpt-chart-card" style="margin-bottom:0;">
+      <div class="rpt-card-head"><span class="rpt-card-title">Daily Sales Trend</span><span class="rpt-card-sub">Revenue &amp; order volume</span></div>
+      <div class="rpt-chart-body" style="height:260px;"><canvas id="salesChart"></canvas></div>
+    </div>
+    <div class="rpt-chart-card" style="margin-bottom:0;">
+      <div class="rpt-card-head"><span class="rpt-card-title">Top Products by Revenue</span><span class="rpt-card-sub">Best sellers</span></div>
+      <div class="rpt-chart-body" style="height:260px;"><canvas id="productsChart"></canvas></div>
+    </div>
+  </div>
+  <div style="margin-bottom:1.5rem;"></div>
+
+  <div class="rpt-table-card">
+    <div class="rpt-card-head">
+      <span class="rpt-card-title">Sales Details</span>
+      <span class="rpt-card-sub">{{ $sales->firstItem() ?? 0 }}–{{ $sales->lastItem() ?? 0 }} of {{ $sales->total() }} records</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="rpt-table">
+        <thead><tr>
+          <th>#</th><th>Reference</th><th>Customer</th><th>Date</th>
+          <th class="t-right">Total</th><th class="t-right">Paid</th>
+          <th>Method</th><th>Status</th>
+        </tr></thead>
+        <tbody>
+          @forelse($sales as $s)
+          <tr>
+            <td class="t-num">{{ $loop->iteration + ($sales->currentPage()-1)*$sales->perPage() }}</td>
+            <td class="t-ref">{{ $s->reference ?? $s->id }}</td>
+            <td class="t-name">{{ $s->customer->name ?? 'Walk-in' }}</td>
+            <td class="t-muted" style="white-space:nowrap;">{{ $s->sale_date ? \Carbon\Carbon::parse($s->sale_date)->format('M d, Y') : '—' }}</td>
+            <td class="t-right t-amt">{{ $userCurrency }} {{ number_format($s->total,2) }}</td>
+            <td class="t-right t-amt-green">{{ $userCurrency }} {{ number_format($s->paid,2) }}</td>
+            <td><span class="rpt-badge rpt-badge-blue">{{ $s->payment_method ?? '—' }}</span></td>
+            <td>
+              @if($s->status=='completed') <span class="rpt-badge rpt-badge-green">Completed</span>
+              @elseif($s->status=='pending') <span class="rpt-badge rpt-badge-amber">Pending</span>
+              @else <span class="rpt-badge rpt-badge-slate">{{ ucfirst($s->status ?? 'Draft') }}</span>
+              @endif
+            </td>
+          </tr>
+          @empty
+          <tr><td colspan="8"><div class="rpt-empty"><svg width="48" height="48" fill="none" stroke="#94a3b8" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><p>No sales found for this period</p><span>Try a different date range</span></div></td></tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+    @if($sales->hasPages())
+    <div class="rpt-pagination no-print"><span>Page {{ $sales->currentPage() }} of {{ $sales->lastPage() }}</span>{{ $sales->links() }}</div>
+    @endif
+  </div>
+
 </div>
 @endsection
 
