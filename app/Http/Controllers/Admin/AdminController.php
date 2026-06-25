@@ -45,7 +45,80 @@ class AdminController extends Controller
 
     public function recentActivity()
     {
-        return response()->json(ActivityLog::with('user')->recent()->get());
+        $logs = ActivityLog::with('user')->latest()->limit(20)->get();
+        return response()->json($logs->map(function ($log) {
+            $colorMap = [
+                'create' => 'success', 'update' => 'info',
+                'delete' => 'danger',  'login'  => 'info',
+                'logout' => 'warning', 'register' => 'success',
+            ];
+            $action = strtolower($log->action ?? '');
+            $dot = $colorMap[$action] ?? 'info';
+            return [
+                'id'          => $log->id,
+                'user'        => $log->user?->name ?? 'System',
+                'avatar'      => strtoupper(substr($log->user?->name ?? 'S', 0, 1)),
+                'action'      => $log->action,
+                'description' => $log->description,
+                'dot'         => $dot,
+                'time'        => $log->created_at?->diffForHumans(),
+            ];
+        }));
+    }
+
+    public function revenueTrends(Request $request)
+    {
+        $months = (int) $request->get('months', 12);
+        $months = min(max($months, 3), 24);
+
+        $labels = [];
+        $data = [];
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $key = $date->format('Y-m');
+            $labels[] = $date->format('M Y');
+
+            $total = Invoice::where('status', 'paid')
+                ->whereYear('paid_at', $date->year)
+                ->whereMonth('paid_at', $date->month)
+                ->sum('total');
+            $data[] = (float) $total;
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'data'   => $data,
+            'total'  => array_sum($data),
+            'avg'    => count($data) ? array_sum($data) / count($data) : 0,
+        ]);
+    }
+
+    public function userGrowth(Request $request)
+    {
+        $months = (int) $request->get('months', 12);
+        $months = min(max($months, 3), 24);
+
+        $labels = [];
+        $data = [];
+        $cumulative = 0;
+
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $labels[] = $date->format('M Y');
+
+            $new = User::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+            $cumulative += $new;
+            $data[] = $cumulative;
+        }
+
+        return response()->json([
+            'labels'    => $labels,
+            'data'      => $data,
+            'new_users' => User::whereMonth('created_at', now()->month)->count(),
+            'total'     => User::count(),
+        ]);
     }
 
     public function updateProfile(Request $request)
