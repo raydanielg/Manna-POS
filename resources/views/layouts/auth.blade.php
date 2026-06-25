@@ -700,6 +700,13 @@
         </div>
 
         <div class="auth-form-side">
+            {{-- Language Switcher --}}
+            <div style="position:absolute;top:1.5rem;right:1.5rem;display:flex;gap:0.35rem;z-index:10;">
+                @php $currentLocale = app()->getLocale(); @endphp
+                @foreach(['en' => '🇬🇧', 'sw' => '🇹🇿', 'fr' => '🇫🇷'] as $code => $flag)
+                    <a href="{{ route('language.switch', $code) }}" style="font-size:1.1rem;text-decoration:none;padding:0.2rem 0.4rem;border-radius:6px;transition:all 0.2s;@if($currentLocale === $code) background:#eff6ff;box-shadow:0 0 0 2px rgba(37,99,235,0.2);@else opacity:0.5; @endif" title="{{ __('app.' . ['en' => 'english', 'sw' => 'swahili', 'fr' => 'french'][$code]) }}">{{ $flag }}</a>
+                @endforeach
+            </div>
             <div class="auth-form-header">
                 <div class="mobile-logo">
                     <img src="{{ asset('icons8-dynamics-365-96.png') }}" alt="MannaPOS Logo" class="logo-image">
