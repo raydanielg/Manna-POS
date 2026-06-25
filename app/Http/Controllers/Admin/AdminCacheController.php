@@ -154,6 +154,57 @@ class AdminCacheController extends Controller
         return $this->formatBytes($size);
     }
 
+    private function getAllCacheSizes()
+    {
+        $app = $this->dirSize(storage_path('framework/cache/data'));
+        $views = $this->dirSize(storage_path('framework/views'));
+        $config = file_exists(base_path('bootstrap/cache/config.php')) ? filesize(base_path('bootstrap/cache/config.php')) : 0;
+        $routes = file_exists(base_path('bootstrap/cache/routes-v7.php')) ? filesize(base_path('bootstrap/cache/routes-v7.php')) : 0;
+        $events = file_exists(base_path('bootstrap/cache/events.php')) ? filesize(base_path('bootstrap/cache/events.php')) : 0;
+        $sessions = $this->dirSize(storage_path('framework/sessions'));
+        $logs = $this->dirSize(storage_path('logs'));
+
+        return [
+            'app' => $app,
+            'views' => $views,
+            'config' => $config,
+            'routes' => $routes,
+            'events' => $events,
+            'sessions' => $sessions,
+            'logs' => $logs,
+            'total' => $app + $views + $config + $routes + $events + $sessions + $logs,
+        ];
+    }
+
+    private function dirSize($path)
+    {
+        if (!is_dir($path)) return 0;
+        $size = 0;
+        try {
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS));
+            foreach ($files as $file) $size += $file->getSize();
+        } catch (\Exception $e) {}
+        return $size;
+    }
+
+    private function clearSessions()
+    {
+        $path = storage_path('framework/sessions');
+        if (!is_dir($path)) return;
+        foreach (glob($path . '/*') as $file) {
+            if (is_file($file)) @unlink($file);
+        }
+    }
+
+    private function clearLogs()
+    {
+        $path = storage_path('logs');
+        if (!is_dir($path)) return;
+        foreach (glob($path . '/*.log') as $file) {
+            if (is_file($file)) @unlink($file);
+        }
+    }
+
     private function formatBytes($bytes, $precision = 2)
     {
         $units = ['B', 'KB', 'MB', 'GB'];
