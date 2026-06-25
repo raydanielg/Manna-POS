@@ -91,6 +91,14 @@ Route::get('/gdpr', function () {
     return view('legal.gdpr');
 });
 
+// Language switcher
+Route::get('/language/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'sw', 'fr'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('language.switch');
+
 Auth::routes();
 
 // Laravel email verification route redirects → our custom OTP system
