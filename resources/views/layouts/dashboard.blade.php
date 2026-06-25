@@ -1462,20 +1462,20 @@
         <div style="position:absolute;top:-50%;right:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(16,185,129,.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
         <span style="position:relative;z-index:1;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
             @if($__daysLeft > 3)
-                <span style="background:rgba(16,185,129,.2);color:#34d399;padding:.18rem .55rem;border-radius:6px;font-weight:800;font-size:.68rem;letter-spacing:.03em;">FREE TRIAL</span>
-                <span><strong>{{ $__daysLeft }}</strong> days remaining in your free trial</span>
+                <span style="background:rgba(16,185,129,.2);color:#34d399;padding:.18rem .55rem;border-radius:6px;font-weight:800;font-size:.68rem;letter-spacing:.03em;">{{ __('app.free_trial') }}</span>
+                <span><strong>{{ $__daysLeft }}</strong> {{ __('app.days_remaining') }}</span>
             @else
                 <span style="background:rgba(239,68,68,.25);color:#fca5a5;padding:.18rem .55rem;border-radius:6px;font-weight:800;font-size:.68rem;letter-spacing:.03em;display:flex;align-items:center;gap:.25rem;">
                     <svg width="14" height="14" fill="none" stroke="#fca5a5" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    TRIAL EXPIRING
+                    {{ __('app.trial_expiring') }}
                 </span>
-                <span>Only <strong>{{ $__daysLeft }}</strong> day{{ $__daysLeft != 1 ? 's' : '' }} left!</span>
+                <span><strong>{{ $__daysLeft }}</strong> {{ __('app.days_left') }}</span>
             @endif
         </span>
         <a href="/subscription/plans" style="position:relative;z-index:1;background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:.35rem 1rem;border-radius:8px;font-weight:700;font-size:.78rem;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:.35rem;transition:all .2s;box-shadow:0 2px 8px rgba(16,185,129,.3);"
            onmouseover="this.style.background='linear-gradient(135deg,#059669,#047857)';this.style.transform='translateY(-1px)'"
            onmouseout="this.style.background='linear-gradient(135deg,#10b981,#059669)';this.style.transform=''">
-            Upgrade Now
+            {{ __('app.upgrade_now') }}
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-7-7l7 7-7 7"/></svg>
         </a>
     </div>
@@ -1484,12 +1484,12 @@
         <div style="position:absolute;top:-50%;left:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
         <span style="position:relative;z-index:1;display:flex;align-items:center;gap:.5rem;">
             <svg width="18" height="18" fill="none" stroke="#fca5a5" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span>Your subscription has expired. Some features may be limited.</span>
+            <span>{{ __('app.subscription_expired') }}</span>
         </span>
         <a href="/subscription/plans" style="position:relative;z-index:1;background:#fff;color:#dc2626;padding:.35rem 1rem;border-radius:8px;font-weight:700;font-size:.78rem;text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;transition:all .2s;"
            onmouseover="this.style.background='#fee2e2';this.style.transform='translateY(-1px)'"
            onmouseout="this.style.background='#fff';this.style.transform=''">
-            Renew Now
+            {{ __('app.renew_now') }}
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-7-7l7 7-7 7"/></svg>
         </a>
     </div>
