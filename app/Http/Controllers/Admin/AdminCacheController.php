@@ -14,13 +14,73 @@ class AdminCacheController extends Controller
     public function list()
     {
         try {
+            $sizes = $this->getAllCacheSizes();
             return response()->json([
                 'opcache_enabled' => function_exists('opcache_get_status') && ($status = opcache_get_status(false)) && $status['opcache_enabled'],
                 'app_cached' => app()->configurationIsCached(),
                 'routes_cached' => app()->routesAreCached(),
                 'events_cached' => file_exists(base_path('bootstrap/cache/events.php')),
                 'views_cached' => count(glob(storage_path('framework/views/*.php'))) > 0,
-                'cache_total_size' => $this->getCacheSize(),
+                'cache_total_size' => $this->formatBytes($sizes['total']),
+                'cache_total_bytes' => $sizes['total'],
+                'items' => [
+                    'app' => [
+                        'label' => 'Application Cache',
+                        'cached' => app()->configurationIsCached(),
+                        'bytes' => $sizes['app'],
+                        'size' => $this->formatBytes($sizes['app']),
+                        'icon' => 'storage',
+                        'color' => '#7c3aed',
+                    ],
+                    'views' => [
+                        'label' => 'View Cache',
+                        'cached' => count(glob(storage_path('framework/views/*.php'))) > 0,
+                        'bytes' => $sizes['views'],
+                        'size' => $this->formatBytes($sizes['views']),
+                        'icon' => 'visibility',
+                        'color' => '#2563eb',
+                    ],
+                    'config' => [
+                        'label' => 'Config Cache',
+                        'cached' => app()->configurationIsCached(),
+                        'bytes' => $sizes['config'],
+                        'size' => $this->formatBytes($sizes['config']),
+                        'icon' => 'settings',
+                        'color' => '#059669',
+                    ],
+                    'routes' => [
+                        'label' => 'Route Cache',
+                        'cached' => app()->routesAreCached(),
+                        'bytes' => $sizes['routes'],
+                        'size' => $this->formatBytes($sizes['routes']),
+                        'icon' => 'route',
+                        'color' => '#d97706',
+                    ],
+                    'events' => [
+                        'label' => 'Event Cache',
+                        'cached' => file_exists(base_path('bootstrap/cache/events.php')),
+                        'bytes' => $sizes['events'],
+                        'size' => $this->formatBytes($sizes['events']),
+                        'icon' => 'event',
+                        'color' => '#dc2626',
+                    ],
+                    'sessions' => [
+                        'label' => 'Session Data',
+                        'cached' => true,
+                        'bytes' => $sizes['sessions'],
+                        'size' => $this->formatBytes($sizes['sessions']),
+                        'icon' => 'session',
+                        'color' => '#0891b2',
+                    ],
+                    'logs' => [
+                        'label' => 'Log Files',
+                        'cached' => $sizes['logs'] > 0,
+                        'bytes' => $sizes['logs'],
+                        'size' => $this->formatBytes($sizes['logs']),
+                        'icon' => 'description',
+                        'color' => '#64748b',
+                    ],
+                ],
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
