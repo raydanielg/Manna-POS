@@ -96,16 +96,25 @@ class AdminCacheController extends Controller
                     Artisan::call('cache:clear');
                     break;
                 case 'views':
+                case 'view':
                     Artisan::call('view:clear');
                     break;
                 case 'config':
                     Artisan::call('config:clear');
                     break;
                 case 'routes':
+                case 'route':
                     Artisan::call('route:clear');
                     break;
                 case 'events':
+                case 'event':
                     Artisan::call('event:clear');
+                    break;
+                case 'sessions':
+                    $this->clearSessions();
+                    break;
+                case 'logs':
+                    $this->clearLogs();
                     break;
                 case 'all':
                     Artisan::call('cache:clear');
@@ -113,6 +122,8 @@ class AdminCacheController extends Controller
                     Artisan::call('config:clear');
                     Artisan::call('route:clear');
                     Artisan::call('event:clear');
+                    $this->clearSessions();
+                    $this->clearLogs();
                     break;
                 default:
                     return response()->json(['message' => 'Invalid cache type'], 400);
