@@ -947,167 +947,167 @@
     <div class="sidebar-content">
 
         {{-- ── MAIN ──────────────────────────────────────── --}}
-        <div class="nav-section-label">Main</div>
+        <div class="nav-section-label">{{ __('app.nav_main') }}</div>
 
         @can('dashboard.view')
         <a href="{{ route('dashboard') }}" class="nav-item {{ $isHome ? 'active' : '' }}" data-tip="Dashboard">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12l-2 0l9-9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M10 12h4v4h-4z"/></svg>
-            <span class="nav-label">Dashboard</span>
+            <span class="nav-label">{{ __('app.dashboard') }}</span>
         </a>
         @endcan
 
         {{-- ── CRM ──────────────────────────────────────── --}}
-        <div class="nav-section-label">CRM</div>
+        <div class="nav-section-label">{{ __('app.nav_crm') }}</div>
 
         <div class="dropdown {{ $isCrm ? 'open' : '' }}" id="dropdown-crm">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-crm')" data-tip="CRM">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
-                <span class="nav-label">CRM</span>
+                <span class="nav-label">{{ __('app.nav_crm') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <div class="dd-group-label">Customers</div>
-                @can('contacts.view')<a href="{{ route('dashboard.contacts.customers') }}" class="child-item {{ request()->routeIs('dashboard.contacts.customers') ? 'active' : '' }}">Customers</a>@endcan
-                @can('contacts.view')<a href="{{ route('dashboard.contacts.customer-groups') }}" class="child-item {{ request()->routeIs('dashboard.contacts.customer-groups') ? 'active' : '' }}">Customer Groups</a>@endcan
-                @can('contacts.create')<a href="{{ route('dashboard.contacts.import-contacts') }}" class="child-item {{ request()->routeIs('dashboard.contacts.import-contacts') ? 'active' : '' }}">Import Contacts</a>@endcan
-                <div class="dd-group-label">Sales & Loyalty</div>
-                @can('sales.view')<a href="{{ route('dashboard.sell.all-sales') }}?payment_status=credit" class="child-item">Credit Sales</a>@endcan
-                <a href="#" class="child-item child-soon">Customer Payments <span class="soon-badge">Soon</span></a>
-                <a href="#" class="child-item child-soon">Loyalty Points <span class="soon-badge">Soon</span></a>
+                <div class="dd-group-label">{{ __('app.customers') }}</div>
+                @can('contacts.view')<a href="{{ route('dashboard.contacts.customers') }}" class="child-item {{ request()->routeIs('dashboard.contacts.customers') ? 'active' : '' }}">{{ __('app.customers') }}</a>@endcan
+                @can('contacts.view')<a href="{{ route('dashboard.contacts.customer-groups') }}" class="child-item {{ request()->routeIs('dashboard.contacts.customer-groups') ? 'active' : '' }}">{{ __('app.customer_groups') }}</a>@endcan
+                @can('contacts.create')<a href="{{ route('dashboard.contacts.import-contacts') }}" class="child-item {{ request()->routeIs('dashboard.contacts.import-contacts') ? 'active' : '' }}">{{ __('app.import_contacts') }}</a>@endcan
+                <div class="dd-group-label">{{ __('app.nav_sales') }} & {{ __('app.loyalty_points') }}</div>
+                @can('sales.view')<a href="{{ route('dashboard.sell.all-sales') }}?payment_status=credit" class="child-item">{{ __('app.credit_sales') }}</a>@endcan
+                <a href="#" class="child-item child-soon">{{ __('app.customer_payments') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
+                <a href="#" class="child-item child-soon">{{ __('app.loyalty_points') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
                 <div class="dd-group-label">Communication</div>
-                @can('crm.view')<a href="{{ route('dashboard.crm.activities') }}" class="child-item {{ request()->routeIs('dashboard.crm.activities') ? 'active' : '' }}">Activities</a>@endcan
-                @can('crm.view')<a href="{{ route('dashboard.crm.dashboard') }}" class="child-item {{ request()->routeIs('dashboard.crm.dashboard') ? 'active' : '' }}">CRM Dashboard</a>@endcan
-                @can('sms.view')<a href="{{ route('dashboard.sms-campaigns') }}" class="child-item {{ $isSmsCampaigns ? 'active' : '' }}">SMS Campaigns</a>@endcan
-                <a href="#" class="child-item child-soon">Customer Reports <span class="soon-badge">Soon</span></a>
+                @can('crm.view')<a href="{{ route('dashboard.crm.activities') }}" class="child-item {{ request()->routeIs('dashboard.crm.activities') ? 'active' : '' }}">{{ __('app.activities') }}</a>@endcan
+                @can('crm.view')<a href="{{ route('dashboard.crm.dashboard') }}" class="child-item {{ request()->routeIs('dashboard.crm.dashboard') ? 'active' : '' }}">{{ __('app.crm_dashboard') }}</a>@endcan
+                @can('sms.view')<a href="{{ route('dashboard.sms-campaigns') }}" class="child-item {{ $isSmsCampaigns ? 'active' : '' }}">{{ __('app.sms_campaigns') }}</a>@endcan
+                <a href="#" class="child-item child-soon">{{ __('app.customer_reports') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
             </div>
         </div>
 
         {{-- ── SALES ────────────────────────────────────── --}}
-        <div class="nav-section-label">Sales</div>
+        <div class="nav-section-label">{{ __('app.nav_sales') }}</div>
 
         @can('sales.view')
         <div class="dropdown {{ $isSell || $isOnlineOrders ? 'open' : '' }}" id="dropdown-sell">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-sell')" data-tip="Sales">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                <span class="nav-label">Sales</span>
+                <span class="nav-label">{{ __('app.nav_sales') }}</span>
                 @php $pendingCount = collect(json_decode(Auth::user()->store_settings ?? '{}', true)['orders'] ?? [])->where('status', 'pending')->count(); @endphp
                 @if($pendingCount > 0)<span style="margin-left:auto;margin-right:0.3rem;background:#ef4444;color:#fff;font-size:0.6rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:99px;">{{ $pendingCount }}</span>@endif
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <div class="dd-group-label">Transactions</div>
-                @can('sales.view')<a href="{{ route('dashboard.sell.all-sales') }}" class="child-item {{ request()->routeIs('dashboard.sell.all-sales') ? 'active' : '' }}">All Sales</a>@endcan
-                @can('sales.create')<a href="{{ route('dashboard.sell.add-sale') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-sale') ? 'active' : '' }}">Add Sale</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.list-sell-return') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-sell-return') ? 'active' : '' }}">Sell Returns</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.discounts') }}" class="child-item {{ request()->routeIs('dashboard.sell.discounts') ? 'active' : '' }}">Discounts</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.shipments') }}" class="child-item {{ request()->routeIs('dashboard.sell.shipments') ? 'active' : '' }}">Shipments</a>@endcan
-                @can('sales.create')<a href="{{ route('dashboard.sell.import-sales') }}" class="child-item {{ request()->routeIs('dashboard.sell.import-sales') ? 'active' : '' }}">Import Sales</a>@endcan
+                <div class="dd-group-label">{{ __('app.transactions') }}</div>
+                @can('sales.view')<a href="{{ route('dashboard.sell.all-sales') }}" class="child-item {{ request()->routeIs('dashboard.sell.all-sales') ? 'active' : '' }}">{{ __('app.all_sales') }}</a>@endcan
+                @can('sales.create')<a href="{{ route('dashboard.sell.add-sale') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-sale') ? 'active' : '' }}">{{ __('app.add_sale') }}</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.list-sell-return') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-sell-return') ? 'active' : '' }}">{{ __('app.sell_returns') }}</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.discounts') }}" class="child-item {{ request()->routeIs('dashboard.sell.discounts') ? 'active' : '' }}">{{ __('app.discounts') }}</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.shipments') }}" class="child-item {{ request()->routeIs('dashboard.sell.shipments') ? 'active' : '' }}">{{ __('app.shipments') }}</a>@endcan
+                @can('sales.create')<a href="{{ route('dashboard.sell.import-sales') }}" class="child-item {{ request()->routeIs('dashboard.sell.import-sales') ? 'active' : '' }}">{{ __('app.import_sales') }}</a>@endcan
                 <div class="dd-group-label">POS</div>
-                @can('sales.create')<a href="{{ route('dashboard.sell.pos') }}" class="child-item {{ request()->routeIs('dashboard.sell.pos') ? 'active' : '' }}">POS Terminal</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.list-pos') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-pos') ? 'active' : '' }}">List POS</a>@endcan
+                @can('sales.create')<a href="{{ route('dashboard.sell.pos') }}" class="child-item {{ request()->routeIs('dashboard.sell.pos') ? 'active' : '' }}">{{ __('app.pos_terminal') }}</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.list-pos') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-pos') ? 'active' : '' }}">{{ __('app.list_pos') }}</a>@endcan
                 <div class="dd-group-label">Drafts & Quotations</div>
-                @can('sales.create')<a href="{{ route('dashboard.sell.add-draft') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-draft') ? 'active' : '' }}">Add Draft</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.list-drafts') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-drafts') ? 'active' : '' }}">List Drafts</a>@endcan
-                @can('sales.create')<a href="{{ route('dashboard.sell.add-quotation') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-quotation') ? 'active' : '' }}">Add Quotation</a>@endcan
-                @can('sales.view')<a href="{{ route('dashboard.sell.list-quotations') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-quotations') ? 'active' : '' }}">List Quotations</a>@endcan
+                @can('sales.create')<a href="{{ route('dashboard.sell.add-draft') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-draft') ? 'active' : '' }}">{{ __('app.add_draft') }}</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.list-drafts') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-drafts') ? 'active' : '' }}">{{ __('app.list_drafts') }}</a>@endcan
+                @can('sales.create')<a href="{{ route('dashboard.sell.add-quotation') }}" class="child-item {{ request()->routeIs('dashboard.sell.add-quotation') ? 'active' : '' }}">{{ __('app.add_quotation') }}</a>@endcan
+                @can('sales.view')<a href="{{ route('dashboard.sell.list-quotations') }}" class="child-item {{ request()->routeIs('dashboard.sell.list-quotations') ? 'active' : '' }}">{{ __('app.list_quotations') }}</a>@endcan
                 <div class="dd-group-label">Online</div>
-                <a href="{{ route('dashboard.online-orders') }}" class="child-item {{ $isOnlineOrders ? 'active' : '' }}">Online Orders @if($pendingCount > 0)<span style="background:#ef4444;color:#fff;font-size:0.6rem;font-weight:700;padding:0.1rem 0.35rem;border-radius:99px;margin-left:4px;">{{ $pendingCount }}</span>@endif</a>
+                <a href="{{ route('dashboard.online-orders') }}" class="child-item {{ $isOnlineOrders ? 'active' : '' }}">{{ __('app.online_orders') }} @if($pendingCount > 0)<span style="background:#ef4444;color:#fff;font-size:0.6rem;font-weight:700;padding:0.1rem 0.35rem;border-radius:99px;margin-left:4px;">{{ $pendingCount }}</span>@endif</a>
             </div>
         </div>
         @endcan
 
         {{-- ── PRODUCTS ─────────────────────────────────── --}}
-        <div class="nav-section-label">Products</div>
+        <div class="nav-section-label">{{ __('app.nav_products') }}</div>
 
         @can('products.view')
         <div class="dropdown {{ $isInventory ? 'open' : '' }}" id="dropdown-products">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-products')" data-tip="Products">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4.5v9l-8 4.5l-8-4.5v-9l8-4.5"/><path d="M12 12l8-4.5"/><path d="M8.2 9.8l7.6-4.6"/><path d="M12 12v9"/><path d="M12 12l-8-4.5"/></svg>
-                <span class="nav-label">Products</span>
+                <span class="nav-label">{{ __('app.nav_products') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
                 <div class="dd-group-label">Management</div>
-                @can('products.view')<a href="{{ route('dashboard.inventory.list-products') }}" class="child-item {{ request()->routeIs('dashboard.inventory.list-products') ? 'active' : '' }}">List Products</a>@endcan
-                @can('products.create')<a href="{{ route('dashboard.inventory.add-product') }}" class="child-item {{ request()->routeIs('dashboard.inventory.add-product') ? 'active' : '' }}">Add Product</a>@endcan
-                @can('products.edit')<a href="{{ route('dashboard.inventory.update-price') }}" class="child-item {{ request()->routeIs('dashboard.inventory.update-price') ? 'active' : '' }}">Update Price</a>@endcan
-                @can('products.view')<a href="{{ route('dashboard.inventory.print-labels') }}" class="child-item {{ request()->routeIs('dashboard.inventory.print-labels') ? 'active' : '' }}">Print Labels</a>@endcan
-                @can('products.view')<a href="{{ route('dashboard.inventory.variations') }}" class="child-item {{ request()->routeIs('dashboard.inventory.variations') ? 'active' : '' }}">Variations</a>@endcan
-                @can('products.view')<a href="{{ route('dashboard.inventory.selling-price-group') }}" class="child-item {{ request()->routeIs('dashboard.inventory.selling-price-group') ? 'active' : '' }}">Selling Price Group</a>@endcan
+                @can('products.view')<a href="{{ route('dashboard.inventory.list-products') }}" class="child-item {{ request()->routeIs('dashboard.inventory.list-products') ? 'active' : '' }}">{{ __('app.list_products') }}</a>@endcan
+                @can('products.create')<a href="{{ route('dashboard.inventory.add-product') }}" class="child-item {{ request()->routeIs('dashboard.inventory.add-product') ? 'active' : '' }}">{{ __('app.add_product') }}</a>@endcan
+                @can('products.edit')<a href="{{ route('dashboard.inventory.update-price') }}" class="child-item {{ request()->routeIs('dashboard.inventory.update-price') ? 'active' : '' }}">{{ __('app.update_price') }}</a>@endcan
+                @can('products.view')<a href="{{ route('dashboard.inventory.print-labels') }}" class="child-item {{ request()->routeIs('dashboard.inventory.print-labels') ? 'active' : '' }}">{{ __('app.print_labels') }}</a>@endcan
+                @can('products.view')<a href="{{ route('dashboard.inventory.variations') }}" class="child-item {{ request()->routeIs('dashboard.inventory.variations') ? 'active' : '' }}">{{ __('app.variations') }}</a>@endcan
+                @can('products.view')<a href="{{ route('dashboard.inventory.selling-price-group') }}" class="child-item {{ request()->routeIs('dashboard.inventory.selling-price-group') ? 'active' : '' }}">{{ __('app.selling_price_group') }}</a>@endcan
                 <div class="dd-group-label">Import</div>
-                @can('products.create')<a href="{{ route('dashboard.inventory.import-products') }}" class="child-item {{ request()->routeIs('dashboard.inventory.import-products') ? 'active' : '' }}">Import Products</a>@endcan
-                @can('products.create')<a href="{{ route('dashboard.inventory.import-opening-stock') }}" class="child-item {{ request()->routeIs('dashboard.inventory.import-opening-stock') ? 'active' : '' }}">Import Opening Stock</a>@endcan
+                @can('products.create')<a href="{{ route('dashboard.inventory.import-products') }}" class="child-item {{ request()->routeIs('dashboard.inventory.import-products') ? 'active' : '' }}">{{ __('app.import_products') }}</a>@endcan
+                @can('products.create')<a href="{{ route('dashboard.inventory.import-opening-stock') }}" class="child-item {{ request()->routeIs('dashboard.inventory.import-opening-stock') ? 'active' : '' }}">{{ __('app.import_opening_stock') }}</a>@endcan
                 <div class="dd-group-label">Classification</div>
-                @can('products.view')<a href="{{ route('dashboard.inventory.units') }}" class="child-item {{ request()->routeIs('dashboard.inventory.units') ? 'active' : '' }}">Units</a>@endcan
-                @can('products.view')<a href="{{ route('dashboard.inventory.product-categories') }}" class="child-item {{ request()->routeIs('dashboard.inventory.product-categories') ? 'active' : '' }}">Categories</a>@endcan
-                <a href="#" class="child-item child-soon">Subcategories <span class="soon-badge">Soon</span></a>
-                @can('products.view')<a href="{{ route('dashboard.inventory.brands') }}" class="child-item {{ request()->routeIs('dashboard.inventory.brands') ? 'active' : '' }}">Brands</a>@endcan
-                <a href="#" class="child-item child-soon">Sub Brands <span class="soon-badge">Soon</span></a>
-                @can('products.view')<a href="{{ route('dashboard.inventory.warranties') }}" class="child-item {{ request()->routeIs('dashboard.inventory.warranties') ? 'active' : '' }}">Warranties</a>@endcan
+                @can('products.view')<a href="{{ route('dashboard.inventory.units') }}" class="child-item {{ request()->routeIs('dashboard.inventory.units') ? 'active' : '' }}">{{ __('app.units') }}</a>@endcan
+                @can('products.view')<a href="{{ route('dashboard.inventory.product-categories') }}" class="child-item {{ request()->routeIs('dashboard.inventory.product-categories') ? 'active' : '' }}">{{ __('app.categories') }}</a>@endcan
+                <a href="#" class="child-item child-soon">{{ __('app.subcategories') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
+                @can('products.view')<a href="{{ route('dashboard.inventory.brands') }}" class="child-item {{ request()->routeIs('dashboard.inventory.brands') ? 'active' : '' }}">{{ __('app.brands') }}</a>@endcan
+                <a href="#" class="child-item child-soon">{{ __('app.sub_brands') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
+                @can('products.view')<a href="{{ route('dashboard.inventory.warranties') }}" class="child-item {{ request()->routeIs('dashboard.inventory.warranties') ? 'active' : '' }}">{{ __('app.warranties') }}</a>@endcan
                 <div class="dd-group-label">Expiry</div>
-                <a href="{{ route('dashboard.reports.expiry-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expiry-report') ? 'active' : '' }}">MFG & EXP Register</a>
-                <a href="{{ route('dashboard.reports.expiry-report') }}?alert=1" class="child-item">MFG & EXP Alert</a>
+                <a href="{{ route('dashboard.reports.expiry-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expiry-report') ? 'active' : '' }}">{{ __('app.mfg_exp_register') }}</a>
+                <a href="{{ route('dashboard.reports.expiry-report') }}?alert=1" class="child-item">{{ __('app.mfg_exp_alert') }}</a>
             </div>
         </div>
         @endcan
 
         {{-- ── PURCHASES ────────────────────────────────── --}}
-        <div class="nav-section-label">Purchases</div>
+        <div class="nav-section-label">{{ __('app.nav_purchases') }}</div>
 
         @can('purchases.view')
         <div class="dropdown {{ $isPurchases ? 'open' : '' }}" id="dropdown-purchases">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-purchases')" data-tip="Purchases">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12"/><path d="M16 11l-4 4l-4-4"/><path d="M3 12a9 9 0 0 0 18 0"/></svg>
-                <span class="nav-label">Purchases</span>
+                <span class="nav-label">{{ __('app.nav_purchases') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                @can('purchases.view')<a href="{{ route('dashboard.purchases.list-purchases') }}" class="child-item {{ request()->routeIs('dashboard.purchases.list-purchases') ? 'active' : '' }}">List Purchases</a>@endcan
-                @can('purchases.create')<a href="{{ route('dashboard.purchases.add-purchase') }}" class="child-item {{ request()->routeIs('dashboard.purchases.add-purchase') ? 'active' : '' }}">Add Purchase</a>@endcan
-                @can('purchases.view')<a href="{{ route('dashboard.purchases.list-purchase-return') }}" class="child-item {{ request()->routeIs('dashboard.purchases.list-purchase-return') ? 'active' : '' }}">List Purchase Return</a>@endcan
-                @can('contacts.view')<a href="{{ route('dashboard.contacts.suppliers') }}" class="child-item {{ request()->routeIs('dashboard.contacts.suppliers') ? 'active' : '' }}">Suppliers</a>@endcan
+                @can('purchases.view')<a href="{{ route('dashboard.purchases.list-purchases') }}" class="child-item {{ request()->routeIs('dashboard.purchases.list-purchases') ? 'active' : '' }}">{{ __('app.list_purchases') }}</a>@endcan
+                @can('purchases.create')<a href="{{ route('dashboard.purchases.add-purchase') }}" class="child-item {{ request()->routeIs('dashboard.purchases.add-purchase') ? 'active' : '' }}">{{ __('app.add_purchase') }}</a>@endcan
+                @can('purchases.view')<a href="{{ route('dashboard.purchases.list-purchase-return') }}" class="child-item {{ request()->routeIs('dashboard.purchases.list-purchase-return') ? 'active' : '' }}">{{ __('app.list_purchase_return') }}</a>@endcan
+                @can('contacts.view')<a href="{{ route('dashboard.contacts.suppliers') }}" class="child-item {{ request()->routeIs('dashboard.contacts.suppliers') ? 'active' : '' }}">{{ __('app.suppliers') }}</a>@endcan
             </div>
         </div>
         @endcan
 
         {{-- ── INVENTORY ────────────────────────────────── --}}
-        <div class="nav-section-label">Inventory</div>
+        <div class="nav-section-label">{{ __('app.nav_inventory') }}</div>
 
         <div class="dropdown {{ $isInventoryMgmt ? 'open' : '' }}" id="dropdown-inventory">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-inventory')" data-tip="Inventory">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h7"/><path d="M15 15l2 2 4-4"/></svg>
-                <span class="nav-label">Inventory</span>
+                <span class="nav-label">{{ __('app.nav_inventory') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <div class="dd-group-label">Stock Levels</div>
-                @can('products.view')<a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">Stock Levels</a>@endcan
-                <a href="#" class="child-item child-soon">Count by Category <span class="soon-badge">Soon</span></a>
-                <a href="#" class="child-item child-soon">Count by Location <span class="soon-badge">Soon</span></a>
-                <a href="#" class="child-item child-soon">Record Physical Qty <span class="soon-badge">Soon</span></a>
+                <div class="dd-group-label">{{ __('app.stock_levels') }}</div>
+                @can('products.view')<a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">{{ __('app.stock_levels') }}</a>@endcan
+                <a href="#" class="child-item child-soon">{{ __('app.count_by_category') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
+                <a href="#" class="child-item child-soon">{{ __('app.count_by_location') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
+                <a href="#" class="child-item child-soon">{{ __('app.record_physical_qty') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
                 <div class="dd-group-label">Adjustment</div>
-                @can('stock_adjustments.view')<a href="{{ route('dashboard.stock-adjustment.list-stock-adjustment') }}" class="child-item {{ request()->routeIs('dashboard.stock-adjustment.list-stock-adjustment') ? 'active' : '' }}">List Adjustments</a>@endcan
-                @can('stock_adjustments.view')<a href="{{ route('dashboard.stock-adjustment.add-stock-adjustment') }}" class="child-item {{ request()->routeIs('dashboard.stock-adjustment.add-stock-adjustment') ? 'active' : '' }}">Add Adjustment</a>@endcan
+                @can('stock_adjustments.view')<a href="{{ route('dashboard.stock-adjustment.list-stock-adjustment') }}" class="child-item {{ request()->routeIs('dashboard.stock-adjustment.list-stock-adjustment') ? 'active' : '' }}">{{ __('app.list_adjustments') }}</a>@endcan
+                @can('stock_adjustments.view')<a href="{{ route('dashboard.stock-adjustment.add-stock-adjustment') }}" class="child-item {{ request()->routeIs('dashboard.stock-adjustment.add-stock-adjustment') ? 'active' : '' }}">{{ __('app.add_adjustment') }}</a>@endcan
                 <div class="dd-group-label">Transfer</div>
-                @can('stock_transfers.view')<a href="{{ route('dashboard.stock-transfer.list-stock-transfer') }}" class="child-item {{ request()->routeIs('dashboard.stock-transfer.list-stock-transfer') ? 'active' : '' }}">List Transfers</a>@endcan
-                @can('stock_transfers.view')<a href="{{ route('dashboard.stock-transfer.add-stock-transfer') }}" class="child-item {{ request()->routeIs('dashboard.stock-transfer.add-stock-transfer') ? 'active' : '' }}">Add Transfer</a>@endcan
+                @can('stock_transfers.view')<a href="{{ route('dashboard.stock-transfer.list-stock-transfer') }}" class="child-item {{ request()->routeIs('dashboard.stock-transfer.list-stock-transfer') ? 'active' : '' }}">{{ __('app.list_transfers') }}</a>@endcan
+                @can('stock_transfers.view')<a href="{{ route('dashboard.stock-transfer.add-stock-transfer') }}" class="child-item {{ request()->routeIs('dashboard.stock-transfer.add-stock-transfer') ? 'active' : '' }}">{{ __('app.add_transfer') }}</a>@endcan
             </div>
         </div>
 
         {{-- ── FINANCE ──────────────────────────────────── --}}
-        <div class="nav-section-label">Finance</div>
+        <div class="nav-section-label">{{ __('app.nav_finance') }}</div>
 
         @can('expenses.view')
         <div class="dropdown {{ $isExpenses ? 'open' : '' }}" id="dropdown-expenses">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-expenses')" data-tip="Expenses">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 21v-16a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2l-3 2"/><path d="M14.8 8a2 2 0 0 0-1.8-1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1"/><path d="M12 6v10"/></svg>
-                <span class="nav-label">Expenses</span>
+                <span class="nav-label">{{ __('app.expenses') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                @can('expenses.view')<a href="{{ route('dashboard.expenses.list-expenses') }}" class="child-item {{ request()->routeIs('dashboard.expenses.list-expenses') ? 'active' : '' }}">List Expenses</a>@endcan
-                @can('expenses.create')<a href="{{ route('dashboard.expenses.add-expense') }}" class="child-item {{ request()->routeIs('dashboard.expenses.add-expense') ? 'active' : '' }}">Add Expense</a>@endcan
-                @can('expenses.view')<a href="{{ route('dashboard.expenses.expense-categories') }}" class="child-item {{ request()->routeIs('dashboard.expenses.expense-categories') ? 'active' : '' }}">Expense Categories</a>@endcan
+                @can('expenses.view')<a href="{{ route('dashboard.expenses.list-expenses') }}" class="child-item {{ request()->routeIs('dashboard.expenses.list-expenses') ? 'active' : '' }}">{{ __('app.list_expenses') }}</a>@endcan
+                @can('expenses.create')<a href="{{ route('dashboard.expenses.add-expense') }}" class="child-item {{ request()->routeIs('dashboard.expenses.add-expense') ? 'active' : '' }}">{{ __('app.add_expense') }}</a>@endcan
+                @can('expenses.view')<a href="{{ route('dashboard.expenses.expense-categories') }}" class="child-item {{ request()->routeIs('dashboard.expenses.expense-categories') ? 'active' : '' }}">{{ __('app.expense_categories') }}</a>@endcan
             </div>
         </div>
         @endcan
@@ -1116,13 +1116,13 @@
         <div class="dropdown {{ $isBanking ? 'open' : '' }}" id="dropdown-banking">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-banking')" data-tip="Banking">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4l8 4v14"/><path d="M5 11h14"/><path d="M10 11v10"/><path d="M14 11v10"/></svg>
-                <span class="nav-label">Banking</span>
+                <span class="nav-label">{{ __('app.banking') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="{{ route('dashboard.banking') }}" class="child-item {{ request()->routeIs('dashboard.banking') ? 'active' : '' }}">Dashboard</a>
-                <a href="{{ route('dashboard.banking.accounts') }}" class="child-item {{ request()->routeIs('dashboard.banking.accounts') ? 'active' : '' }}">Accounts</a>
-                <a href="{{ route('dashboard.banking.transactions') }}" class="child-item {{ request()->routeIs('dashboard.banking.transactions') ? 'active' : '' }}">Transactions</a>
+                <a href="{{ route('dashboard.banking') }}" class="child-item {{ request()->routeIs('dashboard.banking') ? 'active' : '' }}">{{ __('app.dashboard') }}</a>
+                <a href="{{ route('dashboard.banking.accounts') }}" class="child-item {{ request()->routeIs('dashboard.banking.accounts') ? 'active' : '' }}">{{ __('app.accounts') }}</a>
+                <a href="{{ route('dashboard.banking.transactions') }}" class="child-item {{ request()->routeIs('dashboard.banking.transactions') ? 'active' : '' }}">{{ __('app.transactions') }}</a>
             </div>
         </div>
         @endcan
@@ -1131,133 +1131,133 @@
         <div class="dropdown {{ $isMicrofinance ? 'open' : '' }}" id="dropdown-microfinance">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-microfinance')" data-tip="Loans">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span class="nav-label">Microfinance</span>
+                <span class="nav-label">{{ __('app.microfinance') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="{{ route('dashboard.microfinance') }}" class="child-item {{ request()->routeIs('dashboard.microfinance') ? 'active' : '' }}">Dashboard</a>
-                <a href="{{ route('dashboard.microfinance.loans') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.loans') ? 'active' : '' }}">Loans</a>
-                <a href="{{ route('dashboard.microfinance.products') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.products') ? 'active' : '' }}">Loan Products</a>
-                <a href="{{ route('dashboard.microfinance.guarantors') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.guarantors') ? 'active' : '' }}">Guarantors</a>
+                <a href="{{ route('dashboard.microfinance') }}" class="child-item {{ request()->routeIs('dashboard.microfinance') ? 'active' : '' }}">{{ __('app.dashboard') }}</a>
+                <a href="{{ route('dashboard.microfinance.loans') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.loans') ? 'active' : '' }}">{{ __('app.loans') }}</a>
+                <a href="{{ route('dashboard.microfinance.products') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.products') ? 'active' : '' }}">{{ __('app.loan_products') }}</a>
+                <a href="{{ route('dashboard.microfinance.guarantors') }}" class="child-item {{ request()->routeIs('dashboard.microfinance.guarantors') ? 'active' : '' }}">{{ __('app.guarantors') }}</a>
             </div>
         </div>
         @endcan
 
         {{-- ── MANAGEMENT ───────────────────────────────── --}}
-        <div class="nav-section-label">Management</div>
+        <div class="nav-section-label">{{ __('app.nav_management') }}</div>
 
         <div class="dropdown {{ $isMgmt ? 'open' : '' }}" id="dropdown-mgmt">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-mgmt')" data-tip="Management">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0-8 0"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
-                <span class="nav-label">Management</span>
+                <span class="nav-label">{{ __('app.nav_management') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <div class="dd-group-label">Users</div>
-                @can('users.view')<a href="{{ route('dashboard.user-management.users') }}" class="child-item {{ request()->routeIs('dashboard.user-management.users') ? 'active' : '' }}">Users</a>@endcan
-                @can('roles.view')<a href="{{ route('dashboard.user-management.roles') }}" class="child-item {{ request()->routeIs('dashboard.user-management.roles') ? 'active' : '' }}">Roles & Permissions</a>@endcan
-                <a href="{{ route('dashboard.user-management.sales-commission-agents') }}" class="child-item {{ request()->routeIs('dashboard.user-management.sales-commission-agents') ? 'active' : '' }}">Commission Agents</a>
+                <div class="dd-group-label">{{ __('app.users') }}</div>
+                @can('users.view')<a href="{{ route('dashboard.user-management.users') }}" class="child-item {{ request()->routeIs('dashboard.user-management.users') ? 'active' : '' }}">{{ __('app.users') }}</a>@endcan
+                @can('roles.view')<a href="{{ route('dashboard.user-management.roles') }}" class="child-item {{ request()->routeIs('dashboard.user-management.roles') ? 'active' : '' }}">{{ __('app.roles_permissions') }}</a>@endcan
+                <a href="{{ route('dashboard.user-management.sales-commission-agents') }}" class="child-item {{ request()->routeIs('dashboard.user-management.sales-commission-agents') ? 'active' : '' }}">{{ __('app.commission_agents') }}</a>
                 @if(Auth::user()->isOwner())
-                <a href="{{ route('dashboard.staff.index') }}" class="child-item {{ $isStaff ? 'active' : '' }}">Staff Management</a>
-                <div class="dd-group-label">Subscription</div>
-                <a href="{{ route('dashboard.plan-management.plans') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.plans') ? 'active' : '' }}">Subscription Plans</a>
-                <a href="{{ route('dashboard.plan-management.subscriptions') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.subscriptions') ? 'active' : '' }}">Subscriptions</a>
+                <a href="{{ route('dashboard.staff.index') }}" class="child-item {{ $isStaff ? 'active' : '' }}">{{ __('app.staff_management') }}</a>
+                <div class="dd-group-label">{{ __('app.subscriptions') }}</div>
+                <a href="{{ route('dashboard.plan-management.plans') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.plans') ? 'active' : '' }}">{{ __('app.subscription_plans') }}</a>
+                <a href="{{ route('dashboard.plan-management.subscriptions') }}" class="child-item {{ request()->routeIs('dashboard.plan-management.subscriptions') ? 'active' : '' }}">{{ __('app.subscriptions') }}</a>
                 @endif
                 <div class="dd-group-label">HR & Operations</div>
-                @can('payroll.view')<a href="{{ route('dashboard.payroll') }}" class="child-item {{ $isPayroll ? 'active' : '' }}">Payroll</a>@endcan
-                <a href="#" class="child-item child-soon">KPI <span class="soon-badge">Soon</span></a>
-                <a href="#" class="child-item child-soon">Job Descriptions <span class="soon-badge">Soon</span></a>
+                @can('payroll.view')<a href="{{ route('dashboard.payroll') }}" class="child-item {{ $isPayroll ? 'active' : '' }}">{{ __('app.payroll') }}</a>@endcan
+                <a href="#" class="child-item child-soon">{{ __('app.kpi') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
+                <a href="#" class="child-item child-soon">{{ __('app.job_descriptions') }} <span class="soon-badge">{{ __('app.soon') }}</span></a>
                 @can('manufacturing.view')
                 <div class="dd-group-label">Production</div>
-                <a href="{{ route('dashboard.manufacturing') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing') ? 'active' : '' }}">Manufacturing</a>
-                <a href="{{ route('dashboard.manufacturing.recipes') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing.recipes') ? 'active' : '' }}">Recipes & BOM</a>
-                <a href="{{ route('dashboard.manufacturing.production') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing.production') ? 'active' : '' }}">Production Runs</a>
+                <a href="{{ route('dashboard.manufacturing') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing') ? 'active' : '' }}">{{ __('app.manufacturing') }}</a>
+                <a href="{{ route('dashboard.manufacturing.recipes') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing.recipes') ? 'active' : '' }}">{{ __('app.recipes_bom') }}</a>
+                <a href="{{ route('dashboard.manufacturing.production') }}" class="child-item {{ request()->routeIs('dashboard.manufacturing.production') ? 'active' : '' }}">{{ __('app.production_runs') }}</a>
                 @endcan
                 <div class="dd-group-label">Files & Docs</div>
-                @can('files.view')<a href="{{ route('dashboard.file-cabinet') }}" class="child-item {{ $isFileCabinet ? 'active' : '' }}">File Cabinet</a>@endcan
-                @canany(['approvals.view','approvals.approve'])<a href="{{ route('dashboard.approvals.index') }}" class="child-item {{ request()->routeIs('dashboard.approvals.*') ? 'active' : '' }}">Approval Requests</a>@endcanany
+                @can('files.view')<a href="{{ route('dashboard.file-cabinet') }}" class="child-item {{ $isFileCabinet ? 'active' : '' }}">{{ __('app.file_cabinet') }}</a>@endcan
+                @canany(['approvals.view','approvals.approve'])<a href="{{ route('dashboard.approvals.index') }}" class="child-item {{ request()->routeIs('dashboard.approvals.*') ? 'active' : '' }}">{{ __('app.approval_requests') }}</a>@endcanany
             </div>
         </div>
 
         {{-- ── ANALYTICS ────────────────────────────────── --}}
-        <div class="nav-section-label">Analytics</div>
+        <div class="nav-section-label">{{ __('app.nav_analytics') }}</div>
 
         @can('reports.view')
         <div class="dropdown {{ $isReports ? 'open' : '' }}" id="dropdown-reports">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-reports')" data-tip="Reports">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M5 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M13 17v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 17v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 3v4"/></svg>
-                <span class="nav-label">Reports</span>
+                <span class="nav-label">{{ __('app.reports') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
                 <div class="dd-group-label">Financial</div>
-                <a href="{{ route('dashboard.reports.profit-loss-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.profit-loss-report') ? 'active' : '' }}">Profit / Loss</a>
-                <a href="{{ route('dashboard.reports.sales-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.sales-report') ? 'active' : '' }}">Sales Report</a>
-                <a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.purchase-report') ? 'active' : '' }}">Purchase Report</a>
-                <a href="{{ route('dashboard.reports.expense-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expense-report') ? 'active' : '' }}">Expense Report</a>
-                <div class="dd-group-label">Inventory</div>
-                <a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">Stock Report</a>
-                <a href="{{ route('dashboard.reports.expiry-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expiry-report') ? 'active' : '' }}">Expiry Report</a>
-                <a href="{{ route('dashboard.reports.product-trends-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.product-trends-report') ? 'active' : '' }}">Product Trends</a>
-                <div class="dd-group-label">Suppliers</div>
-                <a href="{{ route('dashboard.reports.suppliers-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.suppliers-report') ? 'active' : '' }}">Suppliers Report</a>
-                <a href="{{ route('dashboard.reports.supplier-price-comparison') }}" class="child-item {{ request()->routeIs('dashboard.reports.supplier-price-comparison') ? 'active' : '' }}">Price Comparison</a>
+                <a href="{{ route('dashboard.reports.profit-loss-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.profit-loss-report') ? 'active' : '' }}">{{ __('app.profit_loss') }}</a>
+                <a href="{{ route('dashboard.reports.sales-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.sales-report') ? 'active' : '' }}">{{ __('app.sales_report') }}</a>
+                <a href="{{ route('dashboard.reports.purchase-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.purchase-report') ? 'active' : '' }}">{{ __('app.purchase_report') }}</a>
+                <a href="{{ route('dashboard.reports.expense-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expense-report') ? 'active' : '' }}">{{ __('app.expense_report') }}</a>
+                <div class="dd-group-label">{{ __('app.nav_inventory') }}</div>
+                <a href="{{ route('dashboard.reports.inventory-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.inventory-report') ? 'active' : '' }}">{{ __('app.stock_report') }}</a>
+                <a href="{{ route('dashboard.reports.expiry-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.expiry-report') ? 'active' : '' }}">{{ __('app.expiry_report') }}</a>
+                <a href="{{ route('dashboard.reports.product-trends-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.product-trends-report') ? 'active' : '' }}">{{ __('app.product_trends') }}</a>
+                <div class="dd-group-label">{{ __('app.suppliers') }}</div>
+                <a href="{{ route('dashboard.reports.suppliers-report') }}" class="child-item {{ request()->routeIs('dashboard.reports.suppliers-report') ? 'active' : '' }}">{{ __('app.suppliers_report') }}</a>
+                <a href="{{ route('dashboard.reports.supplier-price-comparison') }}" class="child-item {{ request()->routeIs('dashboard.reports.supplier-price-comparison') ? 'active' : '' }}">{{ __('app.price_comparison') }}</a>
             </div>
         </div>
         @endcan
 
         {{-- ── SYSTEM ───────────────────────────────────── --}}
-        <div class="nav-section-label">System</div>
+        <div class="nav-section-label">{{ __('app.nav_system') }}</div>
 
         <a href="{{ route('dashboard.calendar') }}" class="nav-item {{ request()->routeIs('dashboard.calendar') ? 'active' : '' }}" data-tip="Calendar">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            <span class="nav-label">Calendar & Tasks</span>
+            <span class="nav-label">{{ __('app.calendar_tasks') }}</span>
         </a>
 
         <a href="{{ route('dashboard.notification-templates') }}" class="nav-item {{ $isNotifTpl ? 'active' : '' }}" data-tip="Notifications">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-14a2 2 0 0 1-2-2v-10z"/><path d="M3 7l9 6l9-6"/></svg>
-            <span class="nav-label">Notification Templates</span>
+            <span class="nav-label">{{ __('app.notification_templates') }}</span>
         </a>
 
         <a href="/subscription/plans" class="nav-item {{ request()->is('subscription/plans') ? 'active' : '' }}" data-tip="My Plan">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
-            <span class="nav-label">My Subscription</span>
+            <span class="nav-label">{{ __('app.my_subscription') }}</span>
         </a>
 
         <a href="{{ route('dashboard.profile') }}" class="nav-item {{ $isProfile ? 'active' : '' }}" data-tip="Profile">
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/><path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4"/></svg>
-            <span class="nav-label">My Profile</span>
+            <span class="nav-label">{{ __('app.my_profile') }}</span>
         </a>
 
         @can('settings.view')
         <div class="dropdown {{ $isSettings ? 'open' : '' }}" id="dropdown-settings">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-settings')" data-tip="Settings">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/></svg>
-                <span class="nav-label">Settings</span>
+                <span class="nav-label">{{ __('app.settings') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                @can('settings.edit')<a href="{{ route('dashboard.settings.general') }}" class="child-item {{ request()->routeIs('dashboard.settings.general') ? 'active' : '' }}">Business Settings</a>@endcan
-                @can('settings.edit')<a href="{{ route('dashboard.settings.business-location') }}" class="child-item {{ request()->routeIs('dashboard.settings.business-location') ? 'active' : '' }}">Business Locations</a>@endcan
-                @can('settings.edit')<a href="{{ route('dashboard.settings.invoice-settings') }}" class="child-item {{ request()->routeIs('dashboard.settings.invoice-settings') ? 'active' : '' }}">Invoice Settings</a>@endcan
-                @can('settings.edit')<a href="{{ route('dashboard.settings.barcode-settings') }}" class="child-item {{ request()->routeIs('dashboard.settings.barcode-settings') ? 'active' : '' }}">Barcode Settings</a>@endcan
-                @can('settings.view')<a href="{{ route('dashboard.settings.tax-rates') }}" class="child-item {{ request()->routeIs('dashboard.settings.tax-rates') ? 'active' : '' }}">Tax Rates</a>@endcan
+                @can('settings.edit')<a href="{{ route('dashboard.settings.general') }}" class="child-item {{ request()->routeIs('dashboard.settings.general') ? 'active' : '' }}">{{ __('app.business_settings') }}</a>@endcan
+                @can('settings.edit')<a href="{{ route('dashboard.settings.business-location') }}" class="child-item {{ request()->routeIs('dashboard.settings.business-location') ? 'active' : '' }}">{{ __('app.business_locations') }}</a>@endcan
+                @can('settings.edit')<a href="{{ route('dashboard.settings.invoice-settings') }}" class="child-item {{ request()->routeIs('dashboard.settings.invoice-settings') ? 'active' : '' }}">{{ __('app.invoice_settings') }}</a>@endcan
+                @can('settings.edit')<a href="{{ route('dashboard.settings.barcode-settings') }}" class="child-item {{ request()->routeIs('dashboard.settings.barcode-settings') ? 'active' : '' }}">{{ __('app.barcode_settings') }}</a>@endcan
+                @can('settings.view')<a href="{{ route('dashboard.settings.tax-rates') }}" class="child-item {{ request()->routeIs('dashboard.settings.tax-rates') ? 'active' : '' }}">{{ __('app.tax_rates') }}</a>@endcan
             </div>
         </div>
         @endcan
 
         {{-- ── SUPPORT ──────────────────────────────────── --}}
-        <div class="nav-section-label">Support</div>
+        <div class="nav-section-label">{{ __('app.nav_support') }}</div>
 
         <div class="dropdown {{ $isFeedback ? 'open' : '' }}" id="dropdown-support">
             <div class="dropdown-toggle" onclick="toggleDropdown('dropdown-support')" data-tip="Support">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m0 0V12m0 0h8.485"/><circle cx="12" cy="12" r="3"/></svg>
-                <span class="nav-label">Support & Feedback</span>
+                <span class="nav-label">{{ __('app.support_feedback') }}</span>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6l6 6"/></svg>
             </div>
             <div class="dropdown-children">
-                <a href="{{ route('dashboard.feedback.index') }}" class="child-item {{ $isFeedback && !$isAdminFeedback ? 'active' : '' }}">My Feedback</a>
-                <a href="{{ route('dashboard.feedback.admin.index') }}" class="child-item {{ $isAdminFeedback ? 'active' : '' }}">Support Inbox</a>
+                <a href="{{ route('dashboard.feedback.index') }}" class="child-item {{ $isFeedback && !$isAdminFeedback ? 'active' : '' }}">{{ __('app.my_feedback') }}</a>
+                <a href="{{ route('dashboard.feedback.admin.index') }}" class="child-item {{ $isAdminFeedback ? 'active' : '' }}">{{ __('app.support_inbox') }}</a>
             </div>
         </div>
 
@@ -1269,7 +1269,7 @@
             @csrf
             <button type="submit" class="sign-out-btn">
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                <span class="sign-out-text">Sign Out</span>
+                <span class="sign-out-text">{{ __('app.sign_out') }}</span>
             </button>
         </form>
     </div>
@@ -1333,7 +1333,7 @@
             {{-- POS Button --}}
             <a href="{{ route('dashboard.sell.pos') }}" class="btn btn-primary" style="gap:0.5rem;">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/></svg>
-                <span class="hidden md:inline">POS</span>
+                <span class="hidden md:inline">{{ __('app.pos') }}</span>
             </a>
 
             <div class="header-dropdown" id="hdr-profit" style="position:relative;">
@@ -1341,7 +1341,7 @@
                     <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M3 6m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/><path d="M18 12l.01 0"/><path d="M6 12l.01 0"/></svg>
                 </button>
                 <div class="profit-popup header-dropdown-menu" id="profit-popup">
-                    <div class="header-dropdown-header"><div class="header-dropdown-title">Today's Summary</div></div>
+                    <div class="header-dropdown-header"><div class="header-dropdown-title">{{ __('app.todays_summary') }}</div></div>
                     <div id="profit-content" style="padding:1rem 1.25rem;">
                         <div style="text-align:center;color:#94a3b8;font-size:0.8rem;">Loading...</div>
                     </div>
@@ -1358,7 +1358,7 @@
                     <span class="notif-dot"></span>
                 </div>
                 <div class="header-dropdown-menu">
-                    <div class="header-dropdown-header"><div class="header-dropdown-title">Notifications</div></div>
+                    <div class="header-dropdown-header"><div class="header-dropdown-title">{{ __('app.notifications') }}</div></div>
                     <div class="notification-item notification-unread">
                         <div class="notification-title">New Sale — #INV-001</div>
                         <div class="notification-desc">Sale of TSh 1,250 completed</div>
@@ -1375,7 +1375,7 @@
                         <div class="notification-time">1 hour ago</div>
                     </div>
                     <div class="header-dropdown-footer">
-                        <a href="#" class="header-dropdown-item" style="justify-content:center; padding:0.5rem;">View All Notifications</a>
+                        <a href="#" class="header-dropdown-item" style="justify-content:center; padding:0.5rem;">{{ __('app.notifications') }}</a>
                     </div>
                 </div>
             </div>
@@ -1425,23 +1425,23 @@
                 </div>
                 <div class="header-dropdown-menu" style="min-width:200px;">
                     <div class="header-dropdown-header" style="padding:0.75rem 1rem;">
-                        <div style="font-size:0.75rem;color:#64748b;">Signed in as</div>
+                        <div style="font-size:0.75rem;color:#64748b;">{{ __('app.signed_in_as') }}</div>
                         <div style="font-size:0.8rem;font-weight:700;color:#0f172a;">{{ Auth::user()->name ?? 'Admin' }}</div>
                     </div>
                     <a href="{{ route('dashboard.profile') }}" class="header-dropdown-item" style="padding:0.6rem 1rem;">
                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/></svg>
-                        Profile
+                        {{ __('app.profile') }}
                     </a>
                     <a href="{{ route('dashboard.settings.general') }}" class="header-dropdown-item" style="padding:0.6rem 1rem;">
                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/></svg>
-                        Settings
+                        {{ __('app.settings') }}
                     </a>
                     <div class="header-dropdown-divider"></div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="header-dropdown-item" style="width:100%; border:none; background:none; color:#2563eb; cursor:pointer; padding:0.6rem 1rem;">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M9 12h12l-3 -3"/><path d="M18 15l3 -3"/></svg>
-                            Sign Out
+                            {{ __('app.sign_out') }}
                         </button>
                     </form>
                 </div>
