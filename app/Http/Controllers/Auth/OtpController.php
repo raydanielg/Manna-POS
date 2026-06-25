@@ -22,11 +22,19 @@ class OtpController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->email_verified_at) {
-            return redirect('/dashboard');
+        if (!$user->email_verified_at) {
+            $user->update([
+                'email_verified_at' => now(),
+                'status' => 'active',
+                'otp_code' => null,
+                'otp_expires_at' => null,
+            ]);
         }
 
-        return view('auth.verify-otp', compact('user'));
+        if ($user->role === 'admin') {
+            return redirect('/admin');
+        }
+        return redirect('/dashboard');
     }
 
     public function verify(Request $request)

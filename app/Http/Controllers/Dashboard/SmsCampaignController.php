@@ -29,9 +29,8 @@ class SmsCampaignController extends Controller
     {
         $campaigns = SmsCampaign::where('user_id', auth()->id())->latest()->get();
         $templates = SmsTemplate::where('is_active', true)->get();
-        $customers = Customer::where(function($q) {
-            $q->where('created_by', auth()->id())->orWhere('user_id', auth()->id());
-        })->whereNotNull('mobile')->get();
+        $customers = Customer::where('created_by', auth()->id())
+            ->whereNotNull('phone')->get();
         return view('dashboard.sms-campaigns.index', compact('campaigns', 'templates', 'customers'));
     }
 
@@ -60,7 +59,7 @@ class SmsCampaignController extends Controller
                 $recipients[] = [
                     'sms_campaign_id' => $campaign->id,
                     'customer_id' => $c->id,
-                    'phone' => $c->mobile,
+                    'phone' => $c->phone,
                     'name' => $c->name,
                     'created_at' => now(),
                     'updated_at' => now(),

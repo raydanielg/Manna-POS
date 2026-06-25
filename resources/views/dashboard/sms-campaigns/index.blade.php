@@ -58,7 +58,7 @@
               @foreach($customers as $c)
               <label class="recipient-chip" style="cursor:pointer;">
                 <input type="checkbox" name="customer_ids[]" value="{{ $c->id }}" class="rec-check" style="cursor:pointer;">
-                <span>{{ $c->name }} <span style="color:#94a3b8;">({{ $c->mobile }})</span></span>
+                <span>{{ $c->name }} <span style="color:#94a3b8;">({{ $c->phone }})</span></span>
               </label>
               @endforeach
             </div>
