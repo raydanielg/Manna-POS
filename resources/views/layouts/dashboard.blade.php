@@ -1380,6 +1380,32 @@
                 </div>
             </div>
 
+            {{-- Language Switcher --}}
+            <div class="header-dropdown" id="hdr-lang">
+                <div class="notif-btn" onclick="toggleHeaderDropdown('hdr-lang')" title="{{ __('app.language') }}">
+                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.75 1.5c-.18.318-.43.6-.717.887L9.354 14.06A8.998 8.998 0 0112 21a8.998 8.998 0 005.646-6.06l-2.679-2.679A9 9 0 0012.75 1.5z"/></svg>
+                </div>
+                <div class="header-dropdown-menu" style="min-width:180px;">
+                    <div class="header-dropdown-header"><div class="header-dropdown-title">{{ __('app.language') }}</div></div>
+                    @php $currentLocale = app()->getLocale(); @endphp
+                    <a href="{{ route('language.switch', 'en') }}" class="header-dropdown-item" style="@if($currentLocale === 'en') background:#eff6ff; color:#2563eb; font-weight:600; @endif">
+                        <span style="font-size:1.1rem;">🇬🇧</span>
+                        <span>{{ __('app.english') }}</span>
+                        @if($currentLocale === 'en')<svg style="margin-left:auto; width:16px; height:16px; color:#2563eb;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>@endif
+                    </a>
+                    <a href="{{ route('language.switch', 'sw') }}" class="header-dropdown-item" style="@if($currentLocale === 'sw') background:#eff6ff; color:#2563eb; font-weight:600; @endif">
+                        <span style="font-size:1.1rem;">🇹🇿</span>
+                        <span>{{ __('app.swahili') }}</span>
+                        @if($currentLocale === 'sw')<svg style="margin-left:auto; width:16px; height:16px; color:#2563eb;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>@endif
+                    </a>
+                    <a href="{{ route('language.switch', 'fr') }}" class="header-dropdown-item" style="@if($currentLocale === 'fr') background:#eff6ff; color:#2563eb; font-weight:600; @endif">
+                        <span style="font-size:1.1rem;">🇫🇷</span>
+                        <span>{{ __('app.french') }}</span>
+                        @if($currentLocale === 'fr')<svg style="margin-left:auto; width:16px; height:16px; color:#2563eb;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>@endif
+                    </a>
+                </div>
+            </div>
+
             {{-- Profile --}}
             <div class="header-dropdown" id="hdr-profile">
                 <div class="user-chip" onclick="toggleHeaderDropdown('hdr-profile')">
