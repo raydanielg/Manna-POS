@@ -123,28 +123,58 @@
     </div>
 </div>
 
+{{-- ════ PREMIUM CHARTS ROW ════ --}}
 <div class="charts-row">
+    {{-- Revenue Trends --}}
     <div class="chart-card">
         <div class="chart-header">
-            <span class="chart-title">Revenue Trends</span>
-            <select class="chart-range" onchange="updateRevenueChart(this.value)">
+            <div class="chart-header-left">
+                <span class="chart-title">Revenue Trends</span>
+                <span class="chart-subtitle" id="revenueSubtitle">Last 12 Months</span>
+            </div>
+            <select class="chart-range" id="revenueRange" onchange="updateRevenueChart(this.value)">
                 <option value="12">Last 12 Months</option>
                 <option value="6">Last 6 Months</option>
                 <option value="3">Last Quarter</option>
             </select>
+        </div>
+        <div class="chart-stats">
+            <div class="chart-stat">
+                <span class="chart-stat-label">Total</span>
+                <span class="chart-stat-value" id="revenueTotal">—</span>
+            </div>
+            <div class="chart-stat">
+                <span class="chart-stat-label">Avg / Month</span>
+                <span class="chart-stat-value" id="revenueAvg">—</span>
+            </div>
         </div>
         <div class="chart-wrap">
             <canvas id="revenueChart"></canvas>
         </div>
     </div>
+
+    {{-- User Growth --}}
     <div class="chart-card">
         <div class="chart-header">
-            <span class="chart-title">User Growth</span>
-            <select class="chart-range" onchange="updateUserChart(this.value)">
+            <div class="chart-header-left">
+                <span class="chart-title">User Growth</span>
+                <span class="chart-subtitle" id="userSubtitle">Last 12 Months</span>
+            </div>
+            <select class="chart-range" id="userRange" onchange="updateUserChart(this.value)">
                 <option value="12">Last 12 Months</option>
                 <option value="6">Last 6 Months</option>
                 <option value="3">Last Quarter</option>
             </select>
+        </div>
+        <div class="chart-stats">
+            <div class="chart-stat">
+                <span class="chart-stat-label">Total Users</span>
+                <span class="chart-stat-value" id="userTotal">—</span>
+            </div>
+            <div class="chart-stat">
+                <span class="chart-stat-label">New This Month</span>
+                <span class="chart-stat-value" id="userNew">—</span>
+            </div>
         </div>
         <div class="chart-wrap">
             <canvas id="userChart"></canvas>
@@ -152,13 +182,14 @@
     </div>
 </div>
 
+{{-- ════ PREMIUM RECENT ACTIVITY ════ --}}
 <div class="activity-card">
     <div class="activity-header">
         <span class="activity-title">Recent Activity</span>
         <a href="{{ route('admin.system.activity-logs') }}" class="btn btn-secondary btn-xs">View All</a>
     </div>
-    <div class="activity-body">
-        <div class="activity-empty" id="recentActivity">
+    <div class="activity-body" id="recentActivity">
+        <div class="activity-empty">
             <svg width="40" height="40" fill="none" stroke="#cbd5e1" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-4a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
             <span>Loading activity...</span>
         </div>
@@ -203,27 +234,52 @@
     .insight-foot { display:flex;align-items:center;gap:0.3rem;font-size:0.68rem;font-weight:600;color:#94a3b8; }
     .insight-badge { font-size:0.6rem;padding:0.15rem 0.5rem; }
 
+    /* ── Premium Charts ── */
     .charts-row { display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem; }
-    .chart-card { background:#fff;border-radius:14px;border:1px solid #e9edf5;padding:1.25rem 1.25rem 0.75rem; }
-    .chart-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem; }
-    .chart-title { font-size:0.88rem;font-weight:700;color:#0f172a; }
-    .chart-range { padding:0.3rem 0.55rem;font-size:0.72rem;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#475569;outline:none;cursor:pointer; }
-    .chart-range:focus { border-color:#e03057; }
-    .chart-wrap { position:relative;height:220px; }
+    .chart-card { background:#fff;border-radius:16px;border:1px solid #e9edf5;padding:1.25rem 1.25rem 0.75rem;transition:box-shadow 0.25s,transform 0.25s;position:relative;overflow:hidden; }
+    .chart-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0; }
+    .chart-card:nth-child(1)::before { background:linear-gradient(90deg,#7c3aed,#a78bfa); }
+    .chart-card:nth-child(2)::before { background:linear-gradient(90deg,#2563eb,#60a5fa); }
+    .chart-card:hover { box-shadow:0 8px 28px rgba(15,23,42,0.06);transform:translateY(-2px); }
+    .chart-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem; }
+    .chart-header-left { display:flex;flex-direction:column;gap:0.15rem; }
+    .chart-title { font-size:0.92rem;font-weight:800;color:#0f172a;letter-spacing:-0.01em; }
+    .chart-subtitle { font-size:0.68rem;font-weight:600;color:#94a3b8; }
+    .chart-range { padding:0.3rem 0.55rem;font-size:0.72rem;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#475569;outline:none;cursor:pointer;transition:all 0.15s; }
+    .chart-range:hover { border-color:#cbd5e1;background:#fff; }
+    .chart-range:focus { border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,0.1); }
+    .chart-stats { display:flex;gap:1.5rem;margin-bottom:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid #f1f5f9; }
+    .chart-stat { display:flex;flex-direction:column;gap:0.15rem; }
+    .chart-stat-label { font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#94a3b8; }
+    .chart-stat-value { font-size:1.1rem;font-weight:800;color:#0f172a;letter-spacing:-0.02em; }
+    .chart-wrap { position:relative;height:240px; }
 
-    .activity-card { background:#fff;border-radius:14px;border:1px solid #e9edf5;margin-bottom:1.5rem; }
+    /* ── Premium Activity ── */
+    .activity-card { background:#fff;border-radius:16px;border:1px solid #e9edf5;margin-bottom:1.5rem;overflow:hidden; }
     .activity-header { display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1.25rem;border-bottom:1px solid #f1f5f9; }
-    .activity-title { font-size:0.88rem;font-weight:700;color:#0f172a; }
-    .activity-body { padding:0; }
-    .activity-empty { display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:2rem;color:#94a3b8;font-size:0.82rem; }
-    .activity-item { display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1.25rem;border-bottom:1px solid #f8fafc;font-size:0.8rem;color:#475569; }
+    .activity-title { font-size:0.92rem;font-weight:800;color:#0f172a;letter-spacing:-0.01em; }
+    .activity-body { padding:0;max-height:420px;overflow-y:auto; }
+    .activity-body::-webkit-scrollbar { width:5px; }
+    .activity-body::-webkit-scrollbar-thumb { background:#e2e8f0;border-radius:99px; }
+    .activity-body::-webkit-scrollbar-track { background:transparent; }
+    .activity-empty { display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:2.5rem;color:#94a3b8;font-size:0.82rem; }
+    .activity-item { display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1.25rem;border-bottom:1px solid #f8fafc;font-size:0.8rem;color:#475569;transition:background 0.12s; }
+    .activity-item:hover { background:#f8fafc; }
     .activity-item:last-child { border-bottom:none; }
+    .activity-avatar { width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:#fff;flex-shrink:0; }
+    .activity-avatar.success { background:linear-gradient(135deg,#16a34a,#22c55e); }
+    .activity-avatar.info { background:linear-gradient(135deg,#2563eb,#3b82f6); }
+    .activity-avatar.danger { background:linear-gradient(135deg,#dc2626,#ef4444); }
+    .activity-avatar.warning { background:linear-gradient(135deg,#d97706,#f59e0b); }
+    .activity-content { flex:1;min-width:0; }
+    .activity-desc { font-size:0.8rem;color:#334155;font-weight:500;line-height:1.35; }
+    .activity-user { font-size:0.68rem;color:#94a3b8;font-weight:600;margin-top:0.1rem; }
     .activity-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
     .activity-dot.success { background:#16a34a; }
     .activity-dot.warning { background:#d97706; }
     .activity-dot.info { background:#2563eb; }
     .activity-dot.danger { background:#dc2626; }
-    .activity-time { margin-left:auto;font-size:0.68rem;color:#94a3b8;white-space:nowrap; }
+    .activity-time { margin-left:auto;font-size:0.68rem;color:#94a3b8;white-space:nowrap;flex-shrink:0; }
 
     .kpi-icon-wrap .material-icons { font-size:24px; }
     @media (max-width:1200px) { .kpi-grid,.insight-grid { grid-template-columns:repeat(2,1fr); } .charts-row { grid-template-columns:1fr; } }
@@ -231,8 +287,6 @@
 </style>
 @endsection
 @section('scripts')
-const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
 let revenueChart, userChart;
 
 function getPeriodDates(period) {
@@ -276,42 +330,163 @@ async function refreshDashboard(extra = {}) {
     } catch (e) { console.warn('Dashboard stats fetch failed', e); }
 }
 
-function initCharts() {
-    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-    const userCtx = document.getElementById('userChart').getContext('2d');
-
-    const baseData = () => Array(12).fill(0).map(() => Math.floor(Math.random() * 80000 + 20000));
-
-    revenueChart = new Chart(revenueCtx, {
-        type: 'line',
-        data: { labels: months, datasets: [{ label: 'Revenue', data: baseData(), borderColor: '#7c3aed', backgroundColor: makeGrad(revenueCtx, '#7c3aed'), fill: true, tension: 0.45, pointRadius: 3, pointHoverRadius: 6, pointBackgroundColor: '#fff', pointBorderColor: '#7c3aed', pointBorderWidth: 2, borderWidth: 2.5 }] },
-        options: chartOptions('#7c3aed')
-    });
-    userChart = new Chart(userCtx, {
-        type: 'line',
-        data: { labels: months, datasets: [{ label: 'Users', data: baseData(), borderColor: '#2563eb', backgroundColor: makeGrad(userCtx, '#2563eb'), fill: true, tension: 0.45, pointRadius: 3, pointHoverRadius: 6, pointBackgroundColor: '#fff', pointBorderColor: '#2563eb', pointBorderWidth: 2, borderWidth: 2.5 }] },
-        options: chartOptions('#2563eb')
-    });
+/* ── Chart helpers ── */
+function makeGrad(ctx, color) {
+    const g = ctx.createLinearGradient(0, 0, 0, 220);
+    g.addColorStop(0, color + '40');
+    g.addColorStop(1, color + '02');
+    return g;
 }
 
-function chartOptions() {
+function chartOptions(currency) {
     return {
         responsive: true, maintainAspectRatio: false,
         plugins: {
             legend: { display: false },
-            tooltip: { backgroundColor: '#0f172a', titleColor: '#fff', bodyColor: '#e2e8f0', padding: 10, cornerRadius: 8, displayColors: false }
+            tooltip: {
+                backgroundColor: '#0f172a', titleColor: '#fff', bodyColor: '#e2e8f0',
+                padding: 12, cornerRadius: 10, displayColors: false,
+                titleFont: { size: 12, weight: '700' },
+                bodyFont: { size: 13, weight: '600' },
+                callbacks: {
+                    label: ctx => {
+                        let v = ctx.parsed.y;
+                        if (currency) return currency + ' ' + v.toLocaleString(undefined, { maximumFractionDigits: 0 });
+                        return v.toLocaleString() + ' users';
+                    }
+                }
+            }
         },
         scales: {
-            y: { beginAtZero: true, grid: { color: '#f1f5f9', drawBorder: false }, ticks: { color: '#94a3b8', font: { size: 10 }, callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v } },
-            x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+            y: {
+                beginAtZero: true,
+                grid: { color: '#f1f5f9', drawBorder: false },
+                ticks: { color: '#94a3b8', font: { size: 10, weight: '600' }, callback: v => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }
+            },
+            x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10, weight: '600' } } }
         },
         interaction: { intersect: false, mode: 'index' },
+        animation: { duration: 600, easing: 'easeOutQuart' },
     };
 }
 
-function updateRevenueChart(val) {}
-function updateUserChart(val) {}
+/* ── Revenue Chart ── */
+async function loadRevenueChart(months = 12) {
+    try {
+        const res = await apiFetch('/api/admin/revenue-trends?months=' + months);
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        if (revenueChart) revenueChart.destroy();
 
-try { initCharts(); } catch (e) { console.warn('Chart init failed', e); }
+        revenueChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: res.labels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: res.data,
+                    borderColor: '#7c3aed',
+                    backgroundColor: makeGrad(ctx, '#7c3aed'),
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#7c3aed',
+                    pointBorderWidth: 2,
+                    pointHoverBackgroundColor: '#7c3aed',
+                    pointHoverBorderColor: '#fff',
+                    borderWidth: 2.5,
+                }]
+            },
+            options: chartOptions('TZS')
+        });
+
+        document.getElementById('revenueTotal').textContent = 'TZS ' + Number(res.total).toLocaleString(undefined, { maximumFractionDigits: 0 });
+        document.getElementById('revenueAvg').textContent = 'TZS ' + Number(Math.round(res.avg)).toLocaleString(undefined, { maximumFractionDigits: 0 });
+        document.getElementById('revenueSubtitle').textContent = months === 3 ? 'Last Quarter' : 'Last ' + months + ' Months';
+    } catch (e) { console.warn('Revenue chart failed', e); }
+}
+
+/* ── User Growth Chart ── */
+async function loadUserChart(months = 12) {
+    try {
+        const res = await apiFetch('/api/admin/user-growth?months=' + months);
+        const ctx = document.getElementById('userChart').getContext('2d');
+        if (userChart) userChart.destroy();
+
+        userChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: res.labels,
+                datasets: [{
+                    label: 'Total Users',
+                    data: res.data,
+                    borderColor: '#2563eb',
+                    backgroundColor: makeGrad(ctx, '#2563eb'),
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#2563eb',
+                    pointBorderWidth: 2,
+                    pointHoverBackgroundColor: '#2563eb',
+                    pointHoverBorderColor: '#fff',
+                    borderWidth: 2.5,
+                }]
+            },
+            options: chartOptions(null)
+        });
+
+        document.getElementById('userTotal').textContent = Number(res.total).toLocaleString();
+        document.getElementById('userNew').textContent = '+' + Number(res.new_users).toLocaleString();
+        document.getElementById('userSubtitle').textContent = months === 3 ? 'Last Quarter' : 'Last ' + months + ' Months';
+    } catch (e) { console.warn('User chart failed', e); }
+}
+
+function updateRevenueChart(val) { loadRevenueChart(parseInt(val)); }
+function updateUserChart(val) { loadUserChart(parseInt(val)); }
+
+/* ── Recent Activity ── */
+async function loadRecentActivity() {
+    try {
+        const items = await apiFetch('/api/admin/recent-activity');
+        const container = document.getElementById('recentActivity');
+
+        if (!items || items.length === 0) {
+            container.innerHTML = `
+                <div class="activity-empty">
+                    <svg width="40" height="40" fill="none" stroke="#cbd5e1" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-4a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                    <span>No recent activity</span>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = items.map(item => `
+            <div class="activity-item">
+                <div class="activity-avatar ${item.dot}">${item.avatar}</div>
+                <div class="activity-content">
+                    <div class="activity-desc">${item.description || item.action}</div>
+                    <div class="activity-user">${item.user}</div>
+                </div>
+                <span class="activity-time">${item.time}</span>
+            </div>
+        `).join('');
+    } catch (e) {
+        console.warn('Recent activity failed', e);
+        document.getElementById('recentActivity').innerHTML = `
+            <div class="activity-empty">
+                <svg width="40" height="40" fill="none" stroke="#cbd5e1" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-4a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                <span>Failed to load activity</span>
+            </div>`;
+    }
+}
+
+/* ── Init ── */
+try {
+    loadRevenueChart(12);
+    loadUserChart(12);
+} catch (e) { console.warn('Chart init failed', e); }
 refreshDashboard();
+loadRecentActivity();
 @endsection
