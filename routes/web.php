@@ -667,6 +667,9 @@ Route::middleware(['auth', 'admin'])->prefix('api/admin')->name('admin.api.')->g
 
     // ── Dashboard ──
     Route::get('stats',                [AdminController::class, 'stats'])->name('stats');
+    Route::get('revenue-trends',       [AdminController::class, 'revenueTrends'])->name('revenue-trends');
+    Route::get('user-growth',          [AdminController::class, 'userGrowth'])->name('user-growth');
+    Route::get('recent-activity',      [AdminController::class, 'recentActivity'])->name('recent-activity');
 
     // ── Profile ──
     Route::put('profile',              [AdminController::class, 'updateProfile'])->name('profile.update');
