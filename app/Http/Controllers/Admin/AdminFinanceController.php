@@ -21,38 +21,128 @@ class AdminFinanceController extends Controller
             $today = now()->startOfDay();
             $monthStart = now()->startOfMonth();
             $yearStart = now()->startOfYear();
+            $lastMonthStart = now()->subMonth()->startOfMonth();
+            $lastMonthEnd = now()->subMonth()->endOfMonth();
 
-            $todayTotal = Invoice::where('status', 'paid')
-                ->whereDate('paid_at', $today)
-                ->sum('total');
+            // ── KPI: Revenue ──
+            $todayTotal = (float) Invoice::where('status', 'paid')
+                ->whereDate('paid_at', $today)->sum('total');
 
-            $monthTotal = Invoice::where('status', 'paid')
+            $monthTotal = (float) Invoice::where('status', 'paid')
+                ->whereDate('paid_at', '>=', $monthStart)->sum('total');
+
+            $lastMonthTotal = (float) Invoice::where('status', 'paid')
+                ->whereBetween('paid_at', [$lastMonthStart, $lastMonthEnd])->sum('total');
+
+            $yearTotal = (float) Invoice::where('status', 'paid')
+                ->whereDate('paid_at', '>=', $yearStart)->sum('total');
+
+            $allTimeTotal = (float) Invoice::where('status', 'paid')->sum('total');
+
+            // ── KPI: Counts ──
+            $todayCount = Invoice::where('status', 'paid')->whereDate('paid_at', $today)->count();
+            $monthCount = Invoice::where('status', 'paid')->whereDate('paid_at', '>=', $monthStart)->count();
+            $yearCount = Invoice::where('status', 'paid')->whereDate('paid_at', '>=', $yearStart)->count();
+
+            // ── KPI: Pending ──
+            $pendingInvoices = Invoice::where('status', 'pending')->count();
+            $pendingAmount = (float) Invoice::where('status', 'pending')->sum('total');
+            $pendingPayouts = (float) Payment::where('status', 'pending')->sum('amount');
+
+            // ── KPI: Avg ──
+            $avgTransaction = (float) Invoice::where('status', 'paid')->avg('total') ?? 0;
+
+            // ── KPI: Expenses ──
+            $monthExpenses = (float) Expense::where('expense_date', '>=', $monthStart)->sum('amount');
+            $yearExpenses = (float) Expense::where('expense_date', '>=', $yearStart)->sum('amount');
+
+            // ── Net Revenue ──
+            $monthNet = $monthTotal - $monthExpenses;
+            $yearNet = $yearTotal - $yearExpenses;
+
+            // ── Month-over-month change ──
+            $momChange = $lastMonthTotal > 0
+                ? round((($monthTotal - $lastMonthTotal) / $lastMonthTotal) * 100, 1)
+                : 0;
+
+            // ── Monthly chart (last 12 months) ──
+            $monthlyLabels = [];
+            $monthlyRevenue = [];
+            $monthlyExpenses = [];
+            for ($i = 11; $i >= 0; $i--) {
+                $date = now()->subMonths($i);
+                $monthlyLabels[] = $date->format('M Y');
+                $monthlyRevenue[] = (float) Invoice::where('status', 'paid')
+                    ->whereYear('paid_at', $date->year)
+                    ->whereMonth('paid_at', $date->month)->sum('total');
+                $monthlyExpenses[] = (float) Expense::whereYear('expense_date', $date->year)
+                    ->whereMonth('expense_date', $date->month)->sum('amount');
+            }
+
+            // ── Weekly chart (last 8 weeks) ──
+            $weeklyLabels = [];
+            $weeklyRevenue = [];
+            for ($i = 7; $i >= 0; $i--) {
+                $weekStart = now()->subWeeks($i)->startOfWeek();
+                $weekEnd = now()->subWeeks($i)->endOfWeek();
+                $weeklyLabels[] = $weekStart->format('M d');
+                $weeklyRevenue[] = (float) Invoice::where('status', 'paid')
+                    ->whereBetween('paid_at', [$weekStart, $weekEnd])->sum('total');
+            }
+
+            // ── Payment methods breakdown ──
+            $paymentMethods = Payment::where('status', 'completed')
                 ->whereDate('paid_at', '>=', $monthStart)
-                ->sum('total');
+                ->select('payment_method', DB::raw('sum(amount) as total'), DB::raw('count(*) as count'))
+                ->groupBy('payment_method')
+                ->get();
 
-            $yearTotal = Invoice::where('status', 'paid')
-                ->whereDate('paid_at', '>=', $yearStart)
-                ->sum('total');
-
-            $pendingPayouts = Payment::where('status', 'pending')->sum('amount');
-
-            $avgTransaction = Invoice::where('status', 'paid')
-                ->avg('total') ?? 0;
-
-            $chartData = Invoice::where('status', 'paid')
-                ->whereYear('paid_at', now()->year)
+            // ── Recent transactions ──
+            $recent = Invoice::with('user:id,name')
+                ->where('status', 'paid')
+                ->latest('paid_at')
+                ->limit(15)
                 ->get()
-                ->groupBy(fn($i) => $i->paid_at?->format('Y-m'))
-                ->map(fn($items) => $items->sum('total'))
-                ->toArray();
+                ->map(fn($i) => [
+                    'id' => $i->id,
+                    'invoice_number' => $i->invoice_number,
+                    'user' => $i->user?->name ?? '—',
+                    'amount' => number_format($i->total, 2),
+                    'currency' => $i->currency,
+                    'status' => $i->status,
+                    'paid_at' => $i->paid_at?->format('Y-m-d'),
+                ]);
 
             return response()->json([
-                'today_total' => number_format($todayTotal, 2),
-                'month_total' => number_format($monthTotal, 2),
-                'year_total' => number_format($yearTotal, 2),
-                'pending_payouts' => number_format($pendingPayouts, 2),
-                'avg_transaction' => number_format($avgTransaction, 2),
-                'chart_data' => $chartData,
+                'kpis' => [
+                    'today_total' => $todayTotal,
+                    'today_count' => $todayCount,
+                    'month_total' => $monthTotal,
+                    'month_count' => $monthCount,
+                    'month_expenses' => $monthExpenses,
+                    'month_net' => $monthNet,
+                    'year_total' => $yearTotal,
+                    'year_count' => $yearCount,
+                    'year_expenses' => $yearExpenses,
+                    'year_net' => $yearNet,
+                    'all_time_total' => $allTimeTotal,
+                    'avg_transaction' => $avgTransaction,
+                    'pending_invoices' => $pendingInvoices,
+                    'pending_amount' => $pendingAmount,
+                    'pending_payouts' => $pendingPayouts,
+                    'mom_change' => $momChange,
+                ],
+                'monthly_chart' => [
+                    'labels' => $monthlyLabels,
+                    'revenue' => $monthlyRevenue,
+                    'expenses' => $monthlyExpenses,
+                ],
+                'weekly_chart' => [
+                    'labels' => $weeklyLabels,
+                    'revenue' => $weeklyRevenue,
+                ],
+                'payment_methods' => $paymentMethods,
+                'recent_transactions' => $recent,
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
